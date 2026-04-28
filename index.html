@@ -9,45 +9,54 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
 
   <style>
-    /* ═══ LAYER A: PRODUCTION ═══ */
+    /* ═══════════════════════════════════
+       LAYER A: GLM PRODUCTION
+       Values from computed styles inspection
+       ═══════════════════════════════════ */
     :root, [data-theme="production"] {
-      --t-primary:#3b71ca;--t-primary-h:#386bc0;--t-primary-bg:#e2eaf7;--t-primary-bdr:#b1c6ea;--t-primary-txt:#2f5aa2;
-      --t-secondary:#9fa6b2;--t-secondary-bg:#f1f2f3;--t-secondary-txt:#404247;
-      --t-success:#14a44d;--t-success-bg:#dcf1e4;--t-success-txt:#0c622e;
-      --t-danger:#dc4c64;--t-danger-bg:#fae4e8;--t-danger-txt:#b03d50;
-      --t-warning:#e4a11b;--t-warning-bg:#fbf1dd;--t-warning-txt:#896110;
-      --t-info:#54b4d3;--t-info-bg:#e5f4f8;--t-info-txt:#3b7e94;
-      --t-light:#fbfbfb;--t-dark:#332d2d;
-      --t-body:#2D3B4A;--t-body-bg:#f5f5f5;
-      --t-link:#3b71ca;--t-link-h:#386bc0;
-      --t-bdr:#e0e0e0;--t-form-bdr:#bdbdbd;--t-form-lbl:#757575;
-      --t-valid:#14a44d;--t-invalid:#dc4c64;
-      --t-focus:rgba(59,113,202,0.25);--t-focus-bdr:#3b71ca;
+      --t-primary:#3b71ca; --t-primary-h:#386bc0; --t-primary-bg:#e2eaf7; --t-primary-bdr:#b1c6ea; --t-primary-txt:#2f5aa2;
+      --t-secondary:#9fa6b2; --t-secondary-bg:#f1f2f3; --t-secondary-txt:#404247;
+      --t-success:#14a44d; --t-success-bg:#dcf1e4; --t-success-txt:#0c622e;
+      --t-danger:#dc4c64; --t-danger-bg:#fae4e8; --t-danger-txt:#b03d50;
+      --t-warning:#e4a11b; --t-warning-bg:#fbf1dd; --t-warning-txt:#896110;
+      --t-info:#54b4d3; --t-info-bg:#e5f4f8; --t-info-txt:#3b7e94;
+      --t-light:#fbfbfb; --t-dark:#332d2d;
+      --t-body:rgb(45,59,74); --t-body-bg:#f5f5f5;
+      --t-link:#3b71ca; --t-link-h:#386bc0;
+      --t-bdr:#e0e0e0; --t-form-bdr:#bdbdbd; --t-form-lbl:#757575;
+      --t-valid:#14a44d; --t-invalid:#dc4c64;
+      --t-focus:rgba(59,113,202,0.25); --t-focus-bdr:#3b71ca;
       --t-surface:#fff;
-      --t-font:"Roboto",sans-serif;--t-heading:"Roboto",sans-serif;
-      --t-shadow-sm:0 .125rem .25rem rgba(0,0,0,.075);--t-shadow:0 .5rem 1rem rgba(0,0,0,.15);--t-shadow-lg:0 1rem 3rem rgba(0,0,0,.175);
-      --g50:#fbfbfb;--g100:#f5f5f5;--g200:#eee;--g300:#e0e0e0;--g400:#bdbdbd;--g500:#9e9e9e;--g600:#757575;--g700:#616161;--g800:#4f4f4f;--g900:#262626;
-      --r-xs:2px;--r-sm:4px;--r-md:8px;--r-rnd:50px;--r-pill:50rem;
+      --t-font:"Roboto",sans-serif; --t-heading:"Roboto",sans-serif;
+      --t-shadow-sm:0 .125rem .25rem rgba(0,0,0,.075); --t-shadow:0 .5rem 1rem rgba(0,0,0,.15); --t-shadow-lg:0 1rem 3rem rgba(0,0,0,.175);
+      --g50:#fbfbfb; --g100:#f5f5f5; --g200:#eee; --g300:#e0e0e0; --g400:#bdbdbd; --g500:#9e9e9e; --g600:#757575; --g700:#616161; --g800:#4f4f4f; --g900:#262626;
+      --r-xs:2px; --r-sm:4px; --r-md:8px; --r-rnd:50px; --r-pill:50rem;
       --layer-color:#3b71ca;
     }
-    /* ═══ LAYER B: DESIGN TOKENS ═══ */
-    [data-theme="tokens"] {
-      --t-primary:#2D3B4A;--t-primary-h:#424F5C;--t-primary-bg:#EAEBED;--t-primary-bdr:#C0C4C9;--t-primary-txt:#2D3B4A;
-      --t-secondary:#536E8A;--t-secondary-bg:#D5E2FA;--t-secondary-txt:#2D3B4A;
-      --t-success:#67CF9D;--t-success-bg:#E1F5EB;--t-success-txt:#2D3B4A;
-      --t-danger:#BD3B39;--t-danger-bg:#FCDDED;--t-danger-txt:#BD3B39;
-      --t-warning:#F4C862;--t-warning-bg:#FFF4D1;--t-warning-txt:#2D3B4A;
-      --t-info:#536E8A;--t-info-bg:#D5E2FA;--t-info-txt:#2D3B4A;
-      --t-light:#FAFAFA;--t-dark:#2D3B4A;
-      --t-body:#2D3B4A;--t-body-bg:#f5f5f5;
-      --t-link:rgb(25,118,210);--t-link-h:rgb(35,82,124);
-      --t-bdr:#E0E0E0;--t-form-bdr:#757575;--t-form-lbl:#616161;
-      --t-valid:#67CF9D;--t-invalid:#BD3B39;
-      --t-focus:rgba(45,59,74,0.25);--t-focus-bdr:#2D3B4A;
+
+    /* ═══════════════════════════════════
+       LAYER B: MDB5 DEFAULTS (out-of-box)
+       Stock MDB5 7.x values
+       ═══════════════════════════════════ */
+    [data-theme="mdb-default"] {
+      --t-primary:#1266F1; --t-primary-h:#0d5bdd; --t-primary-bg:#d3e3fd; --t-primary-bdr:#a8c7fb; --t-primary-txt:#0e52c1;
+      --t-secondary:#B23CFD; --t-secondary-bg:#f0d9fe; --t-secondary-txt:#8e30ca;
+      --t-success:#00B74A; --t-success-bg:#ccf0da; --t-success-txt:#00923b;
+      --t-danger:#F93154; --t-danger-bg:#fed6dd; --t-danger-txt:#c72743;
+      --t-warning:#FFA900; --t-warning-bg:#ffeacc; --t-warning-txt:#cc8700;
+      --t-info:#39C0ED; --t-info-bg:#d8f2fb; --t-info-txt:#2e9abe;
+      --t-light:#FBFBFB; --t-dark:#262626;
+      --t-body:rgb(79,79,79); --t-body-bg:#fff;
+      --t-link:#1266F1; --t-link-h:#0d5bdd;
+      --t-bdr:#dee2e6; --t-form-bdr:#dee2e6; --t-form-lbl:#757575;
+      --t-valid:#00B74A; --t-invalid:#F93154;
+      --t-focus:rgba(18,102,241,0.25); --t-focus-bdr:#1266F1;
       --t-surface:#fff;
-      --t-font:"Roboto",sans-serif;--t-heading:"Poppins",sans-serif;
-      --g50:#FAFAFA;--g100:#F5F5F5;--g200:#EEE;--g300:#E0E0E0;--g400:#BDBDBD;--g500:#757575;--g600:#616161;--g700:#424242;--g800:#212121;--g900:#000;
-      --layer-color:#2D3B4A;
+      --t-font:"Roboto",sans-serif; --t-heading:"Roboto",sans-serif;
+      --t-shadow-sm:0 .125rem .25rem rgba(0,0,0,.075); --t-shadow:0 .5rem 1rem rgba(0,0,0,.15); --t-shadow-lg:0 1rem 3rem rgba(0,0,0,.175);
+      --g50:#fbfbfb; --g100:#f5f5f5; --g200:#eee; --g300:#e0e0e0; --g400:#bdbdbd; --g500:#9e9e9e; --g600:#757575; --g700:#616161; --g800:#4f4f4f; --g900:#262626;
+      --r-xs:4px; --r-sm:4px; --r-md:4px; --r-rnd:50px; --r-pill:50rem;
+      --layer-color:#1266F1;
     }
 
     *{box-sizing:border-box}
@@ -57,13 +66,25 @@
     .toggle-bar{position:fixed;top:0;left:240px;right:0;height:48px;background:#fff;border-bottom:1px solid var(--t-bdr);display:flex;align-items:center;justify-content:space-between;padding:0 28px;z-index:999;box-shadow:0 1px 3px rgba(0,0,0,.04)}
     .toggle-bar .lbl{font-size:13px;font-weight:500;color:var(--layer-color);display:flex;align-items:center;gap:8px}
     .toggle-bar .lbl .dot{width:9px;height:9px;border-radius:50%;background:var(--layer-color)}
-    .tg{display:flex;border:1px solid var(--t-bdr);border-radius:6px;overflow:hidden}
+    .tg{display:flex;border:1px solid #ddd;border-radius:6px;overflow:hidden}
     .tg button{padding:5px 14px;font-size:12px;font-weight:500;border:none;cursor:pointer;background:#fff;color:#888;transition:all .15s;font-family:inherit}
     .tg button.on{background:var(--t-primary);color:#fff}
     .tg button:not(.on):hover{background:#f5f5f5}
-    .delta-n{font-size:11px;color:#aaa}
-    .dbadge{display:none;font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;background:#FFF4D1;color:#896110;margin-left:6px;vertical-align:middle;text-transform:uppercase;letter-spacing:.5px}
-    [data-theme="tokens"] .dbadge{display:inline}
+    .override-count{font-size:11px;color:#999}
+
+    /* ── Override Callout ── */
+    .override-tag{display:none;font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;background:#E8F5E9;color:#2E7D32;margin-left:6px;vertical-align:middle;text-transform:uppercase;letter-spacing:.5px}
+    .no-override-tag{display:none;font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;background:#FFF3E0;color:#E65100;margin-left:6px;vertical-align:middle;text-transform:uppercase;letter-spacing:.5px}
+    [data-theme="production"] .override-tag{display:inline}
+    [data-theme="production"] .no-override-tag{display:inline}
+
+    /* Override detail callout box */
+    .override-detail{display:none;margin:12px 0 16px;padding:12px 16px;background:#f0faf3;border:1px solid #c8e6c9;border-radius:6px;font-size:12px;color:#2E7D32}
+    .override-detail code{background:#fff;padding:1px 5px;border-radius:3px;font-size:11px;color:#1B5E20;border:1px solid #c8e6c9}
+    .no-override-detail{display:none;margin:12px 0 16px;padding:12px 16px;background:#FFF8E1;border:1px solid #FFE082;border-radius:6px;font-size:12px;color:#E65100}
+    .no-override-detail code{background:#fff;padding:1px 5px;border-radius:3px;font-size:11px;color:#BF360C;border:1px solid #FFE082}
+    [data-theme="production"] .override-detail{display:block}
+    [data-theme="production"] .no-override-detail{display:block}
 
     /* ── Sidebar ── */
     .toc{position:fixed;top:0;left:0;width:240px;height:100vh;overflow-y:auto;background:#1a1f25;color:#ccc;padding:14px 0;z-index:1001;font-size:12px}
@@ -173,12 +194,12 @@
 
 <!-- TOGGLE BAR -->
 <div class="toggle-bar">
-  <div class="lbl"><span class="dot"></span><span id="ll">Production (Current)</span></div>
+  <div class="lbl"><span class="dot"></span><span id="ll">GLM Production</span></div>
   <div style="display:flex;align-items:center;gap:14px">
-    <span class="delta-n" id="dn"></span>
+    <span class="override-count" id="oc"></span>
     <div class="tg">
-      <button class="on" id="bP" onclick="st('production')">Production</button>
-      <button id="bT" onclick="st('tokens')">Design Tokens</button>
+      <button class="on" id="bP" onclick="st('production')">GLM Production</button>
+      <button id="bD" onclick="st('mdb-default')">MDB5 Default</button>
     </div>
   </div>
 </div>
@@ -188,13 +209,28 @@
 
 <div style="margin-bottom:24px">
   <h1 style="font-family:var(--t-heading);font-size:26px;font-weight:700;margin:0 0 4px">Foundant Component Reference</h1>
-  <p style="color:var(--g600);font-size:13px;margin:0">MDB5 Pro components. Toggle between Production and Design Token layers to see differences. <span class="dbadge">DELTA</span> markers show where they diverge.</p>
+  <p style="color:var(--g600);font-size:13px;margin:0">Toggle between <strong>GLM Production</strong> (what's actually shipping) and <strong>MDB5 Default</strong> (out-of-box). Green <span class="override-tag" style="display:inline">OVERRIDDEN</span> tags show where engineers have customized. Orange <span class="no-override-tag" style="display:inline">DEFAULT</span> tags flag areas still using MDB5 stock values — potential gaps.</p>
 </div>
 
 <!-- ═══ COLORS ═══ -->
 <section class="sec" id="colors">
-  <h2>Colors <span class="dbadge">CHANGED</span></h2>
-  <p class="sd">Theme colors, semantic palette, and neutral scale.</p>
+  <h2>Colors <span class="override-tag">OVERRIDDEN</span></h2>
+  <p class="sd">Theme palette. All six semantic colors have been overridden from MDB5 defaults.</p>
+
+  <div class="override-detail">
+    <strong>Overrides applied:</strong><br>
+    Primary: <code>#1266F1</code> → <code>#3b71ca</code> · 
+    Secondary: <code>#B23CFD</code> → <code>#9fa6b2</code> · 
+    Success: <code>#00B74A</code> → <code>#14a44d</code> · 
+    Danger: <code>#F93154</code> → <code>#dc4c64</code> · 
+    Warning: <code>#FFA900</code> → <code>#e4a11b</code> · 
+    Info: <code>#39C0ED</code> → <code>#54b4d3</code> · 
+    Dark: <code>#262626</code> → <code>#332d2d</code> · 
+    Body color: <code>rgb(79,79,79)</code> → <code>rgb(45,59,74)</code> · 
+    Body bg: <code>#fff</code> → <code>#f5f5f5</code> · 
+    Border color: <code>#dee2e6</code> → <code>#e0e0e0</code>
+  </div>
+
   <h3>Theme</h3>
   <div class="sg">
     <div class="sw"><div class="swc" style="background:var(--t-primary)"></div><div class="swi"><strong>Primary</strong></div></div>
@@ -231,8 +267,13 @@
 
 <!-- ═══ TYPOGRAPHY ═══ -->
 <section class="sec" id="typography">
-  <h2>Typography <span class="dbadge">CHANGED</span></h2>
-  <p class="sd">Body: Roboto. Headings: Roboto (production) → Poppins (tokens).</p>
+  <h2>Typography <span class="no-override-tag">DEFAULT</span></h2>
+  <p class="sd">Font family, heading scale, body text, and inline styles.</p>
+
+  <div class="no-override-detail">
+    <strong>No override detected:</strong> Both production and MDB5 default use <code>Roboto, sans-serif</code> for body and headings. The foundant.css design tokens specify <code>Poppins</code> for headings, but this has not been applied in production. Heading sizes h2–h4 have been overridden in a separate stylesheet but the font-family remains MDB5 default.
+  </div>
+
   <h3>Headings</h3>
   <div style="margin-bottom:12px">
     <div style="font-family:var(--t-heading);font-size:2.5rem;font-weight:700;margin:6px 0">h1. Heading</div>
@@ -250,8 +291,11 @@
 
 <!-- ═══ ICONS ═══ -->
 <section class="sec" id="icons">
-  <h2>Icons</h2>
-  <p class="sd">FA7 Pro in production; FA6 Free in this CDN reference.</p>
+  <h2>Icons <span class="override-tag">OVERRIDDEN</span></h2>
+  <p class="sd">Icon library.</p>
+  <div class="override-detail">
+    <strong>Override applied:</strong> Production uses <code>Font Awesome 7 Pro</code> (multiple families: Pro, Sharp, Duotone, Slab, etc.). MDB5 ships with <code>Font Awesome 6 Free</code>. This CDN reference renders FA6 Free.
+  </div>
   <div class="cr" style="font-size:20px;gap:16px;color:var(--g600)">
     <i class="fas fa-home" title="home"></i><i class="fas fa-search" title="search"></i><i class="fas fa-user" title="user"></i><i class="fas fa-cog" title="cog"></i><i class="fas fa-bell" title="bell"></i><i class="fas fa-envelope" title="envelope"></i><i class="fas fa-trash" title="trash"></i><i class="fas fa-edit" title="edit"></i><i class="fas fa-plus" title="plus"></i><i class="fas fa-check" title="check"></i><i class="fas fa-times" title="times"></i><i class="fas fa-download" title="download"></i><i class="fas fa-filter" title="filter"></i><i class="fas fa-sort" title="sort"></i><i class="fas fa-ellipsis-v" title="ellipsis-v"></i><i class="fas fa-chevron-down" title="chevron-down"></i><i class="fas fa-info-circle" title="info-circle"></i><i class="fas fa-exclamation-triangle" title="warning"></i><i class="fas fa-calendar" title="calendar"></i><i class="fas fa-eye" title="eye"></i><i class="fas fa-link" title="link"></i><i class="fas fa-external-link-alt" title="external"></i>
   </div>
@@ -259,16 +303,20 @@
 
 <!-- ═══ GRID ═══ -->
 <section class="sec" id="grid">
-  <h2>Grid System</h2>
-  <p class="sd">12-column. sm:576 md:768 lg:992 xl:1200 xxl:1400.</p>
-  <div class="row g-2 mb-2"><div class="col"><div class="demo-box" style="background:var(--t-primary);color:#fff;padding:10px;border-radius:var(--r-sm);text-align:center;font-size:12px">col</div></div><div class="col"><div style="background:var(--t-primary);color:#fff;padding:10px;border-radius:var(--r-sm);text-align:center;font-size:12px">col</div></div><div class="col"><div style="background:var(--t-primary);color:#fff;padding:10px;border-radius:var(--r-sm);text-align:center;font-size:12px">col</div></div></div>
-  <div class="row g-2 mb-2"><div class="col-3"><div style="background:var(--t-primary-bg);color:var(--t-primary);padding:10px;border-radius:var(--r-sm);text-align:center;font-size:12px">3</div></div><div class="col-6"><div style="background:var(--t-primary);color:#fff;padding:10px;border-radius:var(--r-sm);text-align:center;font-size:12px">6</div></div><div class="col-3"><div style="background:var(--t-primary-bg);color:var(--t-primary);padding:10px;border-radius:var(--r-sm);text-align:center;font-size:12px">3</div></div></div>
+  <h2>Grid System <span class="no-override-tag">DEFAULT</span></h2>
+  <p class="sd">12-column responsive grid.</p>
+  <div class="no-override-detail"><strong>No override detected:</strong> Grid breakpoints, column counts, and gutter sizes appear to use MDB5/Bootstrap defaults.</div>
+  <div class="row g-2 mb-2"><div class="col"><div style="background:var(--t-primary);color:#fff;padding:10px;border-radius:var(--r-sm);text-align:center;font-size:12px">col</div></div><div class="col"><div style="background:var(--t-primary);color:#fff;padding:10px;border-radius:var(--r-sm);text-align:center;font-size:12px">col</div></div><div class="col"><div style="background:var(--t-primary);color:#fff;padding:10px;border-radius:var(--r-sm);text-align:center;font-size:12px">col</div></div></div>
+  <div class="row g-2"><div class="col-3"><div style="background:var(--t-primary-bg);color:var(--t-primary);padding:10px;border-radius:var(--r-sm);text-align:center;font-size:12px">3</div></div><div class="col-6"><div style="background:var(--t-primary);color:#fff;padding:10px;border-radius:var(--r-sm);text-align:center;font-size:12px">6</div></div><div class="col-3"><div style="background:var(--t-primary-bg);color:var(--t-primary);padding:10px;border-radius:var(--r-sm);text-align:center;font-size:12px">3</div></div></div>
 </section>
 
 <!-- ═══ SPACING ═══ -->
 <section class="sec" id="spacing">
-  <h2>Spacing &amp; Radius</h2>
-  <p class="sd">Custom radius tokens and Bootstrap spacing scale.</p>
+  <h2>Spacing &amp; Radius <span class="override-tag">OVERRIDDEN</span></h2>
+  <p class="sd">Custom radius tokens. Spacing scale is MDB5 default.</p>
+  <div class="override-detail">
+    <strong>Radius overrides:</strong> Production defines custom radius tokens: <code>--radius-xs: 2px</code>, <code>--radius-sm: 4px</code>, <code>--radius-md: 8px</code>, <code>--radius-round: 50px</code>. MDB5 default uses <code>0.25rem (4px)</code> for all standard radii. The <code>8px</code> md radius is the notable divergence.
+  </div>
   <h3>Radius</h3>
   <div class="cr" style="align-items:center">
     <div style="width:70px;height:50px;background:var(--g200);border:1px solid var(--t-bdr);border-radius:var(--r-xs);display:flex;align-items:center;justify-content:center;font-size:10px">xs 2px</div>
@@ -280,8 +328,9 @@
 
 <!-- ═══ NAVBAR ═══ -->
 <section class="sec" id="navbar">
-  <h2>Navbar</h2>
+  <h2>Navbar <span class="no-override-tag">DEFAULT</span></h2>
   <p class="sd">Top navigation bar.</p>
+  <div class="no-override-detail"><strong>No structural override detected:</strong> Navbar uses MDB5 default component patterns. Colors change via the theme overrides above but no navbar-specific customizations were found.</div>
   <div style="background:var(--t-dark);border-radius:var(--r-md);padding:0 16px;display:flex;align-items:center;height:44px;gap:20px">
     <span style="color:#fff;font-weight:700;font-size:14px;font-family:var(--t-heading)">Foundant</span>
     <a href="#" style="color:rgba(255,255,255,.9);text-decoration:none;font-size:13px;font-weight:500">Dashboard</a>
@@ -295,8 +344,9 @@
 
 <!-- ═══ SIDENAV ═══ -->
 <section class="sec" id="sidenav">
-  <h2>Sidenav</h2>
-  <p class="sd">Vertical sidebar with sections and icons.</p>
+  <h2>Sidenav <span class="no-override-tag">DEFAULT</span></h2>
+  <p class="sd">Vertical sidebar navigation.</p>
+  <div class="no-override-detail"><strong>No structural override detected:</strong> Uses MDB5 sidenav patterns. Active state and colors are driven by theme color overrides.</div>
   <div style="width:220px;background:var(--t-surface);border:1px solid var(--t-bdr);border-radius:var(--r-md);overflow:hidden">
     <div style="padding:12px 14px;border-bottom:1px solid var(--t-bdr);font-weight:700;font-size:13px;font-family:var(--t-heading)"><i class="fas fa-layer-group me-2" style="color:var(--t-primary)"></i>GLM</div>
     <div style="padding:4px 0">
@@ -304,16 +354,15 @@
       <a href="#" style="display:flex;align-items:center;padding:8px 14px;color:var(--g600);text-decoration:none;font-size:12px;border-left:3px solid transparent"><i class="fas fa-file-alt me-3" style="width:16px;text-align:center;font-size:12px"></i>Applications</a>
       <a href="#" style="display:flex;align-items:center;padding:8px 14px;color:var(--g600);text-decoration:none;font-size:12px;border-left:3px solid transparent"><i class="fas fa-award me-3" style="width:16px;text-align:center;font-size:12px"></i>Awards</a>
       <a href="#" style="display:flex;align-items:center;padding:8px 14px;color:var(--g600);text-decoration:none;font-size:12px;border-left:3px solid transparent"><i class="fas fa-chart-bar me-3" style="width:16px;text-align:center;font-size:12px"></i>Reports</a>
-      <div style="padding:10px 14px 3px;font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--g400);font-weight:700">Settings</div>
-      <a href="#" style="display:flex;align-items:center;padding:8px 14px;color:var(--g600);text-decoration:none;font-size:12px;border-left:3px solid transparent"><i class="fas fa-cog me-3" style="width:16px;text-align:center;font-size:12px"></i>Configuration</a>
     </div>
   </div>
 </section>
 
 <!-- ═══ TABS ═══ -->
 <section class="sec" id="tabs">
-  <h2>Tabs &amp; Pills</h2>
-  <p class="sd">Horizontal page-section navigation.</p>
+  <h2>Tabs &amp; Pills <span class="no-override-tag">DEFAULT</span></h2>
+  <p class="sd">Horizontal navigation.</p>
+  <div class="no-override-detail"><strong>No structural override detected:</strong> Tab and pill styles use MDB5 defaults. Active color changes with theme primary.</div>
   <h3>Tabs</h3>
   <div style="border-bottom:2px solid var(--t-bdr);display:flex;gap:0;margin-bottom:14px">
     <a href="#" style="padding:8px 18px;font-size:13px;font-weight:500;text-decoration:none;color:var(--t-primary);border-bottom:2px solid var(--t-primary);margin-bottom:-2px">Active</a>
@@ -324,21 +373,22 @@
   <div style="display:flex;gap:5px">
     <a href="#" style="padding:6px 14px;font-size:12px;font-weight:500;text-decoration:none;color:#fff;background:var(--t-primary);border-radius:var(--r-rnd)">Active</a>
     <a href="#" style="padding:6px 14px;font-size:12px;text-decoration:none;color:var(--g600);background:var(--g200);border-radius:var(--r-rnd)">Pill</a>
-    <a href="#" style="padding:6px 14px;font-size:12px;text-decoration:none;color:var(--g600);background:var(--g200);border-radius:var(--r-rnd)">Pill</a>
   </div>
 </section>
 
 <!-- ═══ BREADCRUMB ═══ -->
 <section class="sec" id="breadcrumb">
-  <h2>Breadcrumb</h2>
+  <h2>Breadcrumb <span class="no-override-tag">DEFAULT</span></h2>
   <p class="sd">Path navigation.</p>
+  <div class="no-override-detail"><strong>No override detected.</strong></div>
   <nav style="font-size:13px"><a href="#" style="color:var(--t-link);text-decoration:none">Home</a><span style="color:var(--g400);margin:0 6px">/</span><a href="#" style="color:var(--t-link);text-decoration:none">Grants</a><span style="color:var(--g400);margin:0 6px">/</span><span style="color:var(--g500)">Application #1042</span></nav>
 </section>
 
 <!-- ═══ PAGINATION ═══ -->
 <section class="sec" id="pagination">
-  <h2>Pagination</h2>
-  <p class="sd">Page navigation for tables/lists.</p>
+  <h2>Pagination <span class="no-override-tag">DEFAULT</span></h2>
+  <p class="sd">Page navigation.</p>
+  <div class="no-override-detail"><strong>No override detected.</strong></div>
   <div style="display:flex;gap:3px">
     <button style="padding:5px 10px;border:1px solid var(--t-bdr);background:#fff;border-radius:var(--r-sm);font-size:12px;color:var(--g400);cursor:pointer">Prev</button>
     <button style="padding:5px 10px;border:1px solid var(--t-primary);background:var(--t-primary);border-radius:var(--r-sm);font-size:12px;color:#fff;cursor:pointer">1</button>
@@ -350,8 +400,11 @@
 
 <!-- ═══ BUTTONS ═══ -->
 <section class="sec" id="buttons">
-  <h2>Buttons <span class="dbadge">CHANGED</span></h2>
-  <p class="sd">Pill-shaped only. All semantic variants, sizes, and states.</p>
+  <h2>Buttons <span class="override-tag">OVERRIDDEN</span></h2>
+  <p class="sd">All semantic variants, sizes, and states.</p>
+  <div class="override-detail">
+    <strong>Overrides applied:</strong> Button colors follow theme overrides. Production uses <code>pill shape (border-radius: 50px)</code> for primary actions — this is a custom decision, not an MDB5 default (<code>4px</code>). The <code>btn-rounded</code> MDB class achieves this, but your system appears to apply it as the default shape.
+  </div>
   <h3>Filled</h3>
   <div class="cr"><button class="btn-t btn-tp">Primary</button><button class="btn-t btn-ts">Secondary</button><button class="btn-t btn-tsc">Success</button><button class="btn-t btn-td">Danger</button><button class="btn-t btn-tw">Warning</button><button class="btn-t btn-ti">Info</button></div>
   <h3>Outline</h3>
@@ -368,8 +421,9 @@
 
 <!-- ═══ DROPDOWNS ═══ -->
 <section class="sec" id="dropdowns">
-  <h2>Dropdowns</h2>
+  <h2>Dropdowns <span class="no-override-tag">DEFAULT</span></h2>
   <p class="sd">Contextual action menus.</p>
+  <div class="no-override-detail"><strong>No structural override detected.</strong></div>
   <div style="position:relative;display:inline-block">
     <button class="btn-t btn-tp btn-sm2">Actions <i class="fas fa-caret-down ms-1"></i></button>
     <div style="position:absolute;top:100%;left:0;margin-top:4px;background:#fff;border:1px solid var(--t-bdr);border-radius:var(--r-md);box-shadow:var(--t-shadow);min-width:170px;z-index:10;overflow:hidden">
@@ -383,19 +437,23 @@
 
 <!-- ═══ CARDS ═══ -->
 <section class="sec" id="cards">
-  <h2>Cards</h2>
+  <h2>Cards <span class="no-override-tag">DEFAULT</span></h2>
   <p class="sd">Content containers.</p>
+  <div class="no-override-detail"><strong>No structural override detected:</strong> Card borders, padding, and layout use MDB5 defaults. Colors change via theme.</div>
   <div class="row g-3">
-    <div class="col-md-4"><div class="card-t"><div class="card-tb"><div style="font-family:var(--t-heading);font-weight:600;font-size:15px;margin-bottom:6px">Basic Card</div><p style="font-size:12px;color:var(--g600);margin:0 0 10px">Supporting text content.</p><button class="btn-t btn-tp btn-sm2">Action</button></div></div></div>
-    <div class="col-md-4"><div class="card-t"><div class="card-th">Header</div><div class="card-tb"><p style="font-size:12px;color:var(--g600);margin:0">Body content here.</p></div><div class="card-tf">Updated 2 days ago</div></div></div>
-    <div class="col-md-4"><div class="card-t"><div style="height:80px;background:linear-gradient(135deg,var(--t-primary),var(--t-info));display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px"><i class="fas fa-image me-1"></i> Image</div><div class="card-tb"><div style="font-family:var(--t-heading);font-weight:600;font-size:15px;margin-bottom:6px">Image Card</div><p style="font-size:12px;color:var(--g600);margin:0">With header image.</p></div></div></div>
+    <div class="col-md-4"><div class="card-t"><div class="card-tb"><div style="font-family:var(--t-heading);font-weight:600;font-size:15px;margin-bottom:6px">Basic Card</div><p style="font-size:12px;color:var(--g600);margin:0 0 10px">Supporting text.</p><button class="btn-t btn-tp btn-sm2">Action</button></div></div></div>
+    <div class="col-md-4"><div class="card-t"><div class="card-th">Header</div><div class="card-tb"><p style="font-size:12px;color:var(--g600);margin:0">Body content.</p></div><div class="card-tf">Updated 2 days ago</div></div></div>
+    <div class="col-md-4"><div class="card-t"><div style="height:80px;background:linear-gradient(135deg,var(--t-primary),var(--t-info));display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px"><i class="fas fa-image me-1"></i> Image</div><div class="card-tb"><div style="font-family:var(--t-heading);font-weight:600;font-size:15px;margin-bottom:6px">Image Card</div><p style="font-size:12px;color:var(--g600);margin:0">With header.</p></div></div></div>
   </div>
 </section>
 
 <!-- ═══ BADGES ═══ -->
 <section class="sec" id="badges">
-  <h2>Badges &amp; Chips <span class="dbadge">CHANGED</span></h2>
+  <h2>Badges &amp; Chips <span class="override-tag">OVERRIDDEN</span></h2>
   <p class="sd">Status indicators and tags.</p>
+  <div class="override-detail">
+    <strong>Overrides applied:</strong> All badge colors follow theme overrides. Subtle background tints (<code>*-bg-subtle</code>) have been customized for each semantic color. Production uses pill-shaped badges.
+  </div>
   <h3>Subtle</h3>
   <div class="cr"><span class="badge-t bp">Primary</span><span class="badge-t bs">Approved</span><span class="badge-t bd">Denied</span><span class="badge-t bw">Pending</span><span class="badge-t bi">In Review</span></div>
   <h3>Solid</h3>
@@ -406,8 +464,11 @@
 
 <!-- ═══ ALERTS ═══ -->
 <section class="sec" id="alerts">
-  <h2>Alerts <span class="dbadge">CHANGED</span></h2>
+  <h2>Alerts <span class="override-tag">OVERRIDDEN</span></h2>
   <p class="sd">Contextual feedback messages.</p>
+  <div class="override-detail">
+    <strong>Overrides applied:</strong> Alert colors follow theme overrides. Background tints and text emphasis colors are all customized from MDB5 defaults.
+  </div>
   <div class="alert-t ap"><i class="fas fa-info-circle" style="margin-top:1px"></i> Informational alert.</div>
   <div class="alert-t as"><i class="fas fa-check-circle" style="margin-top:1px"></i> Application submitted successfully.</div>
   <div class="alert-t aw"><i class="fas fa-exclamation-triangle" style="margin-top:1px"></i> Past review deadline.</div>
@@ -417,8 +478,9 @@
 
 <!-- ═══ TABLES ═══ -->
 <section class="sec" id="tables">
-  <h2>Tables</h2>
-  <p class="sd">Data tables with hover states.</p>
+  <h2>Tables <span class="no-override-tag">DEFAULT</span></h2>
+  <p class="sd">Data tables.</p>
+  <div class="no-override-detail"><strong>No structural override detected:</strong> Table layout, hover states, and borders use MDB5 defaults. Your production app uses <code>ag-Grid</code> for complex tables (visible in computed styles as <code>--ag-*</code> variables), which is a separate component entirely.</div>
   <div style="overflow-x:auto">
     <table class="tbl-t">
       <thead><tr><th>#</th><th>Organization</th><th>Program</th><th>Amount</th><th>Status</th></tr></thead>
@@ -433,8 +495,9 @@
 
 <!-- ═══ LIST GROUPS ═══ -->
 <section class="sec" id="list-groups">
-  <h2>List Groups</h2>
+  <h2>List Groups <span class="no-override-tag">DEFAULT</span></h2>
   <p class="sd">Grouped list items.</p>
+  <div class="no-override-detail"><strong>No override detected.</strong></div>
   <div style="max-width:280px;border:1px solid var(--t-bdr);border-radius:var(--r-md);overflow:hidden">
     <div style="padding:8px 14px;display:flex;justify-content:space-between;align-items:center;background:var(--t-primary-bg);font-size:13px;font-weight:500;color:var(--t-primary)">Applications <span class="badge-t bp">14</span></div>
     <div style="padding:8px 14px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--t-bdr);font-size:13px">Under Review <span class="badge-t bw">3</span></div>
@@ -444,19 +507,20 @@
 
 <!-- ═══ ACCORDIONS ═══ -->
 <section class="sec" id="accordions">
-  <h2>Accordions</h2>
+  <h2>Accordions <span class="no-override-tag">DEFAULT</span></h2>
   <p class="sd">Collapsible panels.</p>
+  <div class="no-override-detail"><strong>No override detected.</strong></div>
   <div style="border:1px solid var(--t-bdr);border-radius:var(--r-md);overflow:hidden">
-    <div><div style="padding:10px 14px;font-weight:500;font-size:13px;cursor:pointer;display:flex;justify-content:space-between;background:var(--g50)">Item #1 <i class="fas fa-chevron-down" style="font-size:11px;color:var(--g400)"></i></div><div style="padding:12px 14px;font-size:13px;color:var(--g600);border-top:1px solid var(--t-bdr)">First item's content. Expanded by default.</div></div>
+    <div><div style="padding:10px 14px;font-weight:500;font-size:13px;cursor:pointer;display:flex;justify-content:space-between;background:var(--g50)">Item #1 <i class="fas fa-chevron-down" style="font-size:11px;color:var(--g400)"></i></div><div style="padding:12px 14px;font-size:13px;color:var(--g600);border-top:1px solid var(--t-bdr)">First item's content.</div></div>
     <div style="border-top:1px solid var(--t-bdr)"><div style="padding:10px 14px;font-weight:500;font-size:13px;cursor:pointer;display:flex;justify-content:space-between">Item #2 <i class="fas fa-chevron-right" style="font-size:11px;color:var(--g400)"></i></div></div>
-    <div style="border-top:1px solid var(--t-bdr)"><div style="padding:10px 14px;font-weight:500;font-size:13px;cursor:pointer;display:flex;justify-content:space-between">Item #3 <i class="fas fa-chevron-right" style="font-size:11px;color:var(--g400)"></i></div></div>
   </div>
 </section>
 
 <!-- ═══ TIMELINE ═══ -->
 <section class="sec" id="timeline">
-  <h2>Timeline</h2>
+  <h2>Timeline <span class="no-override-tag">DEFAULT</span></h2>
   <p class="sd">Activity history.</p>
+  <div class="no-override-detail"><strong>No override detected:</strong> MDB5 timeline pattern with color-only changes from theme.</div>
   <div style="max-width:420px;padding-left:22px;border-left:2px solid var(--t-bdr)">
     <div style="position:relative;padding-bottom:16px"><div style="position:absolute;left:-29px;top:2px;width:14px;height:14px;border-radius:50%;background:var(--t-success);border:2px solid #fff"></div><strong style="font-size:13px">Approved</strong><p style="font-size:11px;color:var(--g500);margin:3px 0 0">Apr 28, 2026</p></div>
     <div style="position:relative;padding-bottom:16px"><div style="position:absolute;left:-29px;top:2px;width:14px;height:14px;border-radius:50%;background:var(--t-primary);border:2px solid #fff"></div><strong style="font-size:13px">Review Complete</strong><p style="font-size:11px;color:var(--g500);margin:3px 0 0">Apr 22, 2026</p></div>
@@ -466,21 +530,25 @@
 
 <!-- ═══ INPUTS ═══ -->
 <section class="sec" id="inputs">
-  <h2>Text Inputs <span class="dbadge">CHANGED</span></h2>
-  <p class="sd">Standard top-label inputs. Border and focus colors shift between layers.</p>
+  <h2>Text Inputs <span class="override-tag">OVERRIDDEN</span></h2>
+  <p class="sd">Standard top-label inputs.</p>
+  <div class="override-detail">
+    <strong>Overrides applied:</strong> Form control border: <code>#dee2e6</code> → <code>#bdbdbd</code>. Focus border color: <code>#1266F1</code> → <code>#3b71ca</code>. Focus ring: <code>rgba(18,102,241,0.25)</code> → <code>rgba(59,113,202,0.25)</code>. Input focus label color uses <code>#3b71ca</code>.
+  </div>
   <div class="row g-3" style="max-width:560px">
     <div class="col-md-6"><label class="lbl-t">Organization Name</label><input class="inp-t" placeholder="Enter name" /></div>
     <div class="col-md-6"><label class="lbl-t">Email</label><input class="inp-t" type="email" placeholder="name@example.com" /></div>
     <div class="col-12"><label class="lbl-t">Description</label><textarea class="inp-t" rows="2" placeholder="Enter details..." style="resize:vertical"></textarea></div>
-    <div class="col-md-6"><label class="lbl-t">With Helper</label><input class="inp-t" /><div style="font-size:11px;color:var(--g500);margin-top:3px">We'll never share your data.</div></div>
+    <div class="col-md-6"><label class="lbl-t">With Helper</label><input class="inp-t" /><div style="font-size:11px;color:var(--g500);margin-top:3px">Helper text below input.</div></div>
     <div class="col-md-6"><label class="lbl-t">Disabled</label><input class="inp-t" value="Cannot edit" disabled style="background:var(--g200);cursor:not-allowed" /></div>
   </div>
 </section>
 
 <!-- ═══ SELECTS ═══ -->
 <section class="sec" id="selects">
-  <h2>Select</h2>
+  <h2>Select <span class="no-override-tag">DEFAULT</span></h2>
   <p class="sd">Native dropdowns.</p>
+  <div class="no-override-detail"><strong>No structural override detected.</strong></div>
   <div class="row g-3" style="max-width:560px">
     <div class="col-md-6"><label class="lbl-t">Category</label><select class="sel-t"><option>Choose...</option><option>Education</option><option>Health</option></select></div>
     <div class="col-md-6"><label class="lbl-t">Status</label><select class="sel-t"><option>All</option><option>Active</option><option>Closed</option></select></div>
@@ -489,8 +557,9 @@
 
 <!-- ═══ CHECK/RADIO/SWITCH ═══ -->
 <section class="sec" id="checkradio">
-  <h2>Checkbox, Radio &amp; Switch</h2>
+  <h2>Checkbox, Radio &amp; Switch <span class="no-override-tag">DEFAULT</span></h2>
   <p class="sd">Selection controls.</p>
+  <div class="no-override-detail"><strong>No structural override detected:</strong> Uses MDB5/Bootstrap form-check defaults. Checked color follows theme primary.</div>
   <div class="row g-4">
     <div class="col-md-4"><h3>Checkbox</h3><div class="form-check"><input class="form-check-input" type="checkbox" checked id="c1"><label class="form-check-label" for="c1" style="font-size:13px">Checked</label></div><div class="form-check"><input class="form-check-input" type="checkbox" id="c2"><label class="form-check-label" for="c2" style="font-size:13px">Unchecked</label></div><div class="form-check"><input class="form-check-input" type="checkbox" disabled id="c3"><label class="form-check-label" for="c3" style="font-size:13px">Disabled</label></div></div>
     <div class="col-md-4"><h3>Radio</h3><div class="form-check"><input class="form-check-input" type="radio" name="r" checked id="r1"><label class="form-check-label" for="r1" style="font-size:13px">One</label></div><div class="form-check"><input class="form-check-input" type="radio" name="r" id="r2"><label class="form-check-label" for="r2" style="font-size:13px">Two</label></div></div>
@@ -500,8 +569,11 @@
 
 <!-- ═══ DATEPICKER ═══ -->
 <section class="sec" id="datepicker">
-  <h2>Datepicker</h2>
+  <h2>Datepicker <span class="override-tag">OVERRIDDEN</span></h2>
   <p class="sd">Calendar selection (static).</p>
+  <div class="override-detail">
+    <strong>Overrides applied:</strong> Datepicker header bg: <code>#3b71ca</code> (matches primary override). Toggle focus color: <code>#3b71ca</code>. Cell-in-range bg: <code>#b1c6ea</code>. These are set via dedicated <code>--mdb-datepicker-*</code> variables.
+  </div>
   <div style="max-width:260px"><label class="lbl-t">Date</label><div style="position:relative"><input class="inp-t" value="04/28/2026" /><i class="fas fa-calendar" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--g400);font-size:13px"></i></div></div>
   <div style="height:12px"></div>
   <div style="width:260px;border:1px solid var(--t-bdr);border-radius:var(--r-md);overflow:hidden">
@@ -519,15 +591,19 @@
 
 <!-- ═══ AUTOCOMPLETE ═══ -->
 <section class="sec" id="autocomplete">
-  <h2>Autocomplete</h2>
-  <p class="sd">Typeahead suggestions.</p>
+  <h2>Autocomplete <span class="no-override-tag">DEFAULT</span></h2>
+  <p class="sd">Typeahead.</p>
+  <div class="no-override-detail"><strong>No structural override detected.</strong></div>
   <div style="max-width:360px"><label class="lbl-t">Organization</label><div style="position:relative"><input class="inp-t" value="Commun" style="border-radius:var(--r-sm) var(--r-sm) 0 0" /><div style="border:1px solid var(--t-bdr);border-top:none;border-radius:0 0 var(--r-sm) var(--r-sm);box-shadow:var(--t-shadow-sm);background:#fff"><div style="padding:8px 12px;font-size:12px;background:var(--t-primary-bg);cursor:pointer"><b>Commun</b>ity Health Alliance</div><div style="padding:8px 12px;font-size:12px;cursor:pointer"><b>Commun</b>ity Foundation</div></div></div></div>
 </section>
 
 <!-- ═══ STEPPER ═══ -->
 <section class="sec" id="stepper">
-  <h2>Stepper</h2>
+  <h2>Stepper <span class="override-tag">OVERRIDDEN</span></h2>
   <p class="sd">Multi-step progress.</p>
+  <div class="override-detail">
+    <strong>Overrides applied:</strong> Stepper mobile bg: <code>#fbfbfb</code> (matches light override). Step indicator colors follow theme primary/success overrides.
+  </div>
   <div style="display:flex;align-items:center;justify-content:center">
     <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:32px;height:32px;border-radius:50%;background:var(--t-success);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px"><i class="fas fa-check" style="font-size:11px"></i></div><span style="font-size:10px;color:var(--t-success-txt);font-weight:500">Details</span></div>
     <div style="flex:1;height:2px;background:var(--t-success);max-width:80px"></div>
@@ -541,8 +617,11 @@
 
 <!-- ═══ VALIDATION ═══ -->
 <section class="sec" id="validation">
-  <h2>Validation <span class="dbadge">CHANGED</span></h2>
-  <p class="sd">Valid/invalid input states.</p>
+  <h2>Validation <span class="override-tag">OVERRIDDEN</span></h2>
+  <p class="sd">Valid/invalid states.</p>
+  <div class="override-detail">
+    <strong>Overrides applied:</strong> Valid color: <code>#00B74A</code> → <code>#14a44d</code>. Invalid color: <code>#F93154</code> → <code>#dc4c64</code>. Valid border: <code>#00B74A</code> → <code>#14a44d</code>. Invalid border: <code>#F93154</code> → <code>#dc4c64</code>.
+  </div>
   <div style="max-width:440px;display:flex;flex-direction:column;gap:14px">
     <div><label class="lbl-t">Valid</label><input class="inp-t" style="border-color:var(--t-valid)" value="Community Health Alliance" /><div style="font-size:11px;color:var(--t-valid);margin-top:3px"><i class="fas fa-check-circle me-1"></i>Looks good!</div></div>
     <div><label class="lbl-t">Invalid</label><input class="inp-t" style="border-color:var(--t-invalid)" placeholder="Required" /><div style="font-size:11px;color:var(--t-invalid);margin-top:3px"><i class="fas fa-times-circle me-1"></i>Required field.</div></div>
@@ -551,8 +630,9 @@
 
 <!-- ═══ INPUT GROUPS ═══ -->
 <section class="sec" id="input-groups">
-  <h2>Input Groups</h2>
+  <h2>Input Groups <span class="no-override-tag">DEFAULT</span></h2>
   <p class="sd">Combined inputs.</p>
+  <div class="no-override-detail"><strong>No override detected.</strong></div>
   <div style="max-width:440px;display:flex;flex-direction:column;gap:10px">
     <div style="display:flex"><span style="padding:9px 12px;background:var(--g100);border:1px solid var(--t-form-bdr);border-right:none;border-radius:var(--r-sm) 0 0 var(--r-sm);color:var(--g600);font-size:13px">$</span><input class="inp-t" style="border-radius:0 var(--r-sm) var(--r-sm) 0" placeholder="Amount" /></div>
     <div style="display:flex"><input class="inp-t" style="border-radius:var(--r-sm) 0 0 var(--r-sm);border-right:none" placeholder="Search..." /><button class="btn-t btn-tp" style="border-radius:0 var(--r-sm) var(--r-sm) 0;padding:9px 14px"><i class="fas fa-search"></i></button></div>
@@ -561,8 +641,9 @@
 
 <!-- ═══ MODALS ═══ -->
 <section class="sec" id="modals">
-  <h2>Modals</h2>
+  <h2>Modals <span class="no-override-tag">DEFAULT</span></h2>
   <p class="sd">Dialog overlays.</p>
+  <div class="no-override-detail"><strong>No structural override detected.</strong></div>
   <div class="modal-t" style="max-width:440px">
     <div class="modal-th"><h5>Confirm Award</h5><button style="background:none;border:none;font-size:18px;color:var(--g400);cursor:pointer">&times;</button></div>
     <div class="modal-tb">Approve <strong>$75,000</strong> to Community Health Alliance?</div>
@@ -572,8 +653,9 @@
 
 <!-- ═══ TOASTS ═══ -->
 <section class="sec" id="toasts">
-  <h2>Toasts</h2>
-  <p class="sd">Notification messages.</p>
+  <h2>Toasts <span class="no-override-tag">DEFAULT</span></h2>
+  <p class="sd">Notifications.</p>
+  <div class="no-override-detail"><strong>No structural override detected.</strong></div>
   <div style="max-width:300px;display:flex;flex-direction:column;gap:8px">
     <div style="background:#fff;border-left:4px solid var(--t-success);border-radius:var(--r-sm);box-shadow:var(--t-shadow-sm);padding:10px 14px;display:flex;align-items:center;gap:8px"><i class="fas fa-check-circle" style="color:var(--t-success);font-size:14px"></i><div><strong style="font-size:12px">Saved</strong><p style="margin:0;font-size:11px;color:var(--g500)">Changes saved.</p></div></div>
     <div style="background:#fff;border-left:4px solid var(--t-danger);border-radius:var(--r-sm);box-shadow:var(--t-shadow-sm);padding:10px 14px;display:flex;align-items:center;gap:8px"><i class="fas fa-times-circle" style="color:var(--t-danger);font-size:14px"></i><div><strong style="font-size:12px">Error</strong><p style="margin:0;font-size:11px;color:var(--g500)">Payment failed.</p></div></div>
@@ -582,8 +664,9 @@
 
 <!-- ═══ TOOLTIPS ═══ -->
 <section class="sec" id="tooltips">
-  <h2>Tooltips &amp; Popovers</h2>
+  <h2>Tooltips &amp; Popovers <span class="no-override-tag">DEFAULT</span></h2>
   <p class="sd">Contextual overlays.</p>
+  <div class="no-override-detail"><strong>No override detected.</strong></div>
   <div class="cr" style="gap:28px">
     <div style="position:relative;display:inline-block"><button class="btn-t btn-tp btn-sm2">Tooltip</button><div style="position:absolute;bottom:calc(100% + 7px);left:50%;transform:translateX(-50%);background:var(--t-dark);color:#fff;padding:4px 9px;border-radius:var(--r-sm);font-size:11px;white-space:nowrap">Tooltip text<div style="position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:var(--t-dark)"></div></div></div>
     <div style="position:relative;display:inline-block"><button class="btn-t btn-to btn-sm2">Popover</button><div style="position:absolute;bottom:calc(100% + 9px);left:0;background:#fff;border:1px solid var(--t-bdr);border-radius:var(--r-md);box-shadow:var(--t-shadow);width:210px"><div style="padding:7px 10px;border-bottom:1px solid var(--t-bdr);font-weight:600;font-size:12px">Title</div><div style="padding:8px 10px;font-size:12px;color:var(--g600)">Rich content here.</div></div></div>
@@ -592,8 +675,9 @@
 
 <!-- ═══ SPINNERS ═══ -->
 <section class="sec" id="spinners">
-  <h2>Spinners</h2>
+  <h2>Spinners <span class="no-override-tag">DEFAULT</span></h2>
   <p class="sd">Loading indicators.</p>
+  <div class="no-override-detail"><strong>No override detected.</strong></div>
   <div class="cr" style="align-items:center">
     <div class="spinner-border" style="color:var(--t-primary);width:1.8rem;height:1.8rem" role="status"></div>
     <div class="spinner-border" style="color:var(--t-success);width:1.8rem;height:1.8rem" role="status"></div>
@@ -604,26 +688,26 @@
 
 <!-- ═══ PROGRESS ═══ -->
 <section class="sec" id="progress">
-  <h2>Progress Bars</h2>
+  <h2>Progress Bars <span class="no-override-tag">DEFAULT</span></h2>
   <p class="sd">Completion indicators.</p>
+  <div class="no-override-detail"><strong>No override detected.</strong></div>
   <div style="max-width:440px;display:flex;flex-direction:column;gap:10px">
     <div><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--g600);margin-bottom:3px"><span>Progress</span><span>75%</span></div><div class="prog-t"><div class="prog-bar" style="width:75%;background:var(--t-primary)"></div></div></div>
     <div><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--g600);margin-bottom:3px"><span>Budget</span><span>45%</span></div><div class="prog-t"><div class="prog-bar" style="width:45%;background:var(--t-success)"></div></div></div>
-    <div><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--g600);margin-bottom:3px"><span>Deadline</span><span>90%</span></div><div class="prog-t"><div class="prog-bar" style="width:90%;background:var(--t-danger)"></div></div></div>
   </div>
 </section>
 
 <!-- ═══ OFFCANVAS ═══ -->
 <section class="sec" id="offcanvas">
-  <h2>Offcanvas / Slide-over</h2>
-  <p class="sd">Pattern B (locked). Slide-in panel.</p>
-  <div style="width:270px;height:280px;background:#fff;border:1px solid var(--t-bdr);border-radius:0 var(--r-md) var(--r-md) 0;box-shadow:var(--t-shadow-lg)">
+  <h2>Offcanvas / Slide-over <span class="no-override-tag">DEFAULT</span></h2>
+  <p class="sd">Slide-in panel.</p>
+  <div class="no-override-detail"><strong>No structural override detected.</strong></div>
+  <div style="width:270px;height:260px;background:#fff;border:1px solid var(--t-bdr);border-radius:0 var(--r-md) var(--r-md) 0;box-shadow:var(--t-shadow-lg)">
     <div style="padding:12px 16px;border-bottom:1px solid var(--t-bdr);display:flex;justify-content:space-between;align-items:center"><span style="font-family:var(--t-heading);font-weight:600;font-size:14px">Filters</span><button style="background:none;border:none;font-size:16px;color:var(--g400);cursor:pointer">&times;</button></div>
     <div style="padding:14px 16px;font-size:13px">
       <p style="font-weight:500;margin:0 0 6px;font-size:12px">Status</p>
       <div class="form-check"><input class="form-check-input" type="checkbox" checked><label class="form-check-label" style="font-size:12px">Active</label></div>
       <div class="form-check"><input class="form-check-input" type="checkbox"><label class="form-check-label" style="font-size:12px">Closed</label></div>
-      <div class="form-check"><input class="form-check-input" type="checkbox"><label class="form-check-label" style="font-size:12px">Draft</label></div>
       <div style="margin-top:16px"><button class="btn-t btn-tp" style="width:100%;font-size:12px;padding:8px">Apply</button></div>
     </div>
   </div>
@@ -631,8 +715,9 @@
 
 <!-- ═══ SHADOWS ═══ -->
 <section class="sec" id="shadows">
-  <h2>Shadows</h2>
+  <h2>Shadows <span class="no-override-tag">DEFAULT</span></h2>
   <p class="sd">Elevation levels.</p>
+  <div class="no-override-detail"><strong>No override detected:</strong> Shadow values match MDB5 defaults.</div>
   <div class="cr">
     <div style="width:100px;height:64px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--g500);border-radius:var(--r-sm)">None</div>
     <div style="width:100px;height:64px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--g500);border-radius:var(--r-sm);box-shadow:var(--t-shadow-sm)">Small</div>
@@ -641,8 +726,7 @@
   </div>
 </section>
 
-<!-- Footer -->
-<div style="padding:28px 0;text-align:center;color:var(--g400);font-size:11px;border-top:1px solid var(--t-bdr);margin-top:12px">Foundant Component Reference · MDB5 Pro · Production vs Design Tokens</div>
+<div style="padding:28px 0;text-align:center;color:var(--g400);font-size:11px;border-top:1px solid var(--t-bdr);margin-top:12px">Foundant Component Reference · GLM Production vs MDB5 Default</div>
 
 </div><!-- /main -->
 </div><!-- /app -->
@@ -652,11 +736,10 @@
 function st(t){
   document.getElementById('app').setAttribute('data-theme',t);
   document.getElementById('bP').classList.toggle('on',t==='production');
-  document.getElementById('bT').classList.toggle('on',t==='tokens');
-  document.getElementById('ll').textContent=t==='production'?'Production (Current)':'Design Tokens (Target)';
-  document.getElementById('dn').textContent=t==='tokens'?'12 token differences from production':'';
+  document.getElementById('bD').classList.toggle('on',t==='mdb-default');
+  document.getElementById('ll').textContent=t==='production'?'GLM Production':'MDB5 Default';
+  document.getElementById('oc').textContent=t==='production'?'9 overridden · 18 default':'Stock MDB5 7.x values';
 }
-// TOC highlight
 const tl=document.querySelectorAll('.toc a'),ss=document.querySelectorAll('.sec[id]');
 window.addEventListener('scroll',()=>{let c='';ss.forEach(s=>{if(s.offsetTop-72<=window.scrollY)c=s.id});tl.forEach(l=>l.classList.toggle('on',l.getAttribute('href')==='#'+c))});
 </script>
