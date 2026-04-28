@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MDB5 Pro — Component Kitchen Sink</title>
+
+  <!-- MDB5 CSS (Free CDN — Pro components will be styled manually where needed) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.min.css" rel="stylesheet" />
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <!-- Google Fonts: Roboto -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --mdb-primary: #1266F1;
+      --mdb-secondary: #B23CFD;
+      --mdb-success: #00B74A;
+      --mdb-danger: #F93154;
+      --mdb-warning: #FFA900;
+      --mdb-info: #39C0ED;
+      --mdb-light: #FBFBFB;
+      --mdb-dark: #262626;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      background: #f5f5f5;
+      color: #333;
+    }
+
+    /* ── Sticky Sidebar TOC ── */
+    .toc-sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 240px;
+      height: 100vh;
+      overflow-y: auto;
+      background: #262626;
+      color: #ccc;
+      padding: 16px 0;
+      z-index: 1000;
+      font-size: 13px;
+    }
+    .toc-sidebar h5 {
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 0 16px;
+      margin: 0 0 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .toc-sidebar a {
+      display: block;
+      padding: 5px 16px;
+      color: #aaa;
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+    }
+    .toc-sidebar a:hover,
+    .toc-sidebar a.active {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+    }
+    .toc-sidebar .toc-group {
+      margin-bottom: 8px;
+    }
+    .toc-sidebar .toc-group-label {
+      padding: 8px 16px 4px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #666;
+      font-weight: 700;
+    }
+
+    /* ── Main Content ── */
+    .main-content {
+      margin-left: 240px;
+      padding: 32px 40px;
+      max-width: 1200px;
+    }
+
+    /* ── Section Styles ── */
+    .component-section {
+      background: #fff;
+      border-radius: 8px;
+      padding: 32px;
+      margin-bottom: 32px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .component-section h2 {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0 0 8px;
+      color: #262626;
+    }
+    .component-section .section-desc {
+      color: #777;
+      font-size: 14px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 16px;
+    }
+    .component-section h3 {
+      font-size: 16px;
+      font-weight: 500;
+      color: #555;
+      margin: 24px 0 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 13px;
+    }
+    .component-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+    .component-label {
+      font-size: 11px;
+      color: #999;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .spacer { height: 16px; }
+
+    /* ── Color Swatches ── */
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 12px;
+    }
+    .swatch {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .swatch-color {
+      height: 60px;
+    }
+    .swatch-info {
+      padding: 8px;
+      font-size: 12px;
+      background: #fff;
+    }
+    .swatch-info strong { display: block; margin-bottom: 2px; }
+    .swatch-info code { font-size: 11px; color: #777; }
+
+    /* ── Typography Specimen ── */
+    .type-specimen p { margin: 4px 0; }
+
+    /* ── Utility ── */
+    .demo-box {
+      background: var(--mdb-primary);
+      color: #fff;
+      padding: 12px;
+      border-radius: 4px;
+      text-align: center;
+      font-size: 13px;
+    }
+    .demo-box-light {
+      background: #e3f2fd;
+      color: var(--mdb-primary);
+      padding: 12px;
+      border-radius: 4px;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    /* Override for dark bg demos */
+    .dark-demo {
+      background: #262626;
+      padding: 24px;
+      border-radius: 8px;
+    }
+
+    /* ── Table for reference ── */
+    .ref-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .ref-table th, .ref-table td {
+      border: 1px solid #eee;
+      padding: 8px 12px;
+      text-align: left;
+    }
+    .ref-table th {
+      background: #f9f9f9;
+      font-weight: 500;
+    }
+
+    /* Page header */
+    .page-header {
+      margin-bottom: 32px;
+    }
+    .page-header h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin: 0 0 8px;
+    }
+    .page-header p {
+      color: #777;
+      font-size: 15px;
+      margin: 0;
+    }
+
+    /* Prevent nav overlap on anchor scroll */
+    [id] {
+      scroll-margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════ -->
+<!-- SIDEBAR TOC                             -->
+<!-- ════════════════════════════════════════ -->
+<nav class="toc-sidebar">
+  <h5>MDB5 Pro Kitchen Sink</h5>
+
+  <div class="toc-group">
+    <div class="toc-group-label">Foundation</div>
+    <a href="#colors">Colors</a>
+    <a href="#typography">Typography</a>
+    <a href="#icons">Icons</a>
+  </div>
+
+  <div class="toc-group">
+    <div class="toc-group-label">Layout</div>
+    <a href="#grid">Grid System</a>
+    <a href="#containers">Containers</a>
+    <a href="#flexbox">Flexbox Utilities</a>
+  </div>
+
+  <div class="toc-group">
+    <div class="toc-group-label">Navigation</div>
+    <a href="#navbar">Navbar</a>
+    <a href="#sidenav">Sidenav</a>
+    <a href="#tabs">Tabs &amp; Pills</a>
+    <a href="#breadcrumb">Breadcrumb</a>
+    <a href="#pagination">Pagination</a>
+    <a href="#scrollspy">Scrollspy</a>
+  </div>
+
+  <div class="toc-group">
+    <div class="toc-group-label">Content</div>
+    <a href="#buttons">Buttons</a>
+    <a href="#cards">Cards</a>
+    <a href="#badges">Badges &amp; Chips</a>
+    <a href="#alerts">Alerts</a>
+    <a href="#accordions">Accordions</a>
+    <a href="#list-groups">List Groups</a>
+    <a href="#tables">Tables</a>
+    <a href="#datatables">Datatables (Pro)</a>
+  </div>
+
+  <div class="toc-group">
+    <div class="toc-group-label">Forms</div>
+    <a href="#inputs">Inputs</a>
+    <a href="#selects">Select</a>
+    <a href="#checkradio">Checkbox &amp; Radio</a>
+    <a href="#switches">Switches</a>
+    <a href="#range">Range</a>
+    <a href="#file-input">File Input</a>
+    <a href="#datepicker">Datepicker (Pro)</a>
+    <a href="#timepicker">Timepicker (Pro)</a>
+    <a href="#autocomplete">Autocomplete (Pro)</a>
+    <a href="#multiselect">Multi Select (Pro)</a>
+    <a href="#stepper">Stepper (Pro)</a>
+    <a href="#input-groups">Input Groups</a>
+    <a href="#validation">Validation</a>
+  </div>
+
+  <div class="toc-group">
+    <div class="toc-group-label">Feedback &amp; Overlays</div>
+    <a href="#modals">Modals</a>
+    <a href="#toasts">Toasts</a>
+    <a href="#tooltips">Tooltips</a>
+    <a href="#popovers">Popovers</a>
+    <a href="#spinners">Spinners &amp; Loading</a>
+    <a href="#progress">Progress Bars</a>
+  </div>
+
+  <div class="toc-group">
+    <div class="toc-group-label">Data Display</div>
+    <a href="#rating">Rating (Pro)</a>
+    <a href="#charts">Charts (Pro)</a>
+    <a href="#timeline">Timeline</a>
+    <a href="#treeview">Treeview (Pro)</a>
+  </div>
+
+  <div class="toc-group">
+    <div class="toc-group-label">Surfaces</div>
+    <a href="#offcanvas">Offcanvas</a>
+    <a href="#collapse">Collapse</a>
+    <a href="#dropdown">Dropdowns</a>
+  </div>
+
+  <div class="toc-group">
+    <div class="toc-group-label">Media</div>
+    <a href="#images">Images</a>
+    <a href="#lightbox">Lightbox (Pro)</a>
+    <a href="#carousel">Carousel</a>
+  </div>
+
+  <div class="toc-group">
+    <div class="toc-group-label">Utilities</div>
+    <a href="#shadows">Shadows</a>
+    <a href="#borders">Borders</a>
+    <a href="#spacing">Spacing</a>
+    <a href="#visibility">Display &amp; Visibility</a>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════ -->
+<!-- MAIN CONTENT                            -->
+<!-- ════════════════════════════════════════ -->
+<div class="main-content">
+
+  <div class="page-header">
+    <h1>MDB5 Pro — Component Kitchen Sink</h1>
+    <p>Exhaustive reference of all MDB5 Pro components rendered with default styling. Use this to identify gaps against your production codebase and map to Figma components.</p>
+  </div>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- FOUNDATION: COLORS                  -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="colors">
+    <h2>Colors</h2>
+    <p class="section-desc">MDB5 default theme palette. Compare against your Foundant tokens.</p>
+
+    <h3>Theme Colors</h3>
+    <div class="swatch-grid">
+      <div class="swatch">
+        <div class="swatch-color" style="background:#1266F1"></div>
+        <div class="swatch-info"><strong>Primary</strong><code>#1266F1</code></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#B23CFD"></div>
+        <div class="swatch-info"><strong>Secondary</strong><code>#B23CFD</code></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#00B74A"></div>
+        <div class="swatch-info"><strong>Success</strong><code>#00B74A</code></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#F93154"></div>
+        <div class="swatch-info"><strong>Danger</strong><code>#F93154</code></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#FFA900"></div>
+        <div class="swatch-info"><strong>Warning</strong><code>#FFA900</code></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#39C0ED"></div>
+        <div class="swatch-info"><strong>Info</strong><code>#39C0ED</code></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#FBFBFB"></div>
+        <div class="swatch-info"><strong>Light</strong><code>#FBFBFB</code></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#262626"></div>
+        <div class="swatch-info"><strong>Dark</strong><code>#262626</code></div>
+      </div>
+    </div>
+
+    <h3>Grayscale</h3>
+    <div class="swatch-grid">
+      <div class="swatch"><div class="swatch-color" style="background:#fff"></div><div class="swatch-info"><strong>White</strong><code>#FFFFFF</code></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#f8f9fa"></div><div class="swatch-info"><strong>Gray 100</strong><code>#F8F9FA</code></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#e9ecef"></div><div class="swatch-info"><strong>Gray 200</strong><code>#E9ECEF</code></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#dee2e6"></div><div class="swatch-info"><strong>Gray 300</strong><code>#DEE2E6</code></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#ced4da"></div><div class="swatch-info"><strong>Gray 400</strong><code>#CED4DA</code></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#adb5bd"></div><div class="swatch-info"><strong>Gray 500</strong><code>#ADB5BD</code></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#757575"></div><div class="swatch-info"><strong>Gray 600</strong><code>#757575</code></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#616161"></div><div class="swatch-info"><strong>Gray 700</strong><code>#616161</code></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#424242"></div><div class="swatch-info"><strong>Gray 800</strong><code>#424242</code></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#212121"></div><div class="swatch-info"><strong>Gray 900</strong><code>#212121</code></div></div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- FOUNDATION: TYPOGRAPHY              -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="typography">
+    <h2>Typography</h2>
+    <p class="section-desc">MDB5 uses Roboto as its default typeface. Heading scale, body text, display classes, and inline elements.</p>
+
+    <h3>Headings</h3>
+    <div class="type-specimen">
+      <h1>h1. Heading (2.5rem / 40px)</h1>
+      <h2>h2. Heading (2rem / 32px)</h2>
+      <h3>h3. Heading (1.75rem / 28px)</h3>
+      <h4>h4. Heading (1.5rem / 24px)</h4>
+      <h5>h5. Heading (1.25rem / 20px)</h5>
+      <h6>h6. Heading (1rem / 16px)</h6>
+    </div>
+
+    <h3>Display Headings</h3>
+    <div class="type-specimen">
+      <p style="font-size:4rem;font-weight:300;line-height:1.2">Display 1</p>
+      <p style="font-size:3.5rem;font-weight:300;line-height:1.2">Display 2</p>
+      <p style="font-size:2.8125rem;font-weight:300;line-height:1.2">Display 3</p>
+      <p style="font-size:2.125rem;font-weight:300;line-height:1.2">Display 4</p>
+    </div>
+
+    <h3>Body &amp; Inline</h3>
+    <p>This is default body text at 1rem (16px) with 1.6 line-height. MDB5 sets the base font-weight to 400.</p>
+    <p><strong>Bold text (700)</strong> &middot; <em>Italic text</em> &middot; <small>Small text (.875em)</small> &middot; <mark>Highlighted</mark> &middot; <del>Deleted</del> &middot; <u>Underlined</u></p>
+    <p class="lead" style="font-size:1.25rem;font-weight:300">Lead paragraph — used for introductory text. 1.25rem, weight 300.</p>
+    <blockquote class="blockquote" style="border-left:4px solid var(--mdb-primary);padding-left:16px;margin:16px 0">
+      <p style="margin:0;font-size:1.1rem">Blockquote: "The greatest glory in living lies not in never falling, but in rising every time we fall."</p>
+      <footer style="font-size:0.875rem;color:#757575;margin-top:4px">— Attribution line</footer>
+    </blockquote>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- FOUNDATION: ICONS                   -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="icons">
+    <h2>Icons</h2>
+    <p class="section-desc">MDB5 bundles Font Awesome 6. Common icons used in SaaS/admin patterns.</p>
+    <div class="component-row" style="font-size:24px;gap:20px;color:#555">
+      <span title="fas fa-home"><i class="fas fa-home"></i></span>
+      <span title="fas fa-search"><i class="fas fa-search"></i></span>
+      <span title="fas fa-user"><i class="fas fa-user"></i></span>
+      <span title="fas fa-cog"><i class="fas fa-cog"></i></span>
+      <span title="fas fa-bell"><i class="fas fa-bell"></i></span>
+      <span title="fas fa-envelope"><i class="fas fa-envelope"></i></span>
+      <span title="fas fa-trash"><i class="fas fa-trash"></i></span>
+      <span title="fas fa-edit"><i class="fas fa-edit"></i></span>
+      <span title="fas fa-plus"><i class="fas fa-plus"></i></span>
+      <span title="fas fa-check"><i class="fas fa-check"></i></span>
+      <span title="fas fa-times"><i class="fas fa-times"></i></span>
+      <span title="fas fa-download"><i class="fas fa-download"></i></span>
+      <span title="fas fa-upload"><i class="fas fa-upload"></i></span>
+      <span title="fas fa-filter"><i class="fas fa-filter"></i></span>
+      <span title="fas fa-sort"><i class="fas fa-sort"></i></span>
+      <span title="fas fa-ellipsis-v"><i class="fas fa-ellipsis-v"></i></span>
+      <span title="fas fa-chevron-down"><i class="fas fa-chevron-down"></i></span>
+      <span title="fas fa-chevron-right"><i class="fas fa-chevron-right"></i></span>
+      <span title="fas fa-arrow-left"><i class="fas fa-arrow-left"></i></span>
+      <span title="fas fa-arrow-right"><i class="fas fa-arrow-right"></i></span>
+      <span title="fas fa-info-circle"><i class="fas fa-info-circle"></i></span>
+      <span title="fas fa-exclamation-triangle"><i class="fas fa-exclamation-triangle"></i></span>
+      <span title="fas fa-chart-bar"><i class="fas fa-chart-bar"></i></span>
+      <span title="fas fa-file-alt"><i class="fas fa-file-alt"></i></span>
+      <span title="fas fa-calendar"><i class="fas fa-calendar"></i></span>
+      <span title="fas fa-lock"><i class="fas fa-lock"></i></span>
+      <span title="fas fa-eye"><i class="fas fa-eye"></i></span>
+      <span title="fas fa-copy"><i class="fas fa-copy"></i></span>
+      <span title="fas fa-link"><i class="fas fa-link"></i></span>
+      <span title="fas fa-external-link-alt"><i class="fas fa-external-link-alt"></i></span>
+    </div>
+    <p style="font-size:12px;color:#999;margin-top:8px">Hover for class names. Full set at fontawesome.com/icons.</p>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- LAYOUT: GRID                        -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="grid">
+    <h2>Grid System</h2>
+    <p class="section-desc">12-column responsive grid with breakpoints: sm(540px), md(720px), lg(960px), xl(1140px), xxl(1320px).</p>
+
+    <h3>Equal Columns</h3>
+    <div class="row g-2 mb-3">
+      <div class="col"><div class="demo-box">col</div></div>
+      <div class="col"><div class="demo-box">col</div></div>
+      <div class="col"><div class="demo-box">col</div></div>
+    </div>
+
+    <h3>Sized Columns</h3>
+    <div class="row g-2 mb-3">
+      <div class="col-3"><div class="demo-box-light">col-3</div></div>
+      <div class="col-6"><div class="demo-box">col-6</div></div>
+      <div class="col-3"><div class="demo-box-light">col-3</div></div>
+    </div>
+    <div class="row g-2 mb-3">
+      <div class="col-4"><div class="demo-box">col-4</div></div>
+      <div class="col-8"><div class="demo-box-light">col-8</div></div>
+    </div>
+    <div class="row g-2 mb-3">
+      <div class="col-2"><div class="demo-box-light">2</div></div>
+      <div class="col-2"><div class="demo-box">2</div></div>
+      <div class="col-2"><div class="demo-box-light">2</div></div>
+      <div class="col-2"><div class="demo-box">2</div></div>
+      <div class="col-2"><div class="demo-box-light">2</div></div>
+      <div class="col-2"><div class="demo-box">2</div></div>
+    </div>
+
+    <h3>Offset &amp; Nesting</h3>
+    <div class="row g-2 mb-3">
+      <div class="col-md-4 offset-md-4"><div class="demo-box">col-md-4 offset-md-4</div></div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- LAYOUT: CONTAINERS                  -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="containers">
+    <h2>Containers</h2>
+    <p class="section-desc">Responsive fixed-width containers and fluid container.</p>
+    <table class="ref-table">
+      <thead>
+        <tr><th>Class</th><th>sm ≥576</th><th>md ≥768</th><th>lg ≥992</th><th>xl ≥1200</th><th>xxl ≥1400</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>.container</code></td><td>540px</td><td>720px</td><td>960px</td><td>1140px</td><td>1320px</td></tr>
+        <tr><td><code>.container-fluid</code></td><td colspan="5">100% at all breakpoints</td></tr>
+        <tr><td><code>.container-md</code></td><td>100%</td><td>720px</td><td>960px</td><td>1140px</td><td>1320px</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- LAYOUT: FLEXBOX                     -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="flexbox">
+    <h2>Flexbox Utilities</h2>
+    <p class="section-desc">Flex direction, alignment, wrapping, gap, and ordering utilities.</p>
+
+    <h3>Justify Content</h3>
+    <div class="d-flex justify-content-between p-2 mb-2" style="background:#f0f0f0;border-radius:4px">
+      <div class="demo-box" style="width:80px">Start</div>
+      <div class="demo-box" style="width:80px">Center</div>
+      <div class="demo-box" style="width:80px">End</div>
+    </div>
+
+    <h3>Align Items</h3>
+    <div class="d-flex align-items-center p-2 mb-2" style="background:#f0f0f0;border-radius:4px;height:80px">
+      <div class="demo-box" style="width:80px;height:30px;font-size:11px">Centered</div>
+      <div class="demo-box ms-2" style="width:80px;height:50px;font-size:11px">Centered</div>
+      <div class="demo-box ms-2" style="width:80px;height:40px;font-size:11px">Centered</div>
+    </div>
+
+    <h3>Gap</h3>
+    <div class="d-flex gap-3">
+      <div class="demo-box-light" style="padding:8px 16px">gap-1</div>
+      <div class="demo-box-light" style="padding:8px 16px">gap-2</div>
+      <div class="demo-box-light" style="padding:8px 16px">gap-3</div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- NAVIGATION: NAVBAR                  -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="navbar">
+    <h2>Navbar</h2>
+    <p class="section-desc">Responsive navigation bar with brand, links, search, and icons.</p>
+
+    <h3>Light Navbar</h3>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3" style="border-radius:4px">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Brand</a>
+        <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#nav1"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="nav1">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Features</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" data-mdb-toggle="dropdown">Dropdown</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Separated</a></li>
+              </ul>
+            </li>
+          </ul>
+          <div class="d-flex align-items-center">
+            <input type="search" class="form-control form-control-sm me-2" placeholder="Search" style="width:160px" />
+            <a href="#" class="text-reset me-3"><i class="fas fa-bell"></i></a>
+            <a href="#" class="text-reset"><i class="fas fa-user-circle" style="font-size:20px"></i></a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <h3>Dark Navbar</h3>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="border-radius:4px">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Brand</a>
+        <div class="collapse navbar-collapse show">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item"><a class="nav-link active" href="#">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Grants</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Reports</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- NAVIGATION: SIDENAV                 -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="sidenav">
+    <h2>Sidenav (Pro)</h2>
+    <p class="section-desc">Vertical sidebar navigation with sections, icons, and nested items. Rendered inline as a demo.</p>
+
+    <div style="display:flex;gap:24px">
+      <!-- Light Sidenav -->
+      <div style="width:260px;background:#fff;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden">
+        <div style="padding:16px 20px;border-bottom:1px solid #eee;font-weight:700;font-size:15px">
+          <i class="fas fa-layer-group me-2" style="color:var(--mdb-primary)"></i> App Name
+        </div>
+        <ul style="list-style:none;margin:0;padding:8px 0">
+          <li><a href="#" style="display:flex;align-items:center;padding:10px 20px;color:var(--mdb-primary);background:#e3f2fd;text-decoration:none;font-size:14px;font-weight:500"><i class="fas fa-tachometer-alt me-3" style="width:20px;text-align:center"></i> Dashboard</a></li>
+          <li><a href="#" style="display:flex;align-items:center;padding:10px 20px;color:#555;text-decoration:none;font-size:14px"><i class="fas fa-file-alt me-3" style="width:20px;text-align:center"></i> Applications</a></li>
+          <li><a href="#" style="display:flex;align-items:center;padding:10px 20px;color:#555;text-decoration:none;font-size:14px"><i class="fas fa-award me-3" style="width:20px;text-align:center"></i> Awards</a></li>
+          <li><a href="#" style="display:flex;align-items:center;padding:10px 20px;color:#555;text-decoration:none;font-size:14px"><i class="fas fa-chart-bar me-3" style="width:20px;text-align:center"></i> Reports</a></li>
+          <li style="padding:12px 20px 4px;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#999;font-weight:700">Settings</li>
+          <li><a href="#" style="display:flex;align-items:center;padding:10px 20px;color:#555;text-decoration:none;font-size:14px"><i class="fas fa-cog me-3" style="width:20px;text-align:center"></i> Configuration</a></li>
+          <li><a href="#" style="display:flex;align-items:center;padding:10px 20px;color:#555;text-decoration:none;font-size:14px"><i class="fas fa-users me-3" style="width:20px;text-align:center"></i> Users</a></li>
+        </ul>
+      </div>
+
+      <!-- Dark Sidenav -->
+      <div style="width:260px;background:#262626;border-radius:8px;overflow:hidden">
+        <div style="padding:16px 20px;border-bottom:1px solid #444;font-weight:700;font-size:15px;color:#fff">
+          <i class="fas fa-layer-group me-2" style="color:#39C0ED"></i> App Name
+        </div>
+        <ul style="list-style:none;margin:0;padding:8px 0">
+          <li><a href="#" style="display:flex;align-items:center;padding:10px 20px;color:#fff;background:rgba(255,255,255,0.08);text-decoration:none;font-size:14px;font-weight:500"><i class="fas fa-tachometer-alt me-3" style="width:20px;text-align:center"></i> Dashboard</a></li>
+          <li><a href="#" style="display:flex;align-items:center;padding:10px 20px;color:#bbb;text-decoration:none;font-size:14px"><i class="fas fa-file-alt me-3" style="width:20px;text-align:center"></i> Applications</a></li>
+          <li><a href="#" style="display:flex;align-items:center;padding:10px 20px;color:#bbb;text-decoration:none;font-size:14px"><i class="fas fa-award me-3" style="width:20px;text-align:center"></i> Awards</a></li>
+          <li><a href="#" style="display:flex;align-items:center;padding:10px 20px;color:#bbb;text-decoration:none;font-size:14px"><i class="fas fa-chart-bar me-3" style="width:20px;text-align:center"></i> Reports</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- NAVIGATION: TABS & PILLS            -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="tabs">
+    <h2>Tabs &amp; Pills</h2>
+    <p class="section-desc">Horizontal tab bars and pill-style navigation.</p>
+
+    <h3>Default Tabs</h3>
+    <ul class="nav nav-tabs mb-3">
+      <li class="nav-item"><a class="nav-link active" href="#">Active</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Link</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Link</a></li>
+      <li class="nav-item"><a class="nav-link disabled" href="#">Disabled</a></li>
+    </ul>
+
+    <h3>Pills</h3>
+    <ul class="nav nav-pills mb-3">
+      <li class="nav-item"><a class="nav-link active" href="#">Active</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Link</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Link</a></li>
+    </ul>
+
+    <h3>Tabs with Icons</h3>
+    <ul class="nav nav-tabs">
+      <li class="nav-item"><a class="nav-link active" href="#"><i class="fas fa-home me-1"></i> Home</a></li>
+      <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-user me-1"></i> Profile</a></li>
+      <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-envelope me-1"></i> Messages</a></li>
+    </ul>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- NAVIGATION: BREADCRUMB              -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="breadcrumb">
+    <h2>Breadcrumb</h2>
+    <p class="section-desc">Path-based navigation indicating current location.</p>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item"><a href="#">Grants</a></li>
+        <li class="breadcrumb-item"><a href="#">2024 Community Fund</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Application #1042</li>
+      </ol>
+    </nav>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- NAVIGATION: PAGINATION              -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="pagination">
+    <h2>Pagination</h2>
+    <p class="section-desc">Page-level navigation for data tables and lists.</p>
+
+    <h3>Default</h3>
+    <nav>
+      <ul class="pagination mb-3">
+        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+      </ul>
+    </nav>
+
+    <h3>Sizes</h3>
+    <div class="component-row">
+      <nav>
+        <ul class="pagination pagination-sm">
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+        </ul>
+      </nav>
+      <nav>
+        <ul class="pagination pagination-lg">
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+        </ul>
+      </nav>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- NAVIGATION: SCROLLSPY               -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="scrollspy">
+    <h2>Scrollspy</h2>
+    <p class="section-desc">Automatically update navigation based on scroll position. (This page's sidebar TOC uses the same pattern.)</p>
+    <p style="color:#888;font-size:13px">Scrollspy is a behavior, not a visual component. It highlights nav links as the user scrolls to corresponding sections. Active state styling shown in Tabs/Pills above.</p>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- CONTENT: BUTTONS                    -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="buttons">
+    <h2>Buttons</h2>
+    <p class="section-desc">All button variants, sizes, states, and shapes.</p>
+
+    <h3>Filled Buttons</h3>
+    <div class="component-row">
+      <button class="btn btn-primary">Primary</button>
+      <button class="btn btn-secondary">Secondary</button>
+      <button class="btn btn-success">Success</button>
+      <button class="btn btn-danger">Danger</button>
+      <button class="btn btn-warning">Warning</button>
+      <button class="btn btn-info">Info</button>
+      <button class="btn btn-light">Light</button>
+      <button class="btn btn-dark">Dark</button>
+      <button class="btn btn-link">Link</button>
+    </div>
+
+    <h3>Outline Buttons</h3>
+    <div class="component-row">
+      <button class="btn btn-outline-primary">Primary</button>
+      <button class="btn btn-outline-secondary">Secondary</button>
+      <button class="btn btn-outline-success">Success</button>
+      <button class="btn btn-outline-danger">Danger</button>
+      <button class="btn btn-outline-warning">Warning</button>
+      <button class="btn btn-outline-info">Info</button>
+      <button class="btn btn-outline-dark">Dark</button>
+    </div>
+
+    <h3>Rounded (Pill) Buttons</h3>
+    <div class="component-row">
+      <button class="btn btn-primary btn-rounded">Primary</button>
+      <button class="btn btn-outline-primary btn-rounded">Outline</button>
+      <button class="btn btn-secondary btn-rounded">Secondary</button>
+      <button class="btn btn-success btn-rounded">Success</button>
+      <button class="btn btn-danger btn-rounded">Danger</button>
+    </div>
+
+    <h3>Sizes</h3>
+    <div class="component-row" style="align-items:center">
+      <button class="btn btn-primary btn-sm">Small</button>
+      <button class="btn btn-primary">Default</button>
+      <button class="btn btn-primary btn-lg">Large</button>
+    </div>
+
+    <h3>States</h3>
+    <div class="component-row">
+      <button class="btn btn-primary">Normal</button>
+      <button class="btn btn-primary" disabled>Disabled</button>
+      <button class="btn btn-primary" style="box-shadow:0 0 0 3px rgba(18,102,241,0.25)">Focus Ring</button>
+    </div>
+
+    <h3>Icon Buttons</h3>
+    <div class="component-row">
+      <button class="btn btn-primary"><i class="fas fa-plus me-2"></i>Add New</button>
+      <button class="btn btn-outline-danger"><i class="fas fa-trash me-2"></i>Delete</button>
+      <button class="btn btn-primary btn-floating"><i class="fas fa-plus"></i></button>
+      <button class="btn btn-outline-primary btn-floating"><i class="fas fa-edit"></i></button>
+    </div>
+
+    <h3>Button Group</h3>
+    <div class="btn-group" role="group">
+      <button type="button" class="btn btn-primary">Left</button>
+      <button type="button" class="btn btn-primary">Middle</button>
+      <button type="button" class="btn btn-primary">Right</button>
+    </div>
+
+    <h3>Block Button</h3>
+    <div style="max-width:400px">
+      <button class="btn btn-primary btn-block" style="width:100%">Full Width Button</button>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- CONTENT: CARDS                      -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="cards">
+    <h2>Cards</h2>
+    <p class="section-desc">Content containers with headers, bodies, footers, images, and overlays.</p>
+
+    <div class="row g-3">
+      <!-- Basic Card -->
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Basic Card</h5>
+            <p class="card-text" style="font-size:14px;color:#666">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <button class="btn btn-primary btn-sm">Go somewhere</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card with Header & Footer -->
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-header">Featured</div>
+          <div class="card-body">
+            <h5 class="card-title">Card with Header</h5>
+            <p class="card-text" style="font-size:14px;color:#666">With supporting text below as a natural lead-in.</p>
+          </div>
+          <div class="card-footer text-muted" style="font-size:13px">2 days ago</div>
+        </div>
+      </div>
+
+      <!-- Card with Image -->
+      <div class="col-md-4">
+        <div class="card">
+          <div style="height:140px;background:linear-gradient(135deg,#1266F1,#39C0ED);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px"><i class="fas fa-image me-2"></i> Image Area</div>
+          <div class="card-body">
+            <h5 class="card-title">Image Card</h5>
+            <p class="card-text" style="font-size:14px;color:#666">Card with image header placeholder.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card with List Group -->
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-header">List Group Card</div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Application Review</li>
+            <li class="list-group-item">Grant Approval</li>
+            <li class="list-group-item">Payment Processing</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Horizontal Card -->
+      <div class="col-md-8">
+        <div class="card" style="flex-direction:row">
+          <div style="width:160px;background:linear-gradient(135deg,#00B74A,#39C0ED);display:flex;align-items:center;justify-content:center;color:#fff;border-radius:4px 0 0 4px"><i class="fas fa-award" style="font-size:32px"></i></div>
+          <div class="card-body">
+            <h5 class="card-title">Horizontal Card</h5>
+            <p class="card-text" style="font-size:14px;color:#666">Side-by-side layout with image and content.</p>
+            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- CONTENT: BADGES & CHIPS             -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="badges">
+    <h2>Badges &amp; Chips</h2>
+    <p class="section-desc">Inline status indicators, counters, and interactive chips.</p>
+
+    <h3>Badges</h3>
+    <div class="component-row">
+      <span class="badge bg-primary">Primary</span>
+      <span class="badge bg-secondary">Secondary</span>
+      <span class="badge bg-success">Success</span>
+      <span class="badge bg-danger">Danger</span>
+      <span class="badge bg-warning">Warning</span>
+      <span class="badge bg-info">Info</span>
+      <span class="badge bg-light text-dark">Light</span>
+      <span class="badge bg-dark">Dark</span>
+    </div>
+
+    <h3>Pill Badges</h3>
+    <div class="component-row">
+      <span class="badge rounded-pill bg-primary">Primary</span>
+      <span class="badge rounded-pill bg-success">Approved</span>
+      <span class="badge rounded-pill bg-warning">Pending</span>
+      <span class="badge rounded-pill bg-danger">Denied</span>
+      <span class="badge rounded-pill bg-info">In Review</span>
+    </div>
+
+    <h3>Badge with Counter</h3>
+    <div class="component-row" style="align-items:center">
+      <button class="btn btn-primary" style="position:relative">
+        Inbox <span class="badge bg-danger" style="position:absolute;top:-8px;right:-8px">4</span>
+      </button>
+      <button class="btn btn-outline-primary" style="position:relative">
+        Notifications <span class="badge rounded-pill bg-danger" style="position:absolute;top:-8px;right:-8px">99+</span>
+      </button>
+    </div>
+
+    <h3>Chips (Pro)</h3>
+    <div class="component-row">
+      <span style="display:inline-flex;align-items:center;padding:6px 12px;background:#e3f2fd;color:#1266F1;border-radius:16px;font-size:13px;font-weight:500">
+        <i class="fas fa-user me-1" style="font-size:11px"></i> John Doe
+        <i class="fas fa-times ms-2" style="font-size:10px;cursor:pointer;opacity:0.6"></i>
+      </span>
+      <span style="display:inline-flex;align-items:center;padding:6px 12px;background:#e8f5e9;color:#00B74A;border-radius:16px;font-size:13px;font-weight:500">
+        Approved <i class="fas fa-check ms-1" style="font-size:10px"></i>
+      </span>
+      <span style="display:inline-flex;align-items:center;padding:6px 12px;background:#fce4ec;color:#F93154;border-radius:16px;font-size:13px;font-weight:500">
+        Overdue <i class="fas fa-times ms-2" style="font-size:10px;cursor:pointer;opacity:0.6"></i>
+      </span>
+      <span style="display:inline-flex;align-items:center;padding:6px 12px;background:#f5f5f5;color:#616161;border-radius:16px;font-size:13px">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Ccircle cx='10' cy='10' r='10' fill='%23ccc'/%3E%3C/svg%3E" width="20" height="20" style="border-radius:50%;margin-right:6px" /> Jane Smith
+      </span>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- CONTENT: ALERTS                     -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="alerts">
+    <h2>Alerts</h2>
+    <p class="section-desc">Contextual feedback messages for user actions.</p>
+
+    <div class="alert alert-primary" role="alert"><i class="fas fa-info-circle me-2"></i>A simple primary alert — check it out!</div>
+    <div class="alert alert-success" role="alert"><i class="fas fa-check-circle me-2"></i>Grant application submitted successfully.</div>
+    <div class="alert alert-warning" role="alert"><i class="fas fa-exclamation-triangle me-2"></i>This application is past its review deadline.</div>
+    <div class="alert alert-danger" role="alert"><i class="fas fa-times-circle me-2"></i>Error processing payment. Please try again.</div>
+    <div class="alert alert-info" role="alert"><i class="fas fa-info-circle me-2"></i>A new grant cycle opens on January 15th.</div>
+
+    <h3>Dismissible Alert</h3>
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <i class="fas fa-exclamation-triangle me-2"></i><strong>Warning!</strong> 3 applications require your review.
+      <button type="button" class="btn-close" data-mdb-dismiss="alert"></button>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- CONTENT: ACCORDIONS                 -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="accordions">
+    <h2>Accordions</h2>
+    <p class="section-desc">Collapsible content panels for organizing information.</p>
+
+    <div class="accordion" id="accordionExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header"><button class="accordion-button" type="button" data-mdb-toggle="collapse" data-mdb-target="#collapseOne">Accordion Item #1</button></h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" data-mdb-parent="#accordionExample">
+          <div class="accordion-body" style="font-size:14px">This is the first item's content. It is shown by default until the collapse plugin adds the appropriate classes for styling.</div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-mdb-toggle="collapse" data-mdb-target="#collapseTwo">Accordion Item #2</button></h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" data-mdb-parent="#accordionExample">
+          <div class="accordion-body" style="font-size:14px">This is the second item's accordion body. It is hidden by default.</div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-mdb-toggle="collapse" data-mdb-target="#collapseThree">Accordion Item #3</button></h2>
+        <div id="collapseThree" class="accordion-collapse collapse" data-mdb-parent="#accordionExample">
+          <div class="accordion-body" style="font-size:14px">This is the third item's accordion body. It is hidden by default.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- CONTENT: LIST GROUPS                -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="list-groups">
+    <h2>List Groups</h2>
+    <p class="section-desc">Flexible lists for displaying series of content.</p>
+
+    <div class="row g-3">
+      <div class="col-md-4">
+        <h3>Basic</h3>
+        <ul class="list-group">
+          <li class="list-group-item active">Active item</li>
+          <li class="list-group-item">Second item</li>
+          <li class="list-group-item">Third item</li>
+          <li class="list-group-item disabled">Disabled item</li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h3>With Badges</h3>
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between align-items-center">Applications <span class="badge bg-primary rounded-pill">14</span></li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">Under Review <span class="badge bg-warning rounded-pill">3</span></li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">Approved <span class="badge bg-success rounded-pill">8</span></li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h3>Colored</h3>
+        <ul class="list-group">
+          <li class="list-group-item list-group-item-primary">Primary</li>
+          <li class="list-group-item list-group-item-success">Success</li>
+          <li class="list-group-item list-group-item-warning">Warning</li>
+          <li class="list-group-item list-group-item-danger">Danger</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- CONTENT: TABLES                     -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="tables">
+    <h2>Tables</h2>
+    <p class="section-desc">Data tables with striping, hovering, borders, and responsive wrapping.</p>
+
+    <h3>Default Table</h3>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr><th>#</th><th>Organization</th><th>Grant Program</th><th>Amount</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Community Health Alliance</td><td>2024 Health Equity Fund</td><td>$75,000</td><td><span class="badge bg-success">Approved</span></td></tr>
+          <tr><td>2</td><td>Rural Education Network</td><td>Youth Development Grant</td><td>$50,000</td><td><span class="badge bg-warning">Pending</span></td></tr>
+          <tr><td>3</td><td>Arts Council of Metro</td><td>Cultural Enrichment</td><td>$25,000</td><td><span class="badge bg-danger">Denied</span></td></tr>
+          <tr><td>4</td><td>Green Valley Conservancy</td><td>Environmental Stewardship</td><td>$100,000</td><td><span class="badge bg-info">In Review</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Striped &amp; Bordered</h3>
+    <table class="table table-striped table-bordered" style="font-size:14px">
+      <thead class="table-dark">
+        <tr><th>Date</th><th>Transaction</th><th>Amount</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>01/15/2024</td><td>Grant Disbursement</td><td>$75,000</td></tr>
+        <tr><td>02/01/2024</td><td>Progress Report Fee</td><td>$500</td></tr>
+        <tr><td>03/15/2024</td><td>Mid-term Payment</td><td>$25,000</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Small Table</h3>
+    <table class="table table-sm" style="font-size:13px">
+      <thead><tr><th>ID</th><th>Name</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td>001</td><td>Sarah Johnson</td><td>Program Officer</td></tr>
+        <tr><td>002</td><td>Mark Chen</td><td>Grants Manager</td></tr>
+        <tr><td>003</td><td>Lisa Wang</td><td>Finance Director</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- CONTENT: DATATABLES (PRO)           -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="datatables">
+    <h2>Datatables (Pro)</h2>
+    <p class="section-desc">Enhanced tables with search, sort, pagination, and row selection. Shown as a static representation.</p>
+
+    <div style="border:1px solid #e0e0e0;border-radius:8px;overflow:hidden">
+      <!-- Toolbar -->
+      <div style="padding:12px 16px;background:#f9f9f9;border-bottom:1px solid #e0e0e0;display:flex;justify-content:space-between;align-items:center">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:13px;color:#777">Show</span>
+          <select style="border:1px solid #ddd;border-radius:4px;padding:4px 8px;font-size:13px">
+            <option>10</option><option>25</option><option>50</option>
+          </select>
+          <span style="font-size:13px;color:#777">entries</span>
+        </div>
+        <div>
+          <input type="text" placeholder="Search..." style="border:1px solid #ddd;border-radius:4px;padding:6px 12px;font-size:13px;width:200px" />
+        </div>
+      </div>
+      <!-- Table -->
+      <table style="width:100%;border-collapse:collapse;font-size:14px">
+        <thead>
+          <tr style="background:#f5f5f5;border-bottom:2px solid #e0e0e0">
+            <th style="padding:10px 16px;text-align:left;cursor:pointer">Name <i class="fas fa-sort" style="font-size:10px;color:#aaa;margin-left:4px"></i></th>
+            <th style="padding:10px 16px;text-align:left;cursor:pointer">Position <i class="fas fa-sort" style="font-size:10px;color:#aaa;margin-left:4px"></i></th>
+            <th style="padding:10px 16px;text-align:left;cursor:pointer">Office <i class="fas fa-sort" style="font-size:10px;color:#aaa;margin-left:4px"></i></th>
+            <th style="padding:10px 16px;text-align:right;cursor:pointer">Salary <i class="fas fa-sort-down" style="font-size:10px;color:#1266F1;margin-left:4px"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #eee"><td style="padding:10px 16px">Tiger Nixon</td><td style="padding:10px 16px">System Architect</td><td style="padding:10px 16px">Edinburgh</td><td style="padding:10px 16px;text-align:right">$320,800</td></tr>
+          <tr style="border-bottom:1px solid #eee;background:#fafafa"><td style="padding:10px 16px">Garrett Winters</td><td style="padding:10px 16px">Accountant</td><td style="padding:10px 16px">Tokyo</td><td style="padding:10px 16px;text-align:right">$170,750</td></tr>
+          <tr style="border-bottom:1px solid #eee"><td style="padding:10px 16px">Ashton Cox</td><td style="padding:10px 16px">Junior Tech Author</td><td style="padding:10px 16px">San Francisco</td><td style="padding:10px 16px;text-align:right">$86,000</td></tr>
+        </tbody>
+      </table>
+      <!-- Footer -->
+      <div style="padding:12px 16px;background:#f9f9f9;border-top:1px solid #e0e0e0;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#777">
+        <span>Showing 1 to 3 of 57 entries</span>
+        <div style="display:flex;gap:4px">
+          <button style="padding:4px 10px;border:1px solid #ddd;background:#fff;border-radius:4px;font-size:12px;color:#aaa">Previous</button>
+          <button style="padding:4px 10px;border:1px solid #1266F1;background:#1266F1;color:#fff;border-radius:4px;font-size:12px">1</button>
+          <button style="padding:4px 10px;border:1px solid #ddd;background:#fff;border-radius:4px;font-size:12px">2</button>
+          <button style="padding:4px 10px;border:1px solid #ddd;background:#fff;border-radius:4px;font-size:12px">3</button>
+          <button style="padding:4px 10px;border:1px solid #ddd;background:#fff;border-radius:4px;font-size:12px">Next</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- FORMS: INPUTS                       -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="inputs">
+    <h2>Inputs</h2>
+    <p class="section-desc">Text inputs with MDB's floating label (outline) style and standard Bootstrap labels.</p>
+
+    <div class="row g-3" style="max-width:600px">
+      <div class="col-12">
+        <h3>Outline (MDB Default)</h3>
+      </div>
+      <div class="col-md-6">
+        <div class="form-outline" data-mdb-input-init>
+          <input type="text" class="form-control" id="input1" />
+          <label class="form-label" for="input1">Default Input</label>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-outline" data-mdb-input-init>
+          <input type="text" class="form-control" id="input2" value="Filled value" />
+          <label class="form-label" for="input2">With Value</label>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-outline" data-mdb-input-init>
+          <input type="text" class="form-control" id="input3" disabled value="Cannot edit" />
+          <label class="form-label" for="input3">Disabled</label>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-outline" data-mdb-input-init>
+          <input type="text" class="form-control form-control-lg" id="input4" />
+          <label class="form-label" for="input4">Large Input</label>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <h3>Standard Labels</h3>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="input5">Organization Name</label>
+        <input type="text" class="form-control" id="input5" placeholder="Enter name" />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="input6">Email Address</label>
+        <input type="email" class="form-control" id="input6" placeholder="name@example.com" />
+      </div>
+      <div class="col-12">
+        <label class="form-label" for="textarea1">Description</label>
+        <textarea class="form-control" id="textarea1" rows="3" placeholder="Enter a detailed description..."></textarea>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="input7">With Helper Text</label>
+        <input type="text" class="form-control" id="input7" />
+        <div class="form-text" style="font-size:12px">We'll never share your data.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- FORMS: SELECT                       -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="selects">
+    <h2>Select</h2>
+    <p class="section-desc">Native select and MDB enhanced select (Pro).</p>
+
+    <div class="row g-3" style="max-width:600px">
+      <div class="col-md-6">
+        <label class="form-label">Native Select</label>
+        <select class="form-select">
+          <option selected>Choose...</option>
+          <option>Community Development</option>
+          <option>Education</option>
+          <option>Health</option>
+          <option>Environment</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Small Select</label>
+        <select class="form-select form-select-sm">
+          <option selected>Status filter...</option>
+          <option>All</option>
+          <option>Active</option>
+          <option>Closed</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- FORMS: CHECKBOX & RADIO             -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="checkradio">
+    <h2>Checkbox &amp; Radio</h2>
+    <p class="section-desc">Selection controls for single and multiple choice.</p>
+
+    <div class="row g-4">
+      <div class="col-md-4">
+        <h3>Checkboxes</h3>
+        <div class="form-check"><input class="form-check-input" type="checkbox" id="chk1" checked><label class="form-check-label" for="chk1">Checked</label></div>
+        <div class="form-check"><input class="form-check-input" type="checkbox" id="chk2"><label class="form-check-label" for="chk2">Unchecked</label></div>
+        <div class="form-check"><input class="form-check-input" type="checkbox" id="chk3" disabled><label class="form-check-label" for="chk3">Disabled</label></div>
+      </div>
+      <div class="col-md-4">
+        <h3>Radio Buttons</h3>
+        <div class="form-check"><input class="form-check-input" type="radio" name="radio1" id="rad1" checked><label class="form-check-label" for="rad1">Option One</label></div>
+        <div class="form-check"><input class="form-check-input" type="radio" name="radio1" id="rad2"><label class="form-check-label" for="rad2">Option Two</label></div>
+        <div class="form-check"><input class="form-check-input" type="radio" name="radio1" id="rad3"><label class="form-check-label" for="rad3">Option Three</label></div>
+      </div>
+      <div class="col-md-4">
+        <h3>Inline</h3>
+        <div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" id="inl1" checked><label class="form-check-label" for="inl1">A</label></div>
+        <div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" id="inl2"><label class="form-check-label" for="inl2">B</label></div>
+        <div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" id="inl3"><label class="form-check-label" for="inl3">C</label></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- FORMS: SWITCHES                     -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="switches">
+    <h2>Switches</h2>
+    <p class="section-desc">Toggle switches for binary settings.</p>
+    <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="sw1" checked><label class="form-check-label" for="sw1">Active</label></div>
+    <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="sw2"><label class="form-check-label" for="sw2">Inactive</label></div>
+    <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="sw3" disabled><label class="form-check-label" for="sw3">Disabled</label></div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- FORMS: RANGE                        -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="range">
+    <h2>Range</h2>
+    <p class="section-desc">Slider input for numeric ranges.</p>
+    <div style="max-width:400px">
+      <label class="form-label" for="range1">Budget Range</label>
+      <input type="range" class="form-range" id="range1" min="0" max="100" value="50" />
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- FORMS: FILE INPUT                   -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="file-input">
+    <h2>File Input</h2>
+    <p class="section-desc">File upload controls.</p>
+    <div style="max-width:400px">
+      <label class="form-label" for="file1">Upload Document</label>
+      <input class="form-control" type="file" id="file1" />
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- FORMS: DATEPICKER (PRO)             -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="datepicker">
+    <h2>Datepicker (Pro)</h2>
+    <p class="section-desc">Calendar-based date selection. Shown as a static representation.</p>
+
+    <div style="max-width:300px">
+      <label class="form-label">Select Date</label>
+      <div style="position:relative">
+        <input type="text" class="form-control" placeholder="mm/dd/yyyy" value="04/28/2026" />
+        <i class="fas fa-calendar" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#aaa"></i>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+
+    <!-- Static calendar representation -->
+    <div style="width:280px;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden;font-size:13px">
+      <div style="background:var(--mdb-primary);color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center">
+        <i class="fas fa-chevron-left" style="cursor:pointer"></i>
+        <strong>April 2026</strong>
+        <i class="fas fa-chevron-right" style="cursor:pointer"></i>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);text-align:center;padding:8px">
+        <div style="padding:6px;color:#999;font-weight:500">Su</div><div style="padding:6px;color:#999;font-weight:500">Mo</div><div style="padding:6px;color:#999;font-weight:500">Tu</div><div style="padding:6px;color:#999;font-weight:500">We</div><div style="padding:6px;color:#999;font-weight:500">Th</div><div style="padding:6px;color:#999;font-weight:500">Fr</div><div style="padding:6px;color:#999;font-weight:500">Sa</div>
+        <div style="padding:6px;color:#ccc">29</div><div style="padding:6px;color:#ccc">30</div><div style="padding:6px;color:#ccc">31</div><div style="padding:6px">1</div><div style="padding:6px">2</div><div style="padding:6px">3</div><div style="padding:6px">4</div>
+        <div style="padding:6px">5</div><div style="padding:6px">6</div><div style="padding:6px">7</div><div style="padding:6px">8</div><div style="padding:6px">9</div><div style="padding:6px">10</div><div style="padding:6px">11</div>
+        <div style="padding:6px">12</div><div style="padding:6px">13</div><div style="padding:6px">14</div><div style="padding:6px">15</div><div style="padding:6px">16</div><div style="padding:6px">17</div><div style="padding:6px">18</div>
+        <div style="padding:6px">19</div><div style="padding:6px">20</div><div style="padding:6px">21</div><div style="padding:6px">22</div><div style="padding:6px">23</div><div style="padding:6px">24</div><div style="padding:6px">25</div>
+        <div style="padding:6px">26</div><div style="padding:6px">27</div><div style="padding:6px;background:var(--mdb-primary);color:#fff;border-radius:50%">28</div><div style="padding:6px">29</div><div style="padding:6px">30</div><div style="padding:6px;color:#ccc">1</div><div style="padding:6px;color:#ccc">2</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- FORMS: TIMEPICKER (PRO)             -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="timepicker">
+    <h2>Timepicker (Pro)</h2>
+    <p class="section-desc">Clock-style time selection.</p>
+    <div style="max-width:300px">
+      <label class="form-label">Select Time</label>
+      <div style="position:relative">
+        <input type="text" class="form-control" placeholder="12:00 AM" value="2:30 PM" />
+        <i class="fas fa-clock" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#aaa"></i>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- FORMS: AUTOCOMPLETE (PRO)           -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="autocomplete">
+    <h2>Autocomplete (Pro)</h2>
+    <p class="section-desc">Text input with typeahead suggestion dropdown.</p>
+    <div style="max-width:400px">
+      <label class="form-label">Search Organization</label>
+      <div style="position:relative">
+        <input type="text" class="form-control" value="Commun" />
+        <div style="position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid #e0e0e0;border-top:none;border-radius:0 0 4px 4px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:10">
+          <div style="padding:10px 16px;cursor:pointer;font-size:14px;background:#e3f2fd"><strong>Commun</strong>ity Health Alliance</div>
+          <div style="padding:10px 16px;cursor:pointer;font-size:14px"><strong>Commun</strong>ity Foundation of Greater Atlanta</div>
+          <div style="padding:10px 16px;cursor:pointer;font-size:14px"><strong>Commun</strong>ity Development Block Grant</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- FORMS: MULTI SELECT (PRO)           -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="multiselect">
+    <h2>Multi Select (Pro)</h2>
+    <p class="section-desc">Select multiple options from a dropdown list with chips.</p>
+    <div style="max-width:400px">
+      <label class="form-label">Grant Categories</label>
+      <div style="border:1px solid #ddd;border-radius:4px;padding:6px 12px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:42px">
+        <span style="display:inline-flex;align-items:center;padding:2px 8px;background:#e3f2fd;color:#1266F1;border-radius:12px;font-size:12px">Education <i class="fas fa-times ms-1" style="font-size:9px;cursor:pointer"></i></span>
+        <span style="display:inline-flex;align-items:center;padding:2px 8px;background:#e3f2fd;color:#1266F1;border-radius:12px;font-size:12px">Health <i class="fas fa-times ms-1" style="font-size:9px;cursor:pointer"></i></span>
+        <span style="color:#aaa;font-size:14px">Select more...</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- FORMS: STEPPER (PRO)                -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="stepper">
+    <h2>Stepper (Pro)</h2>
+    <p class="section-desc">Multi-step form progress indicator.</p>
+
+    <h3>Horizontal Stepper</h3>
+    <div style="display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:24px">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--mdb-primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500"><i class="fas fa-check" style="font-size:12px"></i></div>
+        <span style="font-size:12px;color:var(--mdb-primary);font-weight:500">Details</span>
+      </div>
+      <div style="flex:1;height:2px;background:var(--mdb-primary);max-width:120px"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--mdb-primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500">2</div>
+        <span style="font-size:12px;color:var(--mdb-primary);font-weight:500">Budget</span>
+      </div>
+      <div style="flex:1;height:2px;background:#ddd;max-width:120px"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+        <div style="width:36px;height:36px;border-radius:50%;background:#ddd;color:#999;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500">3</div>
+        <span style="font-size:12px;color:#999">Review</span>
+      </div>
+      <div style="flex:1;height:2px;background:#ddd;max-width:120px"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+        <div style="width:36px;height:36px;border-radius:50%;background:#ddd;color:#999;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500">4</div>
+        <span style="font-size:12px;color:#999">Submit</span>
+      </div>
+    </div>
+
+    <h3>Vertical Stepper</h3>
+    <div style="max-width:400px">
+      <div style="display:flex;gap:16px;margin-bottom:0">
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--mdb-primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px"><i class="fas fa-check" style="font-size:11px"></i></div>
+          <div style="width:2px;flex:1;background:var(--mdb-primary)"></div>
+        </div>
+        <div style="padding-bottom:24px"><strong style="font-size:14px">Step 1 — Organization Info</strong><p style="font-size:13px;color:#777;margin:4px 0 0">Completed</p></div>
+      </div>
+      <div style="display:flex;gap:16px;margin-bottom:0">
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--mdb-primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px">2</div>
+          <div style="width:2px;flex:1;background:#ddd"></div>
+        </div>
+        <div style="padding-bottom:24px"><strong style="font-size:14px">Step 2 — Project Narrative</strong><p style="font-size:13px;color:var(--mdb-primary);margin:4px 0 0">In Progress</p></div>
+      </div>
+      <div style="display:flex;gap:16px">
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div style="width:32px;height:32px;border-radius:50%;background:#ddd;color:#999;display:flex;align-items:center;justify-content:center;font-size:13px">3</div>
+        </div>
+        <div><strong style="font-size:14px;color:#999">Step 3 — Budget</strong><p style="font-size:13px;color:#aaa;margin:4px 0 0">Pending</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- FORMS: INPUT GROUPS                 -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="input-groups">
+    <h2>Input Groups</h2>
+    <p class="section-desc">Combine inputs with text, buttons, or icons.</p>
+    <div style="max-width:500px;display:flex;flex-direction:column;gap:12px">
+      <div class="input-group">
+        <span class="input-group-text">@</span>
+        <input type="text" class="form-control" placeholder="Username" />
+      </div>
+      <div class="input-group">
+        <span class="input-group-text">$</span>
+        <input type="text" class="form-control" placeholder="Amount" />
+        <span class="input-group-text">.00</span>
+      </div>
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search..." />
+        <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+      </div>
+      <div class="input-group">
+        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+        <input type="email" class="form-control" placeholder="Email address" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- FORMS: VALIDATION                   -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="validation">
+    <h2>Validation</h2>
+    <p class="section-desc">Success and error states for form inputs.</p>
+    <div style="max-width:500px;display:flex;flex-direction:column;gap:16px">
+      <div>
+        <label class="form-label" for="valid1">Valid Input</label>
+        <input type="text" class="form-control is-valid" id="valid1" value="Community Health Alliance" />
+        <div class="valid-feedback">Looks good!</div>
+      </div>
+      <div>
+        <label class="form-label" for="invalid1">Invalid Input</label>
+        <input type="text" class="form-control is-invalid" id="invalid1" value="" />
+        <div class="invalid-feedback">This field is required.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- FEEDBACK: MODALS                    -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="modals">
+    <h2>Modals</h2>
+    <p class="section-desc">Dialog overlays for focused content, confirmations, and forms. Shown inline.</p>
+
+    <div style="max-width:500px;border:1px solid #e0e0e0;border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,0.15);overflow:hidden;background:#fff">
+      <div style="padding:16px 24px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center">
+        <h5 style="margin:0;font-size:18px">Confirm Award</h5>
+        <button style="background:none;border:none;font-size:20px;color:#aaa;cursor:pointer">&times;</button>
+      </div>
+      <div style="padding:24px;font-size:14px;color:#555">
+        Are you sure you want to approve this grant award of <strong>$75,000</strong> to Community Health Alliance? This action will notify the applicant and initiate the payment process.
+      </div>
+      <div style="padding:12px 24px;border-top:1px solid #eee;display:flex;justify-content:flex-end;gap:8px">
+        <button class="btn btn-outline-secondary btn-sm">Cancel</button>
+        <button class="btn btn-primary btn-sm">Confirm Award</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- FEEDBACK: TOASTS                    -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="toasts">
+    <h2>Toasts</h2>
+    <p class="section-desc">Lightweight, auto-dismissing notifications.</p>
+
+    <div style="display:flex;flex-direction:column;gap:12px;max-width:350px">
+      <div style="background:#fff;border:1px solid #e0e0e0;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);overflow:hidden">
+        <div style="padding:8px 12px;display:flex;align-items:center;border-bottom:1px solid #eee">
+          <div style="width:16px;height:16px;border-radius:50%;background:var(--mdb-primary);margin-right:8px"></div>
+          <strong style="font-size:13px;flex:1">Application</strong>
+          <small style="color:#999;font-size:11px">just now</small>
+          <button style="background:none;border:none;color:#aaa;margin-left:8px">&times;</button>
+        </div>
+        <div style="padding:12px;font-size:13px;color:#555">Application #1042 has been submitted successfully.</div>
+      </div>
+
+      <div style="background:#fff;border-left:4px solid var(--mdb-success);border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,0.1);padding:12px 16px;display:flex;align-items:center;gap:12px">
+        <i class="fas fa-check-circle" style="color:var(--mdb-success);font-size:18px"></i>
+        <div>
+          <strong style="font-size:13px">Saved</strong>
+          <p style="margin:0;font-size:12px;color:#777">Changes saved successfully.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- FEEDBACK: TOOLTIPS                  -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="tooltips">
+    <h2>Tooltips</h2>
+    <p class="section-desc">Small contextual overlays on hover.</p>
+    <div class="component-row">
+      <div style="position:relative;display:inline-block">
+        <button class="btn btn-primary btn-sm">Hover me</button>
+        <div style="position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#262626;color:#fff;padding:4px 10px;border-radius:4px;font-size:12px;white-space:nowrap">
+          Tooltip on top
+          <div style="position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#262626"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- FEEDBACK: POPOVERS                  -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="popovers">
+    <h2>Popovers</h2>
+    <p class="section-desc">Rich content overlay triggered by click or hover.</p>
+    <div style="position:relative;display:inline-block">
+      <button class="btn btn-outline-primary btn-sm">Click for Popover</button>
+      <div style="position:absolute;bottom:calc(100% + 10px);left:0;background:#fff;border:1px solid #e0e0e0;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);width:260px;z-index:10">
+        <div style="padding:8px 12px;border-bottom:1px solid #eee;font-weight:500;font-size:14px">Popover Title</div>
+        <div style="padding:12px;font-size:13px;color:#666">And here's some amazing content. It's very engaging, right?</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- FEEDBACK: SPINNERS & LOADING        -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="spinners">
+    <h2>Spinners &amp; Loading</h2>
+    <p class="section-desc">Loading indicators for async operations.</p>
+    <div class="component-row" style="align-items:center">
+      <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+      <div class="spinner-border text-secondary" role="status"></div>
+      <div class="spinner-border text-success" role="status"></div>
+      <div class="spinner-grow text-primary" role="status"></div>
+      <div class="spinner-grow text-danger" role="status"></div>
+      <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+      <button class="btn btn-primary" disabled>
+        <span class="spinner-border spinner-border-sm me-2"></span>Loading...
+      </button>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- FEEDBACK: PROGRESS BARS             -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="progress">
+    <h2>Progress Bars</h2>
+    <p class="section-desc">Visual indicators for completion and loading states.</p>
+    <div style="max-width:500px;display:flex;flex-direction:column;gap:12px">
+      <div class="progress" style="height:20px"><div class="progress-bar" style="width:25%">25%</div></div>
+      <div class="progress" style="height:20px"><div class="progress-bar bg-success" style="width:50%">50%</div></div>
+      <div class="progress" style="height:20px"><div class="progress-bar bg-warning" style="width:75%">75%</div></div>
+      <div class="progress" style="height:20px"><div class="progress-bar bg-danger" style="width:100%">100%</div></div>
+      <div class="progress" style="height:8px"><div class="progress-bar progress-bar-striped progress-bar-animated" style="width:60%"></div></div>
+
+      <h3>Stacked</h3>
+      <div class="progress" style="height:20px">
+        <div class="progress-bar bg-success" style="width:35%">Approved</div>
+        <div class="progress-bar bg-warning" style="width:25%">Pending</div>
+        <div class="progress-bar bg-danger" style="width:15%">Denied</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- DATA DISPLAY: RATING (PRO)          -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="rating">
+    <h2>Rating (Pro)</h2>
+    <p class="section-desc">Star-based or icon-based rating inputs.</p>
+    <div style="font-size:24px;color:#FFA900">
+      <i class="fas fa-star"></i>
+      <i class="fas fa-star"></i>
+      <i class="fas fa-star"></i>
+      <i class="fas fa-star-half-alt"></i>
+      <i class="far fa-star" style="color:#ddd"></i>
+      <span style="font-size:14px;color:#777;margin-left:8px">3.5 / 5</span>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- DATA DISPLAY: CHARTS (PRO)          -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="charts">
+    <h2>Charts (Pro)</h2>
+    <p class="section-desc">MDB Pro includes Chart.js integration. Shown as static representations of available chart types.</p>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div style="background:#f9f9f9;border-radius:8px;padding:24px;text-align:center">
+          <h3 style="text-align:left">Bar Chart</h3>
+          <div style="display:flex;align-items:flex-end;justify-content:center;gap:16px;height:150px">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:40px;background:var(--mdb-primary);border-radius:4px 4px 0 0;height:60px"></div><span style="font-size:11px">Q1</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:40px;background:var(--mdb-primary);border-radius:4px 4px 0 0;height:100px"></div><span style="font-size:11px">Q2</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:40px;background:var(--mdb-primary);border-radius:4px 4px 0 0;height:80px"></div><span style="font-size:11px">Q3</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:40px;background:var(--mdb-primary);border-radius:4px 4px 0 0;height:130px"></div><span style="font-size:11px">Q4</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div style="background:#f9f9f9;border-radius:8px;padding:24px;text-align:center">
+          <h3 style="text-align:left">Doughnut Chart</h3>
+          <div style="width:140px;height:140px;border-radius:50%;background:conic-gradient(var(--mdb-primary) 0% 45%, var(--mdb-success) 45% 70%, var(--mdb-warning) 70% 85%, var(--mdb-danger) 85% 100%);margin:0 auto;position:relative">
+            <div style="position:absolute;inset:30px;background:#f9f9f9;border-radius:50%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- DATA DISPLAY: TIMELINE              -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="timeline">
+    <h2>Timeline</h2>
+    <p class="section-desc">Vertical timeline for activity history or process tracking.</p>
+
+    <div style="max-width:500px;padding-left:24px;border-left:2px solid #e0e0e0">
+      <div style="position:relative;padding-bottom:24px">
+        <div style="position:absolute;left:-31px;top:2px;width:16px;height:16px;border-radius:50%;background:var(--mdb-success);border:2px solid #fff"></div>
+        <strong style="font-size:14px">Application Approved</strong>
+        <p style="font-size:13px;color:#777;margin:4px 0 0">April 28, 2026 — Approved by Sarah Johnson</p>
+      </div>
+      <div style="position:relative;padding-bottom:24px">
+        <div style="position:absolute;left:-31px;top:2px;width:16px;height:16px;border-radius:50%;background:var(--mdb-primary);border:2px solid #fff"></div>
+        <strong style="font-size:14px">Review Completed</strong>
+        <p style="font-size:13px;color:#777;margin:4px 0 0">April 22, 2026 — All reviewers submitted scores</p>
+      </div>
+      <div style="position:relative;padding-bottom:24px">
+        <div style="position:absolute;left:-31px;top:2px;width:16px;height:16px;border-radius:50%;background:var(--mdb-info);border:2px solid #fff"></div>
+        <strong style="font-size:14px">Assigned to Reviewers</strong>
+        <p style="font-size:13px;color:#777;margin:4px 0 0">April 10, 2026 — 3 reviewers assigned</p>
+      </div>
+      <div style="position:relative">
+        <div style="position:absolute;left:-31px;top:2px;width:16px;height:16px;border-radius:50%;background:#ddd;border:2px solid #fff"></div>
+        <strong style="font-size:14px">Application Submitted</strong>
+        <p style="font-size:13px;color:#777;margin:4px 0 0">March 15, 2026</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- DATA DISPLAY: TREEVIEW (PRO)        -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="treeview">
+    <h2>Treeview (Pro)</h2>
+    <p class="section-desc">Hierarchical collapsible tree structure.</p>
+    <div style="font-size:14px;max-width:300px">
+      <div style="padding:4px 0;cursor:pointer"><i class="fas fa-caret-down me-1"></i><i class="fas fa-folder-open me-2" style="color:#FFA900"></i> Grant Programs</div>
+      <div style="padding-left:24px">
+        <div style="padding:4px 0;cursor:pointer"><i class="fas fa-caret-down me-1"></i><i class="fas fa-folder-open me-2" style="color:#FFA900"></i> 2024</div>
+        <div style="padding-left:24px">
+          <div style="padding:4px 0"><i class="fas fa-file me-2" style="color:#aaa;margin-left:14px"></i> Community Development</div>
+          <div style="padding:4px 0"><i class="fas fa-file me-2" style="color:#aaa;margin-left:14px"></i> Health Equity</div>
+          <div style="padding:4px 0"><i class="fas fa-file me-2" style="color:#aaa;margin-left:14px"></i> Youth Programs</div>
+        </div>
+        <div style="padding:4px 0;cursor:pointer"><i class="fas fa-caret-right me-1"></i><i class="fas fa-folder me-2" style="color:#FFA900"></i> 2025</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- SURFACES: OFFCANVAS                 -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="offcanvas">
+    <h2>Offcanvas</h2>
+    <p class="section-desc">Slide-in panel from the edge of the viewport. Shown inline.</p>
+    <div style="display:flex;gap:24px;align-items:flex-start">
+      <div style="width:300px;height:300px;background:#fff;border:1px solid #e0e0e0;border-radius:0 8px 8px 0;box-shadow:4px 0 16px rgba(0,0,0,0.1)">
+        <div style="padding:16px 20px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center">
+          <h5 style="margin:0;font-size:16px">Filters</h5>
+          <button style="background:none;border:none;font-size:18px;color:#aaa">&times;</button>
+        </div>
+        <div style="padding:16px 20px;font-size:14px">
+          <p style="font-weight:500;margin-bottom:8px">Status</p>
+          <div class="form-check"><input class="form-check-input" type="checkbox" checked><label class="form-check-label" style="font-size:13px">Active</label></div>
+          <div class="form-check"><input class="form-check-input" type="checkbox"><label class="form-check-label" style="font-size:13px">Closed</label></div>
+          <div class="form-check"><input class="form-check-input" type="checkbox"><label class="form-check-label" style="font-size:13px">Draft</label></div>
+          <div style="margin-top:16px">
+            <button class="btn btn-primary btn-sm" style="width:100%">Apply Filters</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- SURFACES: COLLAPSE                  -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="collapse">
+    <h2>Collapse</h2>
+    <p class="section-desc">Toggle visibility of content. Used in accordions, nav, and detail panels.</p>
+    <button class="btn btn-primary btn-sm mb-2" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">Toggle Content</button>
+    <div style="background:#f8f9fa;padding:16px;border-radius:4px;font-size:14px;display:block">
+      This content can be toggled. Collapse is a foundational behavior used by accordion, navbar, and other expandable UI patterns.
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- SURFACES: DROPDOWNS                 -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="dropdown">
+    <h2>Dropdowns</h2>
+    <p class="section-desc">Contextual overlays for lists of links and actions.</p>
+
+    <div style="display:flex;gap:24px;align-items:flex-start">
+      <div style="position:relative;display:inline-block">
+        <button class="btn btn-primary btn-sm">Dropdown <i class="fas fa-caret-down ms-1"></i></button>
+        <div style="position:absolute;top:100%;left:0;margin-top:4px;background:#fff;border:1px solid #e0e0e0;border-radius:4px;box-shadow:0 4px 12px rgba(0,0,0,0.1);min-width:180px;z-index:10">
+          <a href="#" style="display:block;padding:8px 16px;font-size:14px;color:#333;text-decoration:none">Action</a>
+          <a href="#" style="display:block;padding:8px 16px;font-size:14px;color:#333;text-decoration:none">Another action</a>
+          <hr style="margin:4px 0;border-color:#eee">
+          <a href="#" style="display:block;padding:8px 16px;font-size:14px;color:var(--mdb-danger);text-decoration:none">Delete</a>
+        </div>
+      </div>
+
+      <div style="position:relative;display:inline-block">
+        <button class="btn btn-outline-secondary btn-sm"><i class="fas fa-ellipsis-v"></i></button>
+        <div style="position:absolute;top:100%;right:0;margin-top:4px;background:#fff;border:1px solid #e0e0e0;border-radius:4px;box-shadow:0 4px 12px rgba(0,0,0,0.1);min-width:160px;z-index:10">
+          <a href="#" style="display:block;padding:8px 16px;font-size:14px;color:#333;text-decoration:none"><i class="fas fa-edit me-2" style="width:16px"></i>Edit</a>
+          <a href="#" style="display:block;padding:8px 16px;font-size:14px;color:#333;text-decoration:none"><i class="fas fa-copy me-2" style="width:16px"></i>Duplicate</a>
+          <a href="#" style="display:block;padding:8px 16px;font-size:14px;color:#333;text-decoration:none"><i class="fas fa-download me-2" style="width:16px"></i>Export</a>
+          <hr style="margin:4px 0;border-color:#eee">
+          <a href="#" style="display:block;padding:8px 16px;font-size:14px;color:var(--mdb-danger);text-decoration:none"><i class="fas fa-trash me-2" style="width:16px"></i>Delete</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- MEDIA: IMAGES                       -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="images">
+    <h2>Images</h2>
+    <p class="section-desc">Responsive images, thumbnails, and shapes.</p>
+    <div class="component-row">
+      <div style="width:120px;height:80px;background:#e3f2fd;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#1266F1">.img-fluid</div>
+      <div style="width:80px;height:80px;background:#e3f2fd;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#1266F1">.rounded-circle</div>
+      <div style="width:120px;height:80px;background:#e3f2fd;border:1px solid #ddd;padding:4px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#1266F1">.img-thumbnail</div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- MEDIA: LIGHTBOX (PRO)               -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="lightbox">
+    <h2>Lightbox (Pro)</h2>
+    <p class="section-desc">Full-screen image/gallery viewer triggered by clicking thumbnails. Behavior-based — uses the image grid above as its trigger.</p>
+    <p style="color:#888;font-size:13px">Lightbox opens a full-screen overlay with navigation arrows and zoom. It wraps an image grid and adds click-to-expand behavior.</p>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- MEDIA: CAROUSEL                     -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="carousel">
+    <h2>Carousel</h2>
+    <p class="section-desc">Sliding content display with indicators and controls.</p>
+    <div style="max-width:500px;position:relative;background:linear-gradient(135deg,#1266F1,#39C0ED);border-radius:8px;height:200px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px">
+      <div style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:36px;height:36px;background:rgba(255,255,255,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer"><i class="fas fa-chevron-left"></i></div>
+      Slide 1 of 3
+      <div style="position:absolute;right:12px;top:50%;transform:translateY(-50%);width:36px;height:36px;background:rgba(255,255,255,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer"><i class="fas fa-chevron-right"></i></div>
+      <div style="position:absolute;bottom:12px;display:flex;gap:8px">
+        <div style="width:24px;height:3px;background:#fff;border-radius:2px"></div>
+        <div style="width:24px;height:3px;background:rgba(255,255,255,0.5);border-radius:2px"></div>
+        <div style="width:24px;height:3px;background:rgba(255,255,255,0.5);border-radius:2px"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- UTILITIES: SHADOWS                  -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="shadows">
+    <h2>Shadows</h2>
+    <p class="section-desc">Elevation levels using box-shadow utilities.</p>
+    <div class="component-row">
+      <div style="width:120px;height:80px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;color:#777;border-radius:4px">No shadow</div>
+      <div style="width:120px;height:80px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;color:#777;border-radius:4px;box-shadow:0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12)">shadow-1</div>
+      <div style="width:120px;height:80px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;color:#777;border-radius:4px;box-shadow:0 5px 11px 0 rgba(0,0,0,0.18), 0 4px 15px 0 rgba(0,0,0,0.15)">shadow-2</div>
+      <div style="width:120px;height:80px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;color:#777;border-radius:4px;box-shadow:0 8px 17px 2px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.2)">shadow-3</div>
+      <div style="width:120px;height:80px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;color:#777;border-radius:4px;box-shadow:0 16px 24px 2px rgba(0,0,0,0.14), 0 6px 30px 5px rgba(0,0,0,0.12), 0 8px 10px -7px rgba(0,0,0,0.2)">shadow-4</div>
+      <div style="width:120px;height:80px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;color:#777;border-radius:4px;box-shadow:0 24px 38px 3px rgba(0,0,0,0.14), 0 9px 46px 8px rgba(0,0,0,0.12), 0 11px 15px -7px rgba(0,0,0,0.2)">shadow-5</div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- UTILITIES: BORDERS                  -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="borders">
+    <h2>Borders</h2>
+    <p class="section-desc">Border utilities for width, color, and radius.</p>
+    <div class="component-row">
+      <div style="width:80px;height:80px;background:#f8f9fa;border:1px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:11px">border</div>
+      <div style="width:80px;height:80px;background:#f8f9fa;border:2px solid var(--mdb-primary);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--mdb-primary)">primary</div>
+      <div style="width:80px;height:80px;background:#f8f9fa;border:1px solid #ddd;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px">rounded</div>
+      <div style="width:80px;height:80px;background:#f8f9fa;border:1px solid #ddd;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px">circle</div>
+      <div style="width:120px;height:80px;background:#f8f9fa;border:1px solid #ddd;border-radius:50px;display:flex;align-items:center;justify-content:center;font-size:11px">rounded-pill</div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- UTILITIES: SPACING                  -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="spacing">
+    <h2>Spacing</h2>
+    <p class="section-desc">Margin and padding scale: 0, 1(0.25rem), 2(0.5rem), 3(1rem), 4(1.5rem), 5(3rem).</p>
+    <table class="ref-table" style="max-width:400px">
+      <thead><tr><th>Class</th><th>Value</th><th>Pixels</th></tr></thead>
+      <tbody>
+        <tr><td><code>*-0</code></td><td>0</td><td>0px</td></tr>
+        <tr><td><code>*-1</code></td><td>0.25rem</td><td>4px</td></tr>
+        <tr><td><code>*-2</code></td><td>0.5rem</td><td>8px</td></tr>
+        <tr><td><code>*-3</code></td><td>1rem</td><td>16px</td></tr>
+        <tr><td><code>*-4</code></td><td>1.5rem</td><td>24px</td></tr>
+        <tr><td><code>*-5</code></td><td>3rem</td><td>48px</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ─────────────────────────────────── -->
+  <!-- UTILITIES: DISPLAY & VISIBILITY     -->
+  <!-- ─────────────────────────────────── -->
+  <section class="component-section" id="visibility">
+    <h2>Display &amp; Visibility</h2>
+    <p class="section-desc">Responsive display and visibility utility classes.</p>
+    <table class="ref-table" style="max-width:600px">
+      <thead><tr><th>Class</th><th>Behavior</th></tr></thead>
+      <tbody>
+        <tr><td><code>.d-none</code></td><td>Hidden</td></tr>
+        <tr><td><code>.d-block</code></td><td>Display block</td></tr>
+        <tr><td><code>.d-inline</code></td><td>Display inline</td></tr>
+        <tr><td><code>.d-flex</code></td><td>Display flex</td></tr>
+        <tr><td><code>.d-md-none</code></td><td>Hidden at md+ breakpoint</td></tr>
+        <tr><td><code>.d-lg-block</code></td><td>Block at lg+ breakpoint</td></tr>
+        <tr><td><code>.visible</code></td><td>Visibility visible</td></tr>
+        <tr><td><code>.invisible</code></td><td>Visibility hidden (still takes space)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Footer -->
+  <div style="padding:32px 0;text-align:center;color:#aaa;font-size:13px;border-top:1px solid #eee;margin-top:16px">
+    MDB5 Pro Kitchen Sink — Component Reference &middot; Generated for Foundant Design System Mapping
+  </div>
+
+</div>
+
+<!-- MDB5 JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.min.js"></script>
+<script>
+  // Initialize MDB components
+  document.querySelectorAll('[data-mdb-input-init]').forEach(el => {
+    new mdb.Input(el);
+  });
+
+  // Simple TOC highlight on scroll
+  const tocLinks = document.querySelectorAll('.toc-sidebar a');
+  const sections = document.querySelectorAll('.component-section[id]');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const top = section.offsetTop - 60;
+      if (window.scrollY >= top) {
+        current = section.getAttribute('id');
+      }
+    });
+    tocLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) {
+        link.classList.add('active');
+      }
+    });
+  });
+</script>
+</body>
+</html>
