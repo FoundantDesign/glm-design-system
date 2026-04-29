@@ -1,0 +1,886 @@
+<!-- Grant Award Detail -- Unmoderated Study Artifact: dec-approved -->
+<!-- Locked: Slide-over form view, no prototype controls -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css">
+<style>
+:root {
+  --font-body: Roboto, sans-serif;
+  --font-heading: Roboto, sans-serif;
+  --app-bg: #F5F5F5;
+  --surface: #FFFFFF;
+  --primary: #2D3B4A;
+  --primary-hover: #424F5C;
+  --primary-pressed: #57626E;
+  --outline-hover: #EAEAED;
+  --border-color: #E0E0E0;
+  --border: 1px solid #E0E0E0;
+  --radius: 6px;
+  --form-radius: 4px;
+  --pill: 999px;
+  --sidebar-active: #D5E2FA;
+  --sidebar-hover: #F5F5F5;
+  --link: #1B76D2;
+  --gap: 16px;
+  --nav-height: 55px;
+  --sidebar-width: 250px;
+  --neutral-30: #616161;
+  --neutral-40: #757575;
+  --neutral-60: #E0E0E0;
+  --neutral-70: #EEEEEE;
+  --neutral-80: #F5F5F5;
+  --neutral-90: #FAFAFA;
+  --neutral-100: #FFFFFF;
+  --state-dark-hover: #424F5C;
+  --state-dark-pressed: #57626E;
+  --state-dark-disabled: #D5D8DB;
+  --state-light-hover: #EAEAED;
+  --state-light-pressed: #D5D8DB;
+  --state-light-disabled: #EAEAED;
+  --success-0: #67CF9D; --success-50: #E1F5EB;
+  --danger-0: #BD3B39;  --danger-50: #FCDDDD;
+  --warning-0: #F4C862; --warning-50: #FFF4D1;
+  --info-0: #536E8A;    --info-50: #D5E2FA;
+  --mdb-primary: #2D3B4A;
+  --mdb-body-bg: #F5F5F5;
+  --mdb-body-color: #2D3B4A;
+  --mdb-border-color: #E0E0E0;
+  --mdb-border-radius: 6px;
+  --mdb-border-radius-pill: 999px;
+  --mdb-font-sans-serif: Roboto, sans-serif;
+  --mdb-link-color: #1B76D2;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); font-size: 16px; background: var(--app-bg); color: var(--primary); }
+h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); font-weight: 500; color: var(--primary); }
+a { color: var(--link); text-decoration: none; }
+svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
+
+/* NAVBAR */
+.ft-navbar {
+  background: var(--surface); border-bottom: var(--border);
+  height: var(--nav-height); padding: 0 20px;
+  display: flex; align-items: center; gap: 18px;
+  position: sticky; top: 0; z-index: 200;
+}
+.ft-navbar__logo {
+  width: 36px; height: 36px; background: var(--primary);
+  border-radius: var(--radius); display: flex; align-items: center;
+  justify-content: center; font-family: var(--font-heading);
+  font-weight: 700; font-size: 11px; color: #fff; flex-shrink: 0;
+}
+.ft-navbar__item {
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.8rem;
+  color: var(--primary); text-transform: uppercase; background: none;
+  border: none; cursor: pointer; white-space: nowrap;
+  display: flex; align-items: center; gap: 3px;
+}
+.ft-navbar__search {
+  flex: 1; max-width: 420px; border: var(--border);
+  border-radius: var(--form-radius); padding: 5px 12px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.85rem; color: #bbb; background: var(--surface);
+}
+.ft-navbar__spacer { flex: 1; }
+.ft-navbar__role {
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.8rem;
+  color: var(--primary); background: none; border: none; cursor: pointer;
+  display: flex; align-items: center; gap: 3px; white-space: nowrap;
+}
+.ft-navbar__utils { display: flex; align-items: center; gap: 14px; }
+.ft-navbar__utils svg { cursor: pointer; }
+
+/* PAGE */
+.ft-page { display: flex; background: var(--app-bg); min-height: calc(100vh - var(--nav-height)); position: relative; }
+.ft-content { flex: 1; padding: 24px; min-width: 0; }
+
+/* SIDEBAR */
+.ft-sidebar {
+  width: var(--sidebar-width); background: var(--surface);
+  border-right: var(--border); flex-shrink: 0; padding-top: 8px;
+}
+.ft-sidebar__contact {
+  background: #EBEBEB; border-radius: var(--radius);
+  padding: 12px; margin: 8px 10px 15px;
+  box-shadow: 0 2px 8px 2px rgba(0,0,0,0.08);
+}
+.ft-sidebar__contact-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.ft-sidebar__contact-row:last-child { margin-bottom: 0; }
+.ft-sidebar__contact-row svg { flex-shrink: 0; color: var(--primary); }
+.ft-sidebar__contact-row span {
+  font-size: 0.7rem; color: var(--primary);
+  text-transform: uppercase; font-family: var(--font-body); font-weight: 400; word-break: break-all;
+}
+.ft-sidebar__item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px; cursor: pointer; font-size: 0.875rem;
+  font-family: var(--font-body); color: var(--primary); font-weight: 400;
+  background: transparent; border: none; width: 100%; text-align: left; transition: background 0.1s;
+}
+.ft-sidebar__item:hover { background: var(--sidebar-hover); font-weight: 700; }
+.ft-sidebar__item.active { background: var(--sidebar-active); font-weight: 700; }
+.ft-sidebar__label { flex: 1; }
+.ft-sidebar__count {
+  background: var(--primary); color: #fff; border-radius: var(--pill);
+  font-size: 0.65rem; font-weight: 700; padding: 1px 7px; font-family: var(--font-heading);
+}
+.ft-sidebar__stage-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.dot-complete { background: var(--success-0); }
+.dot-active { background: var(--warning-0); }
+.dot-pending { background: var(--state-dark-disabled); }
+
+/* RECORD HEADER */
+.ft-record-header { margin-bottom: 20px; }
+.ft-record-header h1 {
+  font-size: 1.5rem; font-weight: 500;
+  display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;
+}
+.ft-record-meta {
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 0.85rem; color: #666;
+}
+.ft-record-meta .org { font-weight: 600; color: var(--primary); }
+.ft-record-meta .sep { color: #ccc; }
+
+/* HERO CARD */
+.ft-hero {
+  background: var(--surface); border: var(--border); border-radius: var(--radius);
+  padding: 20px 24px; margin-bottom: var(--gap);
+  display: flex; align-items: center; gap: 32px; flex-wrap: wrap;
+}
+.ft-hero__amount-block { display: flex; flex-direction: column; gap: 2px; }
+.ft-hero__amount-label { font-size: 0.75rem; color: var(--neutral-40); font-weight: 400; }
+.ft-hero__amount-value { font-size: 1.5rem; font-weight: 700; font-family: var(--font-heading); color: var(--primary); }
+.ft-hero__divider { width: 1px; height: 48px; background: var(--border-color); flex-shrink: 0; }
+.ft-hero__stage-track { display: flex; align-items: center; gap: 0; flex: 1; min-width: 280px; }
+.ft-hero__stage-step { display: flex; flex-direction: column; align-items: center; flex: 1; }
+.ft-hero__stage-label { font-size: 0.65rem; color: var(--neutral-40); margin-top: 4px; text-align: center; white-space: nowrap; }
+.ft-hero__stage-node {
+  width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border-color);
+  background: var(--surface); display: flex; align-items: center; justify-content: center;
+  font-size: 0.6rem; font-weight: 700; font-family: var(--font-heading); color: #aaa; position: relative; z-index: 1;
+}
+.ft-hero__stage-node.done { background: var(--success-50); border-color: var(--success-0); color: #2a7a52; }
+.ft-hero__stage-node.active { background: var(--warning-50); border-color: var(--warning-0); color: #8a6d00; }
+.ft-hero__stage-line { flex: 1; height: 2px; background: var(--border-color); margin-top: -14px; }
+.ft-hero__stage-line.done { background: var(--success-0); }
+
+/* BENTO */
+.ft-bento { background: var(--surface); border: var(--border); border-radius: var(--radius); padding: 16px; }
+.ft-bento__header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.ft-bento__title { font-size: 1.25rem; font-weight: 500; font-family: var(--font-heading); color: var(--primary); }
+.ft-bento__actions { display: flex; gap: 8px; }
+.ft-kv {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 7px 0; border-bottom: var(--border);
+}
+.ft-kv:last-child { border-bottom: none; }
+.ft-kv__label { font-size: 0.8rem; color: #777; font-weight: 400; }
+.ft-kv__value { font-size: 0.8rem; font-weight: 500; color: var(--primary); }
+
+/* BUTTONS */
+.btn-ft-filled, .btn-ft-outline {
+  border-radius: var(--pill); font-family: var(--font-heading); font-weight: 700;
+  cursor: pointer; border: 2px solid var(--primary);
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.75rem; padding: 4px 14px 3px; transition: background 0.1s;
+}
+.btn-ft-filled { background: var(--primary); color: #fff; }
+.btn-ft-filled:hover { background: var(--primary-hover); border-color: var(--primary-hover); }
+.btn-ft-outline { background: transparent; color: var(--primary); }
+.btn-ft-outline:hover { background: var(--outline-hover); }
+.btn-ft-default { font-size: 0.875rem; padding: 5px 12px; }
+.btn-ft-sm { font-size: 0.75rem; padding: 4px 14px 3px; }
+.btn-ft-danger {
+  border-radius: var(--pill); font-family: var(--font-heading); font-weight: 700;
+  cursor: pointer; border: 2px solid var(--danger-0); background: var(--danger-0); color: #fff;
+  display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; padding: 4px 14px 3px;
+}
+
+/* BADGES */
+.ft-badge {
+  display: inline-block; border-radius: var(--pill); font-size: 0.75rem; font-weight: 500;
+  padding: 2px 10px; white-space: nowrap; color: var(--primary); font-family: var(--font-body);
+}
+.ft-badge--approved, .ft-badge--clear, .ft-badge--exempt, .ft-badge--complete { background: var(--success-50); }
+.ft-badge--manual, .ft-badge--upcoming, .ft-badge--assigned, .ft-badge--submitted { background: var(--info-50); }
+.ft-badge--overdue, .ft-badge--loi-draft, .ft-badge--denied { background: var(--danger-50); }
+.ft-badge--pending, .ft-badge--draft { background: var(--warning-50); }
+.ft-badge--closed, .ft-badge--abandoned { background: var(--neutral-70); color: var(--neutral-40); }
+
+/* GRIDS */
+.ft-grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: var(--gap); margin-bottom: var(--gap); }
+.ft-grid-1-1 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); margin-bottom: var(--gap); }
+.ft-grid-1   { display: grid; grid-template-columns: 1fr; gap: var(--gap); margin-bottom: var(--gap); }
+
+/* CARD LINKS */
+.ft-card-link {
+  display: flex; align-items: center; gap: 4px; font-size: 0.75rem;
+  color: var(--link); cursor: pointer; background: none; border: none;
+  font-family: var(--font-body); font-weight: 500; padding: 0;
+}
+
+/* KEBAB MENUS */
+.ft-kebab-wrap { position: relative; display: inline-block; }
+.ft-kebab-btn {
+  background: none; border: 1px solid var(--border-color); border-radius: var(--form-radius);
+  cursor: pointer; padding: 4px 6px; display: flex; align-items: center; color: var(--primary);
+}
+.ft-kebab-btn:hover { background: var(--outline-hover); }
+.ft-kebab-menu {
+  display: none; position: absolute; right: 0; top: calc(100% + 4px);
+  background: var(--surface); border: 1px solid var(--border-color);
+  border-radius: var(--radius); box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+  min-width: 200px; z-index: 50; padding: 4px 0;
+}
+.ft-kebab-menu.open { display: block; }
+.ft-kebab-menu__item {
+  display: block; width: 100%; text-align: left; padding: 7px 14px;
+  font-size: 0.8rem; color: var(--primary); background: none; border: none;
+  cursor: pointer; font-family: var(--font-body);
+}
+.ft-kebab-menu__item:hover { background: var(--sidebar-hover); }
+
+/* PLACEHOLDER BENTO */
+.ft-bento-placeholder {
+  background: var(--surface); border: 1px dashed var(--border-color);
+  border-radius: var(--radius); padding: 16px; text-align: center;
+}
+.ft-bento-placeholder__label { font-size: 0.8rem; color: #aaa; font-style: italic; }
+
+/* MODAL OVERRIDES */
+.ft-modal .modal-content { border-radius: var(--radius); border: none; box-shadow: 0 4px 24px rgba(0,0,0,0.12); }
+.ft-modal .modal-header { border-bottom: none; padding: 20px 20px 10px; }
+.ft-modal .modal-title { font-family: var(--font-heading); font-weight: 500; }
+.ft-modal .modal-footer { border-top: none; padding: 10px 20px 20px; }
+.ft-modal .modal-body { padding: 0 20px 10px; font-size: 0.9rem; color: #555; line-height: 1.5; }
+
+/* ═══════════════════════════════════════════
+   PATTERN A: FULL REPLACE
+   ═══════════════════════════════════════════ */
+.ft-form-back {
+  display: flex; align-items: center; gap: 6px; margin-bottom: 16px;
+  font-size: 0.85rem; color: var(--link); cursor: pointer;
+  background: none; border: none; font-family: var(--font-body); font-weight: 500; padding: 0;
+}
+.ft-form-back:hover { text-decoration: underline; }
+.ft-form-section { margin-bottom: 20px; }
+.ft-form-section__title {
+  font-size: 0.75rem; font-weight: 700; color: var(--neutral-40);
+  text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px;
+  padding-bottom: 6px; border-bottom: var(--border);
+}
+.ft-form-field { display: grid; grid-template-columns: 180px 1fr; gap: 8px; padding: 6px 0; font-size: 0.85rem; }
+.ft-form-field__label { color: var(--neutral-40); font-weight: 400; }
+.ft-form-field__value { color: var(--primary); font-weight: 400; }
+.ft-form-field__value strong { font-weight: 500; }
+.ft-form-narrative {
+  font-size: 0.85rem; color: var(--primary); line-height: 1.6;
+  padding: 12px 16px; background: var(--neutral-90); border-radius: var(--form-radius);
+  margin-top: 4px;
+}
+
+/* ═══════════════════════════════════════════
+   PATTERN B: SLIDE-OVER PANEL
+   ═══════════════════════════════════════════ */
+.ft-slideover-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.2); z-index: 300;
+}
+.ft-slideover-overlay.open { display: block; }
+.ft-slideover {
+  position: fixed; top: var(--nav-height); right: -560px; bottom: 0; width: 540px;
+  background: var(--surface); border-left: var(--border);
+  box-shadow: -4px 0 24px rgba(0,0,0,0.10); z-index: 301;
+  transition: right 0.25s ease; overflow-y: auto;
+}
+.ft-slideover.open { right: 0; }
+.ft-slideover__header {
+  display: flex; align-items: center; gap: 12px; padding: 16px 20px;
+  border-bottom: var(--border); position: sticky; top: 0; background: var(--surface); z-index: 2;
+}
+.ft-slideover__close {
+  background: none; border: none; cursor: pointer; color: var(--primary);
+  display: flex; align-items: center; padding: 4px;
+}
+.ft-slideover__close:hover { color: var(--danger-0); }
+.ft-slideover__title { font-family: var(--font-heading); font-weight: 500; font-size: 1.1rem; flex: 1; }
+.ft-slideover__body { padding: 20px; }
+
+/* ═══════════════════════════════════════════
+   PATTERN C: FLOATING WINDOW
+   ═══════════════════════════════════════════ */
+.ft-floater {
+  display: none; position: fixed; z-index: 400;
+  width: 560px; max-height: 70vh;
+  background: var(--surface); border: var(--border); border-radius: var(--radius);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18); overflow: hidden;
+  flex-direction: column;
+}
+.ft-floater.open { display: flex; }
+.ft-floater.minimized {
+  width: 280px; max-height: none; height: auto;
+  bottom: 24px !important; left: calc(50% - 140px) !important;
+  top: auto !important; right: auto !important;
+  border-radius: var(--pill); box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+.ft-floater__header {
+  display: flex; align-items: center; gap: 10px; padding: 10px 16px;
+  background: var(--primary); color: #fff; cursor: grab; flex-shrink: 0;
+  user-select: none;
+}
+.ft-floater__header:active { cursor: grabbing; }
+.ft-floater__title { font-family: var(--font-heading); font-weight: 500; font-size: 0.85rem; flex: 1; color: #fff; }
+.ft-floater__btn {
+  background: none; border: none; color: rgba(255,255,255,0.7); cursor: pointer;
+  display: flex; align-items: center; padding: 2px;
+}
+.ft-floater__btn:hover { color: #fff; }
+.ft-floater__body { padding: 20px; overflow-y: auto; flex: 1; }
+.ft-floater.minimized .ft-floater__body { display: none; }
+.ft-floater.minimized .ft-floater__header { border-radius: var(--pill); cursor: pointer; }
+.ft-panel { display: none !important; }
+</style>
+
+<!-- INLINE SVG ICON SYMBOLS -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="ic-home" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2 6.5L8 2l6 4.5V14a1 1 0 01-1 1H3a1 1 0 01-1-1V6.5z"/><path d="M6 15v-5h4v5"/>
+    </symbol>
+    <symbol id="ic-search" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3.5 3.5"/>
+    </symbol>
+    <symbol id="ic-user" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-5 6-5s6 1.7 6 5"/>
+    </symbol>
+    <symbol id="ic-dollar" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M8 1v14M11 4H6.5a2.5 2.5 0 000 5h3a2.5 2.5 0 010 5H5"/>
+    </symbol>
+    <symbol id="ic-clock" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="8" r="6.5"/><path d="M8 5v3.5l2.5 1.5"/>
+    </symbol>
+    <symbol id="ic-file" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 1H4a1 1 0 00-1 1v12a1 1 0 001 1h8a1 1 0 001-1V6L9 1z"/><path d="M9 1v5h5"/>
+    </symbol>
+    <symbol id="ic-chat" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14 10a2 2 0 01-2 2H5l-3 3V4a2 2 0 012-2h8a2 2 0 012 2v6z"/>
+    </symbol>
+    <symbol id="ic-shield" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 1l6 2.5v4C14 11 11.5 14 8 15 4.5 14 2 11 2 7.5v-4L8 1z"/>
+    </symbol>
+    <symbol id="ic-grid" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/>
+      <rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/>
+    </symbol>
+    <symbol id="ic-gear" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="8" r="2.5"/><path d="M8 1.5V3m0 10v1.5M1.5 8H3m10 0h1.5M3.1 3.1l1 1m7.8 7.8 1 1M12.9 3.1l-1 1M4.1 11.9l-1 1"/>
+    </symbol>
+    <symbol id="ic-chevron" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M2 3.5l3 3 3-3"/>
+    </symbol>
+    <symbol id="ic-pencil" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 2l3 3-8 8H3v-3l8-8z"/>
+    </symbol>
+    <symbol id="ic-compass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="8" r="6.5"/><path d="M10.5 5.5l-2 4.5-4.5 2 2-4.5 4.5-2z"/>
+    </symbol>
+    <symbol id="ic-lightbulb" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M8 1a5 5 0 013.5 8.5c-.5.5-.5 1-.5 1.5H5c0-.5 0-1-.5-1.5A5 5 0 018 1z"/><path d="M6 11h4M6.5 13h3"/>
+    </symbol>
+    <symbol id="ic-gift" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="1" y="6" width="14" height="3" rx="1"/><path d="M2 9v5h12V9M8 6V15M8 6S6 3 4.5 3 2 4 3 5.5 6 6 8 6zM8 6s2-3 3.5-3S14 4 13 5.5 10 6 8 6z"/>
+    </symbol>
+    <symbol id="ic-phone" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 1h3l1.5 3.5-2 1.2a9 9 0 004.8 4.8l1.2-2L15 11v3a1 1 0 01-1 1A13 13 0 012 2a1 1 0 011-1z"/>
+    </symbol>
+    <symbol id="ic-envelope" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="1" y="3" width="14" height="10" rx="1"/><path d="M1 4l7 5 7-5"/>
+    </symbol>
+    <symbol id="ic-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <path d="M2 8l4 4 8-8"/>
+    </symbol>
+    <symbol id="ic-close" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M3 3l10 10M13 3L3 13"/>
+    </symbol>
+    <symbol id="ic-trash" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5M3 4l1 10h8l1-10"/>
+    </symbol>
+    <symbol id="ic-arrow-left" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M13 8H3M7 4L3 8l4 4"/>
+    </symbol>
+    <symbol id="ic-external" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M7 3H3a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1V9"/><path d="M10 1h5v5"/><path d="M15 1L7 9"/>
+    </symbol>
+    <symbol id="ic-kebab" viewBox="0 0 16 16" fill="currentColor">
+      <circle cx="8" cy="3" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="8" cy="13" r="1.5"/>
+    </symbol>
+    <symbol id="ic-pdf" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 1H4a1 1 0 00-1 1v12a1 1 0 001 1h8a1 1 0 001-1V6L9 1z"/><path d="M9 1v5h5"/><path d="M5 10h1.5a1 1 0 000-2H5v4"/>
+    </symbol>
+    <symbol id="ic-minimize" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M3 8h10"/>
+    </symbol>
+    <symbol id="ic-maximize" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="3" width="10" height="10" rx="1"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- DELETE MODAL (MDB5) -->
+<div class="modal fade ft-modal" id="deleteModal" tabindex="-1">
+  <div class="modal-dialog"><div class="modal-content">
+    <div class="modal-header"><h5 class="modal-title">Delete this request?</h5><button type="button" class="btn-close" data-mdb-dismiss="modal"></button></div>
+    <div class="modal-body">This will permanently remove <strong>Workforce Pathways Initiative</strong> and all associated data. This action cannot be undone.</div>
+    <div class="modal-footer"><button class="btn-ft-outline btn-ft-default" data-mdb-dismiss="modal">Cancel</button><button class="btn-ft-danger btn-ft-default" data-mdb-dismiss="modal">Delete Request</button></div>
+  </div></div>
+</div>
+
+<!-- PATTERN B: SLIDE-OVER PANEL (hidden) -->
+<div class="ft-slideover-overlay" id="slideover-overlay" onclick="closeFormView()"></div>
+<div class="ft-slideover" id="slideover-panel">
+  <div class="ft-slideover__header">
+    <button class="ft-slideover__close" onclick="closeFormView()"><svg width="16" height="16"><use href="#ic-close"/></svg></button>
+    <span class="ft-slideover__title" id="slideover-title"></span>
+    <button class="btn-ft-outline" style="font-size:0.7rem;padding:3px 10px 2px"><svg width="12" height="12"><use href="#ic-pdf"/></svg> Download PDF</button>
+  </div>
+  <div class="ft-slideover__body" id="slideover-body"></div>
+</div>
+
+
+
+<!-- NAVBAR -->
+<nav class="ft-navbar">
+  <div class="ft-navbar__logo">FT</div>
+  <svg width="16" height="16" style="color:var(--primary);cursor:pointer"><use href="#ic-home"/></svg>
+  <button class="ft-navbar__item">SEARCH <svg width="10" height="10"><use href="#ic-chevron"/></svg></button>
+  <button class="ft-navbar__item">TOOLS <svg width="10" height="10"><use href="#ic-chevron"/></svg></button>
+  <button class="ft-navbar__item">COMMUNICATIONS <svg width="10" height="10"><use href="#ic-chevron"/></svg></button>
+  <button class="ft-navbar__item">REPORTING <svg width="10" height="10"><use href="#ic-chevron"/></svg></button>
+  <div class="ft-navbar__search"><svg width="13" height="13" style="color:#aaa"><use href="#ic-search"/></svg> search</div>
+  <div class="ft-navbar__spacer"></div>
+  <button class="ft-navbar__role">ROLE (GRANTS MANAGER) <svg width="10" height="10"><use href="#ic-chevron"/></svg></button>
+  <div class="ft-navbar__utils">
+    <svg width="16" height="16" style="color:var(--primary)"><use href="#ic-compass"/></svg>
+    <svg width="16" height="16" style="color:var(--primary)"><use href="#ic-lightbulb"/></svg>
+    <svg width="16" height="16" style="color:var(--primary)"><use href="#ic-gift"/></svg>
+    <svg width="16" height="16" style="color:var(--primary)"><use href="#ic-grid"/></svg>
+    <svg width="16" height="16" style="color:var(--primary)"><use href="#ic-gear"/></svg>
+    <svg width="16" height="16" style="color:var(--primary)"><use href="#ic-user"/></svg>
+  </div>
+</nav>
+
+<!-- PAGE -->
+<div class="ft-page">
+  <aside class="ft-sidebar" id="ft-sidebar">
+    <div class="ft-sidebar__contact">
+      <div class="ft-sidebar__contact-row"><svg width="14" height="14"><use href="#ic-user"/></svg><span>Aaron Rodgers</span></div>
+      <div class="ft-sidebar__contact-row"><svg width="14" height="14"><use href="#ic-envelope"/></svg><span>a.rodgers@cedarridge.org</span></div>
+      <div class="ft-sidebar__contact-row"><svg width="14" height="14"><use href="#ic-phone"/></svg><span>612.724.7457</span></div>
+    </div>
+    <button class="ft-sidebar__item active" onclick="setActive(this)"><svg width="15" height="15"><use href="#ic-home"/></svg><span class="ft-sidebar__label">Summary</span></button>
+    <button class="ft-sidebar__item" onclick="setActive(this)"><svg width="15" height="15"><use href="#ic-clock"/></svg><span class="ft-sidebar__label">Follow Ups</span><span class="ft-sidebar__count" id="followup-count" style="display:none">3</span><span class="ft-sidebar__stage-dot dot-pending" id="fu-dot"></span></button>
+    <button class="ft-sidebar__item" onclick="setActive(this)"><svg width="15" height="15"><use href="#ic-file"/></svg><span class="ft-sidebar__label">Documents</span></button>
+    <button class="ft-sidebar__item" onclick="setActive(this)"><svg width="15" height="15"><use href="#ic-chat"/></svg><span class="ft-sidebar__label">Interactions</span></button>
+    <button class="ft-sidebar__item" onclick="setActive(this)"><svg width="15" height="15"><use href="#ic-shield"/></svg><span class="ft-sidebar__label">Financials and Compliance</span></button>
+    <button class="ft-sidebar__item" onclick="setActive(this)"><svg width="15" height="15"><use href="#ic-grid"/></svg><span class="ft-sidebar__label">CSuite</span></button>
+  </aside>
+
+  <main class="ft-content" id="main-content">
+    <div id="header-area"></div>
+    <div id="bento-grid"></div>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.umd.min.js"></script>
+
+<!-- APPLICATION LOGIC -->
+<script>
+var state = { data: 'dec-approved', viewPattern: 'b' };
+var activeFormView = null;
+
+function d() { return DATA[state.data]; }
+function stageLevel() { return STAGE_LEVEL[state.data]; }
+
+/* ── SEEDED FORM CONTENT ── */
+var FORM_CONTENT = {
+  'Eligibility Quiz': {
+    sections: [
+      { title: 'Organization Eligibility', fields: [
+        ['Tax-Exempt Status', '501(c)(3) -- confirmed via IRS database'],
+        ['Years in Operation', '12 years (founded 2013)'],
+        ['Annual Budget', '$2.4M (FY2024)'],
+        ['Geographic Eligibility', 'Minneapolis-St. Paul metro -- eligible'],
+        ['Mission Alignment', 'Workforce development and economic mobility -- aligned with Workforce Development program area']
+      ]},
+      { title: 'Compliance Screening', fields: [
+        ['OFAC Check', 'Clear -- no matches found'],
+        ['SAM.gov Status', 'Active registration, no exclusions'],
+        ['Outstanding Reports', 'None -- all prior grants closed in good standing']
+      ]}
+    ]
+  },
+  'LOI': {
+    sections: [
+      { title: 'Project Overview', fields: [
+        ['Project Title', 'Workforce Pathways Initiative'],
+        ['Requested Amount', '$85,000'],
+        ['Project Duration', '18 months (July 2025 -- December 2026)'],
+        ['Primary Contact', 'Marcus Webb, Executive Director'],
+        ['Program Area', 'Workforce Development']
+      ]},
+      { title: 'Project Narrative', narrative: 'The Workforce Pathways Initiative will create a skills-to-employment pipeline for 120 underemployed adults in North Minneapolis. The program combines industry-recognized credentialing in healthcare and IT with wraparound support services including childcare stipends, transportation assistance, and career coaching. Our partnership with three major regional employers ensures direct hiring pathways for program graduates, with a target placement rate of 75% within 90 days of completion.' },
+      { title: 'Budget Summary', fields: [
+        ['Personnel', '$38,000'],
+        ['Direct Services', '$27,500'],
+        ['Partner Contracts', '$12,000'],
+        ['Admin / Overhead', '$7,500'],
+        ['Total Request', '$85,000']
+      ]}
+    ]
+  },
+  'Application': {
+    sections: [
+      { title: 'Organization Information', fields: [
+        ['Legal Name', 'Northgate Community Foundation'],
+        ['EIN', '41-2098573'],
+        ['Address', '2200 Plymouth Ave N, Minneapolis, MN 55411'],
+        ['Executive Director', 'Marcus Webb'],
+        ['Board Chair', 'Dr. Amina Okafor'],
+        ['Staff Size', '18 FTE, 6 PTE']
+      ]},
+      { title: 'Project Details', fields: [
+        ['Project Title', 'Workforce Pathways Initiative'],
+        ['Start Date', '07/01/2025'],
+        ['End Date', '12/31/2026'],
+        ['Target Population', 'Underemployed adults ages 24-55 in North Minneapolis'],
+        ['Participants Served', '120 individuals over 18 months'],
+        ['Placement Target', '75% employed within 90 days of completion']
+      ]},
+      { title: 'Project Narrative', narrative: 'The Workforce Pathways Initiative addresses the persistent employment gap in North Minneapolis where unemployment rates are nearly 3x the metro average. Building on our existing community trust and 8 years of workforce programming, this initiative introduces two critical innovations: (1) stackable micro-credentials in healthcare and IT that align with employer-identified skill gaps, and (2) a "no wrong door" referral network linking participants to housing stability, mental health, and financial coaching services.\n\nPhase 1 (months 1-6) focuses on recruitment, assessment, and cohort formation. Phase 2 (months 7-14) delivers credentialing coursework through our partnership with Minneapolis Community and Technical College. Phase 3 (months 15-18) provides intensive job placement support and 90-day retention coaching.\n\nEmployer partners -- Hennepin Healthcare, Optum, and Best Buy corporate -- have committed to interview guarantees for credentialed graduates and have provided input on curriculum design.' },
+      { title: 'Budget Detail', fields: [
+        ['Program Director (0.5 FTE)', '$28,000'],
+        ['Career Coaches (2 x 0.75 FTE)', '$10,000'],
+        ['Credentialing Fees', '$15,000'],
+        ['Childcare Stipends', '$8,500'],
+        ['Transportation Assistance', '$4,000'],
+        ['Partner Contracts (MCTC)', '$12,000'],
+        ['Evaluation / Data', '$3,500'],
+        ['Admin / Overhead (8%)', '$4,000'],
+        ['Total', '$85,000']
+      ]},
+      { title: 'Evaluation Plan', fields: [
+        ['Primary Metric', 'Employment placement rate at 90 days'],
+        ['Secondary Metrics', 'Credential completion rate, wage increase at 6 months, participant satisfaction'],
+        ['Data Collection', 'Pre/post surveys, employer verification, quarterly cohort tracking'],
+        ['External Evaluator', 'Wilder Research (confirmed)']
+      ]}
+    ]
+  },
+  'Evaluation 1': {
+    sections: [
+      { title: 'Evaluator Information', fields: [
+        ['Evaluator', 'Priya Anand, Program Officer'],
+        ['Date Completed', '05/20/2025'],
+        ['Overall Score', '87 / 100']
+      ]},
+      { title: 'Scoring Rubric', fields: [
+        ['Mission Alignment (0-20)', '18'],
+        ['Community Need (0-20)', '19'],
+        ['Program Design (0-20)', '16'],
+        ['Organizational Capacity (0-20)', '17'],
+        ['Budget Reasonableness (0-20)', '17']
+      ]},
+      { title: 'Evaluator Comments', narrative: 'Strong application with clear community need documentation. The employer partnership commitments are a standout element and significantly de-risk the placement targets. The budget is reasonable, though I would like to see a clearer explanation of how the 8% overhead rate was calculated. Program design is solid but the transition between Phase 2 and Phase 3 could benefit from more detail about how participants who need additional time with credentialing will be supported. Recommend approval with a suggestion to clarify the overhead calculation before finalizing the grant agreement.' }
+    ]
+  },
+  'Evaluation 2': {
+    sections: [
+      { title: 'Evaluator Information', fields: [
+        ['Evaluator', 'David Chen, Senior Program Officer'],
+        ['Date Completed', '05/22/2025'],
+        ['Overall Score', '82 / 100']
+      ]},
+      { title: 'Scoring Rubric', fields: [
+        ['Mission Alignment (0-20)', '17'],
+        ['Community Need (0-20)', '18'],
+        ['Program Design (0-20)', '15'],
+        ['Organizational Capacity (0-20)', '16'],
+        ['Budget Reasonableness (0-20)', '16']
+      ]},
+      { title: 'Evaluator Comments', narrative: 'Solid proposal addressing a real gap. The 120-participant target is ambitious for an 18-month timeline given the wraparound service model. I am flagging the childcare stipend line as potentially under-budgeted at $8,500 for 120 participants. The employer commitments are excellent and the MCTC partnership adds institutional credibility. Organizational capacity is adequate but bears monitoring given that this represents a 35% increase in program scale over their current operations. Recommend approval at a reduced amount of $70,000 with the difference coming from the overhead and participant count adjustment.' }
+    ]
+  },
+  'Approval': {
+    sections: [
+      { title: 'Decision Summary', fields: [
+        ['Decision', 'Approved'],
+        ['Approved Amount', '$70,000'],
+        ['Original Request', '$85,000'],
+        ['Reduction Reason', 'Adjusted per evaluator recommendation -- overhead clarification and participant scale'],
+        ['Decision Date', '06/01/2025'],
+        ['Approved By', 'Board of Directors -- unanimous'],
+        ['Grant Period', '07/01/2025 -- 12/31/2026']
+      ]},
+      { title: 'Conditions', fields: [
+        ['Condition 1', 'Submit revised budget reflecting $70,000 award within 30 days'],
+        ['Condition 2', 'Provide quarterly progress reports (narrative + financial)'],
+        ['Condition 3', 'Final evaluation report due within 60 days of grant close']
+      ]},
+      { title: 'Payment Schedule', fields: [
+        ['Installment 1', '$35,000 -- upon execution of grant agreement'],
+        ['Installment 2', '$35,000 -- upon satisfactory mid-year report']
+      ]}
+    ]
+  }
+};
+
+var DATA = {
+  /* ── LOI STAGE ── */
+  'loi-submitted': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'LOI Submitted',statusClass:'ft-badge--submitted',requested:'$85,000',awarded:null,showAward:false,followups:[],loiDot:'dot-active',appDot:'dot-pending',decDot:'dot-pending',fuDot:'dot-pending',
+    loiClass:'ft-badge--submitted',loi:'LOI Submitted',appStatus:'Not Started',appClass:'ft-badge--closed',decStatus:'Not Started',decClass:'ft-badge--closed' },
+  'loi-complete': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'LOI Complete',statusClass:'ft-badge--complete',requested:'$85,000',awarded:null,showAward:false,followups:[],loiDot:'dot-complete',appDot:'dot-pending',decDot:'dot-pending',fuDot:'dot-pending',
+    loiClass:'ft-badge--complete',loi:'LOI Complete',appStatus:'Not Started',appClass:'ft-badge--closed',decStatus:'Not Started',decClass:'ft-badge--closed' },
+
+  /* ── APPLICATION STAGE ── */
+  'app-draft': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'Application Draft',statusClass:'ft-badge--draft',requested:'$85,000',awarded:null,showAward:false,followups:[],loiDot:'dot-complete',appDot:'dot-active',decDot:'dot-pending',fuDot:'dot-pending',
+    loiClass:'ft-badge--complete',loi:'LOI Complete',appStatus:'Application Draft',appClass:'ft-badge--draft',decStatus:'Not Started',decClass:'ft-badge--closed',appDue:'04/15/2025' },
+  'app-submitted': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'Application Submitted',statusClass:'ft-badge--submitted',requested:'$85,000',awarded:null,showAward:false,followups:[],loiDot:'dot-complete',appDot:'dot-active',decDot:'dot-pending',fuDot:'dot-pending',
+    loiClass:'ft-badge--complete',loi:'LOI Complete',appStatus:'Application Submitted',appClass:'ft-badge--submitted',decStatus:'Not Started',decClass:'ft-badge--closed',appDue:'04/15/2025' },
+  'app-complete': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'Application Complete',statusClass:'ft-badge--complete',requested:'$85,000',awarded:null,showAward:false,followups:[],loiDot:'dot-complete',appDot:'dot-active',decDot:'dot-pending',fuDot:'dot-pending',
+    loiClass:'ft-badge--complete',loi:'LOI Complete',appStatus:'Application Complete',appClass:'ft-badge--complete',decStatus:'Not Started',decClass:'ft-badge--closed',appDue:'04/15/2025' },
+  'app-evals-assigned': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'Evaluations Assigned',statusClass:'ft-badge--assigned',requested:'$85,000',awarded:null,showAward:false,followups:[],loiDot:'dot-complete',appDot:'dot-active',decDot:'dot-pending',fuDot:'dot-pending',
+    loiClass:'ft-badge--complete',loi:'LOI Complete',appStatus:'Application Complete',appClass:'ft-badge--complete',decStatus:'Not Started',decClass:'ft-badge--closed',appDue:'04/15/2025' },
+  'app-evals-closed': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'Evaluations Closed',statusClass:'ft-badge--complete',requested:'$85,000',awarded:null,showAward:false,followups:[],loiDot:'dot-complete',appDot:'dot-complete',decDot:'dot-pending',fuDot:'dot-pending',
+    loiClass:'ft-badge--complete',loi:'LOI Complete',appStatus:'Application Complete',appClass:'ft-badge--complete',decStatus:'Not Started',decClass:'ft-badge--closed',appDue:'04/15/2025' },
+
+  /* ── DECISION STAGE ── */
+  'dec-draft': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'Approval Draft',statusClass:'ft-badge--draft',requested:'$85,000',awarded:'$70,000',showAward:true,followups:[],loiDot:'dot-complete',appDot:'dot-complete',decDot:'dot-active',fuDot:'dot-pending',
+    loiClass:'ft-badge--complete',loi:'LOI Complete',appStatus:'Application Complete',appClass:'ft-badge--complete',decStatus:'Approval Draft',decClass:'ft-badge--draft',appDue:'04/15/2025',decDue:'06/01/2025' },
+  'dec-approved': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'Approved',statusClass:'ft-badge--approved',requested:'$85,000',awarded:'$70,000',showAward:true,followups:[],loiDot:'dot-complete',appDot:'dot-complete',decDot:'dot-complete',fuDot:'dot-pending',
+    loiClass:'ft-badge--complete',loi:'LOI Complete',appStatus:'Application Complete',appClass:'ft-badge--complete',decStatus:'Approved',decClass:'ft-badge--approved',appDue:'04/15/2025',decDue:'06/01/2025' },
+
+  /* ── FOLLOW UP STAGE ── */
+  'fu-draft': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'Follow Up Draft',statusClass:'ft-badge--draft',requested:'$85,000',awarded:'$70,000',showAward:true,
+    followups:[{name:'Mid-Year Narrative Report',due:'12/31/2025',status:'Draft',cls:'ft-badge--draft'},{name:'Final Financial Report',due:'07/31/2026',status:'Not Started',cls:'ft-badge--closed'},{name:'Site Visit Confirmation',due:'09/15/2025',status:'Not Started',cls:'ft-badge--closed'}],
+    loiDot:'dot-complete',appDot:'dot-complete',decDot:'dot-complete',fuDot:'dot-active',
+    loiClass:'ft-badge--complete',loi:'LOI Complete',appStatus:'Application Complete',appClass:'ft-badge--complete',decStatus:'Approved',decClass:'ft-badge--approved',appDue:'04/15/2025',decDue:'06/01/2025' },
+  'fu-submitted': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'Follow Up Submitted',statusClass:'ft-badge--submitted',requested:'$85,000',awarded:'$70,000',showAward:true,
+    followups:[{name:'Mid-Year Narrative Report',due:'12/31/2025',status:'Submitted',cls:'ft-badge--submitted'},{name:'Final Financial Report',due:'07/31/2026',status:'Assigned',cls:'ft-badge--assigned'},{name:'Site Visit Confirmation',due:'09/15/2025',status:'Assigned',cls:'ft-badge--assigned'}],
+    loiDot:'dot-complete',appDot:'dot-complete',decDot:'dot-complete',fuDot:'dot-active',
+    loiClass:'ft-badge--complete',loi:'LOI Complete',appStatus:'Application Complete',appClass:'ft-badge--complete',decStatus:'Approved',decClass:'ft-badge--approved',appDue:'04/15/2025',decDue:'06/01/2025' },
+  'fu-complete': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'Follow Up Complete',statusClass:'ft-badge--complete',requested:'$85,000',awarded:'$70,000',showAward:true,
+    followups:[{name:'Mid-Year Narrative Report',due:'12/31/2025',status:'Complete',cls:'ft-badge--complete'},{name:'Final Financial Report',due:'07/31/2026',status:'Complete',cls:'ft-badge--complete'},{name:'Site Visit Confirmation',due:'09/15/2025',status:'Complete',cls:'ft-badge--complete'}],
+    loiDot:'dot-complete',appDot:'dot-complete',decDot:'dot-complete',fuDot:'dot-complete',
+    loiClass:'ft-badge--complete',loi:'LOI Complete',appStatus:'Application Complete',appClass:'ft-badge--complete',decStatus:'Approved',decClass:'ft-badge--approved',appDue:'04/15/2025',decDue:'06/01/2025' },
+
+  /* ── CLOSED ── */
+  'closed': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'Closed',statusClass:'ft-badge--closed',requested:'$85,000',awarded:'$70,000',showAward:true,
+    followups:[{name:'Mid-Year Narrative Report',due:'12/31/2025',status:'Complete',cls:'ft-badge--complete'},{name:'Final Financial Report',due:'07/31/2026',status:'Complete',cls:'ft-badge--complete'},{name:'Site Visit Confirmation',due:'09/15/2025',status:'Complete',cls:'ft-badge--complete'}],
+    loiDot:'dot-complete',appDot:'dot-complete',decDot:'dot-complete',fuDot:'dot-complete',
+    loiClass:'ft-badge--complete',loi:'LOI Complete',appStatus:'Application Complete',appClass:'ft-badge--complete',decStatus:'Approved',decClass:'ft-badge--approved',appDue:'04/15/2025',decDue:'06/01/2025' }
+};
+
+/* ── CONTEXTUAL ACTION BUTTONS per status ── */
+/* Each entry: array of { label, style ('filled'|'outline'), icon (optional) } */
+/* Order: outline actions left, primary right, Actions dropdown appended after */
+var ACTION_BUTTONS = {
+  'loi-submitted':      [{ label:'Assign/View Evaluators', style:'outline' }],
+  'loi-complete':       [{ label:'Assign Next Form', style:'filled' }],
+  'app-draft':          [{ label:'Save Application', style:'outline' },{ label:'Approve Request', style:'outline' },{ label:'Application Complete', style:'filled' }],
+  'app-submitted':      [{ label:'Email Aaron Rodgers', style:'outline' },{ label:'Application Incomplete', style:'outline' },{ label:'Application Complete', style:'filled' }],
+  'app-complete':       [{ label:'Email Aaron Rodgers', style:'outline' },{ label:'Skip Application Evaluations', style:'outline' },{ label:'Assign/View Evaluators', style:'filled' }],
+  'app-evals-assigned': [{ label:'Assign/View Evaluators', style:'outline' }],
+  'app-evals-closed':   [{ label:'Approve Request', style:'filled' }],
+  'dec-draft':          [{ label:'Assign/View Evaluators', style:'outline' },{ label:'Send Email', style:'outline' },{ label:'Save Approval', style:'outline' },{ label:'Approve Request', style:'filled' }],
+  'dec-approved':       [{ label:'Email', style:'outline' },{ label:'Edit Follow Ups', style:'outline' },{ label:'Assign Follow Ups', style:'filled' }],
+  'fu-draft':           [{ label:'Assign Follow Ups', style:'outline' },{ label:'Edit Follow Ups', style:'outline' }],
+  'fu-submitted':       [{ label:'Assign Follow Ups', style:'outline' },{ label:'Edit Follow Ups', style:'outline' },{ label:'Email Assignee', style:'outline' },{ label:'Follow Up Incomplete', style:'outline' },{ label:'Follow Up Complete', style:'filled' }],
+  'fu-complete':        [{ label:'Close Request', style:'outline' }],
+  'closed':             [{ label:'Email', style:'outline' }]
+};
+
+/* Map stage keys to numeric-like values for Request Details bento rendering */
+var STAGE_LEVEL = {
+  'loi-submitted':1,'loi-complete':1,
+  'app-draft':2,'app-submitted':2,'app-complete':2,'app-evals-assigned':2,'app-evals-closed':2,
+  'dec-draft':3,'dec-approved':3,
+  'fu-draft':4,'fu-submitted':4,'fu-complete':4,
+  'closed':5
+};
+
+
+/* ── FORM CONTENT RENDERER ── */
+function renderFormContent(formType) {
+  var content = FORM_CONTENT[formType];
+  if (!content) return '<div style="font-size:0.85rem;color:#aaa;padding:16px 0">Form content not available for this item.</div>';
+  var html = '';
+  for (var i = 0; i < content.sections.length; i++) {
+    var sec = content.sections[i];
+    html += '<div class="ft-form-section"><div class="ft-form-section__title">' + sec.title + '</div>';
+    if (sec.narrative) {
+      html += '<div class="ft-form-narrative">' + sec.narrative.replace(/\n/g, '<br><br>') + '</div>';
+    }
+    if (sec.fields) {
+      for (var j = 0; j < sec.fields.length; j++) {
+        html += '<div class="ft-form-field"><span class="ft-form-field__label">' + sec.fields[j][0] + '</span><span class="ft-form-field__value">' + sec.fields[j][1] + '</span></div>';
+      }
+    }
+    html += '</div>';
+  }
+  return html;
+}
+
+/* ── OPEN / CLOSE FORM VIEW ── */
+function openFormView(formType) {
+  activeFormView = formType;
+  if (state.viewPattern === 'a') {
+    renderBentos();
+  } else if (state.viewPattern === 'b') {
+    document.getElementById('slideover-title').textContent = formType;
+    document.getElementById('slideover-body').innerHTML = renderFormContent(formType);
+    document.getElementById('slideover-overlay').classList.add('open');
+    document.getElementById('slideover-panel').classList.add('open');
+  }
+}
+
+function closeFormView() {
+  activeFormView = null;
+  /* A: re-render bentos to summary */
+  renderBentos();
+  /* B: close slideover */
+  document.getElementById('slideover-overlay').classList.remove('open');
+  document.getElementById('slideover-panel').classList.remove('open');
+
+}
+
+
+
+
+
+/* ── RENDER FUNCTIONS ── */
+function render() { renderSidebar(); renderHeader(); renderBentos(); }
+
+function renderSidebar() {
+  var data = d();
+  var fuDot = document.getElementById('fu-dot');
+  var fuCount = document.getElementById('followup-count');
+  if (fuDot) {
+    if (data.followups.length > 0) { fuDot.style.display = 'none'; fuCount.style.display = ''; fuCount.textContent = data.followups.length; }
+    else { fuDot.style.display = ''; fuCount.style.display = 'none'; fuDot.className = 'ft-sidebar__stage-dot ' + data.fuDot; }
+  }
+}
+
+function renderHeader() {
+  var area = document.getElementById('header-area');
+  var data = d();
+
+  /* Build contextual action buttons */
+  var actions = ACTION_BUTTONS[state.data] || [];
+  var actionBtns = '';
+  for (var i = 0; i < actions.length; i++) {
+    var a = actions[i];
+    var cls = a.style === 'filled' ? 'btn-ft-filled btn-ft-sm' : 'btn-ft-outline btn-ft-sm';
+    actionBtns += '<button class="' + cls + '">' + a.label + '</button>';
+  }
+
+  /* Actions dropdown (MDB5) — always rightmost */
+  var dd = '<div class="dropdown"><button class="btn-ft-outline btn-ft-sm dropdown-toggle" data-mdb-toggle="dropdown">Actions</button><ul class="dropdown-menu" style="border-radius:var(--radius);border-color:var(--border-color);font-size:0.8rem;min-width:220px"><li><a class="dropdown-item" style="font-family:var(--font-body)" href="#">Assign Users</a></li><li><a class="dropdown-item" style="font-family:var(--font-body)" href="#">Create Documents</a></li><li><hr class="dropdown-divider"></li><li><a class="dropdown-item" style="font-family:var(--font-body)" href="#">Request Change Log</a></li><li><a class="dropdown-item" style="font-family:var(--font-body)" href="#">Reassign Organization</a></li><li><hr class="dropdown-divider"></li><li><a class="dropdown-item" style="font-family:var(--font-body);color:var(--danger-0)" href="#" data-mdb-toggle="modal" data-mdb-target="#deleteModal">Delete Request</a></li></ul></div>';
+
+  var html = '<div class="ft-record-header"><div style="display:flex;align-items:center;gap:8px"><h1>' + data.title + '</h1><div style="display:flex;align-items:center;gap:8px;margin-left:auto">' + actionBtns + dd + '</div></div><div class="ft-record-meta"><span class="org">' + data.org + '</span><span class="sep">|</span><span>' + data.program + '</span><span class="sep">|</span><span>' + data.type + '</span></div></div>';
+  html += renderHeroCard(data);
+  area.innerHTML = html;
+  var dds = area.querySelectorAll('[data-mdb-toggle="dropdown"]');
+  for (var i = 0; i < dds.length; i++) new mdb.Dropdown(dds[i]);
+}
+
+function renderHeroCard(data) {
+  var stages = [{label:'Eligibility',done:true,active:false},{label:'LOI',done:data.loiDot==='dot-complete',active:data.loiDot==='dot-active'},{label:'Application',done:data.appDot==='dot-complete',active:data.appDot==='dot-active'},{label:'Decision',done:data.decDot==='dot-complete',active:data.decDot==='dot-active'},{label:'Follow Up',done:data.fuDot==='dot-complete',active:data.fuDot==='dot-active'}];
+  var track = '';
+  for (var i = 0; i < stages.length; i++) {
+    var s = stages[i], nc = s.done ? 'done' : (s.active ? 'active' : ''), nl = s.done ? '<svg width="10" height="10" style="color:#2a7a52"><use href="#ic-check"/></svg>' : (i + 1);
+    track += '<div class="ft-hero__stage-step"><div class="ft-hero__stage-node ' + nc + '">' + nl + '</div><div class="ft-hero__stage-label">' + s.label + '</div></div>';
+    if (i < stages.length - 1) track += '<div class="ft-hero__stage-line' + (s.done ? ' done' : '') + '"></div>';
+  }
+  var awardBlock = data.showAward ? '<div class="ft-hero__amount-block"><div class="ft-hero__amount-label">Awarded</div><div class="ft-hero__amount-value">' + data.awarded + '</div></div><div class="ft-hero__divider"></div>' : '<div class="ft-hero__amount-block"><div class="ft-hero__amount-label">Awarded</div><div class="ft-hero__amount-value" style="color:#aaa">TBD</div></div><div class="ft-hero__divider"></div>';
+  var reqDisplay = stageLevel() <= 1 ? '<div class="ft-hero__amount-value" style="color:#aaa">TBD</div>' : '<div class="ft-hero__amount-value">' + data.requested + '</div>';
+  return '<div class="ft-hero"><div class="ft-hero__amount-block"><div class="ft-hero__amount-label">Requested</div>' + reqDisplay + '</div><div class="ft-hero__divider"></div>' + awardBlock + '<div class="ft-hero__amount-block"><div class="ft-hero__amount-label">Status</div><div style="margin-top:4px"><span class="ft-badge ' + data.statusClass + '">' + data.status + '</span></div></div><div class="ft-hero__divider"></div><div class="ft-hero__stage-track">' + track + '</div></div>';
+}
+
+function renderRequestDetailsBento(data) {
+  var sl = stageLevel();
+  var showEvalBtn = (sl <= 2);
+  var kebabId = 'req-details-kebab';
+  var html = '<div class="ft-bento"><div class="ft-bento__header"><span class="ft-bento__title">Request Details</span><div class="ft-bento__actions">';
+  if (showEvalBtn) html += '<button class="btn-ft-outline btn-ft-sm">Assign / View Evaluators</button>';
+  html += '<div class="ft-kebab-wrap"><button class="ft-kebab-btn" onclick="toggleKebab(\'' + kebabId + '\',event)"><svg width="14" height="14"><use href="#ic-kebab"/></svg></button><div class="ft-kebab-menu" id="' + kebabId + '"><button class="ft-kebab-menu__item">View Request History</button><button class="ft-kebab-menu__item">View Submission History</button></div></div>';
+  html += '</div></div>';
+
+  var rdRow = function(label, badgeHtml) {
+    return '<div class="ft-kv"><span class="ft-kv__label" style="min-width:100px">' + label + '</span><span style="min-width:140px">' + badgeHtml + '</span><span class="ft-kv__value" style="display:flex;align-items:center;gap:6px;flex:1;justify-content:flex-end"><button class="ft-card-link" onclick="openFormView(\'' + label.replace(/'/g, "\\'") + '\')"><svg width="12" height="12"><use href="#ic-external"/></svg> View</button><button class="ft-card-link" title="Download PDF"><svg width="14" height="14"><use href="#ic-pdf"/></svg></button></span></div>';
+  };
+
+  html += rdRow('Eligibility Quiz', '<span class="ft-badge ft-badge--complete">Passed</span>');
+  if (sl >= 1) html += rdRow('LOI', '<span class="ft-badge ' + data.loiClass + '">' + data.loi + '</span>');
+  if (sl >= 2) html += rdRow('Application', '<span class="ft-badge ' + data.appClass + '">' + data.appStatus + '</span>');
+  if (sl >= 2 && (data.appStatus === 'Application Complete' || data.decStatus !== 'Not Started')) {
+    html += rdRow('Evaluation 1', '<span class="ft-badge ft-badge--complete">Complete</span>');
+    html += rdRow('Evaluation 2', '<span class="ft-badge ft-badge--complete">Complete</span>');
+  }
+  if (sl >= 3) {
+    var al = data.decStatus === 'Denied' ? 'Denial' : 'Approval';
+    html += rdRow(al, '<span class="ft-badge ' + data.decClass + '">' + data.decStatus + '</span>');
+  }
+  html += '</div>';
+  return html;
+}
+
+function renderAwardBento(data) {
+  var isApproved = (data.decStatus === 'Approved');
+  var html = '<div class="ft-bento"><div class="ft-bento__header"><span class="ft-bento__title">Award Details</span><div class="ft-bento__actions"><button class="btn-ft-outline btn-ft-sm">Add Installment</button>';
+  if (isApproved) html += '<button class="btn-ft-filled btn-ft-sm">Make Payment</button>';
+  html += '</div></div>';
+  if (data.showAward) { html += '<div class="ft-kv"><span class="ft-kv__label">Installment Total</span><span class="ft-kv__value">' + data.awarded + '</span></div><div class="ft-kv"><span class="ft-kv__label">Cancelled Total</span><span class="ft-kv__value">$0.00</span></div><div class="ft-kv"><span class="ft-kv__label">Amount Paid</span><span class="ft-kv__value">$35,000.00</span></div><div class="ft-kv"><span class="ft-kv__label">Balance</span><span class="ft-kv__value">$35,000.00</span></div><div class="ft-kv"><span class="ft-kv__label">Number of Installments</span><span class="ft-kv__value">2</span></div>'; }
+  else html += '<div style="font-size:0.8rem;color:#aaa;padding:8px 0">No installments created yet. Award details will appear once the grant is approved.</div>';
+  html += '</div>'; return html;
+}
+
+function renderDocsBento() { return '<div class="ft-bento"><div class="ft-bento__header"><span class="ft-bento__title">Documents</span><div class="ft-bento__actions"><button class="btn-ft-outline btn-ft-sm">View All</button><button class="btn-ft-outline btn-ft-sm">Upload</button></div></div><div class="ft-kv"><span class="ft-kv__label">Grant Agreement</span><span class="ft-kv__value">PDF - 03/15/2025</span></div><div class="ft-kv"><span class="ft-kv__label">Board Resolution</span><span class="ft-kv__value">PDF - 02/01/2025</span></div><div class="ft-kv"><span class="ft-kv__label">Budget Narrative</span><span class="ft-kv__value">XLSX - 01/20/2025</span></div><div class="ft-kv"><span class="ft-kv__label">IRS Determination Letter</span><span class="ft-kv__value">PDF - 12/15/2024</span></div></div>'; }
+
+function renderFinCompBento() { return '<div class="ft-bento"><div class="ft-bento__header"><span class="ft-bento__title">Financials and Compliance</span><div class="ft-bento__actions"><button class="btn-ft-outline btn-ft-sm">View All</button></div></div><div class="ft-kv"><span class="ft-kv__label">Tax Status</span><span class="ft-kv__value"><span class="ft-badge ft-badge--exempt">Exempt</span></span></div><div class="ft-kv"><span class="ft-kv__label">OFAC Check</span><span class="ft-kv__value"><span class="ft-badge ft-badge--clear">Clear</span></span></div><div class="ft-kv"><span class="ft-kv__label">IRS Classification</span><span class="ft-kv__value">501(c)(3)</span></div><div class="ft-kv"><span class="ft-kv__label">Board Conflict</span><span class="ft-kv__value"><span class="ft-badge ft-badge--clear">Clear</span></span></div><div class="ft-kv"><span class="ft-kv__label">Last Verified</span><span class="ft-kv__value">04/30/2025</span></div><div style="display:flex;gap:8px;padding-top:10px;border-top:1px solid var(--border-color);margin-top:7px"><button class="btn-ft-outline" style="font-size:0.7rem;padding:3px 10px 2px">Acknowledge</button><button class="btn-ft-outline" style="font-size:0.7rem;padding:3px 10px 2px">View Candid Profile</button></div></div>'; }
+
+function renderBentos() {
+  var grid = document.getElementById('bento-grid');
+  var data = d();
+
+  /* PATTERN A: if a form is open and pattern is full-replace, show form bento */
+  if (activeFormView && state.viewPattern === 'a') {
+    grid.innerHTML = '<div class="ft-grid-1"><button class="ft-form-back" onclick="closeFormView()"><svg width="14" height="14"><use href="#ic-arrow-left"/></svg> Back to Summary</button><div class="ft-bento"><div class="ft-bento__header"><span class="ft-bento__title">' + activeFormView + '</span><div class="ft-bento__actions"><button class="btn-ft-outline btn-ft-sm"><svg width="12" height="12"><use href="#ic-pdf"/></svg> Download PDF</button></div></div>' + renderFormContent(activeFormView) + '</div></div>';
+    return;
+  }
+
+  var html = '';
+  html += '<div class="ft-grid-1-1">' + renderRequestDetailsBento(data) + renderAwardBento(data) + '</div>';
+  html += '<div class="ft-grid-1-1"><div class="ft-bento"><div class="ft-bento__header"><span class="ft-bento__title">Follow Ups</span><div class="ft-bento__actions"><button class="btn-ft-outline btn-ft-sm">View All</button><button class="btn-ft-filled btn-ft-sm">Add</button></div></div>';
+  if (data.followups.length === 0) html += '<div style="font-size:0.8rem;color:#aaa;padding:8px 0">No follow-ups assigned yet. They will appear once the grant is awarded.</div>';
+  else { for (var i = 0; i < data.followups.length; i++) html += '<div class="ft-kv"><span class="ft-kv__label">' + data.followups[i].name + '</span><span class="ft-kv__value"><span class="ft-badge ' + data.followups[i].cls + '">' + data.followups[i].status + '</span></span></div>'; }
+  html += '</div><div class="ft-bento"><div class="ft-bento__header"><span class="ft-bento__title">Interactions</span><div class="ft-bento__actions"><button class="btn-ft-outline btn-ft-sm">View All</button><button class="btn-ft-filled btn-ft-sm">Add</button></div></div>';
+  html += '<div class="ft-kv"><span class="ft-kv__label">Priya Anand - Program Officer</span><span class="ft-kv__value" style="color:var(--link)">Email - 05/10/2025</span></div><div class="ft-kv"><span class="ft-kv__label">Marcus Webb - Exec Dir</span><span class="ft-kv__value">Phone - 04/22/2025</span></div><div class="ft-kv"><span class="ft-kv__label">Internal review note</span><span class="ft-kv__value">Note - 04/01/2025</span></div><div class="ft-kv"><span class="ft-kv__label">Priya Anand - Program Officer</span><span class="ft-kv__value" style="color:var(--link)">Email - 03/10/2025</span></div></div></div>';
+  html += '<div class="ft-grid-1-1">' + renderDocsBento() + renderFinCompBento() + '</div>';
+  html += '<div class="ft-grid-1-1"><div class="ft-bento"><div class="ft-bento__header"><span class="ft-bento__title">CSuite</span></div><div style="font-size:0.8rem;color:#aaa;padding:8px 0">CommunitySuite integration -- content TBD.</div></div><div class="ft-bento-placeholder"><div style="font-size:0.8rem;font-weight:600;font-family:var(--font-heading);color:#bbb;margin-bottom:4px">Application Analysis</div><div class="ft-bento-placeholder__label">AI-powered analysis -- deferred to future iteration</div></div></div>';
+  grid.innerHTML = html;
+}
+
+/* ── UTILITIES ── */
+function toggleKebab(id, e) {
+  e.stopPropagation();
+  var all = document.querySelectorAll('.ft-kebab-menu');
+  for (var i = 0; i < all.length; i++) if (all[i].id !== id) all[i].classList.remove('open');
+  var m = document.getElementById(id); if (m) m.classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  var all = document.querySelectorAll('.ft-kebab-menu');
+  for (var i = 0; i < all.length; i++) if (!all[i].parentNode.contains(e.target)) all[i].classList.remove('open');
+});
+function setActive(el) { var items = document.querySelectorAll('.ft-sidebar__item'); for (var i = 0; i < items.length; i++) items[i].classList.remove('active'); el.classList.add('active'); }
+
+render();
+</script>
+
