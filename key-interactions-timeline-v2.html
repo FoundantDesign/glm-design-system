@@ -323,11 +323,11 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
    NAVIGATOR A — GITHUB-STYLE DENSITY GRID (CLICK-TO-FILTER)
    ========================================= */
 .ki-navA { font-family: var(--font-body); }
-.ki-navA__years { display: flex; flex-direction: column; gap: 12px; }
-.ki-navA__year-row { display: flex; align-items: flex-start; gap: 10px; }
+.ki-navA__years { display: flex; flex-direction: column; gap: 6px; }
+.ki-navA__year-row { display: flex; align-items: center; gap: 10px; }
 .ki-navA__year-label {
   font-family: var(--font-heading); font-weight: 700; font-size: 0.8rem;
-  color: var(--primary); width: 44px; flex-shrink: 0; padding-top: 4px;
+  color: var(--primary); width: 44px; flex-shrink: 0;
 }
 .ki-navA__quarters {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
@@ -335,26 +335,26 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
 }
 .ki-navA__quarter {
   background: var(--neutral-90); border: 1px solid var(--neutral-70);
-  border-radius: var(--form-radius); padding: 6px 8px;
+  border-radius: var(--form-radius); padding: 4px 6px;
   cursor: pointer; transition: background 0.1s, border-color 0.1s;
-  display: flex; flex-direction: column; gap: 4px;
+  display: flex; flex-direction: column; gap: 3px;
 }
 .ki-navA__quarter:hover { background: var(--outline-hover); border-color: var(--neutral-50); }
 .ki-navA__quarter.active { background: var(--info-50); border-color: var(--info-0); }
 .ki-navA__quarter-head {
   display: flex; align-items: center; justify-content: space-between;
-  font-family: var(--font-heading); font-weight: 500; font-size: 0.7rem;
-  color: var(--primary);
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.65rem;
+  color: var(--primary); line-height: 1.2;
 }
 .ki-navA__quarter-count {
-  font-family: var(--font-heading); font-weight: 700; font-size: 0.65rem;
+  font-family: var(--font-heading); font-weight: 700; font-size: 0.6rem;
   color: var(--neutral-40);
 }
 .ki-navA__months {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
 }
 .ki-navA__month-cell {
-  aspect-ratio: 1.4 / 1;
+  height: 18px;
   border-radius: 2px; cursor: pointer; transition: opacity 0.1s, transform 0.1s;
   position: relative;
 }
