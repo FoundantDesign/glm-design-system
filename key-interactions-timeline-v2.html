@@ -1,0 +1,2355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Key Interactions Timeline — Prototype v2 (Navigator Variants)</title>
+<!--
+  ═══════════════════════════════════════════════════════════════════════
+  KEY INTERACTIONS TIMELINE — PROTOTYPE v2
+  ═══════════════════════════════════════════════════════════════════════
+
+  LOCKED DECISIONS (from 5/6 refinement + 5/6 v2 review):
+  - Equal spacing with time-gap labels (NOT proportional time)
+  - Vertical orientation — LOCKED (horizontal removed; team converged on vertical
+    as more usable; horizontal was "pretty but unusable" per Daric)
+  - Same component for org-level and request-level (density differs, not component)
+  - Design for the big case (hundreds of events, not thousands)
+  - 10 interaction types in scope: notes, phone, email, in-person, video,
+    awards, submitted forms, payments, installments, system emails
+
+  STILL OPEN (kept as toggles):
+  - Navigator pattern (A / B / C / D) — variation burst still in test
+  - Gap label prominence (Prominent / Subtle) — pending CSM and sales input
+  - Scope (Org / Request) — testing both as same component
+  - Density mode (All events / Human only) — testing whether system events
+    should be visible in density viz or filtered out
+
+  THIS ROUND IS A VARIATION BURST ON THE NAVIGATOR PATTERN:
+  - Variant A: GitHub-style density grid (CLICK-TO-FILTER) — lead candidate
+  - Variant B: GitHub density grid as draggable scrubber (HYBRID)
+  - Variant C: Datadog-style slim density bar + Period dropdown
+  - Variant D: Google Finance windowed scrubber (FULL DRAG/RESIZE)
+
+  SMALLER FIXES BAKED IN ACROSS ALL VARIANTS:
+  - Earlier/Later buttons: removed (navigator handles it; up/down chevrons
+    appear only when no navigator is active — kept for completeness)
+  - Cards-vs-pills duplication: count cards eliminated, pills retained
+  - Vertical only (horizontal removed in 5/6 review)
+  - Granularity dropdown: removed (deprioritized per brief)
+  - Dataset dropdown: removed (was a proto-control, not a real product control)
+  - Undated items: persistent "Undated" tab/pill adjacent to navigator,
+    swaps timeline view to undated-only when activated
+  - System events visually distinguished from human interactions in density viz
+    so dark cells don't mislead users about real engagement
+
+  CONTROLS PANEL TOGGLES (after lock):
+  - Navigator: A / B / C / D / None
+  - Scope: Org / Request
+  - Gap labels: Prominent / Subtle (test both pending CSM input)
+  - Density mode: All events / Human only
+  - View: Dated / Undated (in main UI, not in control panel)
+
+  SEEDED DATA: ~100 events over ~4 years (Feb 2022 → Apr 2026), 10 types,
+  realistic grants management content, two requests under one foundation.
+-->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css">
+<style>
+:root {
+  --font-body: Roboto, sans-serif;
+  --font-heading: Roboto, sans-serif;
+  --app-bg: #F5F5F5;
+  --surface: #FFFFFF;
+  --primary: #2D3B4A;
+  --primary-hover: #424F5C;
+  --primary-pressed: #57626E;
+  --outline-hover: #EAEAED;
+  --border-color: #E0E0E0;
+  --border: 1px solid #E0E0E0;
+  --radius: 6px;
+  --form-radius: 4px;
+  --pill: 999px;
+  --sidebar-active: #D5E2FA;
+  --sidebar-hover: #F5F5F5;
+  --link: #1B76D2;
+  --gap: 16px;
+  --nav-height: 55px;
+  --sidebar-width: 250px;
+  --neutral-30: #616161;
+  --neutral-40: #757575;
+  --neutral-50: #BDBDBD;
+  --neutral-60: #E0E0E0;
+  --neutral-70: #EEEEEE;
+  --neutral-80: #F5F5F5;
+  --neutral-90: #FAFAFA;
+  --state-dark-hover: #424F5C;
+  --state-light-hover: #EAEAED;
+  --success-0: #67CF9D; --success-50: #E1F5EB;
+  --danger-0: #BD3B39;  --danger-50: #FCDDDD;
+  --warning-0: #F4C862; --warning-50: #FFF4D1;
+  --info-0: #536E8A;    --info-50: #D5E2FA;
+  --mdb-primary: #2D3B4A;
+  --mdb-body-bg: #F5F5F5;
+  --mdb-body-color: #2D3B4A;
+  --mdb-border-color: #E0E0E0;
+  --mdb-border-radius: 6px;
+  --mdb-border-radius-pill: 999px;
+  --mdb-font-sans-serif: Roboto, sans-serif;
+  --mdb-link-color: #1B76D2;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); font-size: 16px; background: var(--app-bg); color: var(--primary); }
+h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); font-weight: 500; color: var(--primary); }
+a { color: var(--link); text-decoration: none; }
+svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
+
+/* NAVBAR (unchanged from shell) */
+.ft-navbar {
+  background: var(--surface); border-bottom: var(--border);
+  height: var(--nav-height); padding: 0 20px;
+  display: flex; align-items: center; gap: 18px;
+  position: sticky; top: 0; z-index: 200;
+}
+.ft-navbar__logo {
+  width: 36px; height: 36px; background: var(--primary);
+  border-radius: var(--radius); display: flex; align-items: center;
+  justify-content: center; font-family: var(--font-heading);
+  font-weight: 700; font-size: 11px; color: #fff; flex-shrink: 0;
+}
+.ft-navbar__item {
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.8rem;
+  color: var(--primary); text-transform: uppercase; background: none;
+  border: none; cursor: pointer; white-space: nowrap;
+  display: flex; align-items: center; gap: 3px;
+}
+.ft-navbar__search {
+  flex: 1; max-width: 420px; border: var(--border);
+  border-radius: var(--form-radius); padding: 5px 12px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.85rem; color: #bbb; background: var(--surface);
+}
+.ft-navbar__spacer { flex: 1; }
+.ft-navbar__role {
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.8rem;
+  color: var(--primary); background: none; border: none; cursor: pointer;
+  display: flex; align-items: center; gap: 3px; white-space: nowrap;
+}
+.ft-navbar__utils { display: flex; align-items: center; gap: 14px; }
+.ft-navbar__utils svg { cursor: pointer; }
+
+/* PAGE */
+.ft-page { display: flex; background: var(--app-bg); min-height: calc(100vh - var(--nav-height)); }
+.ft-content { flex: 1; padding: 24px; min-width: 0; }
+
+/* SIDEBAR */
+.ft-sidebar {
+  width: var(--sidebar-width); background: var(--surface);
+  border-right: var(--border); flex-shrink: 0; padding-top: 8px;
+}
+.ft-sidebar__contact {
+  background: #EBEBEB; border-radius: var(--radius);
+  padding: 12px; margin: 8px 10px 15px;
+  box-shadow: 0 2px 8px 2px rgba(0,0,0,0.08);
+}
+.ft-sidebar__contact-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.ft-sidebar__contact-row:last-child { margin-bottom: 0; }
+.ft-sidebar__contact-row svg { flex-shrink: 0; color: var(--primary); }
+.ft-sidebar__contact-row span {
+  font-size: 0.7rem; color: var(--primary);
+  text-transform: uppercase; font-family: var(--font-body); font-weight: 400; word-break: break-all;
+}
+.ft-sidebar__item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px; cursor: pointer; font-size: 0.875rem;
+  font-family: var(--font-body); color: var(--primary); font-weight: 400;
+  background: transparent; border: none; width: 100%; text-align: left; transition: background 0.1s;
+}
+.ft-sidebar__item:hover { background: var(--sidebar-hover); font-weight: 700; }
+.ft-sidebar__item.active { background: var(--sidebar-active); font-weight: 700; }
+.ft-sidebar__label { flex: 1; }
+.ft-sidebar__count {
+  background: var(--primary); color: #fff; border-radius: var(--pill);
+  font-size: 0.65rem; font-weight: 700; padding: 1px 7px; font-family: var(--font-heading);
+}
+
+/* RECORD HEADER */
+.ft-record-header { margin-bottom: 20px; }
+.ft-record-header h1 { font-size: 1.75rem; font-weight: 500; display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.ft-record-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 0.85rem; color: #666; }
+.ft-record-meta .org { font-weight: 600; color: var(--primary); }
+.ft-record-meta .sep { color: #ccc; }
+
+/* BADGES */
+.ft-badge { display: inline-block; border-radius: var(--pill); font-size: 0.75rem; font-weight: 500; padding: 2px 10px; white-space: nowrap; color: var(--primary); font-family: var(--font-body); }
+.ft-badge--approved, .ft-badge--clear { background: var(--success-50); }
+.ft-badge--manual, .ft-badge--upcoming { background: var(--info-50); }
+.ft-badge--overdue, .ft-badge--loi-draft { background: var(--danger-50); }
+.ft-badge--pending, .ft-badge--draft { background: var(--warning-50); }
+
+/* BUTTONS */
+.btn-ft-filled, .btn-ft-outline {
+  border-radius: var(--pill); font-family: var(--font-heading); font-weight: 700;
+  cursor: pointer; border: 2px solid var(--primary);
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.75rem; padding: 4px 14px 3px; transition: background 0.1s;
+}
+.btn-ft-filled { background: var(--primary); color: #fff; }
+.btn-ft-filled:hover { background: var(--primary-hover); border-color: var(--primary-hover); }
+.btn-ft-outline { background: transparent; color: var(--primary); }
+.btn-ft-outline:hover { background: var(--outline-hover); }
+.btn-ft-default { font-size: 0.875rem; padding: 5px 12px; }
+.btn-ft-sm { font-size: 0.75rem; padding: 4px 14px 3px; }
+
+/* =========================================
+   TIMELINE — SHARED
+   ========================================= */
+.ki-section { background: var(--surface); border: var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: var(--gap); }
+
+/* TOP CONTROL BAR */
+.ki-topbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.ki-search-wrap {
+  flex: 1; min-width: 240px; border: var(--border); border-radius: var(--form-radius);
+  padding: 5px 12px; display: flex; align-items: center; gap: 8px;
+  font-size: 0.85rem; color: #bbb; background: var(--surface);
+}
+.ki-search-wrap input {
+  border: none; outline: none; flex: 1; font-family: var(--font-body);
+  font-size: 0.85rem; color: var(--primary); background: transparent;
+}
+.ki-search-wrap input::placeholder { color: #bbb; }
+.ki-jump-today {
+  border: 1px solid var(--primary); border-radius: var(--pill);
+  background: transparent; color: var(--primary);
+  font-family: var(--font-heading); font-weight: 700; font-size: 0.75rem;
+  padding: 4px 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;
+}
+.ki-jump-today:hover { background: var(--outline-hover); }
+
+/* VIEW SWITCHER (Dated / Undated) */
+.ki-viewswitch {
+  display: inline-flex; align-items: center; gap: 0;
+  border: 1px solid var(--primary); border-radius: var(--pill); overflow: hidden;
+}
+.ki-viewswitch button {
+  background: transparent; color: var(--primary);
+  border: none; padding: 4px 14px; cursor: pointer;
+  font-family: var(--font-heading); font-weight: 700; font-size: 0.75rem;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.ki-viewswitch button:hover { background: var(--outline-hover); }
+.ki-viewswitch button.active { background: var(--primary); color: #fff; }
+.ki-viewswitch__count {
+  font-size: 0.65rem; font-weight: 700; opacity: 0.75;
+  padding: 1px 6px; border-radius: var(--pill);
+  background: rgba(0,0,0,0.08);
+}
+.ki-viewswitch button.active .ki-viewswitch__count { background: rgba(255,255,255,0.2); }
+
+/* FILTER PILLS */
+.ki-filters { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.ki-filters__label {
+  font-family: var(--font-heading); font-weight: 500;
+  font-size: 0.75rem; color: var(--neutral-30);
+  text-transform: uppercase; letter-spacing: 0.04em;
+  margin-right: 4px;
+}
+.ki-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid var(--primary); border-radius: var(--pill);
+  background: var(--surface); color: var(--primary);
+  font-family: var(--font-body); font-weight: 500; font-size: 0.8rem;
+  padding: 3px 11px; cursor: pointer; transition: background 0.1s, color 0.1s;
+  user-select: none;
+}
+.ki-pill:hover { background: var(--outline-hover); }
+.ki-pill.active { background: var(--primary); color: #fff; }
+.ki-pill.active svg { color: #fff; }
+.ki-pill svg { color: var(--primary); }
+.ki-pill__count {
+  font-size: 0.7rem; font-weight: 700; padding-left: 4px;
+  font-family: var(--font-heading); opacity: 0.7;
+}
+
+/* SCOPED-RANGE BANNER (shown when navigator filters timeline) */
+.ki-scoped {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--info-50); border-radius: var(--radius);
+  padding: 8px 14px; margin-bottom: var(--gap);
+  font-family: var(--font-body); font-size: 0.85rem; color: var(--primary);
+}
+.ki-scoped strong { font-weight: 700; }
+.ki-scoped button {
+  background: transparent; border: none; color: var(--primary);
+  font-family: var(--font-heading); font-weight: 700; font-size: 0.75rem;
+  cursor: pointer; text-decoration: underline;
+}
+
+/* =========================================
+   NAVIGATOR — SHARED CONTAINER
+   ========================================= */
+.ki-nav-wrap {
+  background: var(--surface); border: var(--border); border-radius: var(--radius);
+  padding: 14px 16px; margin-bottom: var(--gap);
+}
+.ki-nav-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.ki-nav-title {
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.85rem;
+  color: var(--primary);
+}
+.ki-nav-subtitle {
+  font-family: var(--font-body); font-size: 0.75rem; color: var(--neutral-40);
+}
+.ki-nav-quickrange {
+  display: flex; gap: 4px; align-items: center;
+}
+.ki-nav-quickrange button {
+  background: transparent; border: 1px solid var(--neutral-60);
+  border-radius: var(--form-radius); padding: 3px 9px;
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.7rem;
+  color: var(--primary); cursor: pointer;
+}
+.ki-nav-quickrange button:hover { background: var(--outline-hover); }
+.ki-nav-quickrange button.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+/* =========================================
+   NAVIGATOR A — GITHUB-STYLE DENSITY GRID (CLICK-TO-FILTER)
+   ========================================= */
+.ki-navA { font-family: var(--font-body); }
+.ki-navA__years { display: flex; flex-direction: column; gap: 12px; }
+.ki-navA__year-row { display: flex; align-items: flex-start; gap: 10px; }
+.ki-navA__year-label {
+  font-family: var(--font-heading); font-weight: 700; font-size: 0.8rem;
+  color: var(--primary); width: 44px; flex-shrink: 0; padding-top: 4px;
+}
+.ki-navA__quarters {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+  flex: 1; min-width: 0;
+}
+.ki-navA__quarter {
+  background: var(--neutral-90); border: 1px solid var(--neutral-70);
+  border-radius: var(--form-radius); padding: 6px 8px;
+  cursor: pointer; transition: background 0.1s, border-color 0.1s;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.ki-navA__quarter:hover { background: var(--outline-hover); border-color: var(--neutral-50); }
+.ki-navA__quarter.active { background: var(--info-50); border-color: var(--info-0); }
+.ki-navA__quarter-head {
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.7rem;
+  color: var(--primary);
+}
+.ki-navA__quarter-count {
+  font-family: var(--font-heading); font-weight: 700; font-size: 0.65rem;
+  color: var(--neutral-40);
+}
+.ki-navA__months {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px;
+}
+.ki-navA__month-cell {
+  aspect-ratio: 1.4 / 1;
+  border-radius: 2px; cursor: pointer; transition: opacity 0.1s, transform 0.1s;
+  position: relative;
+}
+.ki-navA__month-cell:hover { transform: scale(1.08); outline: 1px solid var(--primary); }
+.ki-navA__month-cell.active { outline: 2px solid var(--primary); outline-offset: 1px; }
+.ki-navA__legend {
+  display: flex; align-items: center; justify-content: flex-end;
+  gap: 6px; margin-top: 10px;
+  font-family: var(--font-body); font-size: 0.7rem; color: var(--neutral-40);
+}
+.ki-navA__legend-cells { display: flex; gap: 3px; }
+.ki-navA__legend-cell { width: 12px; height: 12px; border-radius: 2px; }
+.ki-navA__legend-mode {
+  display: inline-flex; align-items: center; gap: 0;
+  border: 1px solid var(--neutral-60); border-radius: var(--form-radius); overflow: hidden;
+  margin-left: 16px;
+}
+.ki-navA__legend-mode button {
+  background: transparent; border: none; padding: 2px 8px;
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.65rem;
+  color: var(--neutral-40); cursor: pointer;
+}
+.ki-navA__legend-mode button.active { background: var(--primary); color: #fff; }
+
+/* Density color steps (for both A and B) — primary tint scale */
+.density-0 { background: var(--neutral-70); }
+.density-1 { background: #D5E2FA; }
+.density-2 { background: #A6BFE3; }
+.density-3 { background: #6E89B5; }
+.density-4 { background: #2D3B4A; }
+
+/* Density steps when "human only" mode — uses success tint */
+.density-h-0 { background: var(--neutral-70); }
+.density-h-1 { background: #DCEFE2; }
+.density-h-2 { background: #A4D7B5; }
+.density-h-3 { background: #67B587; }
+.density-h-4 { background: #2D6F4A; }
+
+/* =========================================
+   NAVIGATOR B — GITHUB DENSITY AS SCRUBBER (HYBRID)
+   ========================================= */
+.ki-navB { position: relative; user-select: none; }
+.ki-navB__strip {
+  display: grid; gap: 2px; padding: 6px 0;
+  position: relative;
+}
+.ki-navB__cell {
+  height: 32px; border-radius: 2px;
+  position: relative;
+}
+.ki-navB__year-labels {
+  display: flex; justify-content: space-between;
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.7rem;
+  color: var(--neutral-40); padding: 0 2px; margin-top: 4px;
+}
+.ki-navB__year-labels span { flex: 1; text-align: left; }
+.ki-navB__window {
+  position: absolute; top: 4px; bottom: 4px;
+  background: rgba(45, 59, 74, 0.08);
+  border: 2px solid var(--primary); border-radius: var(--form-radius);
+  cursor: grab; pointer-events: auto;
+}
+.ki-navB__window:active { cursor: grabbing; }
+.ki-navB__handle {
+  position: absolute; top: 0; bottom: 0; width: 8px;
+  background: var(--primary); cursor: ew-resize;
+  display: flex; align-items: center; justify-content: center;
+}
+.ki-navB__handle::after {
+  content: ''; width: 2px; height: 12px; background: rgba(255,255,255,0.6);
+  border-radius: 1px;
+}
+.ki-navB__handle--left { left: -4px; border-radius: 3px 0 0 3px; }
+.ki-navB__handle--right { right: -4px; border-radius: 0 3px 3px 0; }
+.ki-navB__readout {
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.75rem;
+  color: var(--primary); margin-top: 6px;
+}
+.ki-navB__readout strong { font-weight: 700; }
+
+/* =========================================
+   NAVIGATOR C — DATADOG-STYLE SLIM DENSITY BAR
+   ========================================= */
+.ki-navC { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.ki-navC__bar {
+  flex: 1; min-width: 320px; height: 36px;
+  display: grid; gap: 1px;
+  background: var(--neutral-70); border-radius: var(--form-radius);
+  padding: 1px;
+  position: relative;
+}
+.ki-navC__cell { border-radius: 1px; cursor: pointer; transition: opacity 0.1s; }
+.ki-navC__cell:hover { outline: 2px solid var(--primary); outline-offset: -2px; z-index: 2; }
+.ki-navC__cell.active { outline: 2px solid var(--primary); outline-offset: -2px; }
+.ki-navC__period {
+  position: relative;
+  display: inline-flex; align-items: center; gap: 4px;
+  border: 1px solid var(--neutral-60); border-radius: var(--form-radius);
+  padding: 5px 10px; cursor: pointer; background: var(--surface);
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.8rem;
+  color: var(--primary); min-width: 140px; justify-content: space-between;
+}
+.ki-navC__period:hover { background: var(--outline-hover); }
+.ki-navC__period-menu {
+  position: absolute; top: calc(100% + 4px); right: 0;
+  background: var(--surface); border: var(--border); border-radius: var(--form-radius);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+  min-width: 160px; z-index: 10; display: none;
+}
+.ki-navC__period-menu.open { display: block; }
+.ki-navC__period-menu button {
+  display: block; width: 100%; text-align: left;
+  background: transparent; border: none; padding: 7px 12px;
+  font-family: var(--font-body); font-size: 0.85rem; color: var(--primary);
+  cursor: pointer;
+}
+.ki-navC__period-menu button:hover { background: var(--outline-hover); }
+.ki-navC__period-menu button.active { background: var(--info-50); font-weight: 700; }
+.ki-navC__axis {
+  display: flex; justify-content: space-between;
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.7rem;
+  color: var(--neutral-40); margin-top: 4px;
+  width: 100%;
+}
+
+/* =========================================
+   NAVIGATOR D — GOOGLE FINANCE WINDOWED SCRUBBER
+   ========================================= */
+.ki-navD { user-select: none; }
+.ki-navD__chart {
+  position: relative; height: 90px;
+  background: var(--neutral-90); border: 1px solid var(--neutral-70);
+  border-radius: var(--form-radius); padding: 4px;
+  display: flex; align-items: flex-end; gap: 1px;
+  overflow: hidden;
+}
+.ki-navD__bar {
+  flex: 1; min-width: 0;
+  background: linear-gradient(to top, var(--primary), var(--primary-hover));
+  border-radius: 1px 1px 0 0; opacity: 0.85;
+}
+.ki-navD__strip {
+  position: relative; height: 36px;
+  background: var(--neutral-80); border: 1px solid var(--neutral-70);
+  border-radius: var(--form-radius); margin-top: 8px;
+  display: grid; gap: 1px; padding: 2px;
+  overflow: hidden;
+}
+.ki-navD__strip-cell { height: 100%; }
+.ki-navD__window {
+  position: absolute; top: 0; bottom: 0;
+  background: rgba(45, 59, 74, 0.12);
+  border-left: 2px solid var(--primary); border-right: 2px solid var(--primary);
+  cursor: grab;
+}
+.ki-navD__window:active { cursor: grabbing; }
+.ki-navD__handle {
+  position: absolute; top: 0; bottom: 0; width: 10px;
+  background: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  cursor: ew-resize;
+}
+.ki-navD__handle::after {
+  content: ''; width: 2px; height: 14px; background: rgba(255,255,255,0.7);
+  border-radius: 1px;
+}
+.ki-navD__handle--left { left: -5px; border-radius: 2px 0 0 2px; }
+.ki-navD__handle--right { right: -5px; border-radius: 0 2px 2px 0; }
+.ki-navD__axis {
+  display: flex; justify-content: space-between;
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.7rem;
+  color: var(--neutral-40); margin-top: 6px;
+}
+.ki-navD__readout {
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.75rem;
+  color: var(--primary); margin-top: 6px;
+}
+.ki-navD__readout strong { font-weight: 700; }
+
+/* =========================================
+   INTERACTION CARD
+   ========================================= */
+.ki-card {
+  background: var(--surface); border: var(--border); border-radius: var(--radius);
+  padding: 12px 14px; width: 100%;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+.ki-card.is-system {
+  background: var(--neutral-90); border-style: dashed;
+}
+.ki-card__head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 10px; margin-bottom: 2px;
+}
+.ki-card__title-wrap { display: flex; align-items: flex-start; gap: 8px; min-width: 0; }
+.ki-card__title-wrap svg { color: var(--primary); margin-top: 2px; flex-shrink: 0; }
+.ki-card.is-system .ki-card__title-wrap svg { color: var(--neutral-40); }
+.ki-card__title {
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.9rem;
+  color: var(--primary); line-height: 1.25; word-break: break-word;
+}
+.ki-card.is-system .ki-card__title { color: var(--neutral-30); font-weight: 400; }
+.ki-card__actions { display: flex; gap: 8px; flex-shrink: 0; }
+.ki-card__actions svg {
+  color: var(--primary); cursor: pointer; opacity: 0.6; transition: opacity 0.1s;
+}
+.ki-card__actions svg:hover { opacity: 1; }
+.ki-card__actions .pinned { opacity: 1; color: var(--primary); }
+.ki-card__meta {
+  font-family: var(--font-body); font-size: 0.72rem; color: var(--neutral-30);
+  margin-left: 24px; margin-bottom: 4px;
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+}
+.ki-card__meta .sep { color: #ccc; }
+.ki-card__meta .req { color: var(--link); cursor: pointer; }
+.ki-card__body {
+  font-family: var(--font-body); font-size: 0.78rem; color: var(--primary);
+  line-height: 1.45; margin-left: 24px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.ki-card.is-system .ki-card__body { color: var(--neutral-30); }
+.ki-card.is-pinned { border-left: 3px solid var(--primary); }
+.ki-card__date-warn {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--font-body); font-size: 0.7rem; color: var(--warning-0);
+  font-weight: 500;
+}
+
+/* =========================================
+   VERTICAL TIMELINE
+   ========================================= */
+.ki-vert {
+  background: var(--surface); border: var(--border); border-radius: var(--radius);
+  padding: 24px 20px; position: relative;
+}
+.ki-vert__rail { position: relative; padding-left: 28px; }
+.ki-vert__rail::before {
+  content: '';
+  position: absolute; top: 14px; bottom: 14px; left: 9px;
+  width: 2px; background: var(--neutral-60);
+}
+.ki-vert__month {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.95rem;
+  color: var(--primary); background: var(--info-50);
+  padding: 6px 12px; border-radius: var(--radius);
+  margin-left: -28px; margin-bottom: 14px; margin-top: 6px;
+  cursor: pointer;
+}
+.ki-vert__month:hover { background: #BCD0F0; }
+.ki-vert__gap {
+  display: flex; align-items: center; gap: 10px;
+  margin-left: -10px; margin-bottom: 14px; margin-top: 6px;
+}
+.ki-vert__gap-dot {
+  width: 8px; height: 8px; border-radius: 50%; border: 2px dashed var(--neutral-60);
+  background: var(--surface);
+}
+.ki-vert__gap-label {
+  font-family: var(--font-heading); font-weight: 700; font-size: 0.65rem;
+  color: var(--neutral-40); text-transform: uppercase; letter-spacing: 0.08em;
+}
+/* Subtle gap-label variant — toggleable via controls */
+.ki-vert.gap-subtle .ki-vert__gap { margin-bottom: 6px; margin-top: 0; }
+.ki-vert.gap-subtle .ki-vert__gap-dot { display: none; }
+.ki-vert.gap-subtle .ki-vert__gap-label {
+  font-size: 0.6rem; opacity: 0.5; font-weight: 500;
+}
+.ki-vert__item { position: relative; margin-bottom: 12px; }
+.ki-vert__dot {
+  position: absolute; left: -26px; top: 14px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--primary); border: 2px solid var(--surface);
+  box-shadow: 0 0 0 2px var(--primary);
+}
+.ki-vert__dot--system {
+  background: var(--surface); box-shadow: 0 0 0 2px var(--neutral-50);
+}
+
+/* EMPTY STATE */
+.ki-empty {
+  padding: 60px 20px; text-align: center;
+  font-family: var(--font-body); color: var(--neutral-30); font-size: 0.9rem;
+  background: var(--surface); border: var(--border); border-radius: var(--radius);
+}
+.ki-empty__title {
+  font-family: var(--font-heading); font-weight: 500; font-size: 1rem;
+  color: var(--primary); margin-bottom: 6px;
+}
+
+/* UNDATED VIEW HEADER */
+.ki-undated-info {
+  background: var(--warning-50); border-radius: var(--radius);
+  padding: 12px 14px; margin-bottom: var(--gap);
+  font-family: var(--font-body); font-size: 0.85rem; color: var(--primary);
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.ki-undated-info svg { color: var(--warning-0); flex-shrink: 0; margin-top: 2px; }
+.ki-undated-info strong { font-weight: 700; }
+
+/* PROTO CONTROLS */
+.ft-panel {
+  position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+  background: var(--primary); border-radius: var(--radius);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.22); width: 340px;
+  font-family: var(--font-heading);
+  max-height: 80vh; display: flex; flex-direction: column;
+}
+.ft-panel__header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 14px; cursor: pointer; user-select: none; flex-shrink: 0;
+}
+.ft-panel__title { font-size: 0.8rem; font-weight: 700; color: #fff; }
+.ft-panel__toggle-btn {
+  background: none; border: none; color: #fff; cursor: pointer;
+  font-size: 0.75rem; font-family: var(--font-heading); font-weight: 500;
+}
+.ft-panel__body { padding: 0 14px 14px; display: none; overflow-y: auto; }
+.ft-panel__body.open { display: block; }
+.ft-panel__section { margin-bottom: 12px; }
+.ft-panel__section:last-child { margin-bottom: 0; }
+.ft-panel__section-label {
+  font-size: 0.65rem; color: rgba(255,255,255,0.6); text-transform: uppercase;
+  letter-spacing: 0.06em; margin-bottom: 5px;
+}
+.ft-panel__row { display: flex; gap: 4px; flex-wrap: wrap; }
+.ft-panel__btn {
+  flex: 1; padding: 5px 6px; border-radius: var(--form-radius);
+  font-size: 0.7rem; font-family: var(--font-heading); font-weight: 500;
+  cursor: pointer; border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7);
+  white-space: nowrap; text-align: center; transition: all 0.1s;
+}
+.ft-panel__btn:hover { background: rgba(255,255,255,0.2); color: #fff; }
+.ft-panel__btn.active { background: #fff; color: var(--primary); border-color: #fff; }
+.ft-panel__note {
+  font-family: var(--font-body); font-size: 0.65rem; color: rgba(255,255,255,0.5);
+  margin-top: 4px; line-height: 1.4;
+}
+.ft-panel__cost {
+  display: inline-block; font-size: 0.6rem; font-weight: 700;
+  padding: 1px 6px; border-radius: var(--pill); margin-left: 6px;
+}
+.ft-panel__cost--low { background: var(--success-50); color: var(--primary); }
+.ft-panel__cost--med { background: var(--warning-50); color: var(--primary); }
+.ft-panel__cost--high { background: var(--danger-50); color: var(--primary); }
+.ft-panel__reset {
+  width: 100%; padding: 7px; border-radius: var(--form-radius);
+  font-size: 0.75rem; font-family: var(--font-heading); font-weight: 700;
+  cursor: pointer; border: 1px solid rgba(255,255,255,0.4);
+  background: transparent; color: #fff; margin-top: 10px;
+}
+.ft-panel__reset:hover { background: rgba(255,255,255,0.1); }
+
+/* TOOLTIP for navigator cells */
+.ki-tooltip {
+  position: absolute; pointer-events: none;
+  background: var(--primary); color: #fff;
+  font-family: var(--font-body); font-size: 0.75rem;
+  padding: 6px 10px; border-radius: var(--form-radius);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  z-index: 100; white-space: nowrap;
+  transform: translate(-50%, -100%); margin-top: -8px;
+  opacity: 0; transition: opacity 0.1s;
+}
+.ki-tooltip.show { opacity: 1; }
+</style>
+
+<!-- INLINE SVG ICON SYMBOLS -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="ic-home" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2 6.5L8 2l6 4.5V14a1 1 0 01-1 1H3a1 1 0 01-1-1V6.5z"/><path d="M6 15v-5h4v5"/>
+    </symbol>
+    <symbol id="ic-search" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3.5 3.5"/>
+    </symbol>
+    <symbol id="ic-user" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-5 6-5s6 1.7 6 5"/>
+    </symbol>
+    <symbol id="ic-dollar" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M8 1v14M11 4H6.5a2.5 2.5 0 000 5h3a2.5 2.5 0 010 5H5"/>
+    </symbol>
+    <symbol id="ic-clock" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="8" r="6.5"/><path d="M8 5v3.5l2.5 1.5"/>
+    </symbol>
+    <symbol id="ic-file" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 1H4a1 1 0 00-1 1v12a1 1 0 001 1h8a1 1 0 001-1V6L9 1z"/><path d="M9 1v5h5"/>
+    </symbol>
+    <symbol id="ic-chat" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14 10a2 2 0 01-2 2H5l-3 3V4a2 2 0 012-2h8a2 2 0 012 2v6z"/>
+    </symbol>
+    <symbol id="ic-shield" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 1l6 2.5v4C14 11 11.5 14 8 15 4.5 14 2 11 2 7.5v-4L8 1z"/>
+    </symbol>
+    <symbol id="ic-grid" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/>
+      <rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/>
+    </symbol>
+    <symbol id="ic-gear" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="8" r="2.5"/><path d="M8 1.5V3m0 10v1.5M1.5 8H3m10 0h1.5M3.1 3.1l1 1m7.8 7.8 1 1M12.9 3.1l-1 1M4.1 11.9l-1 1"/>
+    </symbol>
+    <symbol id="ic-chevron" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M2 3.5l3 3 3-3"/>
+    </symbol>
+    <symbol id="ic-chevron-up" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M2 6.5l3-3 3 3"/>
+    </symbol>
+    <symbol id="ic-chevron-down" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M2 3.5l3 3 3-3"/>
+    </symbol>
+    <symbol id="ic-pencil" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 2l3 3-8 8H3v-3l8-8z"/>
+    </symbol>
+    <symbol id="ic-compass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="8" r="6.5"/><path d="M10.5 5.5l-2 4.5-4.5 2 2-4.5 4.5-2z"/>
+    </symbol>
+    <symbol id="ic-lightbulb" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M8 1a5 5 0 013.5 8.5c-.5.5-.5 1-.5 1.5H5c0-.5 0-1-.5-1.5A5 5 0 018 1z"/>
+      <path d="M6 11h4M6.5 13h3"/>
+    </symbol>
+    <symbol id="ic-gift" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="1" y="6" width="14" height="3" rx="1"/><path d="M2 9v5h12V9M8 6V15M8 6S6 3 4.5 3 2 4 3 5.5 6 6 8 6zM8 6s2-3 3.5-3S14 4 13 5.5 10 6 8 6z"/>
+    </symbol>
+    <symbol id="ic-phone" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 1h3l1.5 3.5-2 1.2a9 9 0 004.8 4.8l1.2-2L15 11v3a1 1 0 01-1 1A13 13 0 012 2a1 1 0 011-1z"/>
+    </symbol>
+    <symbol id="ic-envelope" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="1" y="3" width="14" height="10" rx="1"/><path d="M1 4l7 5 7-5"/>
+    </symbol>
+    <symbol id="ic-globe" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="8" r="6.5"/><path d="M1.5 8h13M8 1.5a10 10 0 010 13M8 1.5a10 10 0 000 13"/>
+    </symbol>
+    <symbol id="ic-building" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="2" width="12" height="13" rx="1"/><path d="M5 15V9h6v6M5 5h1m3 0h1M5 7h1m3 0h1"/>
+    </symbol>
+    <symbol id="ic-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <path d="M2 8l4 4 8-8"/>
+    </symbol>
+    <symbol id="ic-warning" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M8 1L1 14h14L8 1z"/><path d="M8 6v4M8 11.5v.5"/>
+    </symbol>
+    <symbol id="ic-info" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="8" r="6.5"/><path d="M8 7v5M8 5v.5"/>
+    </symbol>
+    <symbol id="ic-close" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M3 3l10 10M13 3L3 13"/>
+    </symbol>
+    <symbol id="ic-note" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 2h7l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z"/>
+      <path d="M10 2v3h3"/><path d="M5 8h6M5 10.5h6M5 13h4"/>
+    </symbol>
+    <symbol id="ic-in-person" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="5" cy="5" r="2"/><circle cx="11" cy="5" r="2"/>
+      <path d="M1.5 14c0-2.2 1.6-3.5 3.5-3.5s3.5 1.3 3.5 3.5"/>
+      <path d="M7.5 14c0-2.2 1.6-3.5 3.5-3.5s3.5 1.3 3.5 3.5"/>
+    </symbol>
+    <symbol id="ic-video" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="1.5" y="4" width="9" height="8" rx="1"/>
+      <path d="M10.5 7l4-2v6l-4-2z"/>
+    </symbol>
+    <symbol id="ic-pin" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M10.62 1.52a.5.5 0 00-.7 0L8.06 3.38 5.4 4.06a.5.5 0 00-.24.84l2.06 2.06L3.5 10.7a.5.5 0 00.7.7l3.74-3.74 2.06 2.06a.5.5 0 00.84-.24l.68-2.66 1.86-1.86a.5.5 0 000-.7l-2.76-2.74z"/>
+    </symbol>
+    <symbol id="ic-calendar" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="3" width="12" height="11" rx="1"/>
+      <path d="M2 6h12M5 2v2M11 2v2"/>
+    </symbol>
+    <symbol id="ic-plus" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M8 3v10M3 8h10"/>
+    </symbol>
+    <symbol id="ic-award" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="8" cy="6" r="4"/><path d="M5.5 9l-1 5 3.5-2 3.5 2-1-5"/>
+    </symbol>
+    <symbol id="ic-form" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="2" width="10" height="12" rx="1"/>
+      <path d="M5 5h6M5 8h6M5 11h4"/>
+    </symbol>
+    <symbol id="ic-payment" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="1.5" y="4" width="13" height="9" rx="1"/>
+      <path d="M1.5 7h13M4 10.5h2"/>
+    </symbol>
+    <symbol id="ic-installment" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="1.5" y="6" width="3" height="7"/>
+      <rect x="6.5" y="3" width="3" height="10"/>
+      <rect x="11.5" y="8" width="3" height="5"/>
+    </symbol>
+    <symbol id="ic-system" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="3" width="12" height="9" rx="1"/>
+      <path d="M2 6l6 4 6-4"/><path d="M5 14h6"/>
+    </symbol>
+    <symbol id="ic-help" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="8" r="6.5"/>
+      <path d="M6 6a2 2 0 014 0c0 1-1 1.5-2 2v.5M8 11.5v.5"/>
+    </symbol>
+  </defs>
+</svg>
+
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="ft-navbar">
+  <div class="ft-navbar__logo">FT</div>
+  <svg width="16" height="16" style="color:var(--primary);cursor:pointer"><use href="#ic-home"/></svg>
+  <button class="ft-navbar__item">SEARCH <svg width="10" height="10"><use href="#ic-chevron"/></svg></button>
+  <button class="ft-navbar__item">TOOLS <svg width="10" height="10"><use href="#ic-chevron"/></svg></button>
+  <button class="ft-navbar__item">COMMUNICATIONS <svg width="10" height="10"><use href="#ic-chevron"/></svg></button>
+  <button class="ft-navbar__item">REPORTING <svg width="10" height="10"><use href="#ic-chevron"/></svg></button>
+  <div class="ft-navbar__search">
+    <svg width="13" height="13" style="color:#aaa"><use href="#ic-search"/></svg>
+    search
+  </div>
+  <div class="ft-navbar__spacer"></div>
+  <button class="ft-navbar__role">ROLE (PROGRAM OFFICER) <svg width="10" height="10"><use href="#ic-chevron"/></svg></button>
+  <div class="ft-navbar__utils">
+    <svg width="16" height="16" style="color:var(--primary)"><use href="#ic-compass"/></svg>
+    <svg width="16" height="16" style="color:var(--primary)"><use href="#ic-lightbulb"/></svg>
+    <svg width="16" height="16" style="color:var(--primary)"><use href="#ic-gift"/></svg>
+    <svg width="16" height="16" style="color:var(--primary)"><use href="#ic-grid"/></svg>
+    <svg width="16" height="16" style="color:var(--primary)"><use href="#ic-gear"/></svg>
+    <svg width="16" height="16" style="color:var(--primary)"><use href="#ic-user"/></svg>
+  </div>
+</nav>
+
+<!-- PAGE -->
+<div class="ft-page">
+
+  <!-- SIDEBAR -->
+  <aside class="ft-sidebar" id="ft-sidebar">
+    <div class="ft-sidebar__contact" id="sidebar-contact"></div>
+    <div id="sidebar-items"></div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="ft-content">
+
+    <!-- RECORD HEADER -->
+    <div class="ft-record-header">
+      <h1 id="record-title">Cedar Ridge Foundation
+        <svg width="16" height="16" style="color:#aaa;cursor:pointer"><use href="#ic-pencil"/></svg>
+      </h1>
+      <div class="ft-record-meta" id="record-meta"></div>
+    </div>
+
+    <!-- TOP CONTROLS -->
+    <div class="ki-section">
+      <div class="ki-topbar">
+        <div class="ki-viewswitch" id="view-switch">
+          <button class="active" data-view="dated">
+            <svg width="13" height="13"><use href="#ic-calendar"/></svg>
+            Dated <span class="ki-viewswitch__count" id="dated-count">0</span>
+          </button>
+          <button data-view="undated">
+            <svg width="13" height="13"><use href="#ic-help"/></svg>
+            Undated <span class="ki-viewswitch__count" id="undated-count">0</span>
+          </button>
+        </div>
+        <div class="ki-search-wrap">
+          <svg width="13" height="13" style="color:#aaa"><use href="#ic-search"/></svg>
+          <input type="text" id="search-input" placeholder="Search interactions by title or content">
+        </div>
+        <button class="ki-jump-today" id="jump-today">
+          <svg width="12" height="12"><use href="#ic-calendar"/></svg>
+          Jump to today
+        </button>
+        <button class="btn-ft-filled btn-ft-default">
+          <svg width="12" height="12" style="color:#fff"><use href="#ic-plus"/></svg>
+          Add Interaction
+        </button>
+      </div>
+
+      <!-- FILTER PILLS -->
+      <div class="ki-filters" id="filter-pills">
+        <span class="ki-filters__label">Filter by type</span>
+      </div>
+    </div>
+
+    <!-- NAVIGATOR (variant-driven, rendered into here) -->
+    <div id="navigator-host"></div>
+
+    <!-- SCOPED-RANGE BANNER (when navigator filters timeline) -->
+    <div id="scoped-banner" style="display:none"></div>
+
+    <!-- TIMELINE -->
+    <div id="timeline"></div>
+
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.umd.min.js"></script>
+<script>
+/* ====================================================
+   SEEDED DATA — ~100 events, 4 years, 10 types
+   ==================================================== */
+/* Two requests under Cedar Ridge Foundation:
+   - Urban Greenways Initiative (2022-2024 cycle, closed)
+   - Youth Nature Programs (2025-2026 cycle, active)
+   - A small org-level inquiry that didn't progress
+   - System emails are dense (reminders, status changes)
+   - Some items deliberately undated to demonstrate that flow */
+
+var ORG_INTERACTIONS = [
+  /* ───── 2022: Urban Greenways early relationship ───── */
+  { id: 1, type: 'email', system: false, pinned: false, title: 'Initial inquiry about environmental grant opportunity', request: 'Urban Greenways Initiative', date: '2022-02-08', author: 'Megan Dahl', body: 'Aaron reached out via our contact form asking about funding opportunities for a proposed greenway and community garden project. Sent preliminary eligibility guidelines and invited him to submit an LOI.' },
+  { id: 2, type: 'phone', system: false, pinned: true, title: 'Introductory call: scope and timeline', request: 'Urban Greenways Initiative', date: '2022-02-22', author: 'Sarah Johnson', body: '30-minute introductory call with Aaron Rodgers and Yvette Chen. Discussed scope, expected outcomes, fit with our Environment program, and timeline for the Q2 cycle.' },
+  { id: 3, type: 'email', system: false, pinned: false, title: 'Shared LOI template and review criteria', request: 'Urban Greenways Initiative', date: '2022-03-04', author: 'Megan Dahl', body: 'Sent the LOI template, review rubric, and a calendar of upcoming deadlines. Also included our annual report so they can see prior funded projects.' },
+  { id: 4, type: 'system-email', system: true, pinned: false, title: 'LOI form sent', request: 'Urban Greenways Initiative', date: '2022-03-04', author: 'System', body: 'Automated: LOI form delivered to applicant.' },
+  { id: 5, type: 'submitted-form', system: false, pinned: false, title: 'LOI submitted', request: 'Urban Greenways Initiative', date: '2022-03-18', author: 'Aaron Rodgers', body: 'Letter of inquiry submitted for the Urban Greenways Initiative project.' },
+  { id: 6, type: 'system-email', system: true, pinned: false, title: 'LOI received confirmation sent', request: 'Urban Greenways Initiative', date: '2022-03-18', author: 'System', body: 'Automated receipt confirmation to applicant.' },
+  { id: 7, type: 'note', system: false, pinned: false, title: 'LOI review note: strong candidate', request: 'Urban Greenways Initiative', date: '2022-03-29', author: 'Sarah Johnson', body: 'LOI is well-organized, partnerships in place, clear outcomes. Recommending invitation to submit full proposal.' },
+  { id: 8, type: 'system-email', system: true, pinned: false, title: 'Full application form sent', request: 'Urban Greenways Initiative', date: '2022-04-02', author: 'System', body: 'Automated: full application form delivered.' },
+  { id: 9, type: 'in-person', system: false, pinned: true, title: 'Site visit: proposed greenway corridor', request: 'Urban Greenways Initiative', date: '2022-04-09', author: 'Sarah Johnson', body: 'Walked the proposed greenway corridor with Aaron and Yvette. The project is well-scoped, partnerships with three neighborhood associations are in place, and the city has signaled written support.' },
+  { id: 10, type: 'note', system: false, pinned: false, title: 'Internal: budget consideration', request: 'Urban Greenways Initiative', date: '2022-04-22', author: 'Sarah Johnson', body: 'Budget requested is $75K. Given our 2022 program area allocation and competing asks, recommending we fund at $60K with a request to narrow phase 1 scope.' },
+  { id: 11, type: 'submitted-form', system: false, pinned: false, title: 'Full application submitted', request: 'Urban Greenways Initiative', date: '2022-04-30', author: 'Aaron Rodgers', body: 'Complete application package submitted.' },
+  { id: 12, type: 'system-email', system: true, pinned: false, title: 'Application received confirmation', request: 'Urban Greenways Initiative', date: '2022-04-30', author: 'System', body: 'Automated confirmation of receipt.' },
+  { id: 13, type: 'video', system: false, pinned: false, title: 'Follow-up video call: budget negotiation', request: 'Urban Greenways Initiative', date: '2022-05-14', author: 'Sarah Johnson', body: 'Called Aaron to share that we are recommending $60K vs. $75K requested and walked through scope adjustments. He understood and will revise the phase 1 plan.' },
+  { id: 14, type: 'award', system: false, pinned: true, title: 'Award decision: $60,000', request: 'Urban Greenways Initiative', date: '2022-06-03', author: 'Board', body: 'Board approved at $60,000 over 12 months.' },
+  { id: 15, type: 'email', system: false, pinned: false, title: 'Award notification', request: 'Urban Greenways Initiative', date: '2022-06-03', author: 'Megan Dahl', body: 'Formal award notification sent. Grant agreement and payment schedule attached.' },
+  { id: 16, type: 'system-email', system: true, pinned: false, title: 'Award notification email sent', request: 'Urban Greenways Initiative', date: '2022-06-03', author: 'System', body: 'Automated award notification.' },
+  { id: 17, type: 'payment', system: false, pinned: false, title: 'Payment 1 of 2: $30,000', request: 'Urban Greenways Initiative', date: '2022-06-15', author: 'Finance', body: 'First installment of $30,000 disbursed.' },
+  { id: 18, type: 'installment', system: false, pinned: false, title: 'Installment scheduled: payment 2', request: 'Urban Greenways Initiative', date: '2022-06-15', author: 'Finance', body: 'Second installment of $30,000 scheduled for 2023-01-15 upon receipt of Q1 progress report.' },
+  { id: 19, type: 'system-email', system: true, pinned: false, title: 'Welcome packet email sent', request: 'Urban Greenways Initiative', date: '2022-06-20', author: 'System', body: 'Automated grantee onboarding packet.' },
+
+  /* ───── Q3 2022: quiet period, follow-ups ───── */
+  { id: 20, type: 'phone', system: false, pinned: false, title: 'Check-in: 90 days into phase 1', request: 'Urban Greenways Initiative', date: '2022-09-12', author: 'Sarah Johnson', body: 'Brief check-in with Yvette. Phase 1 on track. Two of three neighborhood plots broken ground.' },
+  { id: 21, type: 'system-email', system: true, pinned: false, title: 'Q1 progress report reminder', request: 'Urban Greenways Initiative', date: '2022-10-01', author: 'System', body: 'Automated reminder: Q1 progress report due 10/31/2022.' },
+  { id: 22, type: 'system-email', system: true, pinned: false, title: 'Q1 progress report reminder (2nd)', request: 'Urban Greenways Initiative', date: '2022-10-15', author: 'System', body: 'Automated reminder: 16 days remaining.' },
+  { id: 23, type: 'submitted-form', system: false, pinned: false, title: 'Q1 progress report submitted', request: 'Urban Greenways Initiative', date: '2022-10-24', author: 'Aaron Rodgers', body: 'Q1 progress report submitted seven days early.' },
+  { id: 24, type: 'note', system: false, pinned: false, title: 'Q1 report reviewed: strong', request: 'Urban Greenways Initiative', date: '2022-10-26', author: 'Megan Dahl', body: 'Narrative is strong, photos attached, financials align with budget. No action needed beyond acknowledgment.' },
+  { id: 25, type: 'system-email', system: true, pinned: false, title: 'Q1 report acknowledgment email', request: 'Urban Greenways Initiative', date: '2022-10-26', author: 'System', body: 'Automated acknowledgment to applicant.' },
+
+  /* ───── Q4 2022 + early 2023 ───── */
+  { id: 26, type: 'email', system: false, pinned: false, title: 'Holiday update from Aaron', request: 'Urban Greenways Initiative', date: '2022-12-19', author: 'Aaron Rodgers', body: 'Year-end update with photos from the December community planting event.' },
+  { id: 27, type: 'system-email', system: true, pinned: false, title: 'Q2 progress report reminder', request: 'Urban Greenways Initiative', date: '2023-01-02', author: 'System', body: 'Automated reminder: Q2 progress report due 1/31/2023.' },
+  { id: 28, type: 'submitted-form', system: false, pinned: false, title: 'Q2 progress report submitted', request: 'Urban Greenways Initiative', date: '2023-01-22', author: 'Aaron Rodgers', body: 'Q2 progress report submitted.' },
+  { id: 29, type: 'payment', system: false, pinned: false, title: 'Payment 2 of 2: $30,000', request: 'Urban Greenways Initiative', date: '2023-01-25', author: 'Finance', body: 'Second installment of $30,000 disbursed upon receipt of Q2 report.' },
+  { id: 30, type: 'note', system: false, pinned: false, title: 'Q2 review: project pacing well', request: 'Urban Greenways Initiative', date: '2023-01-28', author: 'Megan Dahl', body: 'Phase 1 essentially complete. Phase 2 launching on schedule.' },
+  { id: 31, type: 'system-email', system: true, pinned: false, title: 'Payment confirmation sent', request: 'Urban Greenways Initiative', date: '2023-01-25', author: 'System', body: 'Automated payment confirmation.' },
+
+  /* ───── 2023: middle of grant, fewer touches ───── */
+  { id: 32, type: 'phone', system: false, pinned: false, title: 'Check-in call with Yvette', request: 'Urban Greenways Initiative', date: '2023-03-14', author: 'Sarah Johnson', body: 'Brief catch-up. Two more neighborhood gardens planted.' },
+  { id: 33, type: 'in-person', system: false, pinned: false, title: 'Spring tour: phase 2 sites', request: 'Urban Greenways Initiative', date: '2023-04-11', author: 'Sarah Johnson', body: 'Visited the new phase 2 corridor sites. Strong volunteer turnout, good press from local outlets.' },
+  { id: 34, type: 'system-email', system: true, pinned: false, title: 'Q3 progress report reminder', request: 'Urban Greenways Initiative', date: '2023-04-01', author: 'System', body: 'Automated reminder.' },
+  { id: 35, type: 'submitted-form', system: false, pinned: false, title: 'Q3 progress report submitted', request: 'Urban Greenways Initiative', date: '2023-04-25', author: 'Aaron Rodgers', body: 'Q3 progress report submitted.' },
+  { id: 36, type: 'note', system: false, pinned: false, title: 'Q3 review notes', request: 'Urban Greenways Initiative', date: '2023-04-27', author: 'Megan Dahl', body: 'On track. Suggested they explore matching funding for phase 3 expansion.' },
+  { id: 37, type: 'email', system: false, pinned: false, title: 'Email exchange about phase 3 expansion', request: 'Urban Greenways Initiative', date: '2023-05-09', author: 'Aaron Rodgers', body: 'Aaron asked for advice on positioning a phase 3 expansion ask with the city. Offered to make introductions.' },
+
+  /* ───── 2023 mid-late: a few touches, system noise ───── */
+  { id: 38, type: 'system-email', system: true, pinned: false, title: 'Annual report reminder', request: 'Urban Greenways Initiative', date: '2023-07-01', author: 'System', body: 'Automated reminder.' },
+  { id: 39, type: 'system-email', system: true, pinned: false, title: 'Annual report reminder (2nd)', request: 'Urban Greenways Initiative', date: '2023-07-15', author: 'System', body: 'Automated reminder.' },
+  { id: 40, type: 'submitted-form', system: false, pinned: false, title: 'Annual report submitted', request: 'Urban Greenways Initiative', date: '2023-07-28', author: 'Aaron Rodgers', body: 'Annual report submitted.' },
+  { id: 41, type: 'phone', system: false, pinned: false, title: 'Yvette: phase 3 application planning', request: 'Urban Greenways Initiative', date: '2023-08-22', author: 'Sarah Johnson', body: 'Yvette called about timing for phase 3. Aligned on submitting in fall cycle.' },
+  { id: 42, type: 'note', system: false, pinned: false, title: 'Internal: Cedar Ridge as exemplar', request: 'Urban Greenways Initiative', date: '2023-09-04', author: 'Sarah Johnson', body: 'Discussed Cedar Ridge as a case study for our annual report. Strong outcomes story.' },
+  { id: 43, type: 'email', system: false, pinned: false, title: 'Press coverage from local paper', request: 'Urban Greenways Initiative', date: '2023-09-19', author: 'Aaron Rodgers', body: 'Forwarded a feature article from the Tribune about the greenway project.' },
+  { id: 44, type: 'system-email', system: true, pinned: false, title: 'Q4 progress report reminder', request: 'Urban Greenways Initiative', date: '2023-10-01', author: 'System', body: 'Automated reminder.' },
+  { id: 45, type: 'submitted-form', system: false, pinned: false, title: 'Q4 progress report submitted', request: 'Urban Greenways Initiative', date: '2023-10-23', author: 'Aaron Rodgers', body: 'Q4 progress report submitted.' },
+  { id: 46, type: 'note', system: false, pinned: false, title: 'Q4 review notes', request: 'Urban Greenways Initiative', date: '2023-10-25', author: 'Megan Dahl', body: 'On track for grant closure.' },
+
+  /* ───── 2024: final reporting and closure ───── */
+  { id: 47, type: 'video', system: false, pinned: false, title: 'Final report planning call', request: 'Urban Greenways Initiative', date: '2024-01-18', author: 'Sarah Johnson', body: 'Walked through final report expectations and timeline.' },
+  { id: 48, type: 'system-email', system: true, pinned: false, title: 'Final report reminder', request: 'Urban Greenways Initiative', date: '2024-02-01', author: 'System', body: 'Automated reminder.' },
+  { id: 49, type: 'submitted-form', system: false, pinned: false, title: 'Final narrative report submitted', request: 'Urban Greenways Initiative', date: '2024-02-26', author: 'Aaron Rodgers', body: 'Final narrative and financial report submitted. Strong outcomes documented.' },
+  { id: 50, type: 'submitted-form', system: false, pinned: false, title: 'Final financial report submitted', request: 'Urban Greenways Initiative', date: '2024-02-28', author: 'Aaron Rodgers', body: 'Final financial report submitted.' },
+  { id: 51, type: 'note', system: false, pinned: false, title: 'Final review and closure recommendation', request: 'Urban Greenways Initiative', date: '2024-03-08', author: 'Megan Dahl', body: 'Reports are strong. Recommending grant closure.' },
+  { id: 52, type: 'in-person', system: false, pinned: true, title: 'Ribbon cutting and grant closure event', request: 'Urban Greenways Initiative', date: '2024-05-20', author: 'Sarah Johnson', body: 'Attended the greenway ribbon-cutting. Three neighborhoods represented, about 80 community members present, strong press coverage. Clear outcomes delivered.' },
+  { id: 53, type: 'system-email', system: true, pinned: false, title: 'Grant closed notification', request: 'Urban Greenways Initiative', date: '2024-06-01', author: 'System', body: 'Automated grant closure notification.' },
+
+  /* ───── 2024 quiet middle period ───── */
+  { id: 54, type: 'email', system: false, pinned: false, title: 'Casual check-in: how things are going', request: null, date: '2024-08-12', author: 'Sarah Johnson', body: 'Quick email asking how Aaron and Yvette are doing post-grant.' },
+  { id: 55, type: 'email', system: false, pinned: false, title: 'Aaron mentions a possible new project', request: null, date: '2024-09-04', author: 'Aaron Rodgers', body: 'Aaron mentioned interest in a youth-focused environmental education program for next year.' },
+
+  /* ───── 2025: Youth Nature Programs cycle begins ───── */
+  { id: 56, type: 'email', system: false, pinned: false, title: 'Introduction to Youth Nature Programs idea', request: 'Youth Nature Programs', date: '2025-01-15', author: 'Megan Dahl', body: 'Aaron flagged a second potential project: a youth nature education program they would like to propose. Sent LOI template.' },
+  { id: 57, type: 'system-email', system: true, pinned: false, title: 'LOI form sent', request: 'Youth Nature Programs', date: '2025-01-15', author: 'System', body: 'Automated: LOI form delivered.' },
+  { id: 58, type: 'phone', system: false, pinned: false, title: 'Discovery call: youth program scope', request: 'Youth Nature Programs', date: '2025-02-04', author: 'Sarah Johnson', body: 'Discussed proposed scope, ages served, partnership structure with local schools.' },
+  { id: 59, type: 'submitted-form', system: false, pinned: false, title: 'LOI submitted', request: 'Youth Nature Programs', date: '2025-02-21', author: 'Aaron Rodgers', body: 'Letter of inquiry for Youth Nature Programs.' },
+  { id: 60, type: 'system-email', system: true, pinned: false, title: 'LOI received confirmation', request: 'Youth Nature Programs', date: '2025-02-21', author: 'System', body: 'Automated receipt.' },
+  { id: 61, type: 'note', system: false, pinned: false, title: 'LOI review: needs sustainability work', request: 'Youth Nature Programs', date: '2025-03-08', author: 'Sarah Johnson', body: 'Concept is strong but the sustainability plan beyond the grant period is thin. Recommending invitation with feedback.' },
+  { id: 62, type: 'email', system: false, pinned: false, title: 'Feedback shared and full app invited', request: 'Youth Nature Programs', date: '2025-03-12', author: 'Megan Dahl', body: 'Sent feedback letter and full application invitation.' },
+  { id: 63, type: 'system-email', system: true, pinned: false, title: 'Full application form sent', request: 'Youth Nature Programs', date: '2025-03-12', author: 'System', body: 'Automated form delivery.' },
+  { id: 64, type: 'video', system: false, pinned: true, title: 'Strategy conversation: program design', request: 'Youth Nature Programs', date: '2025-04-22', author: 'Sarah Johnson', body: 'Deeper conversation with Aaron and Yvette on the Youth Nature Programs design. Raised questions about sustainability and youth outcome measurement. They will revise.' },
+
+  /* ───── 2025 mid: relationship building, system noise ───── */
+  { id: 65, type: 'in-person', system: false, pinned: false, title: 'Dropped by their office during community visit', request: null, date: '2025-05-08', author: 'Sarah Johnson', body: 'Was in the neighborhood for another site visit, stopped by to say hello.' },
+  { id: 66, type: 'system-email', system: true, pinned: false, title: 'Application deadline reminder', request: 'Youth Nature Programs', date: '2025-06-01', author: 'System', body: 'Automated reminder.' },
+  { id: 67, type: 'system-email', system: true, pinned: false, title: 'Application deadline reminder (2nd)', request: 'Youth Nature Programs', date: '2025-06-15', author: 'System', body: 'Automated reminder: 15 days remaining.' },
+  { id: 68, type: 'system-email', system: true, pinned: false, title: 'Application deadline reminder (3rd)', request: 'Youth Nature Programs', date: '2025-06-25', author: 'System', body: 'Automated reminder: 5 days remaining.' },
+  { id: 69, type: 'phone', system: false, pinned: false, title: 'Aaron: needs more time on application', request: 'Youth Nature Programs', date: '2025-06-27', author: 'Sarah Johnson', body: 'Aaron asked for a 2-week extension on the application. Approved.' },
+  { id: 70, type: 'system-email', system: true, pinned: false, title: 'Deadline extension granted', request: 'Youth Nature Programs', date: '2025-06-27', author: 'System', body: 'Automated notification of extension to 7/14/2025.' },
+  { id: 71, type: 'submitted-form', system: false, pinned: false, title: 'Full application submitted', request: 'Youth Nature Programs', date: '2025-07-11', author: 'Aaron Rodgers', body: 'Full application submitted with revised sustainability plan and outcome metrics.' },
+  { id: 72, type: 'system-email', system: true, pinned: false, title: 'Application receipt confirmation', request: 'Youth Nature Programs', date: '2025-07-11', author: 'System', body: 'Automated confirmation.' },
+
+  /* ───── Late 2025: review and decision ───── */
+  { id: 73, type: 'note', system: false, pinned: false, title: 'External reviewer assignments', request: 'Youth Nature Programs', date: '2025-08-04', author: 'Megan Dahl', body: 'Assigned to two external reviewers for evaluation.' },
+  { id: 74, type: 'note', system: false, pinned: false, title: 'External review summary', request: 'Youth Nature Programs', date: '2025-09-22', author: 'Megan Dahl', body: 'Both reviewers favorable. Average score 8.4/10. Sustainability plan now strong.' },
+  { id: 75, type: 'video', system: false, pinned: false, title: 'Pre-decision call with Aaron', request: 'Youth Nature Programs', date: '2025-10-08', author: 'Sarah Johnson', body: 'Walked Aaron through the timeline for board decision and requested final clarifications.' },
+  { id: 76, type: 'note', system: false, pinned: false, title: 'Internal: recommending board approval', request: 'Youth Nature Programs', date: '2025-11-30', author: 'Sarah Johnson', body: 'After revisions, recommending board approval at $45K over 18 months.' },
+  { id: 77, type: 'award', system: false, pinned: true, title: 'Award decision: $45,000', request: 'Youth Nature Programs', date: '2026-01-30', author: 'Board', body: 'Board approved at $45,000 over 18 months.' },
+  { id: 78, type: 'email', system: false, pinned: false, title: 'Award notification sent', request: 'Youth Nature Programs', date: '2026-02-02', author: 'Megan Dahl', body: 'Formal award notification sent.' },
+  { id: 79, type: 'system-email', system: true, pinned: false, title: 'Award notification email sent', request: 'Youth Nature Programs', date: '2026-02-02', author: 'System', body: 'Automated.' },
+  { id: 80, type: 'system-email', system: true, pinned: false, title: 'Welcome packet sent', request: 'Youth Nature Programs', date: '2026-02-04', author: 'System', body: 'Automated grantee onboarding.' },
+
+  /* ───── 2026: kickoff, launch ───── */
+  { id: 81, type: 'phone', system: false, pinned: false, title: 'Kickoff call', request: 'Youth Nature Programs', date: '2026-02-18', author: 'Sarah Johnson', body: 'Kickoff call completed. Reviewed grant terms, reporting schedule, and first 90-day milestones.' },
+  { id: 82, type: 'payment', system: false, pinned: false, title: 'Payment 1 of 3: $15,000', request: 'Youth Nature Programs', date: '2026-02-20', author: 'Finance', body: 'First installment disbursed.' },
+  { id: 83, type: 'installment', system: false, pinned: false, title: 'Installments 2 and 3 scheduled', request: 'Youth Nature Programs', date: '2026-02-20', author: 'Finance', body: 'Installments scheduled for 2026-08-20 and 2027-02-20 contingent on progress reports.' },
+  { id: 84, type: 'system-email', system: true, pinned: false, title: 'Payment 1 confirmation', request: 'Youth Nature Programs', date: '2026-02-20', author: 'System', body: 'Automated payment confirmation.' },
+  { id: 85, type: 'email', system: false, pinned: false, title: 'Aaron: program launch this week', request: 'Youth Nature Programs', date: '2026-03-09', author: 'Aaron Rodgers', body: 'Update that the program is launching with three school partner sites this week.' },
+  { id: 86, type: 'in-person', system: false, pinned: false, title: 'Visit to first program session', request: 'Youth Nature Programs', date: '2026-03-21', author: 'Sarah Johnson', body: 'Attended the first afterschool session at Lincoln Elementary. Strong engagement, 18 kids enrolled.' },
+  { id: 87, type: 'note', system: false, pinned: false, title: 'Internal: program off to a strong start', request: 'Youth Nature Programs', date: '2026-03-23', author: 'Sarah Johnson', body: 'Early signs are very positive.' },
+  { id: 88, type: 'email', system: false, pinned: false, title: 'Photos from week 2', request: 'Youth Nature Programs', date: '2026-04-04', author: 'Aaron Rodgers', body: 'Aaron shared photos and quick narrative from the second week of programming.' },
+  { id: 89, type: 'phone', system: false, pinned: false, title: 'Quick call: media inquiry coordination', request: 'Youth Nature Programs', date: '2026-04-15', author: 'Sarah Johnson', body: 'Local NPR affiliate wants to do a story. Coordinated quotes and timing.' },
+
+  /* ───── Org-level (no specific request) ───── */
+  { id: 90, type: 'in-person', system: false, pinned: false, title: 'Aaron at our annual grantee convening', request: null, date: '2023-11-09', author: 'Sarah Johnson', body: 'Aaron attended our annual grantee convening. Networked with three other org leads.' },
+  { id: 91, type: 'in-person', system: false, pinned: false, title: 'Aaron at 2024 grantee convening', request: null, date: '2024-11-07', author: 'Sarah Johnson', body: 'Aaron attended again. Notes from his table conversation captured separately.' },
+  { id: 92, type: 'email', system: false, pinned: false, title: 'Cedar Ridge announcement: leadership transition', request: null, date: '2025-03-01', author: 'Aaron Rodgers', body: 'Aaron announced that Yvette is stepping into a co-director role.' },
+
+  /* ───── Undated items (modal field skipped or historical comments) ───── */
+  { id: 93, type: 'note', system: false, pinned: false, title: 'Historical comment: pre-system context', request: 'Urban Greenways Initiative', date: null, createDate: '2022-01-30', author: 'Sarah Johnson', body: 'Historical comment imported from the prior system. Original date not preserved. Context: Cedar Ridge was referred to us by United Way.' },
+  { id: 94, type: 'note', system: false, pinned: false, title: 'Historical comment: board interest', request: null, date: null, createDate: '2022-02-04', author: 'Megan Dahl', body: 'Historical comment imported. Board member expressed interest in environmental projects.' },
+  { id: 95, type: 'phone', system: false, pinned: false, title: 'Quick call (date not captured)', request: 'Urban Greenways Initiative', date: null, createDate: '2023-06-12', author: 'Sarah Johnson', body: 'Brief call with Aaron, exact date not captured at logging time.' },
+  { id: 96, type: 'email', system: false, pinned: false, title: 'Email exchange (no date set)', request: 'Youth Nature Programs', date: null, createDate: '2025-08-15', author: 'Megan Dahl', body: 'Email thread about program timeline; date field skipped during entry.' },
+  { id: 97, type: 'note', system: false, pinned: false, title: 'Historical comment: in-kind donation', request: null, date: null, createDate: '2023-04-02', author: 'Sarah Johnson', body: 'Historical comment imported. Note about a small in-kind donation Cedar Ridge made to a partner org.' },
+  { id: 98, type: 'phone', system: false, pinned: false, title: 'Voicemail (date unknown)', request: null, date: null, createDate: '2024-09-20', author: 'Sarah Johnson', body: 'Logged a voicemail from Aaron but did not capture the date he left it.' }
+];
+
+/* Build per-request derived collection */
+function filterByRequest(items, requestName) {
+  var out = [];
+  for (var i = 0; i < items.length; i++) {
+    if (items[i].request === requestName) out.push(items[i]);
+  }
+  return out;
+}
+var REQUEST_INTERACTIONS = filterByRequest(ORG_INTERACTIONS, 'Urban Greenways Initiative');
+
+/* Type metadata: 10 types, with system flag baked into the type when applicable */
+var TYPE_META = {
+  'note':           { label: 'Notes',           icon: 'ic-note',        system: false },
+  'phone':          { label: 'Phone',           icon: 'ic-phone',       system: false },
+  'email':          { label: 'Email',           icon: 'ic-envelope',    system: false },
+  'in-person':      { label: 'In Person',       icon: 'ic-in-person',   system: false },
+  'video':          { label: 'Video',           icon: 'ic-video',       system: false },
+  'award':          { label: 'Awards',          icon: 'ic-award',       system: false },
+  'submitted-form': { label: 'Submitted Forms', icon: 'ic-form',        system: false },
+  'payment':        { label: 'Payments',        icon: 'ic-payment',     system: false },
+  'installment':    { label: 'Installments',    icon: 'ic-installment', system: false },
+  'system-email':   { label: 'System Emails',   icon: 'ic-system',      system: true  }
+};
+var TYPE_ORDER = ['note','phone','email','in-person','video','award','submitted-form','payment','installment','system-email'];
+
+/* ====================================================
+   STATE
+   ==================================================== */
+var state = {
+  navigator: 'A',           // A | B | C | D | none
+  scope: 'org',             // org | request
+  view: 'dated',            // dated | undated
+  gapLabel: 'prominent',    // prominent | subtle
+  densityMode: 'all',       // all | human (filter system events out of density viz)
+  activeTypes: {            // type filter pills
+    'note': true, 'phone': true, 'email': true, 'in-person': true, 'video': true,
+    'award': true, 'submitted-form': true, 'payment': true, 'installment': true, 'system-email': true
+  },
+  search: '',
+  /* Navigator-driven scoping (date range filter from navigator interaction) */
+  scopeRange: null,         // { startKey: 'YYYY-MM', endKey: 'YYYY-MM', label: 'Q3 2024' } or null
+  /* Variant B & D: window position in months from earliest */
+  windowStartMonths: 0,
+  windowSpanMonths: 12,
+  /* Variant C: period preset */
+  periodPreset: 'all'       // all | 1m | 3m | 6m | 12m | 24m
+};
+
+/* ====================================================
+   UTILS
+   ==================================================== */
+function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+function formatDate(iso) {
+  if (!iso) return '';
+  var p = iso.split('-');
+  return p[1] + '/' + p[2] + '/' + p[0];
+}
+function monthKey(iso) {
+  if (!iso) return null;
+  var p = iso.split('-');
+  return p[0] + '-' + p[1];
+}
+function monthLabel(key) {
+  var p = key.split('-');
+  var names = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  return names[parseInt(p[1], 10) - 1] + ' ' + p[0];
+}
+function shortMonthLabel(key) {
+  var p = key.split('-');
+  var names = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return names[parseInt(p[1], 10) - 1] + ' ' + p[0].slice(2);
+}
+function monthsBetween(keyA, keyB) {
+  var a = keyA.split('-'); var b = keyB.split('-');
+  return (parseInt(b[0],10) - parseInt(a[0],10)) * 12 + (parseInt(b[1],10) - parseInt(a[1],10));
+}
+function gapPhrase(months) {
+  if (months < 1) return '';
+  if (months === 1) return '1 month later';
+  if (months < 12) return months + ' months later';
+  var years = Math.floor(months / 12);
+  var rem = months % 12;
+  if (rem === 0) return years === 1 ? '1 year later' : years + ' years later';
+  return years + 'y ' + rem + 'm later';
+}
+function quarterFromMonth(monthIdx) {
+  return Math.floor(monthIdx / 3) + 1;
+}
+function densityClass(count, max, mode) {
+  var prefix = mode === 'human' ? 'density-h-' : 'density-';
+  if (count === 0) return prefix + '0';
+  var pct = count / Math.max(max, 1);
+  if (pct < 0.25) return prefix + '1';
+  if (pct < 0.5)  return prefix + '2';
+  if (pct < 0.75) return prefix + '3';
+  return prefix + '4';
+}
+
+/* ====================================================
+   DATA SHAPING
+   ==================================================== */
+function baseData() {
+  return state.scope === 'org' ? ORG_INTERACTIONS : REQUEST_INTERACTIONS;
+}
+
+function datedData() {
+  var src = baseData();
+  var out = [];
+  for (var i = 0; i < src.length; i++) {
+    if (src[i].date) out.push(src[i]);
+  }
+  return out;
+}
+
+function undatedData() {
+  var src = baseData();
+  var out = [];
+  for (var i = 0; i < src.length; i++) {
+    if (!src[i].date) out.push(src[i]);
+  }
+  return out;
+}
+
+/* Apply pill filters + search to a dated set */
+function applyFilters(items) {
+  var out = [];
+  var q = state.search.toLowerCase();
+  for (var i = 0; i < items.length; i++) {
+    var it = items[i];
+    if (!state.activeTypes[it.type]) continue;
+    if (q && it.title.toLowerCase().indexOf(q) === -1 && it.body.toLowerCase().indexOf(q) === -1) continue;
+    out.push(it);
+  }
+  return out;
+}
+
+/* Apply navigator-driven date range scope */
+function applyScopeRange(items) {
+  if (!state.scopeRange) return items;
+  var out = [];
+  for (var i = 0; i < items.length; i++) {
+    var k = monthKey(items[i].date);
+    if (k >= state.scopeRange.startKey && k <= state.scopeRange.endKey) out.push(items[i]);
+  }
+  return out;
+}
+
+function currentDatedData() {
+  var items = applyFilters(datedData());
+  items = applyScopeRange(items);
+  items.sort(function(a, b) { return a.date < b.date ? -1 : (a.date > b.date ? 1 : 0); });
+  return items;
+}
+
+function currentUndatedData() {
+  /* Filter pills + search still apply, but no date range scope */
+  var items = applyFilters(undatedData());
+  items.sort(function(a, b) {
+    var ac = a.createDate || '';
+    var bc = b.createDate || '';
+    return ac < bc ? -1 : (ac > bc ? 1 : 0);
+  });
+  return items;
+}
+
+/* Build per-month density map across the full dataset (for navigators) */
+function buildMonthCounts(humanOnly) {
+  var src = datedData();
+  var counts = {};
+  for (var i = 0; i < src.length; i++) {
+    var it = src[i];
+    if (humanOnly && it.system) continue;
+    var k = monthKey(it.date);
+    counts[k] = (counts[k] || 0) + 1;
+  }
+  return counts;
+}
+
+/* Date span across the dataset */
+function dataSpan() {
+  var src = datedData();
+  if (src.length === 0) return null;
+  var min = src[0].date, max = src[0].date;
+  for (var i = 1; i < src.length; i++) {
+    if (src[i].date < min) min = src[i].date;
+    if (src[i].date > max) max = src[i].date;
+  }
+  return { min: monthKey(min), max: monthKey(max) };
+}
+
+/* Build full month list inclusive between two month keys */
+function monthsList(startKey, endKey) {
+  var out = [];
+  var sp = startKey.split('-');
+  var ep = endKey.split('-');
+  var y = parseInt(sp[0], 10);
+  var m = parseInt(sp[1], 10);
+  var ey = parseInt(ep[0], 10);
+  var em = parseInt(ep[1], 10);
+  while (y < ey || (y === ey && m <= em)) {
+    out.push(y + '-' + pad2(m));
+    m++;
+    if (m > 12) { m = 1; y++; }
+  }
+  return out;
+}
+
+/* ====================================================
+   SIDEBAR + RECORD HEADER
+   ==================================================== */
+function renderSidebar() {
+  var contact = document.getElementById('sidebar-contact');
+  var items = document.getElementById('sidebar-items');
+  if (state.scope === 'org') {
+    contact.innerHTML =
+      '<div class="ft-sidebar__contact-row"><svg width="14" height="14"><use href="#ic-building"/></svg><span>Cedar Ridge Foundation</span></div>' +
+      '<div class="ft-sidebar__contact-row"><svg width="14" height="14"><use href="#ic-envelope"/></svg><span>contact@cedarridge.org</span></div>' +
+      '<div class="ft-sidebar__contact-row"><svg width="14" height="14"><use href="#ic-phone"/></svg><span>612.724.7457</span></div>';
+    items.innerHTML =
+      sbItem('ic-home', 'Summary', '', false) +
+      sbItem('ic-user', 'Contacts', '', false) +
+      sbItem('ic-dollar', 'Requests', '2', false) +
+      sbItem('ic-file', 'Documents', '', false) +
+      sbItem('ic-shield', 'Compliance', '', false) +
+      sbItem('ic-chat', 'Interactions', String(ORG_INTERACTIONS.length), true);
+  } else {
+    contact.innerHTML =
+      '<div class="ft-sidebar__contact-row"><svg width="14" height="14"><use href="#ic-user"/></svg><span>Aaron Rodgers</span></div>' +
+      '<div class="ft-sidebar__contact-row"><svg width="14" height="14"><use href="#ic-envelope"/></svg><span>a.rodgers@cedarridge.org</span></div>' +
+      '<div class="ft-sidebar__contact-row"><svg width="14" height="14"><use href="#ic-phone"/></svg><span>612.724.7457</span></div>';
+    items.innerHTML =
+      sbItem('ic-home', 'Summary', '', false) +
+      sbItem('ic-user', 'Contact Info', '', false) +
+      sbItem('ic-dollar', 'Request / Award Details', '', false) +
+      sbItem('ic-clock', 'Follow Ups', '2', false) +
+      sbItem('ic-file', 'Documents', '', false) +
+      sbItem('ic-chat', 'Interactions', String(REQUEST_INTERACTIONS.length), true) +
+      sbItem('ic-shield', 'Financials and Compliance', '', false);
+  }
+}
+
+function sbItem(icon, label, count, active) {
+  var countHtml = count ? '<span class="ft-sidebar__count">' + count + '</span>' : '';
+  return '<button class="ft-sidebar__item' + (active ? ' active' : '') + '" onclick="setSidebarActive(this)">' +
+    '<svg width="15" height="15"><use href="#' + icon + '"/></svg>' +
+    '<span class="ft-sidebar__label">' + label + '</span>' +
+    countHtml +
+    '</button>';
+}
+
+function setSidebarActive(el) {
+  var its = document.querySelectorAll('.ft-sidebar__item');
+  for (var i = 0; i < its.length; i++) its[i].classList.remove('active');
+  el.classList.add('active');
+}
+
+function renderRecordHeader() {
+  var title = document.getElementById('record-title');
+  var meta = document.getElementById('record-meta');
+  if (state.scope === 'org') {
+    title.innerHTML = 'Cedar Ridge Foundation <svg width="16" height="16" style="color:#aaa;cursor:pointer"><use href="#ic-pencil"/></svg>';
+    meta.innerHTML =
+      '<span class="org">Environment and Conservation</span>' +
+      '<span class="sep">|</span><span>Active grantee, 2 requests</span>' +
+      '<span class="sep">|</span><span>Total awarded: $105,000</span>';
+  } else {
+    title.innerHTML = 'Urban Greenways Initiative <svg width="16" height="16" style="color:#aaa;cursor:pointer"><use href="#ic-pencil"/></svg>';
+    meta.innerHTML =
+      '<span class="org">Cedar Ridge Foundation</span>' +
+      '<span class="sep">|</span><span>Environment and Conservation</span>' +
+      '<span class="sep">|</span><span>Project Support, $60,000</span>' +
+      '<span class="sep">|</span><span class="ft-badge ft-badge--clear">Closed</span>';
+  }
+}
+
+/* ====================================================
+   FILTER PILLS
+   ==================================================== */
+function renderFilterPills() {
+  var host = document.getElementById('filter-pills');
+  var html = '<span class="ki-filters__label">Filter by type</span>';
+  /* Compute counts on dated set for each type */
+  var counts = {};
+  var datedSet = datedData();
+  for (var i = 0; i < datedSet.length; i++) {
+    counts[datedSet[i].type] = (counts[datedSet[i].type] || 0) + 1;
+  }
+  for (var j = 0; j < TYPE_ORDER.length; j++) {
+    var t = TYPE_ORDER[j];
+    var meta = TYPE_META[t];
+    var cnt = counts[t] || 0;
+    if (cnt === 0) continue;
+    var active = state.activeTypes[t];
+    html += '<button class="ki-pill' + (active ? ' active' : '') + '" data-type="' + t + '" onclick="togglePill(\'' + t + '\')">' +
+      '<svg width="13" height="13"><use href="#' + meta.icon + '"/></svg>' +
+      meta.label +
+      '<span class="ki-pill__count">' + cnt + '</span>' +
+      '</button>';
+  }
+  host.innerHTML = html;
+}
+
+function togglePill(type) {
+  state.activeTypes[type] = !state.activeTypes[type];
+  renderFilterPills();
+  renderNavigator();
+  renderTimeline();
+  renderViewSwitchCounts();
+}
+
+/* ====================================================
+   VIEW SWITCH (Dated / Undated)
+   ==================================================== */
+function renderViewSwitchCounts() {
+  document.getElementById('dated-count').textContent = applyFilters(datedData()).length;
+  document.getElementById('undated-count').textContent = applyFilters(undatedData()).length;
+}
+
+function setView(v) {
+  state.view = v;
+  var btns = document.querySelectorAll('#view-switch button');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].classList.toggle('active', btns[i].getAttribute('data-view') === v);
+  }
+  renderAll();
+}
+
+/* ====================================================
+   SCOPED BANNER
+   ==================================================== */
+function renderScopedBanner() {
+  var host = document.getElementById('scoped-banner');
+  if (!state.scopeRange) {
+    host.style.display = 'none';
+    host.innerHTML = '';
+    return;
+  }
+  host.style.display = '';
+  host.className = 'ki-scoped';
+  host.innerHTML =
+    '<span>Showing interactions in <strong>' + state.scopeRange.label + '</strong> ' +
+    '(' + currentDatedData().length + ' of ' + applyFilters(datedData()).length + ' total)</span>' +
+    '<button onclick="clearScopeRange()">Clear range</button>';
+}
+
+function clearScopeRange() {
+  state.scopeRange = null;
+  renderNavigator();
+  renderScopedBanner();
+  renderTimeline();
+}
+
+/* ====================================================
+   NAVIGATOR — DISPATCH
+   ==================================================== */
+function renderNavigator() {
+  var host = document.getElementById('navigator-host');
+  if (state.view === 'undated') { host.innerHTML = ''; return; }
+  if (state.navigator === 'none') { host.innerHTML = ''; return; }
+  if (state.navigator === 'A') host.innerHTML = renderNavA();
+  else if (state.navigator === 'B') host.innerHTML = renderNavB();
+  else if (state.navigator === 'C') host.innerHTML = renderNavC();
+  else if (state.navigator === 'D') host.innerHTML = renderNavD();
+
+  /* Wire up handlers per variant */
+  if (state.navigator === 'B') wireNavB();
+  if (state.navigator === 'C') wireNavC();
+  if (state.navigator === 'D') wireNavD();
+}
+
+/* ====================================================
+   VARIANT A — GitHub-style density grid (click-to-filter)
+   ==================================================== */
+function renderNavA() {
+  var span = dataSpan();
+  if (!span) return '';
+  var counts = buildMonthCounts(state.densityMode === 'human');
+
+  /* Compute max for density scaling */
+  var maxCount = 0;
+  for (var k in counts) { if (counts[k] > maxCount) maxCount = counts[k]; }
+
+  /* Years from min to max */
+  var startYear = parseInt(span.min.split('-')[0], 10);
+  var endYear = parseInt(span.max.split('-')[0], 10);
+
+  var quickHtml =
+    '<div class="ki-nav-quickrange">' +
+      '<button onclick="navAQuickRange(\'all\')" class="' + (state.scopeRange === null ? 'active' : '') + '">All time</button>' +
+      '<button onclick="navAQuickRange(\'12m\')">Last 12mo</button>' +
+      '<button onclick="navAQuickRange(\'6m\')">Last 6mo</button>' +
+      '<button onclick="navAQuickRange(\'3m\')">Last 3mo</button>' +
+    '</div>';
+
+  var yearsHtml = '<div class="ki-navA__years">';
+  for (var y = endYear; y >= startYear; y--) {
+    yearsHtml += '<div class="ki-navA__year-row">';
+    yearsHtml += '<div class="ki-navA__year-label">' + y + '</div>';
+    yearsHtml += '<div class="ki-navA__quarters">';
+    for (var q = 1; q <= 4; q++) {
+      var qStart = (q - 1) * 3 + 1;
+      var qEnd = q * 3;
+      var qStartKey = y + '-' + pad2(qStart);
+      var qEndKey = y + '-' + pad2(qEnd);
+      var qCount = 0;
+      var monthsHtml = '<div class="ki-navA__months">';
+      for (var m = qStart; m <= qEnd; m++) {
+        var mKey = y + '-' + pad2(m);
+        var c = counts[mKey] || 0;
+        qCount += c;
+        var cls = densityClass(c, maxCount, state.densityMode);
+        var activeM = state.scopeRange &&
+          state.scopeRange.startKey === mKey && state.scopeRange.endKey === mKey;
+        monthsHtml += '<div class="ki-navA__month-cell ' + cls + (activeM ? ' active' : '') +
+          '" onclick="navAClickMonth(\'' + mKey + '\', event); event.stopPropagation();" ' +
+          'title="' + monthLabel(mKey) + ': ' + c + ' interaction' + (c === 1 ? '' : 's') + '"></div>';
+      }
+      monthsHtml += '</div>';
+      var activeQ = state.scopeRange &&
+        state.scopeRange.startKey === qStartKey && state.scopeRange.endKey === qEndKey;
+      yearsHtml += '<div class="ki-navA__quarter' + (activeQ ? ' active' : '') +
+        '" onclick="navAClickQuarter(\'' + qStartKey + '\', \'' + qEndKey + '\', \'Q' + q + ' ' + y + '\')">' +
+        '<div class="ki-navA__quarter-head"><span>Q' + q + '</span><span class="ki-navA__quarter-count">' + qCount + '</span></div>' +
+        monthsHtml +
+        '</div>';
+    }
+    yearsHtml += '</div></div>';
+  }
+  yearsHtml += '</div>';
+
+  var legendHtml =
+    '<div class="ki-navA__legend">' +
+      '<span>Less</span>' +
+      '<div class="ki-navA__legend-cells">' +
+        '<div class="ki-navA__legend-cell ' + (state.densityMode === 'human' ? 'density-h-0' : 'density-0') + '"></div>' +
+        '<div class="ki-navA__legend-cell ' + (state.densityMode === 'human' ? 'density-h-1' : 'density-1') + '"></div>' +
+        '<div class="ki-navA__legend-cell ' + (state.densityMode === 'human' ? 'density-h-2' : 'density-2') + '"></div>' +
+        '<div class="ki-navA__legend-cell ' + (state.densityMode === 'human' ? 'density-h-3' : 'density-3') + '"></div>' +
+        '<div class="ki-navA__legend-cell ' + (state.densityMode === 'human' ? 'density-h-4' : 'density-4') + '"></div>' +
+      '</div>' +
+      '<span>More</span>' +
+      '<div class="ki-navA__legend-mode">' +
+        '<button class="' + (state.densityMode === 'all' ? 'active' : '') + '" onclick="navASetDensityMode(\'all\')">All events</button>' +
+        '<button class="' + (state.densityMode === 'human' ? 'active' : '') + '" onclick="navASetDensityMode(\'human\')">Human only</button>' +
+      '</div>' +
+    '</div>';
+
+  return '<div class="ki-nav-wrap ki-navA">' +
+    '<div class="ki-nav-header">' +
+      '<div>' +
+        '<div class="ki-nav-title">Activity by quarter</div>' +
+        '<div class="ki-nav-subtitle">Click a month or quarter to filter the timeline below</div>' +
+      '</div>' +
+      quickHtml +
+    '</div>' +
+    yearsHtml +
+    legendHtml +
+    '</div>';
+}
+
+function navAClickMonth(mKey, ev) {
+  state.scopeRange = { startKey: mKey, endKey: mKey, label: monthLabel(mKey) };
+  renderNavigator();
+  renderScopedBanner();
+  renderTimeline();
+}
+function navAClickQuarter(startKey, endKey, label) {
+  state.scopeRange = { startKey: startKey, endKey: endKey, label: label };
+  renderNavigator();
+  renderScopedBanner();
+  renderTimeline();
+}
+function navAQuickRange(range) {
+  if (range === 'all') { state.scopeRange = null; }
+  else {
+    var span = dataSpan();
+    var months = parseInt(range, 10);
+    var endKey = span.max;
+    /* Compute startKey by walking back N months */
+    var p = endKey.split('-');
+    var y = parseInt(p[0], 10), m = parseInt(p[1], 10);
+    for (var i = 0; i < months - 1; i++) {
+      m--;
+      if (m < 1) { m = 12; y--; }
+    }
+    var startKey = y + '-' + pad2(m);
+    state.scopeRange = { startKey: startKey, endKey: endKey, label: 'Last ' + months + ' months' };
+  }
+  renderNavigator();
+  renderScopedBanner();
+  renderTimeline();
+}
+function navASetDensityMode(mode) {
+  state.densityMode = mode;
+  renderNavigator();
+}
+
+/* ====================================================
+   VARIANT B — GitHub density as draggable scrubber (HYBRID)
+   ==================================================== */
+function renderNavB() {
+  var span = dataSpan();
+  if (!span) return '';
+  var months = monthsList(span.min, span.max);
+  var counts = buildMonthCounts(state.densityMode === 'human');
+  var maxCount = 0;
+  for (var k in counts) { if (counts[k] > maxCount) maxCount = counts[k]; }
+
+  /* Strip: one column per month */
+  var stripHtml = '<div class="ki-navB__strip" id="navB-strip" style="grid-template-columns: repeat(' + months.length + ', 1fr);">';
+  for (var i = 0; i < months.length; i++) {
+    var c = counts[months[i]] || 0;
+    var cls = densityClass(c, maxCount, state.densityMode);
+    stripHtml += '<div class="ki-navB__cell ' + cls + '" data-month="' + months[i] + '" title="' + monthLabel(months[i]) + ': ' + c + '"></div>';
+  }
+  stripHtml += '</div>';
+
+  /* Year labels */
+  var yearLabels = [];
+  var firstYear = months[0].split('-')[0];
+  var lastYear = months[months.length - 1].split('-')[0];
+  yearLabels.push(firstYear);
+  if (lastYear !== firstYear) {
+    var midYear = parseInt(firstYear, 10) + Math.floor((parseInt(lastYear, 10) - parseInt(firstYear, 10)) / 2);
+    yearLabels.push(midYear);
+    yearLabels.push(lastYear);
+  }
+
+  var yearLabelsHtml = '<div class="ki-navB__year-labels">';
+  for (var yi = 0; yi < yearLabels.length; yi++) {
+    yearLabelsHtml += '<span>' + yearLabels[yi] + '</span>';
+  }
+  yearLabelsHtml += '</div>';
+
+  /* Window position (% of strip) */
+  var totalMonths = months.length;
+  var startPct = (state.windowStartMonths / totalMonths) * 100;
+  var widthPct = (state.windowSpanMonths / totalMonths) * 100;
+
+  var rangeStartIdx = Math.max(0, Math.min(totalMonths - 1, state.windowStartMonths));
+  var rangeEndIdx = Math.max(0, Math.min(totalMonths - 1, state.windowStartMonths + state.windowSpanMonths - 1));
+  var startKey = months[rangeStartIdx];
+  var endKey = months[rangeEndIdx];
+
+  var quickHtml =
+    '<div class="ki-nav-quickrange">' +
+      '<button onclick="navBQuickRange(\'all\')">All time</button>' +
+      '<button onclick="navBQuickRange(12)">Last 12mo</button>' +
+      '<button onclick="navBQuickRange(6)">Last 6mo</button>' +
+      '<button onclick="navBQuickRange(3)">Last 3mo</button>' +
+    '</div>';
+
+  return '<div class="ki-nav-wrap ki-navB">' +
+    '<div class="ki-nav-header">' +
+      '<div>' +
+        '<div class="ki-nav-title">Drag to scope the timeline</div>' +
+        '<div class="ki-nav-subtitle">Drag the window to pan, or pull the edges to widen or narrow the range</div>' +
+      '</div>' +
+      quickHtml +
+    '</div>' +
+    '<div style="position:relative">' +
+      stripHtml +
+      '<div class="ki-navB__window" id="navB-window" style="left: ' + startPct + '%; width: ' + widthPct + '%;">' +
+        '<div class="ki-navB__handle ki-navB__handle--left" data-handle="left"></div>' +
+        '<div class="ki-navB__handle ki-navB__handle--right" data-handle="right"></div>' +
+      '</div>' +
+    '</div>' +
+    yearLabelsHtml +
+    '<div class="ki-navB__readout">Showing <strong>' + monthLabel(startKey) + '</strong> through <strong>' + monthLabel(endKey) + '</strong></div>' +
+  '</div>';
+}
+
+var navBDrag = null;
+function wireNavB() {
+  var win = document.getElementById('navB-window');
+  var strip = document.getElementById('navB-strip');
+  if (!win || !strip) return;
+
+  function onDown(e, mode) {
+    e.preventDefault();
+    e.stopPropagation();
+    var rect = strip.getBoundingClientRect();
+    var span = dataSpan();
+    var months = monthsList(span.min, span.max);
+    navBDrag = {
+      mode: mode,
+      startX: e.clientX,
+      stripLeft: rect.left,
+      stripWidth: rect.width,
+      totalMonths: months.length,
+      origStart: state.windowStartMonths,
+      origSpan: state.windowSpanMonths
+    };
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  }
+  function onMove(e) {
+    if (!navBDrag) return;
+    var dxPx = e.clientX - navBDrag.startX;
+    var monthsPerPx = navBDrag.totalMonths / navBDrag.stripWidth;
+    var dxMonths = Math.round(dxPx * monthsPerPx);
+    if (navBDrag.mode === 'pan') {
+      var newStart = navBDrag.origStart + dxMonths;
+      newStart = Math.max(0, Math.min(navBDrag.totalMonths - state.windowSpanMonths, newStart));
+      state.windowStartMonths = newStart;
+    } else if (navBDrag.mode === 'left') {
+      var newStart2 = navBDrag.origStart + dxMonths;
+      newStart2 = Math.max(0, Math.min(navBDrag.origStart + navBDrag.origSpan - 1, newStart2));
+      var newSpan = navBDrag.origSpan + (navBDrag.origStart - newStart2);
+      state.windowStartMonths = newStart2;
+      state.windowSpanMonths = newSpan;
+    } else if (navBDrag.mode === 'right') {
+      var newSpan2 = navBDrag.origSpan + dxMonths;
+      newSpan2 = Math.max(1, Math.min(navBDrag.totalMonths - state.windowStartMonths, newSpan2));
+      state.windowSpanMonths = newSpan2;
+    }
+    applyNavBScope();
+    renderNavigator();
+    renderScopedBanner();
+    renderTimeline();
+  }
+  function onUp() {
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+    navBDrag = null;
+  }
+
+  /* Window pan */
+  win.addEventListener('mousedown', function(e) {
+    var t = e.target;
+    if (t && t.getAttribute && t.getAttribute('data-handle')) return;
+    onDown(e, 'pan');
+  });
+  /* Handles */
+  var handles = win.querySelectorAll('[data-handle]');
+  for (var i = 0; i < handles.length; i++) {
+    (function(h) {
+      h.addEventListener('mousedown', function(e) {
+        onDown(e, h.getAttribute('data-handle'));
+      });
+    })(handles[i]);
+  }
+}
+
+function applyNavBScope() {
+  var span = dataSpan();
+  if (!span) return;
+  var months = monthsList(span.min, span.max);
+  var startIdx = Math.max(0, Math.min(months.length - 1, state.windowStartMonths));
+  var endIdx = Math.max(0, Math.min(months.length - 1, state.windowStartMonths + state.windowSpanMonths - 1));
+  state.scopeRange = {
+    startKey: months[startIdx],
+    endKey: months[endIdx],
+    label: shortMonthLabel(months[startIdx]) + ' to ' + shortMonthLabel(months[endIdx])
+  };
+}
+
+function navBQuickRange(range) {
+  var span = dataSpan();
+  var months = monthsList(span.min, span.max);
+  if (range === 'all') {
+    state.windowStartMonths = 0;
+    state.windowSpanMonths = months.length;
+  } else {
+    var n = Math.min(range, months.length);
+    state.windowStartMonths = months.length - n;
+    state.windowSpanMonths = n;
+  }
+  applyNavBScope();
+  renderNavigator();
+  renderScopedBanner();
+  renderTimeline();
+}
+
+/* ====================================================
+   VARIANT C — Datadog-style slim density bar + Period dropdown
+   ==================================================== */
+function renderNavC() {
+  var span = dataSpan();
+  if (!span) return '';
+  var months = monthsList(span.min, span.max);
+  var counts = buildMonthCounts(state.densityMode === 'human');
+  var maxCount = 0;
+  for (var k in counts) { if (counts[k] > maxCount) maxCount = counts[k]; }
+
+  var barHtml = '<div class="ki-navC__bar" style="grid-template-columns: repeat(' + months.length + ', 1fr);">';
+  for (var i = 0; i < months.length; i++) {
+    var c = counts[months[i]] || 0;
+    var cls = densityClass(c, maxCount, state.densityMode);
+    var active = state.scopeRange && months[i] >= state.scopeRange.startKey && months[i] <= state.scopeRange.endKey;
+    barHtml += '<div class="ki-navC__cell ' + cls + (active ? ' active' : '') + '" data-month="' + months[i] + '" onclick="navCClickMonth(\'' + months[i] + '\')" title="' + monthLabel(months[i]) + ': ' + c + '"></div>';
+  }
+  barHtml += '</div>';
+
+  var periodLabel = 'All time';
+  if (state.periodPreset === '1m') periodLabel = 'Last month';
+  else if (state.periodPreset === '3m') periodLabel = 'Last 3 months';
+  else if (state.periodPreset === '6m') periodLabel = 'Last 6 months';
+  else if (state.periodPreset === '12m') periodLabel = 'Last 12 months';
+  else if (state.periodPreset === '24m') periodLabel = 'Last 24 months';
+
+  var periodMenu =
+    '<div class="ki-navC__period-menu" id="navC-menu">' +
+      '<button class="' + (state.periodPreset === 'all' ? 'active' : '') + '" onclick="navCSetPeriod(\'all\')">All time</button>' +
+      '<button class="' + (state.periodPreset === '1m' ? 'active' : '') + '" onclick="navCSetPeriod(\'1m\')">Last month</button>' +
+      '<button class="' + (state.periodPreset === '3m' ? 'active' : '') + '" onclick="navCSetPeriod(\'3m\')">Last 3 months</button>' +
+      '<button class="' + (state.periodPreset === '6m' ? 'active' : '') + '" onclick="navCSetPeriod(\'6m\')">Last 6 months</button>' +
+      '<button class="' + (state.periodPreset === '12m' ? 'active' : '') + '" onclick="navCSetPeriod(\'12m\')">Last 12 months</button>' +
+      '<button class="' + (state.periodPreset === '24m' ? 'active' : '') + '" onclick="navCSetPeriod(\'24m\')">Last 24 months</button>' +
+    '</div>';
+
+  return '<div class="ki-nav-wrap">' +
+    '<div class="ki-nav-header">' +
+      '<div>' +
+        '<div class="ki-nav-title">Activity over time</div>' +
+        '<div class="ki-nav-subtitle">Click a bar to scope to a single month, or use the period selector</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="ki-navC">' +
+      barHtml +
+      '<div class="ki-navC__period" onclick="navCToggleMenu(event)">' +
+        '<span>Period: ' + periodLabel + '</span>' +
+        '<svg width="10" height="10"><use href="#ic-chevron-down"/></svg>' +
+        periodMenu +
+      '</div>' +
+    '</div>' +
+    '<div class="ki-navC__axis"><span>' + shortMonthLabel(months[0]) + '</span><span>' + shortMonthLabel(months[months.length - 1]) + '</span></div>' +
+  '</div>';
+}
+
+function wireNavC() {
+  /* Close menu on outside click */
+  document.addEventListener('click', navCDocClick);
+}
+function navCDocClick(e) {
+  var menu = document.getElementById('navC-menu');
+  if (!menu) return;
+  var period = e.target.closest && e.target.closest('.ki-navC__period');
+  if (!period) menu.classList.remove('open');
+}
+
+function navCToggleMenu(e) {
+  e.stopPropagation();
+  var menu = document.getElementById('navC-menu');
+  if (menu) menu.classList.toggle('open');
+}
+
+function navCClickMonth(mKey) {
+  state.scopeRange = { startKey: mKey, endKey: mKey, label: monthLabel(mKey) };
+  state.periodPreset = 'all';
+  renderNavigator();
+  renderScopedBanner();
+  renderTimeline();
+}
+
+function navCSetPeriod(p) {
+  state.periodPreset = p;
+  if (p === 'all') {
+    state.scopeRange = null;
+  } else {
+    var months = parseInt(p, 10);
+    var span = dataSpan();
+    var endKey = span.max;
+    var pp = endKey.split('-');
+    var y = parseInt(pp[0], 10), m = parseInt(pp[1], 10);
+    for (var i = 0; i < months - 1; i++) {
+      m--;
+      if (m < 1) { m = 12; y--; }
+    }
+    var startKey = y + '-' + pad2(m);
+    state.scopeRange = { startKey: startKey, endKey: endKey, label: 'Last ' + months + ' months' };
+  }
+  var menu = document.getElementById('navC-menu');
+  if (menu) menu.classList.remove('open');
+  renderNavigator();
+  renderScopedBanner();
+  renderTimeline();
+}
+
+/* ====================================================
+   VARIANT D — Google Finance windowed scrubber
+   ==================================================== */
+function renderNavD() {
+  var span = dataSpan();
+  if (!span) return '';
+  var months = monthsList(span.min, span.max);
+  var counts = buildMonthCounts(state.densityMode === 'human');
+  var maxCount = 0;
+  for (var k in counts) { if (counts[k] > maxCount) maxCount = counts[k]; }
+
+  /* Top "chart" — a bar chart of monthly volume, scoped to the WINDOW */
+  var startIdx = Math.max(0, Math.min(months.length - 1, state.windowStartMonths));
+  var endIdx = Math.max(0, Math.min(months.length - 1, state.windowStartMonths + state.windowSpanMonths - 1));
+  var visMonths = months.slice(startIdx, endIdx + 1);
+
+  var chartHtml = '<div class="ki-navD__chart">';
+  for (var i = 0; i < visMonths.length; i++) {
+    var c = counts[visMonths[i]] || 0;
+    var pct = maxCount > 0 ? (c / maxCount) * 100 : 0;
+    chartHtml += '<div class="ki-navD__bar" style="height: ' + Math.max(pct, 4) + '%" title="' + monthLabel(visMonths[i]) + ': ' + c + '"></div>';
+  }
+  chartHtml += '</div>';
+
+  /* Bottom strip — full timeline density */
+  var stripHtml = '<div class="ki-navD__strip" id="navD-strip" style="grid-template-columns: repeat(' + months.length + ', 1fr);">';
+  for (var j = 0; j < months.length; j++) {
+    var cc = counts[months[j]] || 0;
+    var ccls = densityClass(cc, maxCount, state.densityMode);
+    stripHtml += '<div class="ki-navD__strip-cell ' + ccls + '"></div>';
+  }
+  stripHtml += '</div>';
+
+  var totalMonths = months.length;
+  var startPct = (state.windowStartMonths / totalMonths) * 100;
+  var widthPct = (state.windowSpanMonths / totalMonths) * 100;
+
+  var startKey = months[startIdx];
+  var endKey = months[endIdx];
+
+  var quickHtml =
+    '<div class="ki-nav-quickrange">' +
+      '<button onclick="navDQuickRange(\'all\')">All time</button>' +
+      '<button onclick="navDQuickRange(24)">Last 24mo</button>' +
+      '<button onclick="navDQuickRange(12)">Last 12mo</button>' +
+      '<button onclick="navDQuickRange(6)">Last 6mo</button>' +
+      '<button onclick="navDQuickRange(3)">Last 3mo</button>' +
+    '</div>';
+
+  return '<div class="ki-nav-wrap ki-navD">' +
+    '<div class="ki-nav-header">' +
+      '<div>' +
+        '<div class="ki-nav-title">Volume over time</div>' +
+        '<div class="ki-nav-subtitle">Drag the window below to scope the chart and the timeline</div>' +
+      '</div>' +
+      quickHtml +
+    '</div>' +
+    chartHtml +
+    '<div style="position:relative">' +
+      stripHtml +
+      '<div class="ki-navD__window" id="navD-window" style="left: ' + startPct + '%; width: ' + widthPct + '%;">' +
+        '<div class="ki-navD__handle ki-navD__handle--left" data-handle="left"></div>' +
+        '<div class="ki-navD__handle ki-navD__handle--right" data-handle="right"></div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="ki-navD__axis"><span>' + shortMonthLabel(months[0]) + '</span><span>' + shortMonthLabel(months[months.length - 1]) + '</span></div>' +
+    '<div class="ki-navD__readout">Window: <strong>' + monthLabel(startKey) + '</strong> through <strong>' + monthLabel(endKey) + '</strong></div>' +
+  '</div>';
+}
+
+var navDDrag = null;
+function wireNavD() {
+  var win = document.getElementById('navD-window');
+  var strip = document.getElementById('navD-strip');
+  if (!win || !strip) return;
+
+  function onDown(e, mode) {
+    e.preventDefault();
+    e.stopPropagation();
+    var rect = strip.getBoundingClientRect();
+    var span = dataSpan();
+    var months = monthsList(span.min, span.max);
+    navDDrag = {
+      mode: mode,
+      startX: e.clientX,
+      stripLeft: rect.left,
+      stripWidth: rect.width,
+      totalMonths: months.length,
+      origStart: state.windowStartMonths,
+      origSpan: state.windowSpanMonths
+    };
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  }
+  function onMove(e) {
+    if (!navDDrag) return;
+    var dxPx = e.clientX - navDDrag.startX;
+    var monthsPerPx = navDDrag.totalMonths / navDDrag.stripWidth;
+    var dxMonths = Math.round(dxPx * monthsPerPx);
+    if (navDDrag.mode === 'pan') {
+      var newStart = navDDrag.origStart + dxMonths;
+      newStart = Math.max(0, Math.min(navDDrag.totalMonths - state.windowSpanMonths, newStart));
+      state.windowStartMonths = newStart;
+    } else if (navDDrag.mode === 'left') {
+      var newStart2 = navDDrag.origStart + dxMonths;
+      newStart2 = Math.max(0, Math.min(navDDrag.origStart + navDDrag.origSpan - 1, newStart2));
+      var newSpan = navDDrag.origSpan + (navDDrag.origStart - newStart2);
+      state.windowStartMonths = newStart2;
+      state.windowSpanMonths = newSpan;
+    } else if (navDDrag.mode === 'right') {
+      var newSpan2 = navDDrag.origSpan + dxMonths;
+      newSpan2 = Math.max(1, Math.min(navDDrag.totalMonths - state.windowStartMonths, newSpan2));
+      state.windowSpanMonths = newSpan2;
+    }
+    applyNavDScope();
+    renderNavigator();
+    renderScopedBanner();
+    renderTimeline();
+  }
+  function onUp() {
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+    navDDrag = null;
+  }
+
+  win.addEventListener('mousedown', function(e) {
+    var t = e.target;
+    if (t && t.getAttribute && t.getAttribute('data-handle')) return;
+    onDown(e, 'pan');
+  });
+  var handles = win.querySelectorAll('[data-handle]');
+  for (var i = 0; i < handles.length; i++) {
+    (function(h) {
+      h.addEventListener('mousedown', function(e) {
+        onDown(e, h.getAttribute('data-handle'));
+      });
+    })(handles[i]);
+  }
+}
+
+function applyNavDScope() {
+  var span = dataSpan();
+  if (!span) return;
+  var months = monthsList(span.min, span.max);
+  var startIdx = Math.max(0, Math.min(months.length - 1, state.windowStartMonths));
+  var endIdx = Math.max(0, Math.min(months.length - 1, state.windowStartMonths + state.windowSpanMonths - 1));
+  state.scopeRange = {
+    startKey: months[startIdx],
+    endKey: months[endIdx],
+    label: shortMonthLabel(months[startIdx]) + ' to ' + shortMonthLabel(months[endIdx])
+  };
+}
+
+function navDQuickRange(range) {
+  var span = dataSpan();
+  var months = monthsList(span.min, span.max);
+  if (range === 'all') {
+    state.windowStartMonths = 0;
+    state.windowSpanMonths = months.length;
+  } else {
+    var n = Math.min(range, months.length);
+    state.windowStartMonths = months.length - n;
+    state.windowSpanMonths = n;
+  }
+  applyNavDScope();
+  renderNavigator();
+  renderScopedBanner();
+  renderTimeline();
+}
+
+/* ====================================================
+   CARD RENDERING
+   ==================================================== */
+function cardHtml(it, opts) {
+  opts = opts || {};
+  var meta = TYPE_META[it.type];
+  var pinClass = it.pinned ? ' is-pinned' : '';
+  var sysClass = it.system ? ' is-system' : '';
+  var dateStr = it.date ? formatDate(it.date) : '';
+  var orgRequest = (state.scope === 'org' && it.request) ? '<span class="req">' + it.request + '</span><span class="sep">|</span>' : '';
+  var dateInfo = '';
+  if (it.date) {
+    dateInfo = '<span>' + dateStr + '</span><span class="sep">|</span><span>' + it.author + '</span>';
+  } else {
+    var cd = it.createDate ? formatDate(it.createDate) : 'unknown';
+    dateInfo = '<span class="ki-card__date-warn">' +
+      '<svg width="11" height="11"><use href="#ic-help"/></svg>Date not set' +
+      '</span><span class="sep">|</span><span>logged ' + cd + '</span><span class="sep">|</span><span>' + it.author + '</span>';
+  }
+  var pinIcon = it.pinned
+    ? '<svg width="14" height="14" class="pinned"><use href="#ic-pin"/></svg>'
+    : '<svg width="14" height="14"><use href="#ic-pin"/></svg>';
+  return '<div class="ki-card' + pinClass + sysClass + '">' +
+    '<div class="ki-card__head">' +
+      '<div class="ki-card__title-wrap">' +
+        '<svg width="16" height="16"><use href="#' + meta.icon + '"/></svg>' +
+        '<div class="ki-card__title">' + it.title + '</div>' +
+      '</div>' +
+      '<div class="ki-card__actions">' + pinIcon + '</div>' +
+    '</div>' +
+    '<div class="ki-card__meta">' + orgRequest + dateInfo + '</div>' +
+    '<div class="ki-card__body">' + it.body + '</div>' +
+  '</div>';
+}
+
+/* ====================================================
+   VERTICAL TIMELINE
+   ==================================================== */
+function renderVertical(data) {
+  if (data.length === 0) {
+    return '<div class="ki-empty">' +
+      '<div class="ki-empty__title">No interactions match the current filters.</div>' +
+      'Try clearing the date range, search, or type filters above.' +
+      '</div>';
+  }
+  var gapClass = state.gapLabel === 'subtle' ? ' gap-subtle' : '';
+  var html = '<div class="ki-vert' + gapClass + '"><div class="ki-vert__rail">';
+  var lastKey = null;
+  for (var i = 0; i < data.length; i++) {
+    var it = data[i];
+    var k = monthKey(it.date);
+    if (k !== lastKey) {
+      if (lastKey !== null) {
+        var gapMonths = monthsBetween(lastKey, k);
+        var phrase = gapPhrase(gapMonths);
+        if (phrase) {
+          html += '<div class="ki-vert__gap">' +
+            '<div class="ki-vert__gap-dot"></div>' +
+            '<div class="ki-vert__gap-label">' + phrase + '</div>' +
+          '</div>';
+        }
+      }
+      html += '<div class="ki-vert__month">' +
+        '<svg width="13" height="13" style="color:var(--primary)"><use href="#ic-calendar"/></svg>' +
+        monthLabel(k) +
+        '</div>';
+      lastKey = k;
+    }
+    var dotCls = it.system ? ' ki-vert__dot--system' : '';
+    html += '<div class="ki-vert__item"><div class="ki-vert__dot' + dotCls + '"></div>' + cardHtml(it) + '</div>';
+  }
+  html += '</div></div>';
+  return html;
+}
+
+/* ====================================================
+   UNDATED VIEW
+   ==================================================== */
+function renderUndated() {
+  var data = currentUndatedData();
+  var info = '<div class="ki-undated-info">' +
+    '<svg width="16" height="16"><use href="#ic-info"/></svg>' +
+    '<div><strong>These interactions don\'t have a "happened on" date.</strong> ' +
+    'They include historical comments imported without dates and interactions where the date field was skipped. ' +
+    'They\'re shown by their logged date as a secondary signal — not as a substitute. ' +
+    'You can edit any of these to add the actual interaction date.</div>' +
+  '</div>';
+  if (data.length === 0) {
+    return info + '<div class="ki-empty">' +
+      '<div class="ki-empty__title">No undated interactions.</div>' +
+      'Every interaction in this view has a date set.' +
+      '</div>';
+  }
+  /* Render as a simple chronological-by-create-date list, no gaps, no months */
+  var html = info + '<div class="ki-vert"><div class="ki-vert__rail">';
+  for (var i = 0; i < data.length; i++) {
+    html += '<div class="ki-vert__item"><div class="ki-vert__dot ki-vert__dot--system"></div>' + cardHtml(data[i]) + '</div>';
+  }
+  html += '</div></div>';
+  return html;
+}
+
+/* ====================================================
+   TIMELINE DISPATCH
+   ==================================================== */
+function renderTimeline() {
+  var host = document.getElementById('timeline');
+  if (state.view === 'undated') {
+    host.innerHTML = renderUndated();
+    return;
+  }
+  host.innerHTML = renderVertical(currentDatedData());
+}
+
+/* ====================================================
+   RENDER ALL
+   ==================================================== */
+function renderAll() {
+  renderSidebar();
+  renderRecordHeader();
+  renderFilterPills();
+  renderViewSwitchCounts();
+  renderNavigator();
+  renderScopedBanner();
+  renderTimeline();
+}
+
+/* ====================================================
+   SEARCH + JUMP-TO-TODAY + VIEW SWITCH
+   ==================================================== */
+document.getElementById('search-input').addEventListener('input', function(e) {
+  state.search = e.target.value;
+  renderViewSwitchCounts();
+  renderNavigator();
+  renderTimeline();
+});
+
+document.getElementById('jump-today').addEventListener('click', function() {
+  var host = document.getElementById('timeline');
+  host.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+(function() {
+  var btns = document.querySelectorAll('#view-switch button');
+  for (var i = 0; i < btns.length; i++) {
+    (function(b) {
+      b.addEventListener('click', function() { setView(b.getAttribute('data-view')); });
+    })(btns[i]);
+  }
+})();
+
+/* ====================================================
+   INIT WINDOW DEFAULTS (for B and D)
+   ==================================================== */
+(function initWindow() {
+  var span = dataSpan();
+  if (!span) return;
+  var months = monthsList(span.min, span.max);
+  /* Default window: last 12 months */
+  state.windowSpanMonths = Math.min(12, months.length);
+  state.windowStartMonths = Math.max(0, months.length - state.windowSpanMonths);
+})();
+
+/* ====================================================
+   PROTO CONTROLS — inlined
+   ==================================================== */
+var ftProto = (function() {
+  var sections = [];
+  var config = { startOpen: true, title: 'Prototype Controls — v2' };
+
+  function addSection(s) { sections.push(s); }
+
+  function buildPanel() {
+    var panel = document.createElement('div');
+    panel.className = 'ft-panel'; panel.id = 'ft-proto-panel';
+
+    var header = document.createElement('div');
+    header.className = 'ft-panel__header';
+    header.innerHTML = '<span class="ft-panel__title">' + config.title + '</span>' +
+      '<button class="ft-panel__toggle-btn" id="ft-proto-toggle-label">' + (config.startOpen ? 'Hide' : 'Show') + '</button>';
+    header.onclick = togglePanel;
+    panel.appendChild(header);
+
+    var body = document.createElement('div');
+    body.className = 'ft-panel__body' + (config.startOpen ? ' open' : '');
+    body.id = 'ft-proto-body';
+
+    for (var i = 0; i < sections.length; i++) {
+      var s = sections[i];
+      var sec = document.createElement('div'); sec.className = 'ft-panel__section';
+      var label = document.createElement('div'); label.className = 'ft-panel__section-label';
+      label.innerHTML = s.label + (s.cost ? '<span class="ft-panel__cost ft-panel__cost--' + s.cost + '">' + s.costLabel + '</span>' : '');
+      sec.appendChild(label);
+      var row = document.createElement('div'); row.className = 'ft-panel__row';
+
+      for (var j = 0; j < s.options.length; j++) {
+        var opt = s.options[j];
+        var btn = document.createElement('button');
+        btn.className = 'ft-panel__btn' + (opt.active ? ' active' : '');
+        btn.innerHTML = opt.label + (opt.cost ? '<span class="ft-panel__cost ft-panel__cost--' + opt.cost + '" style="margin-left:4px">' + opt.costLabel + '</span>' : '');
+        btn.setAttribute('data-section', s.id);
+        btn.setAttribute('data-value', opt.value);
+        btn.onclick = (function(sid, val, oc) {
+          return function() {
+            var bs = document.querySelectorAll('.ft-panel__btn[data-section="' + sid + '"]');
+            for (var k = 0; k < bs.length; k++) bs[k].classList.remove('active');
+            this.classList.add('active');
+            if (oc) oc(val);
+          };
+        })(s.id, opt.value, s.onChange);
+        row.appendChild(btn);
+      }
+      sec.appendChild(row);
+      if (s.note) {
+        var note = document.createElement('div');
+        note.className = 'ft-panel__note';
+        note.textContent = s.note;
+        sec.appendChild(note);
+      }
+      body.appendChild(sec);
+    }
+
+    var reset = document.createElement('button');
+    reset.className = 'ft-panel__reset'; reset.textContent = 'Reset all to defaults';
+    reset.onclick = resetAll;
+    body.appendChild(reset);
+
+    panel.appendChild(body);
+    document.body.appendChild(panel);
+  }
+
+  function togglePanel() {
+    var body = document.getElementById('ft-proto-body');
+    var lbl = document.getElementById('ft-proto-toggle-label');
+    var open = body.classList.toggle('open');
+    lbl.textContent = open ? 'Hide' : 'Show';
+  }
+
+  function resetAll() {
+    for (var i = 0; i < sections.length; i++) {
+      var s = sections[i];
+      var bs = document.querySelectorAll('.ft-panel__btn[data-section="' + s.id + '"]');
+      for (var j = 0; j < bs.length; j++) {
+        var isDefault = s.options[j] && s.options[j].active;
+        bs[j].classList.toggle('active', !!isDefault);
+      }
+      for (var k = 0; k < s.options.length; k++) {
+        if (s.options[k].active && s.onChange) { s.onChange(s.options[k].value); break; }
+      }
+    }
+  }
+
+  function init() { buildPanel(); }
+  return { addSection: addSection, init: init, config: config, resetAll: resetAll };
+})();
+
+/* ====================================================
+   WIRE UP CONTROLS
+   ==================================================== */
+ftProto.addSection({
+  label: 'Navigator variant',
+  id: 'navigator',
+  options: [
+    { label: 'A', value: 'A', active: true,  cost: 'low',  costLabel: 'low' },
+    { label: 'B', value: 'B', cost: 'med',  costLabel: 'med' },
+    { label: 'C', value: 'C', cost: 'low',  costLabel: 'low' },
+    { label: 'D', value: 'D', cost: 'high', costLabel: 'high' },
+    { label: 'None', value: 'none' }
+  ],
+  onChange: function(v) {
+    state.navigator = v;
+    state.scopeRange = null;
+    /* Reset window for B/D */
+    if (v === 'B' || v === 'D') {
+      var span = dataSpan(); var months = monthsList(span.min, span.max);
+      state.windowSpanMonths = Math.min(12, months.length);
+      state.windowStartMonths = Math.max(0, months.length - state.windowSpanMonths);
+      applyNavBScope();
+    }
+    renderAll();
+  },
+  note: 'A: GitHub density grid, click-to-filter (lead). B: Density grid as draggable scrubber (hybrid). C: Datadog-style density bar + period dropdown. D: Google Finance windowed scrubber.'
+});
+
+ftProto.addSection({
+  label: 'Scope',
+  id: 'scope',
+  options: [
+    { label: 'Org level', value: 'org', active: true },
+    { label: 'Request level', value: 'request' }
+  ],
+  onChange: function(v) { state.scope = v; state.scopeRange = null; renderAll(); }
+});
+
+ftProto.addSection({
+  label: 'Gap label prominence',
+  id: 'gap',
+  options: [
+    { label: 'Prominent', value: 'prominent', active: true },
+    { label: 'Subtle', value: 'subtle' }
+  ],
+  onChange: function(v) { state.gapLabel = v; renderTimeline(); },
+  note: 'Pending CSM/sales input on whether time gaps are a real customer need.'
+});
+
+ftProto.addSection({
+  label: 'Density: count system events?',
+  id: 'density-mode',
+  options: [
+    { label: 'All events', value: 'all', active: true },
+    { label: 'Human only', value: 'human' }
+  ],
+  onChange: function(v) { state.densityMode = v; renderNavigator(); },
+  note: 'Human-only excludes system emails so density reflects real engagement.'
+});
+
+/* ====================================================
+   GO
+   ==================================================== */
+renderAll();
+ftProto.init();
+</script>
+</body>
+</html>
