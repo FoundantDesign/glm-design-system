@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Key Interactions Timeline — Prototype v1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css">
+<style>
+:root {
+  --font-body: Roboto, sans-serif;
+  --font-heading: Roboto, sans-serif;
+  --app-bg: #F5F5F5;
+  --surface: #FFFFFF;
+  --primary: #2D3B4A;
+  --primary-hover: #424F5C;
+  --primary-pressed: #57626E;
+  --outline-hover: #EAEAED;
+  --border-color: #E0E0E0;
+  --border: 1px solid #E0E0E0;
+  --radius: 6px;
+  --form-radius: 4px;
+  --pill: 999px;
+  --sidebar-active: #D5E2FA;
+  --sidebar-hover: #F5F5F5;
+  --link: #1B76D2;
+  --gap: 16px;
+  --nav-height: 55px;
+  --sidebar-width: 250px;
+  --neutral-30: #616161;
+  --neutral-40: #757575;
+  --neutral-60: #E0E0E0;
+  --neutral-70: #EEEEEE;
+  --neutral-80: #F5F5F5;
+  --neutral-90: #FAFAFA;
+  --state-dark-hover: #424F5C;
+  --state-light-hover: #EAEAED;
+  --success-0: #67CF9D; --success-50: #E1F5EB;
+  --danger-0: #BD3B39;  --danger-50: #FCDDDD;
+  --warning-0: #F4C862; --warning-50: #FFF4D1;
+  --info-0: #536E8A;    --info-50: #D5E2FA;
+  --mdb-primary: #2D3B4A;
+  --mdb-body-bg: #F5F5F5;
+  --mdb-body-color: #2D3B4A;
+  --mdb-border-color: #E0E0E0;
+  --mdb-border-radius: 6px;
+  --mdb-border-radius-pill: 999px;
+  --mdb-font-sans-serif: Roboto, sans-serif;
+  --mdb-link-color: #1B76D2;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); font-size: 16px; background: var(--app-bg); color: var(--primary); }
+h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); font-weight: 500; color: var(--primary); }
+a { color: var(--link); text-decoration: none; }
+svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
+
+/* NAVBAR */
+.ft-navbar {
+  background: var(--surface); border-bottom: var(--border);
+  height: var(--nav-height); padding: 0 20px;
+  display: flex; align-items: center; gap: 18px;
+  position: sticky; top: 0; z-index: 200;
+}
+.ft-navbar__logo {
+  width: 36px; height: 36px; background: var(--primary);
+  border-radius: var(--radius); display: flex; align-items: center;
+  justify-content: center; font-family: var(--font-heading);
+  font-weight: 700; font-size: 11px; color: #fff; flex-shrink: 0;
+}
+.ft-navbar__item {
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.8rem;
+  color: var(--primary); text-transform: uppercase; background: none;
+  border: none; cursor: pointer; white-space: nowrap;
+  display: flex; align-items: center; gap: 3px;
+}
+.ft-navbar__search {
+  flex: 1; max-width: 420px; border: var(--border);
+  border-radius: var(--form-radius); padding: 5px 12px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.85rem; color: #bbb; background: var(--surface);
+}
+.ft-navbar__spacer { flex: 1; }
+.ft-navbar__role {
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.8rem;
+  color: var(--primary); background: none; border: none; cursor: pointer;
+  display: flex; align-items: center; gap: 3px; white-space: nowrap;
+}
+.ft-navbar__utils { display: flex; align-items: center; gap: 14px; }
+.ft-navbar__utils svg { cursor: pointer; }
+
+/* PAGE */
+.ft-page { display: flex; background: var(--app-bg); min-height: calc(100vh - var(--nav-height)); }
+.ft-content { flex: 1; padding: 24px; min-width: 0; }
+
+/* SIDEBAR */
+.ft-sidebar {
+  width: var(--sidebar-width); background: var(--surface);
+  border-right: var(--border); flex-shrink: 0; padding-top: 8px;
+}
+.ft-sidebar__contact {
+  background: #EBEBEB; border-radius: var(--radius);
+  padding: 12px; margin: 8px 10px 15px;
+  box-shadow: 0 2px 8px 2px rgba(0,0,0,0.08);
+}
+.ft-sidebar__contact-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.ft-sidebar__contact-row:last-child { margin-bottom: 0; }
+.ft-sidebar__contact-row svg { flex-shrink: 0; color: var(--primary); }
+.ft-sidebar__contact-row span {
+  font-size: 0.7rem; color: var(--primary);
+  text-transform: uppercase; font-family: var(--font-body); font-weight: 400; word-break: break-all;
+}
+.ft-sidebar__item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px; cursor: pointer; font-size: 0.875rem;
+  font-family: var(--font-body); color: var(--primary); font-weight: 400;
+  background: transparent; border: none; width: 100%; text-align: left; transition: background 0.1s;
+}
+.ft-sidebar__item:hover { background: var(--sidebar-hover); font-weight: 700; }
+.ft-sidebar__item.active { background: var(--sidebar-active); font-weight: 700; }
+.ft-sidebar__label { flex: 1; }
+.ft-sidebar__count {
+  background: var(--primary); color: #fff; border-radius: var(--pill);
+  font-size: 0.65rem; font-weight: 700; padding: 1px 7px; font-family: var(--font-heading);
+}
+
+/* RECORD HEADER */
+.ft-record-header { margin-bottom: 20px; }
+.ft-record-header h1 { font-size: 1.75rem; font-weight: 500; display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.ft-record-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 0.85rem; color: #666; }
+.ft-record-meta .org { font-weight: 600; color: var(--primary); }
+.ft-record-meta .sep { color: #ccc; }
+
+/* BADGES */
+.ft-badge { display: inline-block; border-radius: var(--pill); font-size: 0.75rem; font-weight: 500; padding: 2px 10px; white-space: nowrap; color: var(--primary); font-family: var(--font-body); }
+.ft-badge--approved, .ft-badge--clear { background: var(--success-50); }
+.ft-badge--manual, .ft-badge--upcoming { background: var(--info-50); }
+.ft-badge--overdue, .ft-badge--loi-draft { background: var(--danger-50); }
+.ft-badge--pending, .ft-badge--draft { background: var(--warning-50); }
+
+/* BUTTONS */
+.btn-ft-filled, .btn-ft-outline {
+  border-radius: var(--pill); font-family: var(--font-heading); font-weight: 700;
+  cursor: pointer; border: 2px solid var(--primary);
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.75rem; padding: 4px 14px 3px; transition: background 0.1s;
+}
+.btn-ft-filled { background: var(--primary); color: #fff; }
+.btn-ft-filled:hover { background: var(--primary-hover); border-color: var(--primary-hover); }
+.btn-ft-outline { background: transparent; color: var(--primary); }
+.btn-ft-outline:hover { background: var(--outline-hover); }
+.btn-ft-default { font-size: 0.875rem; padding: 5px 12px; }
+.btn-ft-sm { font-size: 0.75rem; padding: 4px 14px 3px; }
+
+/* =========================================
+   TIMELINE — SHARED
+   ========================================= */
+
+.ki-section { background: var(--surface); border: var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: var(--gap); }
+
+/* Top controls */
+.ki-topbar {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.ki-topbar__group { display: flex; align-items: center; gap: 6px; }
+.ki-topbar__label {
+  font-family: var(--font-heading); font-weight: 500;
+  font-size: 0.75rem; color: var(--neutral-30);
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.ki-select {
+  border: 1px solid var(--primary); border-radius: var(--form-radius);
+  padding: 4px 8px; font-size: 0.8rem; font-family: var(--font-body);
+  color: var(--primary); background: var(--surface); cursor: pointer;
+  min-width: 110px;
+}
+.ki-search-wrap {
+  flex: 1; min-width: 220px; border: var(--border); border-radius: var(--form-radius);
+  padding: 5px 12px; display: flex; align-items: center; gap: 8px;
+  font-size: 0.85rem; color: #bbb; background: var(--surface);
+}
+.ki-search-wrap input {
+  border: none; outline: none; flex: 1; font-family: var(--font-body);
+  font-size: 0.85rem; color: var(--primary);
+}
+.ki-search-wrap input::placeholder { color: #bbb; }
+.ki-jump-today {
+  border: 1px solid var(--primary); border-radius: var(--pill);
+  background: transparent; color: var(--primary);
+  font-family: var(--font-heading); font-weight: 700; font-size: 0.75rem;
+  padding: 4px 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;
+}
+.ki-jump-today:hover { background: var(--outline-hover); }
+
+/* Filter pills */
+.ki-filters { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.ki-filters__label {
+  font-family: var(--font-heading); font-weight: 500;
+  font-size: 0.75rem; color: var(--neutral-30);
+  text-transform: uppercase; letter-spacing: 0.04em;
+  margin-right: 4px;
+}
+.ki-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid var(--primary); border-radius: var(--pill);
+  background: var(--surface); color: var(--primary);
+  font-family: var(--font-body); font-weight: 500; font-size: 0.8rem;
+  padding: 3px 11px; cursor: pointer; transition: background 0.1s, color 0.1s;
+  user-select: none;
+}
+.ki-pill:hover { background: var(--outline-hover); }
+.ki-pill.active { background: var(--primary); color: #fff; }
+.ki-pill.active svg { color: #fff; }
+.ki-pill svg { color: var(--primary); }
+.ki-pill__count {
+  font-size: 0.7rem; font-weight: 700; padding-left: 4px;
+  font-family: var(--font-heading); opacity: 0.7;
+}
+
+/* Summary row */
+.ki-summary {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--gap);
+  margin-bottom: var(--gap);
+}
+.ki-summary__card {
+  background: var(--surface); border: var(--border); border-radius: var(--radius);
+  padding: 14px; text-align: center;
+}
+.ki-summary__icon { margin-bottom: 4px; color: var(--primary); }
+.ki-summary__value { font-family: var(--font-heading); font-weight: 500; font-size: 1.5rem; color: var(--primary); line-height: 1.2; }
+.ki-summary__label {
+  font-family: var(--font-heading); font-size: 0.7rem; font-weight: 500;
+  color: var(--neutral-30); text-transform: uppercase; letter-spacing: 0.06em;
+  margin-top: 2px;
+}
+
+/* Nav buttons */
+.ki-nav {
+  display: flex; justify-content: center; align-items: center; gap: 10px;
+  margin: 12px 0;
+}
+.ki-nav button {
+  border: 1px solid var(--primary); background: var(--surface);
+  color: var(--primary); border-radius: var(--pill);
+  font-family: var(--font-heading); font-weight: 700; font-size: 0.75rem;
+  padding: 4px 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;
+}
+.ki-nav button:hover { background: var(--outline-hover); }
+
+/* =========================================
+   INTERACTION CARD — shared
+   ========================================= */
+.ki-card {
+  background: var(--surface); border: var(--border); border-radius: var(--radius);
+  padding: 14px; width: 100%;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.ki-card__head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 10px; margin-bottom: 2px;
+}
+.ki-card__title-wrap { display: flex; align-items: flex-start; gap: 8px; min-width: 0; }
+.ki-card__title-wrap svg { color: var(--primary); margin-top: 2px; flex-shrink: 0; }
+.ki-card__title {
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.95rem;
+  color: var(--primary); line-height: 1.25; word-break: break-word;
+}
+.ki-card__actions { display: flex; gap: 8px; flex-shrink: 0; }
+.ki-card__actions svg {
+  color: var(--primary); cursor: pointer; opacity: 0.7; transition: opacity 0.1s;
+}
+.ki-card__actions svg:hover { opacity: 1; }
+.ki-card__actions .pinned { opacity: 1; color: var(--primary); }
+
+.ki-card__org {
+  font-family: var(--font-body); font-size: 0.75rem; color: var(--neutral-30);
+  margin-left: 24px; margin-bottom: 4px;
+}
+.ki-card__meta {
+  font-family: var(--font-body); font-size: 0.75rem; color: var(--primary);
+  font-weight: 500; margin-left: 24px; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+}
+.ki-card__meta .sep { color: #ccc; }
+.ki-card__body {
+  font-family: var(--font-body); font-size: 0.8rem; color: var(--primary);
+  line-height: 1.45; margin-left: 24px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.ki-card__readmore {
+  color: var(--link); font-weight: 500; font-size: 0.8rem;
+  font-family: var(--font-body); margin-left: 4px; cursor: pointer;
+}
+.ki-card__body-wrap { margin-left: 24px; }
+.ki-card.is-pinned {
+  border-left: 3px solid var(--primary);
+}
+
+/* =========================================
+   HORIZONTAL TIMELINE
+   ========================================= */
+.ki-horiz {
+  display: flex; align-items: stretch; gap: 0;
+  overflow-x: auto; padding-bottom: 16px;
+  background: var(--surface); border: var(--border); border-radius: var(--radius);
+  padding: 20px;
+}
+.ki-horiz__group {
+  flex-shrink: 0; min-width: 280px; padding: 0 8px;
+  display: flex; flex-direction: column;
+}
+.ki-horiz__group--wide { min-width: 320px; }
+.ki-horiz__group-header {
+  font-family: var(--font-heading); font-weight: 500;
+  font-size: 0.95rem; color: var(--primary);
+  padding: 6px 10px; margin-bottom: 14px;
+  background: var(--info-50); border-radius: var(--radius);
+  display: inline-flex; align-items: center; gap: 6px;
+  align-self: flex-start;
+}
+.ki-horiz__spine-row {
+  display: flex; align-items: center; margin-bottom: 12px; height: 28px;
+}
+.ki-horiz__spine {
+  flex: 1; height: 2px; background: var(--neutral-60);
+  position: relative;
+}
+.ki-horiz__dots {
+  display: flex; gap: 6px; align-items: center;
+  position: relative; z-index: 1;
+}
+.ki-horiz__dot {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--primary); border: 2px solid var(--surface);
+  box-shadow: 0 0 0 2px var(--primary);
+}
+.ki-horiz__cards {
+  display: flex; flex-direction: column; gap: 10px;
+}
+.ki-horiz__gap {
+  flex-shrink: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; padding: 0 8px;
+  min-width: 120px;
+}
+.ki-horiz__gap-label {
+  font-family: var(--font-heading); font-weight: 700; font-size: 0.65rem;
+  color: var(--neutral-40); text-transform: uppercase; letter-spacing: 0.08em;
+  background: var(--surface); border: var(--border); border-radius: var(--pill);
+  padding: 4px 10px; white-space: nowrap;
+  margin-bottom: 7px;
+}
+.ki-horiz__gap-line {
+  width: 100%; border-top: 2px dashed var(--neutral-60); margin-top: -17px;
+}
+
+/* =========================================
+   VERTICAL TIMELINE
+   ========================================= */
+.ki-vert {
+  background: var(--surface); border: var(--border); border-radius: var(--radius);
+  padding: 24px 20px; position: relative;
+}
+.ki-vert__rail {
+  position: relative;
+  padding-left: 28px;
+}
+.ki-vert__rail::before {
+  content: '';
+  position: absolute; top: 14px; bottom: 14px; left: 9px;
+  width: 2px; background: var(--neutral-60);
+}
+.ki-vert__month {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.95rem;
+  color: var(--primary); background: var(--info-50);
+  padding: 6px 12px; border-radius: var(--radius);
+  margin-left: -28px; margin-bottom: 14px; margin-top: 6px;
+}
+.ki-vert__gap {
+  display: flex; align-items: center; gap: 10px;
+  margin-left: -10px; margin-bottom: 14px; margin-top: 6px;
+}
+.ki-vert__gap-dot {
+  width: 8px; height: 8px; border-radius: 50%; border: 2px dashed var(--neutral-60);
+  background: var(--surface);
+}
+.ki-vert__gap-label {
+  font-family: var(--font-heading); font-weight: 700; font-size: 0.65rem;
+  color: var(--neutral-40); text-transform: uppercase; letter-spacing: 0.08em;
+}
+.ki-vert__item {
+  position: relative; margin-bottom: 14px;
+}
+.ki-vert__dot {
+  position: absolute; left: -26px; top: 16px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--primary); border: 2px solid var(--surface);
+  box-shadow: 0 0 0 2px var(--primary);
+}
+
+/* ICON BUBBLE inside type pill */
+.ki-type-icon { color: var(--primary); }
+
+/* EMPTY STATE */
+.ki-empty {
+  padding: 40px 20px; text-align: center;
+  font-family: var(--font-body); color: var(--neutral-30); font-size: 0.9rem;
+}
+
+/* PROTO CONTROLS (shared) */
+.ft-panel {
+  position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+  background: var(--primary); border-radius: var(--radius);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.22); width: 320px;
+  font-family: var(--font-heading);
+}
+.ft-panel__header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 14px; cursor: pointer; user-select: none;
+}
+.ft-panel__title { font-size: 0.8rem; font-weight: 700; color: #fff; }
+.ft-panel__toggle-btn {
+  background: none; border: none; color: #fff; cursor: pointer;
+  font-size: 0.75rem; font-family: var(--font-heading); font-weight: 500;
+}
+.ft-panel__body { padding: 0 14px 14px; display: none; }
+.ft-panel__body.open { display: block; }
+.ft-panel__section { margin-bottom: 12px; }
+.ft-panel__section:last-child { margin-bottom: 0; }
+.ft-panel__section-label {
+  font-size: 0.65rem; color: rgba(255,255,255,0.6); text-transform: uppercase;
+  letter-spacing: 0.06em; margin-bottom: 5px;
+}
+.ft-panel__row { display: flex; gap: 4px; flex-wrap: wrap; }
+.ft-panel__btn {
+  flex: 1; padding: 5px 6px; border-radius: var(--form-radius);
+  font-size: 0.7rem; font-family: var(--font-heading); font-weight: 500;
+  cursor: pointer; border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7);
+  white-space: nowrap; text-align: center; transition: all 0.1s;
+}
+.ft-panel__btn:hover { background: rgba(255,255,255,0.2); color: #fff; }
+.ft-panel__btn.active {
+  background: #fff; color: var(--primary); border-color: #fff;
+}
+.ft-panel__reset {
+  width: 100%; padding: 7px; border-radius: var(--form-radius);
+  font-size: 0.75rem; font-family: var(--font-heading); font-weight: 700;
+  cursor: pointer; border: 1px solid rgba(255,255,255,0.4);
+  background: transparent; color: #fff; margin-top: 10px;
+}
+.ft-panel__reset:hover { background: rgba(255,255,255,0.1); }
+</style>
+
+<!-- INLINE SVG ICON SYMBOLS -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="ic-home" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2 6.5L8 2l6 4.5V14a1 1 0 01-1 1H3a1 1 0 01-1-1V6.5z"/><path d="M6 15v-5h4v5"/>
+    </symbol>
+    <symbol id="ic-search" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3.5 3.5"/>
+    </symbol>
+    <symbol id="ic-user" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-5 6-5s6 1.7 6 5"/>
+    </symbol>
+    <symbol id="ic-dollar" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M8 1v14M11 4H6.5a2.5 2.5 0 000 5h3a2.5 2.5 0 010 5H5"/>
+    </symbol>
+    <symbol id="ic-clock" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="8" r="6.5"/><path d="M8 5v3.5l2.5 1.5"/>
+    </symbol>
+    <symbol id="ic-file" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 1H4a1 1 0 00-1 1v12a1 1 0 001 1h8a1 1 0 001-1V6L9 1z"/><path d="M9 1v5h5"/>
+    </symbol>
+    <symbol id="ic-chat" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14 10a2 2 0 01-2 2H5l-3 3V4a2 2 0 012-2h8a2 2 0 012 2v6z"/>
+    </symbol>
+    <symbol id="ic-shield" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 1l6 2.5v4C14 11 11.5 14 8 15 4.5 14 2 11 2 7.5v-4L8 1z"/>
+    </symbol>
+    <symbol id="ic-grid" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/>
+      <rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/>
+    </symbol>
+    <symbol id="ic-gear" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="8" r="2.5"/><path d="M8 1.5V3m0 10v1.5M1.5 8H3m10 0h1.5M3.1 3.1l1 1m7.8 7.8 1 1M12.9 3.1l-1 1M4.1 11.9l-1 1"/>
+    </symbol>
+    <symbol id="ic-chevron" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M2 3.5l3 3 3-3"/>
+    </symbol>
+    <symbol id="ic-chevron-left" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M6.5 2l-3 3 3 3"/>
+    </symbol>
+    <symbol id="ic-chevron-right" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M3.5 2l3 3-3 3"/>
+    </symbol>
+    <symbol id="ic-pencil" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 2l3 3-8 8H3v-3l8-8z"/>
+    </symbol>
+    <symbol id="ic-compass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="8" r="6.5"/><path d="M10.5 5.5l-2 4.5-4.5 2 2-4.5 4.5-2z"/>
+    </symbol>
+    <symbol id="ic-lightbulb" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M8 1a5 5 0 013.5 8.5c-.5.5-.5 1-.5 1.5H5c0-.5 0-1-.5-1.5A5 5 0 018 1z"/>
+      <path d="M6 11h4M6.5 13h3"/>
+    </symbol>
+    <symbol id="ic-gift" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="1" y="6" width="14" height="3" rx="1"/><path d="M2 9v5h12V9M8 6V15M8 6S6 3 4.5 3 2 4 3 5.5 6 6 8 6zM8 6s2-3 3.5-3S14 4 13 5.5 10 6 8 6z"/>
+    </symbol>
+    <symbol id="ic-phone" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 1h3l1.5 3.5-2 1.2a9 9 0 004.8 4.8l1.2-2L15 11v3a1 1 0 01-1 1A13 13 0 012 2a1 1 0 011-1z"/>
+    </symbol>
+    <symbol id="ic-envelope" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="1" y="3" width="14" height="10" rx="1"/><path d="M1 4l7 5 7-5"/>
+    </symbol>
+    <symbol id="ic-globe" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="8" r="6.5"/><path d="M1.5 8h13M8 1.5a10 10 0 010 13M8 1.5a10 10 0 000 13"/>
+    </symbol>
+    <symbol id="ic-building" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="2" width="12" height="13" rx="1"/><path d="M5 15V9h6v6M5 5h1m3 0h1M5 7h1m3 0h1"/>
+    </symbol>
+    <symbol id="ic-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <path d="M2 8l4 4 8-8"/>
+    </symbol>
+    <symbol id="ic-warning" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M8 1L1 14h14L8 1z"/><path d="M8 6v4M8 11.5v.5"/>
+    </symbol>
+    <symbol id="ic-info" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="8" r="6.5"/><path d="M8 7v5M8 5v.5"/>
+    </symbol>
+    <symbol id="ic-close" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M3 3l10 10M13 3L3 13"/>
+    </symbol>
+    <!-- Interaction type icons -->
+    <symbol id="ic-note" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 2h7l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z"/>
+      <path d="M10 2v3h3"/><path d="M5 8h6M5 10.5h6M5 13h4"/>
+    </symbol>
+    <symbol id="ic-in-person" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="5" cy="5" r="2"/><circle cx="11" cy="5" r="2"/>
+      <path d="M1.5 14c0-2.2 1.6-3.5 3.5-3.5s3.5 1.3 3.5 3.5"/>
+      <path d="M7.5 14c0-2.2 1.6-3.5 3.5-3.5s3.5 1.3 3.5 3.5"/>
+    </symbol>
+    <symbol id="ic-video" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="1.5" y="4" width="9" height="8" rx="1"/>
+      <path d="M10.5 7l4-2v6l-4-2z"/>
+    </symbol>
+    <symbol id="ic-pin" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M10.62 1.52a.5.5 0 00-.7 0L8.06 3.38 5.4 4.06a.5.5 0 00-.24.84l2.06 2.06L3.5 10.7a.5.5 0 00.7.7l3.74-3.74 2.06 2.06a.5.5 0 00.84-.24l.68-2.66 1.86-1.86a.5.5 0 000-.7l-2.76-2.74z"/>
+    </symbol>
+    <symbol id="ic-pin-outline" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10.62 1.52L8.06 3.38 5.4 4.06 7.46 6.12 3.5 10.7l.7.7L8.76 6.88l2.06 2.06.68-2.66 1.86-1.86-2.74-2.9z"/>
+    </symbol>
+    <symbol id="ic-trash" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2.5 4h11M6 4V2.5a1 1 0 011-1h2a1 1 0 011 1V4"/>
+      <path d="M3.5 4l1 10a1 1 0 001 1h5a1 1 0 001-1l1-10"/>
+      <path d="M6.5 7v5M9.5 7v5"/>
+    </symbol>
+    <symbol id="ic-calendar" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="3" width="12" height="11" rx="1"/>
+      <path d="M2 6h12M5 2v2M11 2v2"/>
+    </symbol>
+    <symbol id="ic-plus" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M8 3v10M3 8h10"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- NAVBAR -->
+<nav class="ft-navbar">
+  <div class="ft-navbar__logo">FT</div>
+  <svg width="16" height="16" style="color:var(--primary);cursor:pointer"><use href="#ic-home"/></svg>
+  <button class="ft-navbar__item">SEARCH <svg width="10" height="10"><use href="#ic-chevron"/></svg></button>
+  <button class="ft-navbar__item">TOOLS <svg width="10" height="10"><use href="#ic-chevron"/></svg></button>
+  <button class="ft-navbar__item">COMMUNICATIONS <svg width="10" height="10"><use href="#ic-chevron"/></svg></button>
+  <button class="ft-navbar__item">REPORTING <svg width="10" height="10"><use href="#ic-chevron"/></svg></button>
+  <div class="ft-navbar__search">
+    <svg width="13" height="13" style="color:#aaa"><use href="#ic-search"/></svg>
+    search
+  </div>
+  <div class="ft-navbar__spacer"></div>
+  <button class="ft-navbar__role">ROLE (PROGRAM OFFICER) <svg width="10" height="10"><use href="#ic-chevron"/></svg></button>
+  <div class="ft-navbar__utils">
+    <svg width="16" height="16" style="color:var(--primary)"><use href="#ic-compass"/></svg>
+    <svg width="16" height="16" style="color:var(--primary)"><use href="#ic-lightbulb"/></svg>
+    <svg width="16" height="16" style="color:var(--primary)"><use href="#ic-gift"/></svg>
+    <svg width="16" height="16" style="color:var(--primary)"><use href="#ic-grid"/></svg>
+    <svg width="16" height="16" style="color:var(--primary)"><use href="#ic-gear"/></svg>
+    <svg width="16" height="16" style="color:var(--primary)"><use href="#ic-user"/></svg>
+  </div>
+</nav>
+
+<!-- PAGE -->
+<div class="ft-page">
+
+  <!-- SIDEBAR -->
+  <aside class="ft-sidebar" id="ft-sidebar">
+    <div class="ft-sidebar__contact" id="sidebar-contact"></div>
+    <div id="sidebar-items"></div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="ft-content">
+
+    <!-- RECORD HEADER -->
+    <div class="ft-record-header">
+      <h1 id="record-title">Cedar Ridge Foundation
+        <svg width="16" height="16" style="color:#aaa;cursor:pointer"><use href="#ic-pencil"/></svg>
+      </h1>
+      <div class="ft-record-meta" id="record-meta"></div>
+    </div>
+
+    <!-- TOP CONTROLS -->
+    <div class="ki-section">
+      <div class="ki-topbar">
+        <div class="ki-topbar__group">
+          <span class="ki-topbar__label">Granularity</span>
+          <select class="ki-select" id="granularity">
+            <option value="month">Month</option>
+            <option value="quarter">Quarter</option>
+          </select>
+        </div>
+        <div class="ki-topbar__group">
+          <span class="ki-topbar__label">Dataset</span>
+          <select class="ki-select" id="dataset">
+            <option value="dense">Dense sample</option>
+            <option value="sparse">Sparse sample</option>
+          </select>
+        </div>
+        <div class="ki-search-wrap">
+          <svg width="13" height="13" style="color:#aaa"><use href="#ic-search"/></svg>
+          <input type="text" id="search-input" placeholder="Search interactions by title or content">
+        </div>
+        <button class="ki-jump-today" id="jump-today">
+          <svg width="12" height="12"><use href="#ic-calendar"/></svg>
+          Jump to today
+        </button>
+        <button class="btn-ft-filled btn-ft-default">
+          <svg width="12" height="12" style="color:#fff"><use href="#ic-plus"/></svg>
+          Add Interaction
+        </button>
+      </div>
+
+      <!-- FILTER PILLS -->
+      <div class="ki-filters" id="filter-pills">
+        <span class="ki-filters__label">Filter by type</span>
+      </div>
+    </div>
+
+    <!-- SUMMARY ROW -->
+    <div class="ki-summary" id="summary-row"></div>
+
+    <!-- NAV -->
+    <div class="ki-nav">
+      <button><svg width="10" height="10"><use href="#ic-chevron-left"/></svg> Earlier</button>
+      <button>Later <svg width="10" height="10"><use href="#ic-chevron-right"/></svg></button>
+    </div>
+
+    <!-- TIMELINE -->
+    <div id="timeline"></div>
+
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.umd.min.js"></script>
+<script>
+/* ====================================================
+   SEEDED DATA — realistic grants management content
+   ==================================================== */
+
+var ORG_INTERACTIONS = [
+  {
+    id: 1, type: 'email', pinned: false,
+    title: 'Initial inquiry about environmental grant opportunity',
+    org: 'Cedar Ridge Foundation', request: 'Urban Greenways Initiative',
+    date: '2024-02-08', author: 'Megan Dahl',
+    body: 'Aaron reached out via our contact form asking about funding opportunities for a proposed greenway and community garden project. Sent preliminary eligibility guidelines and invited him to submit an LOI.'
+  },
+  {
+    id: 2, type: 'phone', pinned: true,
+    title: 'Introductory call — Urban Greenways scope and timeline',
+    org: 'Cedar Ridge Foundation', request: 'Urban Greenways Initiative',
+    date: '2024-02-22', author: 'Sarah Johnson',
+    body: '30-minute introductory call with Aaron Rodgers (Executive Director) and Yvette Chen (Program Director). Discussed scope, expected outcomes, fit with our Environment and Conservation focus, and timeline. They are preparing a full request for the Q2 cycle.'
+  },
+  {
+    id: 3, type: 'email', pinned: false,
+    title: 'Shared LOI template and review criteria',
+    org: 'Cedar Ridge Foundation', request: 'Urban Greenways Initiative',
+    date: '2024-03-04', author: 'Megan Dahl',
+    body: 'Sent the LOI template, review rubric, and a calendar of upcoming deadlines. Also included our annual report so they can see prior funded projects in this program area.'
+  },
+  {
+    id: 4, type: 'in-person', pinned: true,
+    title: 'Site visit — proposed greenway corridor walk-through',
+    org: 'Cedar Ridge Foundation', request: 'Urban Greenways Initiative',
+    date: '2024-04-09', author: 'Sarah Johnson',
+    body: 'Walked the proposed greenway corridor with Aaron and Yvette. The project is well-scoped, partnerships with three neighborhood associations are in place, and the city has signaled written support. This is a strong candidate for funding.'
+  },
+  {
+    id: 5, type: 'note', pinned: false,
+    title: 'Internal review note — budget consideration',
+    org: 'Cedar Ridge Foundation', request: 'Urban Greenways Initiative',
+    date: '2024-04-22', author: 'Sarah Johnson',
+    body: 'Budget requested is $75K. Given our 2024 program area allocation and competing asks, recommending we fund at $60K with a request to narrow phase 1 scope. Discussed with Megan — aligned.'
+  },
+  {
+    id: 6, type: 'video', pinned: false,
+    title: 'Follow-up video call — budget negotiation',
+    org: 'Cedar Ridge Foundation', request: 'Urban Greenways Initiative',
+    date: '2024-05-14', author: 'Sarah Johnson',
+    body: 'Called Aaron to share that we are recommending $60K (vs. $75K requested) and walked through scope adjustments. He understood, appreciated the transparency, and will revise the phase 1 plan. Decision letter to follow.'
+  },
+  {
+    id: 7, type: 'email', pinned: false,
+    title: 'Award notification — Urban Greenways Initiative',
+    org: 'Cedar Ridge Foundation', request: 'Urban Greenways Initiative',
+    date: '2024-06-03', author: 'Megan Dahl',
+    body: 'Formal award notification sent for $60,000 over 12 months. Grant agreement and payment schedule attached. Q1 progress report due October 31, 2024.'
+  },
+  {
+    id: 8, type: 'phone', pinned: false,
+    title: 'Check-in: three months into phase 1',
+    org: 'Cedar Ridge Foundation', request: 'Urban Greenways Initiative',
+    date: '2024-09-12', author: 'Sarah Johnson',
+    body: 'Brief check-in with Yvette. Phase 1 is on track — two of three neighborhood plots broken ground, community volunteer days have been well-attended. They anticipate filing the Q1 progress report early.'
+  },
+  {
+    id: 9, type: 'note', pinned: false,
+    title: 'Q1 progress report received and reviewed',
+    org: 'Cedar Ridge Foundation', request: 'Urban Greenways Initiative',
+    date: '2024-10-24', author: 'Megan Dahl',
+    body: 'Q1 progress report received seven days early. Narrative is strong, photos attached, financials align with budget. No action needed beyond acknowledgment.'
+  },
+  {
+    id: 10, type: 'email', pinned: false,
+    title: 'Introduction to a second potential project',
+    org: 'Cedar Ridge Foundation', request: 'Youth Nature Programs (LOI)',
+    date: '2025-01-15', author: 'Megan Dahl',
+    body: 'Aaron flagged a second potential project — a youth nature education program they would like to propose in the fall cycle. Sent LOI template and flagged it on my radar.'
+  },
+  {
+    id: 11, type: 'in-person', pinned: true,
+    title: 'End-of-grant celebration and ribbon cutting',
+    org: 'Cedar Ridge Foundation', request: 'Urban Greenways Initiative',
+    date: '2025-05-20', author: 'Sarah Johnson',
+    body: 'Attended the greenway ribbon-cutting. Three neighborhoods represented, about 80 community members present, strong press coverage. Clear outcomes delivered. This is a case study we should feature.'
+  },
+  {
+    id: 12, type: 'video', pinned: false,
+    title: 'Strategy conversation — Youth Nature Programs request',
+    org: 'Cedar Ridge Foundation', request: 'Youth Nature Programs',
+    date: '2025-09-11', author: 'Sarah Johnson',
+    body: 'Deeper conversation with Aaron and Yvette on the Youth Nature Programs design. Raised questions about sustainability beyond the grant period and measurement of youth outcomes. They agreed to revise and resubmit.'
+  },
+  {
+    id: 13, type: 'note', pinned: false,
+    title: 'Internal: recommend approval of Youth Nature Programs',
+    org: 'Cedar Ridge Foundation', request: 'Youth Nature Programs',
+    date: '2026-01-30', author: 'Sarah Johnson',
+    body: 'After revisions, the Youth Nature Programs proposal now has a clear sustainability plan and defined outcome metrics. Recommending board approval at $45K over 18 months.'
+  },
+  {
+    id: 14, type: 'email', pinned: false,
+    title: 'Youth Nature Programs award notification',
+    org: 'Cedar Ridge Foundation', request: 'Youth Nature Programs',
+    date: '2026-03-11', author: 'Megan Dahl',
+    body: 'Formal approval sent for $45,000 over 18 months. Kickoff call to be scheduled within two weeks.'
+  },
+  {
+    id: 15, type: 'phone', pinned: false,
+    title: 'Kickoff call for Youth Nature Programs',
+    org: 'Cedar Ridge Foundation', request: 'Youth Nature Programs',
+    date: '2026-04-02', author: 'Sarah Johnson',
+    body: 'Kickoff call completed. Reviewed grant terms, reporting schedule, and first 90-day milestones. Aaron and Yvette are enthusiastic and ready to launch.'
+  }
+];
+
+/* Request-level = only the Urban Greenways Initiative interactions */
+var REQUEST_INTERACTIONS = [];
+for (var ri = 0; ri < ORG_INTERACTIONS.length; ri++) {
+  if (ORG_INTERACTIONS[ri].request === 'Urban Greenways Initiative') {
+    REQUEST_INTERACTIONS.push(ORG_INTERACTIONS[ri]);
+  }
+}
+
+/* Interaction type metadata */
+var TYPE_META = {
+  'note':      { label: 'Note',      icon: 'ic-note'      },
+  'phone':     { label: 'Phone Call', icon: 'ic-phone'    },
+  'email':     { label: 'Email',     icon: 'ic-envelope'  },
+  'in-person': { label: 'In Person', icon: 'ic-in-person' },
+  'video':     { label: 'Video Call', icon: 'ic-video'    }
+};
+var TYPE_ORDER = ['note', 'phone', 'email', 'in-person', 'video'];
+
+/* ====================================================
+   STATE
+   ==================================================== */
+var state = {
+  orientation: 'horizontal',
+  scope: 'org',
+  activeTypes: { 'note': true, 'phone': true, 'email': true, 'in-person': true, 'video': true },
+  search: ''
+};
+
+/* ====================================================
+   UTILS
+   ==================================================== */
+function formatDate(iso) {
+  var parts = iso.split('-');
+  return parts[1] + '/' + parts[2] + '/' + parts[0];
+}
+
+function monthKey(iso) {
+  var parts = iso.split('-');
+  return parts[0] + '-' + parts[1];
+}
+
+function monthLabel(key) {
+  var parts = key.split('-');
+  var names = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  return names[parseInt(parts[1], 10) - 1] + ' ' + parts[0];
+}
+
+function monthsBetween(keyA, keyB) {
+  var a = keyA.split('-');
+  var b = keyB.split('-');
+  return (parseInt(b[0],10) - parseInt(a[0],10)) * 12 + (parseInt(b[1],10) - parseInt(a[1],10));
+}
+
+function gapPhrase(months) {
+  if (months < 1) return '';
+  if (months === 1) return '1 month later';
+  if (months < 12) return months + ' months later';
+  var years = Math.floor(months / 12);
+  var rem = months % 12;
+  if (rem === 0) return years === 1 ? '1 year later' : years + ' years later';
+  return years + 'y ' + rem + 'm later';
+}
+
+function currentData() {
+  var base = state.scope === 'org' ? ORG_INTERACTIONS : REQUEST_INTERACTIONS;
+  var filtered = [];
+  var q = state.search.toLowerCase();
+  for (var i = 0; i < base.length; i++) {
+    var it = base[i];
+    if (!state.activeTypes[it.type]) continue;
+    if (q && it.title.toLowerCase().indexOf(q) === -1 && it.body.toLowerCase().indexOf(q) === -1) continue;
+    filtered.push(it);
+  }
+  /* Sort chronologically */
+  filtered.sort(function(a, b) { return a.date < b.date ? -1 : (a.date > b.date ? 1 : 0); });
+  return filtered;
+}
+
+/* ====================================================
+   SIDEBAR RENDERING (scope-aware)
+   ==================================================== */
+function renderSidebar() {
+  var contact = document.getElementById('sidebar-contact');
+  var items = document.getElementById('sidebar-items');
+  if (state.scope === 'org') {
+    contact.innerHTML =
+      '<div class="ft-sidebar__contact-row"><svg width="14" height="14"><use href="#ic-building"/></svg><span>Cedar Ridge Foundation</span></div>' +
+      '<div class="ft-sidebar__contact-row"><svg width="14" height="14"><use href="#ic-envelope"/></svg><span>contact@cedarridge.org</span></div>' +
+      '<div class="ft-sidebar__contact-row"><svg width="14" height="14"><use href="#ic-phone"/></svg><span>612.724.7457</span></div>';
+    items.innerHTML =
+      sbItem('ic-home', 'Summary', '', false) +
+      sbItem('ic-user', 'Contacts', '', false) +
+      sbItem('ic-dollar', 'Requests', '2', false) +
+      sbItem('ic-file', 'Documents', '', false) +
+      sbItem('ic-shield', 'Compliance', '', false) +
+      sbItem('ic-chat', 'Interactions', '15', true);
+  } else {
+    contact.innerHTML =
+      '<div class="ft-sidebar__contact-row"><svg width="14" height="14"><use href="#ic-user"/></svg><span>Aaron Rodgers</span></div>' +
+      '<div class="ft-sidebar__contact-row"><svg width="14" height="14"><use href="#ic-envelope"/></svg><span>a.rodgers@cedarridge.org</span></div>' +
+      '<div class="ft-sidebar__contact-row"><svg width="14" height="14"><use href="#ic-phone"/></svg><span>612.724.7457</span></div>';
+    items.innerHTML =
+      sbItem('ic-home', 'Summary', '', false) +
+      sbItem('ic-user', 'Contact Info', '', false) +
+      sbItem('ic-dollar', 'Request / Award Details', '', false) +
+      sbItem('ic-clock', 'Follow Ups', '2', false) +
+      sbItem('ic-file', 'Documents', '', false) +
+      sbItem('ic-chat', 'Interactions', '11', true) +
+      sbItem('ic-shield', 'Financials and Compliance', '', false);
+  }
+}
+
+function sbItem(icon, label, count, active) {
+  var countHtml = count ? '<span class="ft-sidebar__count">' + count + '</span>' : '';
+  return '<button class="ft-sidebar__item' + (active ? ' active' : '') + '" onclick="setSidebarActive(this)">' +
+    '<svg width="15" height="15"><use href="#' + icon + '"/></svg>' +
+    '<span class="ft-sidebar__label">' + label + '</span>' +
+    countHtml +
+    '</button>';
+}
+
+function setSidebarActive(el) {
+  var items = document.querySelectorAll('.ft-sidebar__item');
+  for (var i = 0; i < items.length; i++) items[i].classList.remove('active');
+  el.classList.add('active');
+}
+
+/* ====================================================
+   RECORD HEADER RENDERING (scope-aware)
+   ==================================================== */
+function renderRecordHeader() {
+  var title = document.getElementById('record-title');
+  var meta = document.getElementById('record-meta');
+  if (state.scope === 'org') {
+    title.childNodes[0].nodeValue = 'Cedar Ridge Foundation ';
+    meta.innerHTML =
+      '<span>Environment and Conservation</span>' +
+      '<span class="sep">|</span><span>Foundation</span>' +
+      '<span class="sep">|</span><span>EIN 41-1234567</span>' +
+      '<span class="sep">|</span><span class="ft-badge ft-badge--approved">Active funder relationship</span>';
+  } else {
+    title.childNodes[0].nodeValue = 'Urban Greenways Initiative ';
+    meta.innerHTML =
+      '<span class="org">Cedar Ridge Foundation</span>' +
+      '<span class="sep">|</span><span>Environment and Conservation</span>' +
+      '<span class="sep">|</span><span>Project Support</span>' +
+      '<span class="sep">|</span><span class="ft-badge ft-badge--approved">Approved</span>';
+  }
+}
+
+/* ====================================================
+   FILTER PILLS
+   ==================================================== */
+function renderFilterPills() {
+  var base = state.scope === 'org' ? ORG_INTERACTIONS : REQUEST_INTERACTIONS;
+  var counts = { 'note': 0, 'phone': 0, 'email': 0, 'in-person': 0, 'video': 0 };
+  for (var i = 0; i < base.length; i++) counts[base[i].type]++;
+
+  var host = document.getElementById('filter-pills');
+  /* Clear existing pills (keep the label) */
+  while (host.children.length > 1) host.removeChild(host.lastChild);
+
+  for (var t = 0; t < TYPE_ORDER.length; t++) {
+    var type = TYPE_ORDER[t];
+    var meta = TYPE_META[type];
+    var pill = document.createElement('button');
+    pill.className = 'ki-pill' + (state.activeTypes[type] ? ' active' : '');
+    pill.setAttribute('data-type', type);
+    pill.innerHTML =
+      '<svg width="12" height="12"><use href="#' + meta.icon + '"/></svg>' +
+      meta.label +
+      '<span class="ki-pill__count">' + counts[type] + '</span>';
+    pill.onclick = (function(t) {
+      return function() { toggleType(t); };
+    })(type);
+    host.appendChild(pill);
+  }
+}
+
+function toggleType(type) {
+  state.activeTypes[type] = !state.activeTypes[type];
+  renderFilterPills();
+  renderSummary();
+  renderTimeline();
+}
+
+/* ====================================================
+   SUMMARY ROW
+   ==================================================== */
+function renderSummary() {
+  var data = currentData();
+  var counts = { 'note': 0, 'phone': 0, 'email': 0, 'in-person': 0, 'video': 0 };
+  for (var i = 0; i < data.length; i++) counts[data[i].type]++;
+
+  var host = document.getElementById('summary-row');
+  var html = '';
+  for (var t = 0; t < TYPE_ORDER.length; t++) {
+    var type = TYPE_ORDER[t];
+    var meta = TYPE_META[type];
+    html +=
+      '<div class="ki-summary__card">' +
+        '<div class="ki-summary__icon"><svg width="22" height="22"><use href="#' + meta.icon + '"/></svg></div>' +
+        '<div class="ki-summary__value">' + counts[type] + '</div>' +
+        '<div class="ki-summary__label">' + meta.label + '</div>' +
+      '</div>';
+  }
+  host.innerHTML = html;
+}
+
+/* ====================================================
+   CARD RENDER (shared)
+   ==================================================== */
+function cardHtml(it) {
+  var meta = TYPE_META[it.type];
+  var pinIcon = it.pinned ? 'ic-pin' : 'ic-pin-outline';
+  var pinClass = it.pinned ? ' pinned' : '';
+  var pinned = it.pinned ? ' is-pinned' : '';
+  var orgLine = state.scope === 'org' ? (it.request || it.org) : '';
+  return '<div class="ki-card' + pinned + '">' +
+    '<div class="ki-card__head">' +
+      '<div class="ki-card__title-wrap">' +
+        '<svg width="16" height="16"><use href="#' + meta.icon + '"/></svg>' +
+        '<div class="ki-card__title">' + it.title + '</div>' +
+      '</div>' +
+      '<div class="ki-card__actions">' +
+        '<svg width="14" height="14" class="' + pinClass + '"><use href="#' + pinIcon + '"/></svg>' +
+        '<svg width="14" height="14"><use href="#ic-pencil"/></svg>' +
+        '<svg width="14" height="14"><use href="#ic-trash"/></svg>' +
+      '</div>' +
+    '</div>' +
+    (orgLine ? '<div class="ki-card__org">' + orgLine + '</div>' : '') +
+    '<div class="ki-card__meta">' +
+      '<span>' + formatDate(it.date) + '</span>' +
+      '<span class="sep">|</span>' +
+      '<span>' + it.author + '</span>' +
+    '</div>' +
+    '<div class="ki-card__body-wrap">' +
+      '<div class="ki-card__body">' + it.body + '</div>' +
+      '<span class="ki-card__readmore">Read more</span>' +
+    '</div>' +
+    '</div>';
+}
+
+/* ====================================================
+   HORIZONTAL TIMELINE
+   ==================================================== */
+function renderHorizontal(data) {
+  if (data.length === 0) return '<div class="ki-empty">No interactions match the current filters.</div>';
+
+  /* Group by monthKey preserving order */
+  var groups = [];
+  var lastKey = null;
+  for (var i = 0; i < data.length; i++) {
+    var k = monthKey(data[i].date);
+    if (k !== lastKey) {
+      groups.push({ key: k, items: [] });
+      lastKey = k;
+    }
+    groups[groups.length - 1].items.push(data[i]);
+  }
+
+  var html = '<div class="ki-horiz">';
+  for (var g = 0; g < groups.length; g++) {
+    var grp = groups[g];
+    /* Period header */
+    html += '<div class="ki-horiz__group' + (grp.items.length > 1 ? ' ki-horiz__group--wide' : '') + '">';
+    html += '<div class="ki-horiz__group-header">' +
+      '<svg width="13" height="13" style="color:var(--primary)"><use href="#ic-calendar"/></svg>' +
+      monthLabel(grp.key) + '</div>';
+    /* Spine with dots */
+    var dotsHtml = '';
+    for (var d = 0; d < grp.items.length; d++) dotsHtml += '<div class="ki-horiz__dot"></div>';
+    html += '<div class="ki-horiz__spine-row"><div class="ki-horiz__dots">' + dotsHtml + '</div><div class="ki-horiz__spine"></div></div>';
+    /* Cards */
+    html += '<div class="ki-horiz__cards">';
+    for (var ci = 0; ci < grp.items.length; ci++) html += cardHtml(grp.items[ci]);
+    html += '</div>';
+    html += '</div>';
+
+    /* Gap to next group */
+    if (g < groups.length - 1) {
+      var months = monthsBetween(grp.key, groups[g + 1].key);
+      var phrase = gapPhrase(months);
+      if (phrase) {
+        html += '<div class="ki-horiz__gap">' +
+          '<div class="ki-horiz__gap-label">' + phrase + '</div>' +
+          '<div class="ki-horiz__gap-line"></div>' +
+          '</div>';
+      }
+    }
+  }
+  html += '</div>';
+  return html;
+}
+
+/* ====================================================
+   VERTICAL TIMELINE
+   ==================================================== */
+function renderVertical(data) {
+  if (data.length === 0) return '<div class="ki-empty">No interactions match the current filters.</div>';
+
+  var html = '<div class="ki-vert"><div class="ki-vert__rail">';
+  var lastKey = null;
+  for (var i = 0; i < data.length; i++) {
+    var it = data[i];
+    var k = monthKey(it.date);
+    if (k !== lastKey) {
+      if (lastKey !== null) {
+        var gapMonths = monthsBetween(lastKey, k);
+        var phrase = gapPhrase(gapMonths);
+        if (phrase) {
+          html += '<div class="ki-vert__gap">' +
+            '<div class="ki-vert__gap-dot"></div>' +
+            '<div class="ki-vert__gap-label">' + phrase + '</div>' +
+            '</div>';
+        }
+      }
+      html += '<div class="ki-vert__month">' +
+        '<svg width="13" height="13" style="color:var(--primary)"><use href="#ic-calendar"/></svg>' +
+        monthLabel(k) + '</div>';
+      lastKey = k;
+    }
+    html += '<div class="ki-vert__item"><div class="ki-vert__dot"></div>' + cardHtml(it) + '</div>';
+  }
+  html += '</div></div>';
+  return html;
+}
+
+/* ====================================================
+   RENDER DISPATCH
+   ==================================================== */
+function renderTimeline() {
+  var data = currentData();
+  var host = document.getElementById('timeline');
+  if (state.orientation === 'horizontal') {
+    host.innerHTML = renderHorizontal(data);
+  } else {
+    host.innerHTML = renderVertical(data);
+  }
+}
+
+function renderAll() {
+  renderSidebar();
+  renderRecordHeader();
+  renderFilterPills();
+  renderSummary();
+  renderTimeline();
+}
+
+/* ====================================================
+   SEARCH + JUMP-TO-TODAY (light)
+   ==================================================== */
+document.getElementById('search-input').addEventListener('input', function(e) {
+  state.search = e.target.value;
+  renderSummary();
+  renderTimeline();
+});
+
+document.getElementById('jump-today').addEventListener('click', function() {
+  /* Scroll timeline container into view as a light proof */
+  var host = document.getElementById('timeline');
+  host.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+/* ====================================================
+   PROTO CONTROLS — inlined for self-contained prototype
+   ==================================================== */
+var ftProto = (function() {
+  var sections = [];
+  var config = { startOpen: true, title: 'Prototype Controls' };
+
+  function addSection(section) { sections.push(section); }
+
+  function buildPanel() {
+    var panel = document.createElement('div');
+    panel.className = 'ft-panel'; panel.id = 'ft-proto-panel';
+
+    var header = document.createElement('div');
+    header.className = 'ft-panel__header';
+    header.innerHTML = '<span class="ft-panel__title">' + config.title + '</span>' +
+      '<button class="ft-panel__toggle-btn" id="ft-proto-toggle-label">' + (config.startOpen ? 'Hide' : 'Show') + '</button>';
+    header.onclick = togglePanel;
+    panel.appendChild(header);
+
+    var body = document.createElement('div');
+    body.className = 'ft-panel__body' + (config.startOpen ? ' open' : '');
+    body.id = 'ft-proto-body';
+
+    for (var i = 0; i < sections.length; i++) {
+      var s = sections[i];
+      var sec = document.createElement('div'); sec.className = 'ft-panel__section';
+      var label = document.createElement('div'); label.className = 'ft-panel__section-label';
+      label.textContent = s.label; sec.appendChild(label);
+      var row = document.createElement('div'); row.className = 'ft-panel__row';
+
+      for (var j = 0; j < s.options.length; j++) {
+        var opt = s.options[j];
+        var btn = document.createElement('button');
+        btn.className = 'ft-panel__btn' + (opt.active ? ' active' : '');
+        btn.textContent = opt.label;
+        btn.setAttribute('data-section', s.id);
+        btn.setAttribute('data-value', opt.value);
+        btn.onclick = (function(sectionId, value, onChange) {
+          return function() {
+            var btns = document.querySelectorAll('.ft-panel__btn[data-section="' + sectionId + '"]');
+            for (var k = 0; k < btns.length; k++) btns[k].classList.remove('active');
+            this.classList.add('active');
+            if (onChange) onChange(value);
+          };
+        })(s.id, opt.value, s.onChange);
+        row.appendChild(btn);
+      }
+      sec.appendChild(row); body.appendChild(sec);
+    }
+
+    var reset = document.createElement('button');
+    reset.className = 'ft-panel__reset'; reset.textContent = 'Reset all to defaults';
+    reset.onclick = resetAll;
+    body.appendChild(reset);
+
+    panel.appendChild(body);
+    document.body.appendChild(panel);
+  }
+
+  function togglePanel() {
+    var body = document.getElementById('ft-proto-body');
+    var lbl = document.getElementById('ft-proto-toggle-label');
+    var open = body.classList.toggle('open');
+    lbl.textContent = open ? 'Hide' : 'Show';
+  }
+
+  function resetAll() {
+    for (var i = 0; i < sections.length; i++) {
+      var s = sections[i];
+      var btns = document.querySelectorAll('.ft-panel__btn[data-section="' + s.id + '"]');
+      for (var j = 0; j < btns.length; j++) {
+        var isDefault = s.options[j] && s.options[j].active;
+        btns[j].classList.toggle('active', !!isDefault);
+      }
+      for (var k = 0; k < s.options.length; k++) {
+        if (s.options[k].active && s.onChange) { s.onChange(s.options[k].value); break; }
+      }
+    }
+  }
+
+  function init() { buildPanel(); }
+
+  return { addSection: addSection, init: init, config: config, resetAll: resetAll };
+})();
+
+/* ====================================================
+   WIRE UP PROTO CONTROLS
+   ==================================================== */
+ftProto.addSection({
+  label: 'Orientation',
+  id: 'orientation',
+  options: [
+    { label: 'Horizontal', value: 'horizontal', active: true },
+    { label: 'Vertical', value: 'vertical' }
+  ],
+  onChange: function(value) { state.orientation = value; renderTimeline(); }
+});
+
+ftProto.addSection({
+  label: 'Scope',
+  id: 'scope',
+  options: [
+    { label: 'Org level', value: 'org', active: true },
+    { label: 'Request level', value: 'request' }
+  ],
+  onChange: function(value) { state.scope = value; renderAll(); }
+});
+
+/* ====================================================
+   INIT
+   ==================================================== */
+renderAll();
+ftProto.init();
+</script>
+</body>
+</html>
