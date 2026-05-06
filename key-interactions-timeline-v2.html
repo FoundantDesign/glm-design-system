@@ -218,14 +218,6 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
   font-size: 0.85rem; color: var(--primary); background: transparent;
 }
 .ki-search-wrap input::placeholder { color: #bbb; }
-.ki-jump-today {
-  border: 1px solid var(--primary); border-radius: var(--pill);
-  background: transparent; color: var(--primary);
-  font-family: var(--font-heading); font-weight: 700; font-size: 0.75rem;
-  padding: 4px 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;
-}
-.ki-jump-today:hover { background: var(--outline-hover); }
-
 /* VIEW SWITCHER (Dated / Undated) */
 .ki-viewswitch {
   display: inline-flex; align-items: center; gap: 0;
@@ -266,6 +258,12 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
 .ki-pill.active { background: var(--primary); color: #fff; }
 .ki-pill.active svg { color: #fff; }
 .ki-pill svg { color: var(--primary); }
+.ki-pill[disabled], .ki-pill.disabled {
+  border-color: var(--neutral-50); color: var(--neutral-40);
+  background: var(--surface); cursor: not-allowed; opacity: 0.6;
+}
+.ki-pill[disabled]:hover, .ki-pill.disabled:hover { background: var(--surface); }
+.ki-pill[disabled] svg, .ki-pill.disabled svg { color: var(--neutral-40); }
 .ki-pill__count {
   font-size: 0.7rem; font-weight: 700; padding-left: 4px;
   font-family: var(--font-heading); opacity: 0.7;
@@ -914,10 +912,6 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
           <svg width="13" height="13" style="color:#aaa"><use href="#ic-search"/></svg>
           <input type="text" id="search-input" placeholder="Search interactions by title or content">
         </div>
-        <button class="ki-jump-today" id="jump-today">
-          <svg width="12" height="12"><use href="#ic-calendar"/></svg>
-          Jump to today
-        </button>
         <button class="btn-ft-filled btn-ft-default">
           <svg width="12" height="12" style="color:#fff"><use href="#ic-plus"/></svg>
           Add Interaction
@@ -1114,9 +1108,9 @@ var state = {
   view: 'dated',            // dated | undated
   gapLabel: 'prominent',    // prominent | subtle
   densityMode: 'all',       // all | human (filter system events out of density viz)
-  activeTypes: {            // type filter pills
-    'note': true, 'phone': true, 'email': true, 'in-person': true, 'video': true,
-    'award': true, 'submitted-form': true, 'payment': true, 'installment': true, 'system-email': true
+  activeTypes: {            // type filter pills (empty selection = show all)
+    'note': false, 'phone': false, 'email': false, 'in-person': false, 'video': false,
+    'award': false, 'submitted-form': false, 'payment': false, 'installment': false, 'system-email': false
   },
   search: '',
   /* Navigator-driven scoping (date range filter from navigator interaction) */
@@ -1158,12 +1152,12 @@ function monthsBetween(keyA, keyB) {
 }
 function gapPhrase(months) {
   if (months < 1) return '';
-  if (months === 1) return '1 month later';
-  if (months < 12) return months + ' months later';
+  if (months === 1) return '1 month earlier';
+  if (months < 12) return months + ' months earlier';
   var years = Math.floor(months / 12);
   var rem = months % 12;
-  if (rem === 0) return years === 1 ? '1 year later' : years + ' years later';
-  return years + 'y ' + rem + 'm later';
+  if (rem === 0) return years === 1 ? '1 year earlier' : years + ' years earlier';
+  return years + 'y ' + rem + 'm earlier';
 }
 function quarterFromMonth(monthIdx) {
   return Math.floor(monthIdx / 3) + 1;
@@ -1204,12 +1198,21 @@ function undatedData() {
 }
 
 /* Apply pill filters + search to a dated set */
+function hasActiveTypeFilters() {
+  for (var k in state.activeTypes) {
+    if (state.activeTypes[k]) return true;
+  }
+  return false;
+}
+
 function applyFilters(items) {
   var out = [];
   var q = state.search.toLowerCase();
+  var anyActive = hasActiveTypeFilters();
   for (var i = 0; i < items.length; i++) {
     var it = items[i];
-    if (!state.activeTypes[it.type]) continue;
+    /* If any type pill is active, item must match one of them. If none are active, all pass. */
+    if (anyActive && !state.activeTypes[it.type]) continue;
     if (q && it.title.toLowerCase().indexOf(q) === -1 && it.body.toLowerCase().indexOf(q) === -1) continue;
     out.push(it);
   }
@@ -1230,7 +1233,7 @@ function applyScopeRange(items) {
 function currentDatedData() {
   var items = applyFilters(datedData());
   items = applyScopeRange(items);
-  items.sort(function(a, b) { return a.date < b.date ? -1 : (a.date > b.date ? 1 : 0); });
+  items.sort(function(a, b) { return a.date < b.date ? 1 : (a.date > b.date ? -1 : 0); });
   return items;
 }
 
@@ -1240,7 +1243,7 @@ function currentUndatedData() {
   items.sort(function(a, b) {
     var ac = a.createDate || '';
     var bc = b.createDate || '';
-    return ac < bc ? -1 : (ac > bc ? 1 : 0);
+    return ac < bc ? 1 : (ac > bc ? -1 : 0);
   });
   return items;
 }
@@ -1361,6 +1364,12 @@ function renderRecordHeader() {
 function renderFilterPills() {
   var host = document.getElementById('filter-pills');
   var html = '<span class="ki-filters__label">Filter by type</span>';
+  /* "Show all" pill — disabled when no filters are active */
+  var anyActive = hasActiveTypeFilters();
+  html += '<button class="ki-pill' + (anyActive ? '' : ' disabled') + '" ' +
+    (anyActive ? 'onclick="clearTypeFilters()"' : 'disabled') + '>' +
+    'Show all' +
+    '</button>';
   /* Compute counts on dated set for each type */
   var counts = {};
   var datedSet = datedData();
@@ -1380,6 +1389,14 @@ function renderFilterPills() {
       '</button>';
   }
   host.innerHTML = html;
+}
+
+function clearTypeFilters() {
+  for (var k in state.activeTypes) { state.activeTypes[k] = false; }
+  renderFilterPills();
+  renderNavigator();
+  renderTimeline();
+  renderViewSwitchCounts();
 }
 
 function togglePill(type) {
@@ -2082,7 +2099,7 @@ function renderVertical(data) {
     var k = monthKey(it.date);
     if (k !== lastKey) {
       if (lastKey !== null) {
-        var gapMonths = monthsBetween(lastKey, k);
+        var gapMonths = monthsBetween(k, lastKey);
         var phrase = gapPhrase(gapMonths);
         if (phrase) {
           html += '<div class="ki-vert__gap">' +
@@ -2164,11 +2181,6 @@ document.getElementById('search-input').addEventListener('input', function(e) {
   renderViewSwitchCounts();
   renderNavigator();
   renderTimeline();
-});
-
-document.getElementById('jump-today').addEventListener('click', function() {
-  var host = document.getElementById('timeline');
-  host.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
 (function() {
