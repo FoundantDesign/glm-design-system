@@ -174,7 +174,13 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
 }
 
 /* RECORD HEADER */
-.ft-record-header { margin-bottom: 20px; }
+.ft-record-header {
+  margin-bottom: 20px;
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+.ft-record-header__main { flex: 1; min-width: 0; }
+.ft-record-header__actions { flex-shrink: 0; padding-top: 4px; }
 .ft-record-header h1 { font-size: 1.75rem; font-weight: 500; display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
 .ft-record-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 0.85rem; color: #666; }
 .ft-record-meta .org { font-weight: 600; color: var(--primary); }
@@ -889,10 +895,18 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
 
     <!-- RECORD HEADER -->
     <div class="ft-record-header">
-      <h1 id="record-title">Cedar Ridge Foundation
-        <svg width="16" height="16" style="color:#aaa;cursor:pointer"><use href="#ic-pencil"/></svg>
-      </h1>
-      <div class="ft-record-meta" id="record-meta"></div>
+      <div class="ft-record-header__main">
+        <h1 id="record-title">Cedar Ridge Foundation
+          <svg width="16" height="16" style="color:#aaa;cursor:pointer"><use href="#ic-pencil"/></svg>
+        </h1>
+        <div class="ft-record-meta" id="record-meta"></div>
+      </div>
+      <div class="ft-record-header__actions">
+        <button class="btn-ft-filled btn-ft-default">
+          <svg width="12" height="12" style="color:#fff"><use href="#ic-plus"/></svg>
+          Add Interaction
+        </button>
+      </div>
     </div>
 
     <!-- TOP CONTROLS -->
@@ -912,10 +926,6 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
           <svg width="13" height="13" style="color:#aaa"><use href="#ic-search"/></svg>
           <input type="text" id="search-input" placeholder="Search interactions by title or content">
         </div>
-        <button class="btn-ft-filled btn-ft-default">
-          <svg width="12" height="12" style="color:#fff"><use href="#ic-plus"/></svg>
-          Add Interaction
-        </button>
       </div>
 
       <!-- FILTER PILLS -->
