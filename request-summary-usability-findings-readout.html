@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Request Summary Redesign Test Findings</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap">
+<style>
+:root {
+  --near-black: #272624;
+  --warm-grey: #747270;
+  --navy: #004784;
+  --green: #97D700;
+  --callout-fill: #F8FCEB;
+  --callout-label: #404D0C;
+  --rule-grey: #D9D9D9;
+  --white: #FFFFFF;
+  --bg: #FAFAF9;
+  --danger: #BD3B39;
+  --warning: #E8A735;
+  --success: #3A8F5C;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Lato', sans-serif; color: var(--near-black); background: var(--bg); font-size: 16px; line-height: 1.6; }
+
+/* NAV */
+.topbar { background: var(--white); border-bottom: 1px solid var(--rule-grey); padding: 14px 40px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 100; }
+.topbar-logo { font-weight: 900; font-size: 0.85rem; color: var(--navy); letter-spacing: 0.08em; text-transform: uppercase; }
+.topbar-sep { color: var(--rule-grey); }
+.topbar-title { font-size: 0.85rem; color: var(--warm-grey); font-weight: 400; }
+
+/* HERO */
+.hero { background: var(--navy); color: var(--white); padding: 80px 40px 60px; }
+.hero-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); margin-bottom: 12px; }
+.hero h1 { font-size: 2.4rem; font-weight: 300; line-height: 1.2; margin-bottom: 8px; max-width: 700px; }
+.hero h1 strong { font-weight: 700; }
+.hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7); margin-bottom: 32px; max-width: 600px; }
+.hero-stats { display: flex; gap: 40px; flex-wrap: wrap; }
+.hero-stat { display: flex; flex-direction: column; }
+.hero-stat-value { font-size: 2rem; font-weight: 700; }
+.hero-stat-label { font-size: 0.75rem; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* SECTION CONTAINER */
+.section { max-width: 960px; margin: 0 auto; padding: 60px 40px; }
+.section + .section { padding-top: 0; }
+
+/* SECTION HEADERS */
+.section-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--navy); margin-bottom: 8px; }
+.section h2 { font-size: 1.6rem; font-weight: 300; color: var(--near-black); margin-bottom: 8px; }
+.section h2 strong { font-weight: 700; }
+.section-intro { font-size: 1rem; color: var(--warm-grey); margin-bottom: 32px; max-width: 640px; }
+
+/* THREE-COLUMN: RIGHT / WRONG / SURPRISED */
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-bottom: 40px; }
+.col-card { background: var(--white); border-radius: 8px; padding: 24px; border-top: 4px solid var(--rule-grey); }
+.col-card.right { border-top-color: var(--success); }
+.col-card.wrong { border-top-color: var(--danger); }
+.col-card.surprised { border-top-color: var(--warning); }
+.col-card-icon { font-size: 1.4rem; margin-bottom: 8px; }
+.col-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; color: var(--near-black); }
+.col-card ul { list-style: none; padding: 0; }
+.col-card li { font-size: 0.85rem; color: var(--near-black); padding: 6px 0; border-bottom: 1px solid var(--rule-grey); line-height: 1.4; }
+.col-card li:last-child { border-bottom: none; }
+.col-card .count { font-size: 0.7rem; color: var(--warm-grey); font-weight: 700; }
+
+/* FINDING CARDS */
+.finding-card { background: var(--white); border-radius: 8px; padding: 32px; margin-bottom: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+.finding-card.full-width { grid-template-columns: 1fr; }
+.finding-tag { display: inline-block; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; margin-bottom: 10px; }
+.finding-tag.convergent { background: #FCDDDD; color: var(--danger); }
+.finding-tag.emerging { background: #FFF4D1; color: #8a6d00; }
+.finding-tag.validated { background: #E1F5EB; color: var(--success); }
+.finding-card h3 { font-size: 1.15rem; font-weight: 700; color: var(--near-black); margin-bottom: 10px; line-height: 1.3; }
+.finding-card p { font-size: 0.9rem; color: var(--near-black); margin-bottom: 12px; line-height: 1.6; }
+.finding-quote { border-left: 3px solid var(--navy); padding: 12px 16px; margin: 12px 0; background: var(--bg); border-radius: 0 6px 6px 0; }
+.finding-quote p { font-size: 0.85rem; color: var(--near-black); font-style: italic; margin-bottom: 4px; }
+.finding-quote cite { font-size: 0.75rem; color: var(--warm-grey); font-style: normal; font-weight: 700; }
+
+/* VIDEO CLIP */
+.clip-container { border-radius: 8px; overflow: hidden; border: 1px solid var(--rule-grey); background: #000; }
+.clip-container iframe { width: 100%; height: 260px; border: none; display: block; }
+.clip-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 200px; background: var(--near-black); color: rgba(255,255,255,0.5); font-size: 0.8rem; gap: 8px; border-radius: 8px; }
+.clip-placeholder-icon { font-size: 2rem; opacity: 0.4; }
+.clip-caption { padding: 10px 14px; background: var(--white); font-size: 0.75rem; color: var(--warm-grey); border-top: 1px solid var(--rule-grey); }
+.clip-caption strong { color: var(--near-black); }
+
+/* RECOMMENDATIONS */
+.rec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+.rec-card { background: var(--white); border-radius: 8px; padding: 24px; }
+.rec-card h3 { font-size: 0.95rem; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
+.rec-card ul { list-style: none; padding: 0; }
+.rec-card li { font-size: 0.85rem; padding: 6px 0; border-bottom: 1px solid var(--rule-grey); line-height: 1.5; }
+.rec-card li:last-child { border-bottom: none; }
+.rec-card li strong { font-weight: 700; }
+.rec-card.ship { border-left: 4px solid var(--success); }
+.rec-card.iterate { border-left: 4px solid var(--danger); }
+.rec-card.test { border-left: 4px solid var(--navy); }
+.rec-card.data { border-left: 4px solid var(--warning); }
+
+/* CALLOUT BOX */
+.callout { border-left: 4px solid var(--green); background: var(--callout-fill); border-radius: 0 8px 8px 0; padding: 20px 24px; margin: 24px 0; }
+.callout-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--callout-label); margin-bottom: 6px; }
+.callout p { font-size: 0.85rem; color: var(--near-black); margin: 0; }
+
+/* APPENDIX TOGGLE */
+.appendix-toggle { background: none; border: 1px solid var(--rule-grey); border-radius: 8px; padding: 14px 20px; font-size: 0.85rem; font-family: 'Lato', sans-serif; font-weight: 700; color: var(--navy); cursor: pointer; width: 100%; text-align: left; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.appendix-toggle:hover { background: var(--white); }
+.appendix-content { display: none; background: var(--white); border-radius: 8px; padding: 24px 32px; margin-bottom: 24px; }
+.appendix-content.open { display: block; }
+.appendix-content h4 { font-size: 0.9rem; font-weight: 700; color: var(--navy); margin: 20px 0 8px; }
+.appendix-content h4:first-child { margin-top: 0; }
+.appendix-content p { font-size: 0.85rem; margin-bottom: 10px; color: var(--near-black); }
+.appendix-content li { font-size: 0.85rem; margin-bottom: 6px; }
+
+/* FOOTER */
+.page-footer { text-align: center; padding: 40px; font-size: 0.75rem; color: var(--warm-grey); border-top: 1px solid var(--rule-grey); }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .three-col { grid-template-columns: 1fr; }
+  .finding-card { grid-template-columns: 1fr; }
+  .rec-grid { grid-template-columns: 1fr; }
+  .hero { padding: 40px 20px 30px; }
+  .hero h1 { font-size: 1.6rem; }
+  .section { padding: 40px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <span class="topbar-logo">GLM Product Design</span>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-title">Request Summary Redesign Test Findings</span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-label">Usability Findings</div>
+  <h1>The core direction is <strong>validated</strong>. Four things need iteration before shipping.</h1>
+  <p class="hero-sub">Request Summary page redesign, tested with 7 GLM clients in an unmoderated remote study (Userlytics). May 2026.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="hero-stat-value">7</span><span class="hero-stat-label">Participants</span></div>
+    <div class="hero-stat"><span class="hero-stat-value">6</span><span class="hero-stat-label">Validated decisions</span></div>
+    <div class="hero-stat"><span class="hero-stat-value">4</span><span class="hero-stat-label">Iterate before ship</span></div>
+    <div class="hero-stat"><span class="hero-stat-value">2</span><span class="hero-stat-label">Data pulls needed</span></div>
+  </div>
+</div>
+
+<!-- RIGHT / WRONG / SURPRISED -->
+<div class="section">
+  <div class="section-label">Summary</div>
+  <h2>What we were <strong>right, wrong, and surprised</strong> about</h2>
+  <p class="section-intro">Mapped against the six HMW statements and three risk areas (findability, comprehension, workflow disruption) from the test plan.</p>
+
+  <div class="three-col">
+    <div class="col-card right">
+      <div class="col-card-icon">&#10003;</div>
+      <h3>What we were right about</h3>
+      <ul>
+        <li>Unified summary page is the right concept <span class="count">7/7</span></li>
+        <li>Hero Card stage tracker communicates status <span class="count">6/7</span></li>
+        <li>Slide-over is the preferred form view pattern <span class="count">4/7 explicit, 0 negative</span></li>
+        <li>Award Details bento is instantly findable <span class="count">7/7</span></li>
+        <li>Actions dropdown is findable for admin tasks <span class="count">5/7</span></li>
+        <li>Application access from Request Details works <span class="count">6/7</span></li>
+      </ul>
+    </div>
+    <div class="col-card wrong">
+      <div class="col-card-icon">&#10007;</div>
+      <h3>What we were wrong about</h3>
+      <ul>
+        <li>Page doesn't self-identify as a request record <span class="count">4/7 misidentified</span></li>
+        <li>Action buttons need next-step context, not just labels <span class="count">2/7 + design principle</span></li>
+        <li>Due dates are critical and missing <span class="count">5/7 asked</span></li>
+      </ul>
+    </div>
+    <div class="col-card surprised">
+      <div class="col-card-icon">!</div>
+      <h3>What surprised us</h3>
+      <ul>
+        <li>Multi-year grants may need different information hierarchy</li>
+        <li>Contact card prominence matters for relationship-based grantmaking</li>
+        <li>Interactions bento value depends entirely on email integration</li>
+        <li>Layout rearrangement vs. consistency is a genuine participant disagreement</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- KEY FINDINGS WITH CLIPS -->
+<div class="section">
+  <div class="section-label">Key findings</div>
+  <h2>The evidence behind the <strong>top findings</strong></h2>
+  <p class="section-intro">Each finding includes participant quotes and video clips where available. Clips can be played inline.</p>
+
+  <!-- FINDING 1: Page identity -->
+  <div class="finding-card">
+    <div>
+      <span class="finding-tag convergent">Convergent (4/7)</span>
+      <h3>The page doesn't identify itself as a request record</h3>
+      <p>Four participants initially described the page as an "organization page" or "organization summary" before self-correcting. The page relies on implicit cues (project title, stage tracker) to communicate record type, but there is no explicit label like "Grant Request" near the title.</p>
+      <p>This is the most actionable comprehension finding. Adding a record type indicator near the page title would resolve it.</p>
+      <div class="finding-quote">
+        <p>"This appears to be an organization summary page... Not sure what this is. Is this one specific request? Or I guess this maybe isn't an organization, it's a request summary page."</p>
+        <cite>Alex Hall</cite>
+      </div>
+    </div>
+    <div>
+      <div class="clip-container">
+        <iframe src="https://video-analysis.userlytics.com/#/clip/sessions/dfa55a01/381d0b518df3c15a9ace7db5e33d5884c467cfe004ad8118c30a36b0f5981a15" allowfullscreen></iframe>
+        <div class="clip-caption"><strong>Elise:</strong> 4th participant in a row who did not immediately understand the page to be a specific request.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINDING 2: Due dates -->
+  <div class="finding-card">
+    <div>
+      <span class="finding-tag convergent">Convergent (5/7)</span>
+      <h3>Due dates are the #1 missing data element</h3>
+      <p>Five participants independently flagged the absence of dates. This was the strongest feedback signal in the study. Participants said date visibility is the primary reason they visit an individual request page, and without it they can't answer common questions from nonprofits or brief colleagues on timeline.</p>
+      <p>The data exists in the system. Submission dates should appear on Request Details rows, due dates on Follow Up rows, and overdue items need visual differentiation.</p>
+      <div class="finding-quote">
+        <p>"Where are the dates for anything? The one thing we would actually go to the individual request versus looking at the workflow page is to know their specific due dates."</p>
+        <cite>Caitlin Stanley</cite>
+      </div>
+    </div>
+    <div>
+      <div class="clip-placeholder">
+        <span class="clip-placeholder-icon">&#9654;</span>
+        <span>Clip pending: Caitlin on missing dates</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINDING 3: Action button scoping -->
+  <div class="finding-card">
+    <div>
+      <span class="finding-tag emerging">Emerging (2/7)</span>
+      <h3>Action buttons need scope and context</h3>
+      <p>The contextual action bar tells users what actions are available, but not why they're being surfaced or what they apply to. Will saw "Follow Up Complete" in the header and asked which of the three listed follow-ups it would affect. Separately, analysis revealed that "Assign/View Evaluators" does double duty as both a status indicator and an action trigger without clarifying which role it's playing.</p>
+      <p>Design principle: contextual buttons should communicate the next step, not just the available action.</p>
+      <div class="finding-quote">
+        <p>"If I click follow-up complete, which of the multiple follow-ups is going to that pertain to? There are multiple follow-ups down here. I'm not sure what clicking either of these buttons would do."</p>
+        <cite>Will Hayden</cite>
+      </div>
+    </div>
+    <div>
+      <div class="clip-placeholder">
+        <span class="clip-placeholder-icon">&#9654;</span>
+        <span>Clip pending: Will on Follow Up Complete confusion</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINDING 4: Slide-over validated -->
+  <div class="finding-card">
+    <div>
+      <span class="finding-tag validated">Validated (4/7)</span>
+      <h3>Slide-over is the clear winner for form viewing</h3>
+      <p>Four participants explicitly preferred slide-over after comparing all three patterns during free exploration. No participant preferred full replace or floating. The slide-over pattern keeps users in context while providing quick access to form content, which aligns with real workflows where grants managers reference applications without wanting to leave the summary page.</p>
+      <div class="finding-quote">
+        <p>"The slide-over is by far my favorite. It's really nice."</p>
+        <cite>Alex Hall</cite>
+      </div>
+    </div>
+    <div>
+      <div class="clip-placeholder">
+        <span class="clip-placeholder-icon">&#9654;</span>
+        <span>Clip pending: Alex comparing form view patterns</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINDING 5: The tension -->
+  <div class="finding-card full-width">
+    <div>
+      <span class="finding-tag emerging">Open question</span>
+      <h3>Should the layout adapt by stage, or stay consistent?</h3>
+      <p>Participants genuinely disagree. Elise and Alex argued that Request Details should be demoted during Follow Up stage because grants managers spend months or years in that phase and rarely need historical application data front and center. But Caitlin explicitly pushed back: she doesn't want boxes to disappear because learning multiple versions of the same page is worse than knowing where everything always is.</p>
+      <p>Will's feedback suggests a middle path: keep all bentos in the same positions but use visual weight (icons, size, color accents) to draw attention to what's most relevant at each stage. This achieves stage-appropriate emphasis without breaking spatial memory.</p>
+      <p>This tension is the most important open design question heading into the next iteration.</p>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px">
+        <div class="finding-quote">
+          <p>"I don't wanna see boxes disappear. That's more confusing if you have to get used to multiple versions of the same page at different stages."</p>
+          <cite>Caitlin Stanley</cite>
+        </div>
+        <div class="finding-quote">
+          <p>"I don't think I would need this request details this visible... this could be minimized. The only items useful to me halfway through an award are follow-ups and award details."</p>
+          <cite>Elise</cite>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RECOMMENDATIONS -->
+<div class="section">
+  <div class="section-label">Recommendations</div>
+  <h2>What to do <strong>next</strong></h2>
+
+  <div class="rec-grid">
+    <div class="rec-card ship">
+      <h3>Ship with confidence</h3>
+      <ul>
+        <li>Expanded layout with all bentos visible</li>
+        <li>Slide-over as the form viewing pattern</li>
+        <li>Hero Card with color-coded stage tracker</li>
+        <li>Award Details bento structure</li>
+        <li>Actions dropdown for admin tasks</li>
+        <li>Request Details bento for form/eval access</li>
+      </ul>
+    </div>
+    <div class="rec-card iterate">
+      <h3>Iterate before shipping</h3>
+      <ul>
+        <li><strong>Add due dates</strong> to Request Details rows and Follow Up rows. Add overdue visual indicators. (5/7)</li>
+        <li><strong>Add record type label</strong> near the page title to differentiate from org records. (4/7)</li>
+        <li><strong>Scope Follow Up Complete</strong> to clarify which follow-up it applies to.</li>
+        <li><strong>Add next-step context</strong> to action buttons (e.g., "LOI reviewed. Assign the next form.")</li>
+      </ul>
+    </div>
+    <div class="rec-card test">
+      <h3>Test in a follow-up round</h3>
+      <ul>
+        <li>Visual hierarchy variations (icons, weighted sizing) as a middle path for stage emphasis</li>
+        <li>Clickable Hero Card stage nodes as form shortcuts</li>
+        <li>Sidebar scroll-to-bento behavior</li>
+        <li>Overdue status visual treatment</li>
+        <li>Contact card prominence for relationship-based contexts</li>
+      </ul>
+    </div>
+    <div class="rec-card data">
+      <h3>Data pulls to inform next steps</h3>
+      <ul>
+        <li><strong>Multi-year grants:</strong> How many active clients have grants with 24+ month durations? Helps anticipate where feedback will cluster.</li>
+        <li><strong>Relationship-based grantmaking:</strong> How many clients would characterize their approach this way? Informs contact card priority.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- APPENDIX -->
+<div class="section">
+  <div class="section-label">Reference</div>
+  <button class="appendix-toggle" onclick="toggleAppendix('methodology')">
+    Methodology and study limitations
+    <span id="methodology-arrow">&#9660;</span>
+  </button>
+  <div class="appendix-content" id="methodology">
+    <h4>Study design</h4>
+    <p>Unmoderated remote usability study conducted through Userlytics. Seven GLM clients completed the study against a target of 10. Participants saw three locked prototype states (Follow Up Submitted, Decision Approved, LOI Submitted) plus a free exploration mode. All form viewing was locked to Pattern B (slide-over). The prototype (v3.3) included contextual action buttons.</p>
+    <p>Tasks traced back to six HMW statements and three risk areas (findability, comprehension, workflow disruption). Several write-in tasks were omitted to stay within the 30-minute cap; verbal video responses were prioritized instead.</p>
+
+    <h4>Confidence thresholds (adjusted for n=7)</h4>
+    <ul>
+      <li><strong>Convergent (5-7 of 7):</strong> Act on now.</li>
+      <li><strong>Emerging (3-4 of 7):</strong> Document and watch.</li>
+      <li><strong>Isolated (1-2 of 7):</strong> Note, don't act yet.</li>
+    </ul>
+
+    <h4>Limitations</h4>
+    <ul>
+      <li>7 of 10 target participants. Emerging signals carry lower confidence.</li>
+      <li>No difficulty rating scales or SUS scores collected (omitted for time).</li>
+      <li>Role segmentation not possible at n=7.</li>
+      <li>Seeded dummy data didn't match all participants' real configurations (no LOI process, more complex budgets, more evaluators).</li>
+      <li>Several participants experienced friction with the Userlytics platform interface (advancing between activities, overlay windows). Some hesitation was platform-driven, not prototype-driven.</li>
+    </ul>
+
+    <h4>Participants</h4>
+    <p>Elise, Patti Biera, Alex Hall, Aamina Ahmed, Elisabeth Jackson, Will Hayden, Caitlin Stanley. Recruited via Gainsight in-app link. No intentional segment split.</p>
+  </div>
+
+  <button class="appendix-toggle" onclick="toggleAppendix('emerging')">
+    Full list of emerging signals
+    <span id="emerging-arrow">&#9660;</span>
+  </button>
+  <div class="appendix-content" id="emerging">
+    <h4>Follow-up action buttons expected near the Follow Ups bento (2/7)</h4>
+    <p>Alex's eye naturally went to the Follow Ups bento for follow-up actions. Patti wanted assignee names inline within follow-up rows. Pre-existing hypothesis confirmed by testing.</p>
+
+    <h4>Hero Card stage nodes expected to be clickable (1/7)</h4>
+    <p>Will tried to click stage tracker nodes to navigate into forms. Isolated signal but an interesting affordance question.</p>
+
+    <h4>Sidebar nav items don't scroll to bentos (2/7)</h4>
+    <p>Caitlin and Will noted clicking sidebar items didn't visibly do anything. Will suggested matching icons between sidebar and bento headers.</p>
+
+    <h4>Same badge color for different statuses (1/7)</h4>
+    <p>Caitlin noted Submitted and Assigned both use info-blue, undermining color coding value.</p>
+
+    <h4>Requested amount irrelevant post-approval (1/7)</h4>
+    <p>Will said he'd prefer the Hero Card to show Paid vs Balance instead of Requested vs Awarded after approval.</p>
+
+    <h4>Financials and Compliance may not need a full bento (1/7)</h4>
+    <p>Will suggested compliance status could be represented as compact icons near the project name rather than a dedicated module.</p>
+
+    <h4>Mobile responsiveness (1/7)</h4>
+    <p>Alex noted they "do lots of things on the go" and was curious how the layout would stack on mobile.</p>
+  </div>
+</div>
+
+<div class="page-footer">
+  Foundant Technologies &middot; Product Design &middot; May 2026
+</div>
+
+<script>
+function toggleAppendix(id) {
+  var el = document.getElementById(id);
+  var arrow = document.getElementById(id + '-arrow');
+  var isOpen = el.classList.toggle('open');
+  arrow.innerHTML = isOpen ? '&#9650;' : '&#9660;';
+}
+</script>
+</body>
+</html>
