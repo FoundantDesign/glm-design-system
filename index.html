@@ -11,27 +11,161 @@
   <style>
     /* ═══════════════════════════════════
        LAYER A: GLM PRODUCTION
-       Values from computed styles inspection
+       Foundant design tokens applied
        ═══════════════════════════════════ */
     :root, [data-theme="production"] {
-      --t-primary:#3b71ca; --t-primary-h:#386bc0; --t-primary-bg:#e2eaf7; --t-primary-bdr:#b1c6ea; --t-primary-txt:#2f5aa2;
-      --t-secondary:#9fa6b2; --t-secondary-bg:#f1f2f3; --t-secondary-txt:#404247;
-      --t-success:#14a44d; --t-success-bg:#dcf1e4; --t-success-txt:#0c622e;
-      --t-danger:#dc4c64; --t-danger-bg:#fae4e8; --t-danger-txt:#b03d50;
-      --t-warning:#e4a11b; --t-warning-bg:#fbf1dd; --t-warning-txt:#896110;
-      --t-info:#54b4d3; --t-info-bg:#e5f4f8; --t-info-txt:#3b7e94;
-      --t-light:#fbfbfb; --t-dark:#332d2d;
-      --t-body:rgb(45,59,74); --t-body-bg:#f5f5f5;
-      --t-link:#3b71ca; --t-link-h:#386bc0;
-      --t-bdr:#e0e0e0; --t-form-bdr:#bdbdbd; --t-form-lbl:#757575;
-      --t-valid:#14a44d; --t-invalid:#dc4c64;
-      --t-focus:rgba(59,113,202,0.25); --t-focus-bdr:#3b71ca;
-      --t-surface:#fff;
-      --t-font:"Roboto",sans-serif; --t-heading:"Roboto",sans-serif;
-      --t-shadow-sm:0 .125rem .25rem rgba(0,0,0,.075); --t-shadow:0 .5rem 1rem rgba(0,0,0,.15); --t-shadow-lg:0 1rem 3rem rgba(0,0,0,.175);
-      --g50:#fbfbfb; --g100:#f5f5f5; --g200:#eee; --g300:#e0e0e0; --g400:#bdbdbd; --g500:#9e9e9e; --g600:#757575; --g700:#616161; --g800:#4f4f4f; --g900:#262626;
-      --r-xs:2px; --r-sm:4px; --r-md:8px; --r-rnd:50px; --r-pill:50rem;
-      --layer-color:#3b71ca;
+      /* ── Foundant Design Tokens ── */
+      --colors-borders-enabled: rgb(117, 117, 117);
+      --colors-borders-divider: rgb(224, 224, 224);
+      --colors-borders-hover: rgb(45, 59, 74);
+      --colors-borders-focused: rgb(45, 59, 74);
+      --colors-borders-brand: rgb(45, 59, 74);
+      --colors-borders-pressed: rgb(45, 59, 74);
+      --colors-borders-disabled: rgb(189, 189, 189);
+      --colors-borders-danger: var(--colors-semantic-danger-500);
+      --colors-borders-warning: rgb(244, 200, 98);
+      --colors-borders-success: rgb(103, 207, 157);
+      --colors-borders-info: rgb(83, 110, 138);
+      --colors-brand-primary-dark-blue: rgb(45, 59, 74);
+      --colors-brand-tertiary-white: rgb(255, 255, 255);
+      --colors-brand-orange: rgb(242, 107, 34);
+      --colors-brand-light-yellow: rgb(254, 251, 220);
+      --colors-brand-secondary-light-blue: rgb(213, 226, 250);
+      --colors-brand-yellow: rgb(246, 184, 69);
+      --colors-state-layers-dark-link: rgb(57, 110, 196);
+      --colors-state-layers-dark-hover: rgb(66, 79, 92);
+      --colors-state-layers-dark-focused: rgb(66, 79, 92);
+      --colors-state-layers-dark-pressed: rgb(87, 98, 110);
+      --colors-state-layers-light-hover: rgb(234, 235, 237);
+      --colors-state-layers-light-focused: rgb(234, 235, 237);
+      --colors-state-layers-light-pressed: rgb(213, 216, 219);
+      --colors-neutral-0: rgb(0, 0, 0);
+      --colors-neutral-10: rgb(33, 33, 33);
+      --colors-neutral-20: rgb(66, 66, 66);
+      --colors-neutral-30: rgb(97, 97, 97);
+      --colors-neutral-40: rgb(117, 117, 117);
+      --colors-neutral-50: rgb(189, 189, 189);
+      --colors-neutral-60: rgb(224, 224, 224);
+      --colors-neutral-70: rgb(238, 238, 238);
+      --colors-neutral-80: rgb(245, 245, 245);
+      --colors-neutral-90: rgb(250, 250, 250);
+      --colors-neutral-100: rgb(255, 255, 255);
+      --colors-primary-shades-0: rgb(45, 59, 74);
+      --colors-primary-shades-10: rgb(66, 79, 92);
+      --colors-primary-shades-20: rgb(87, 98, 110);
+      --colors-primary-shades-30: rgb(108, 118, 128);
+      --colors-primary-shades-40: rgb(129, 137, 146);
+      --colors-primary-shades-50: rgb(150, 157, 165);
+      --colors-primary-shades-60: rgb(171, 177, 183);
+      --colors-primary-shades-70: rgb(192, 196, 201);
+      --colors-primary-shades-80: rgb(213, 216, 219);
+      --colors-primary-shades-90: rgb(234, 235, 237);
+      --colors-semantic-success-0: rgb(103, 207, 157);
+      --colors-semantic-danger-50:  #FAEAEA;
+      --colors-semantic-danger-100: #F2BEBE;
+      --colors-semantic-danger-200: #E89090;
+      --colors-semantic-danger-300: #DD6463;
+      --colors-semantic-danger-400: #D44D4B;
+      --colors-semantic-danger-500: #BD3B39;
+      --colors-semantic-danger-600: #A33230;
+      --colors-semantic-danger-700: #882927;
+      --colors-semantic-danger-800: #6B1F1E;
+      --colors-semantic-danger-900: #4D1514;
+      --colors-semantic-danger-0: #BD3B39; /* legacy alias = danger-500 */
+      --colors-semantic-info-0: rgb(83, 110, 138);
+      --colors-semantic-success-50: rgb(225, 245, 235);
+      --colors-semantic-warning-0: rgb(244, 200, 98);
+      --colors-semantic-warning-50: rgb(255, 244, 209);
+      --colors-semantic-info-50: rgb(213, 226, 250);
+      --colors-semantic-info-90: rgb(240, 247, 255);
+      --colors-link-default: rgb(25, 118, 210);
+      --colors-link-hover: rgb(35, 82, 124);
+      --radius-none: 0;
+      --radius-xs: 2px;
+      --radius-md: 8px;
+      --radius-round: 50px;
+      --radius-sm: 4px;
+
+      /* ── Non-design-system variables ── */
+      --color-primary: var(--colors-link-default);
+      --color-primary-hover: var(--colors-link-default);
+
+      /* ── MDB mappings ── */
+      --mdb-body-bg: var(--colors-neutral-80);
+      --mdb-body-color: var(--colors-brand-primary-dark-blue);
+      --mdb-code-color: #d1145a;
+      --mdb-secondary-color: var(--colors-primary-shades-40);
+      --mdb-surface-color: var(--colors-brand-primary-dark-blue);
+
+      /* ── Kitchen sink theme aliases (mapped to foundant tokens) ── */
+      --t-primary: var(--colors-brand-primary-dark-blue);
+      --t-primary-h: var(--colors-state-layers-dark-hover);
+      --t-primary-bg: var(--colors-primary-shades-90);
+      --t-primary-bdr: var(--colors-primary-shades-70);
+      --t-primary-txt: var(--colors-brand-primary-dark-blue);
+
+      --t-secondary: var(--colors-primary-shades-40);
+      --t-secondary-bg: var(--colors-primary-shades-90);
+      --t-secondary-txt: var(--colors-brand-primary-dark-blue);
+
+      --t-success: var(--colors-semantic-success-0);
+      --t-success-bg: var(--colors-semantic-success-50);
+      --t-success-txt: var(--colors-brand-primary-dark-blue);
+
+      --t-danger: var(--colors-semantic-danger-500);
+      --t-danger-bg: var(--colors-semantic-danger-50);
+      --t-danger-txt: var(--colors-semantic-danger-700);
+
+      --t-warning: var(--colors-semantic-warning-0);
+      --t-warning-bg: var(--colors-semantic-warning-50);
+      --t-warning-txt: var(--colors-brand-primary-dark-blue);
+
+      --t-info: var(--colors-semantic-info-0);
+      --t-info-bg: var(--colors-semantic-info-50);
+      --t-info-txt: var(--colors-brand-primary-dark-blue);
+
+      --t-light: var(--colors-neutral-90);
+      --t-dark: var(--colors-brand-primary-dark-blue);
+
+      --t-body: var(--colors-brand-primary-dark-blue);
+      --t-body-bg: var(--colors-neutral-80);
+      --t-link: var(--colors-link-default);
+      --t-link-h: var(--colors-link-hover);
+
+      --t-bdr: var(--colors-borders-divider);
+      --t-form-bdr: var(--colors-borders-enabled);
+      --t-form-lbl: var(--colors-neutral-40);
+      --t-valid: var(--colors-semantic-success-0);
+      --t-invalid: var(--colors-semantic-danger-500);
+      --t-focus: rgba(45, 59, 74, 0.25);
+      --t-focus-bdr: var(--colors-brand-primary-dark-blue);
+      --t-surface: var(--colors-neutral-100);
+
+      --t-font: "Roboto", sans-serif;
+      --t-heading: "Roboto", sans-serif;
+
+      --t-shadow-sm: 0 .125rem .25rem rgba(0,0,0,.075);
+      --t-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+      --t-shadow-lg: 0 1rem 3rem rgba(0,0,0,.175);
+
+      --g50: var(--colors-neutral-90);
+      --g100: var(--colors-neutral-80);
+      --g200: var(--colors-neutral-70);
+      --g300: var(--colors-neutral-60);
+      --g400: var(--colors-neutral-50);
+      --g500: var(--colors-neutral-40);
+      --g600: var(--colors-neutral-30);
+      --g700: var(--colors-neutral-20);
+      --g800: var(--colors-neutral-10);
+      --g900: var(--colors-neutral-0);
+
+      --r-xs: var(--radius-xs);
+      --r-sm: var(--radius-sm);
+      --r-md: var(--radius-md);
+      --r-rnd: var(--radius-round);
+      --r-pill: 50rem;
+
+      --layer-color: var(--colors-brand-primary-dark-blue);
     }
 
     /* ═══════════════════════════════════
@@ -85,6 +219,10 @@
     .no-override-detail code{background:#fff;padding:1px 5px;border-radius:3px;font-size:11px;color:#BF360C;border:1px solid #FFE082}
     [data-theme="production"] .override-detail{display:block}
     [data-theme="production"] .no-override-detail{display:block}
+
+    /* Production-only sections (hidden on MDB Default) */
+    .production-only{display:none}
+    [data-theme="production"] .production-only{display:block}
 
     /* ── Sidebar ── */
     .toc{position:fixed;top:0;left:0;width:240px;height:100vh;overflow-y:auto;background:#1a1f25;color:#ccc;padding:14px 0;z-index:1001;font-size:12px}
@@ -165,6 +303,49 @@
 
     .prog-t{height:7px;background:var(--g200);border-radius:var(--r-rnd);overflow:hidden}
     .prog-bar{height:100%;border-radius:var(--r-rnd)}
+
+    /* ── Color Range Strip ── */
+    .color-range{display:flex;gap:0;border-radius:var(--r-md);overflow:hidden;margin-bottom:4px}
+    .color-range-step{flex:1;height:44px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px;position:relative;cursor:default}
+    .color-range-step span{font-size:8px;font-weight:600;opacity:0.9}
+    .color-range-label{display:flex;gap:0;margin-bottom:8px}
+    .color-range-label span{flex:1;text-align:center;font-size:9px;color:var(--g500);font-family:'Roboto Mono',monospace}
+    .color-range-anchor{outline:2px solid var(--t-body);outline-offset:-2px}
+    .view-matrix-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;background:var(--t-surface);border:1px solid var(--t-bdr);border-radius:var(--r-sm);font-size:11px;font-weight:500;color:var(--t-body);cursor:pointer;font-family:inherit;transition:all .15s;margin-top:6px}
+    .view-matrix-btn:hover{border-color:var(--t-body);background:var(--g100)}
+
+    /* ── Contrast Matrix Modal ── */
+    .cm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:2000;align-items:center;justify-content:center}
+    .cm-overlay.open{display:flex}
+    .cm-modal{background:#fff;border-radius:var(--r-md);box-shadow:var(--t-shadow-lg);width:92vw;max-width:880px;max-height:90vh;overflow:auto;position:relative}
+    .cm-modal-header{padding:16px 20px;border-bottom:1px solid var(--t-bdr);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:1}
+    .cm-modal-header h3{margin:0;font-size:16px;font-weight:700;color:var(--t-body)}
+    .cm-modal-close{background:none;border:none;font-size:20px;color:var(--g400);cursor:pointer;padding:4px 8px}
+    .cm-modal-close:hover{color:var(--t-body)}
+    .cm-modal-body{padding:20px}
+    .cm-filter-bar{display:flex;gap:5px;margin-bottom:14px;align-items:center}
+    .cm-filter-bar span{font-size:10px;color:var(--g500);font-weight:600}
+    .cm-filter-btn{padding:3px 9px;border-radius:5px;border:1px solid var(--t-bdr);background:#fff;color:var(--g700);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit}
+    .cm-filter-btn.active{background:#BD3B39;border-color:#BD3B39;color:#fff}
+    .cm-legend{display:flex;gap:10px;margin-bottom:14px}
+    .cm-legend-item{display:flex;align-items:center;gap:4px;font-size:9px;font-weight:600}
+    .cm-legend-dot{width:8px;height:8px;border-radius:2px}
+    .cm-table{border-collapse:separate;border-spacing:2px;table-layout:fixed;font-size:10px}
+    .cm-table td{text-align:center;padding:0}
+    .cm-th-swatch{border-radius:4px;padding:3px 2px;display:flex;flex-direction:column;align-items:center}
+    .cm-th-hex{font-size:7px;color:var(--g400);font-family:'Roboto Mono',monospace;margin-top:1px}
+    .cm-cell{border-radius:4px;height:38px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;transition:opacity .12s}
+    .cm-cell-label{font-size:7px;font-weight:700}
+    .cm-cell-ratio{font-size:8px;font-weight:600}
+    .cm-diag{background:var(--g100);height:38px;border-radius:4px;display:flex;align-items:center;justify-content:center;color:var(--g300);font-size:12px}
+    .cm-summary{margin-top:16px;background:var(--t-surface);border-radius:8px;border:1px solid var(--t-bdr);padding:12px 14px}
+    .cm-summary-title{font-size:11px;font-weight:700;color:var(--t-body);margin-bottom:8px}
+    .cm-summary-row{display:flex;gap:4px;flex-wrap:wrap}
+    .cm-summary-item{text-align:center;min-width:52px}
+    .cm-summary-swatch{border-radius:4px;width:34px;height:22px;margin:0 auto;display:flex;align-items:center;justify-content:center}
+    .cm-summary-swatch span{font-size:8px;font-weight:700}
+    .cm-summary-score{font-size:10px;font-weight:700;margin-top:3px}
+    .cm-summary-label{font-size:8px;color:var(--g400)}
   </style>
 </head>
 <body>
@@ -217,20 +398,6 @@
   <h2>Colors <span class="override-tag">OVERRIDDEN</span></h2>
   <p class="sd">Theme palette. All six semantic colors have been overridden from MDB5 defaults.</p>
 
-  <div class="override-detail">
-    <strong>Overrides applied:</strong><br>
-    Primary: <code>#1266F1</code> → <code>#3b71ca</code> · 
-    Secondary: <code>#B23CFD</code> → <code>#9fa6b2</code> · 
-    Success: <code>#00B74A</code> → <code>#14a44d</code> · 
-    Danger: <code>#F93154</code> → <code>#dc4c64</code> · 
-    Warning: <code>#FFA900</code> → <code>#e4a11b</code> · 
-    Info: <code>#39C0ED</code> → <code>#54b4d3</code> · 
-    Dark: <code>#262626</code> → <code>#332d2d</code> · 
-    Body color: <code>rgb(79,79,79)</code> → <code>rgb(45,59,74)</code> · 
-    Body bg: <code>#fff</code> → <code>#f5f5f5</code> · 
-    Border color: <code>#dee2e6</code> → <code>#e0e0e0</code>
-  </div>
-
   <h3>Theme</h3>
   <div class="sg">
     <div class="sw"><div class="swc" style="background:var(--t-primary)"></div><div class="swi"><strong>Primary</strong></div></div>
@@ -242,6 +409,15 @@
     <div class="sw"><div class="swc" style="background:var(--t-light);border-bottom:1px solid #e0e0e0"></div><div class="swi"><strong>Light</strong></div></div>
     <div class="sw"><div class="swc" style="background:var(--t-dark)"></div><div class="swi"><strong>Dark</strong></div></div>
   </div>
+  <div class="override-detail">
+    Primary: MDB <code>#1266F1</code> → Foundant <code>--colors-brand-primary-dark-blue</code> (#2D3B4A) ·
+    Secondary: MDB <code>#B23CFD</code> → Foundant <code>--colors-primary-shades-40</code> (#81898F) ·
+    Success: MDB <code>#00B74A</code> → Foundant <code>--colors-semantic-success-0</code> (#67CF9D) ·
+    Danger: MDB <code>#F93154</code> → Foundant <code>--colors-semantic-danger-0</code> (#BD3B39) ·
+    Warning: MDB <code>#FFA900</code> → Foundant <code>--colors-semantic-warning-0</code> (#F4C862) ·
+    Info: MDB <code>#39C0ED</code> → Foundant <code>--colors-semantic-info-0</code> (#536E8A) ·
+    Dark: MDB <code>#262626</code> → Foundant <code>--colors-brand-primary-dark-blue</code> (#2D3B4A)
+  </div>
   <h3>Subtle Backgrounds</h3>
   <div class="sg">
     <div class="sw"><div class="swc" style="background:var(--t-primary-bg)"></div><div class="swi"><strong>Primary</strong></div></div>
@@ -250,6 +426,41 @@
     <div class="sw"><div class="swc" style="background:var(--t-warning-bg)"></div><div class="swi"><strong>Warning</strong></div></div>
     <div class="sw"><div class="swc" style="background:var(--t-info-bg)"></div><div class="swi"><strong>Info</strong></div></div>
   </div>
+  <div class="override-detail">All subtle backgrounds follow from theme color overrides above.</div>
+
+  <div class="production-only">
+  <h3>Danger — Full Range</h3>
+  <div class="color-range">
+    <div class="color-range-step" style="background:#FAEAEA"><span style="color:#4D1514">50</span></div>
+    <div class="color-range-step" style="background:#F2BEBE"><span style="color:#4D1514">100</span></div>
+    <div class="color-range-step" style="background:#E89090"><span style="color:#4D1514">200</span></div>
+    <div class="color-range-step" style="background:#DD6463"><span style="color:#fff">300</span></div>
+    <div class="color-range-step" style="background:#D44D4B"><span style="color:#fff">400</span></div>
+    <div class="color-range-step color-range-anchor" style="background:#BD3B39"><span style="color:#fff">500</span></div>
+    <div class="color-range-step" style="background:#A33230"><span style="color:#fff">600</span></div>
+    <div class="color-range-step" style="background:#882927"><span style="color:#fff">700</span></div>
+    <div class="color-range-step" style="background:#6B1F1E"><span style="color:#fff">800</span></div>
+    <div class="color-range-step" style="background:#4D1514"><span style="color:#fff">900</span></div>
+  </div>
+  <div class="color-range-label">
+    <span>#FAEAEA</span><span>#F2BEBE</span><span>#E89090</span><span>#DD6463</span><span>#D44D4B</span><span>#BD3B39</span><span>#A33230</span><span>#882927</span><span>#6B1F1E</span><span>#4D1514</span>
+  </div>
+  <div class="override-detail">Anchor: <code>danger-500</code> = <code>#BD3B39</code> (matches <code>--colors-semantic-danger-0</code>). Full 50–900 range validated via WCAG 2.2 AA contrast matrix. Outlined step = anchor.</div>
+  <button class="view-matrix-btn" onclick="document.getElementById('dangerMatrix').classList.add('open')"><i class="fas fa-th" style="font-size:10px"></i> View contrast matrix</button>
+
+  <h3 style="margin-top:20px">Success, Warning, Info — Ranges Pending</h3>
+  <div style="font-size:11px;color:var(--g500);padding:8px 0">Full 50–900 ranges for success, warning, and info will be added as they are validated through the same WCAG AA process.</div>
+  </div>
+
+  <h3>Surface &amp; Body</h3>
+  <div class="override-detail">
+    Body color: MDB <code>rgb(79,79,79)</code> → Foundant <code>--colors-brand-primary-dark-blue</code> (#2D3B4A) ·
+    Body bg: MDB <code>#fff</code> → Foundant <code>--colors-neutral-80</code> (#F5F5F5) ·
+    Border color: MDB <code>#dee2e6</code> → Foundant <code>--colors-borders-divider</code> (#E0E0E0) ·
+    Link color: Foundant <code>--colors-link-default</code> (#1976D2) ·
+    Link hover: Foundant <code>--colors-link-hover</code> (#23527C)
+  </div>
+
   <h3>Neutral Scale</h3>
   <div class="sg">
     <div class="sw"><div class="swc" style="background:var(--g50)"></div><div class="swi"><strong>50</strong></div></div>
@@ -314,9 +525,6 @@
 <section class="sec" id="spacing">
   <h2>Spacing &amp; Radius <span class="override-tag">OVERRIDDEN</span></h2>
   <p class="sd">Custom radius tokens. Spacing scale is MDB5 default.</p>
-  <div class="override-detail">
-    <strong>Radius overrides:</strong> Production defines custom radius tokens: <code>--radius-xs: 2px</code>, <code>--radius-sm: 4px</code>, <code>--radius-md: 8px</code>, <code>--radius-round: 50px</code>. MDB5 default uses <code>0.25rem (4px)</code> for all standard radii. The <code>8px</code> md radius is the notable divergence.
-  </div>
   <h3>Radius</h3>
   <div class="cr" style="align-items:center">
     <div style="width:70px;height:50px;background:var(--g200);border:1px solid var(--t-bdr);border-radius:var(--r-xs);display:flex;align-items:center;justify-content:center;font-size:10px">xs 2px</div>
@@ -324,6 +532,7 @@
     <div style="width:70px;height:50px;background:var(--g200);border:1px solid var(--t-bdr);border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:10px">md 8px</div>
     <div style="width:90px;height:50px;background:var(--g200);border:1px solid var(--t-bdr);border-radius:var(--r-rnd);display:flex;align-items:center;justify-content:center;font-size:10px">round 50px</div>
   </div>
+  <div class="override-detail">Custom radius tokens: <code>--radius-xs: 2px</code>, <code>--radius-sm: 4px</code>, <code>--radius-md: 8px</code>, <code>--radius-round: 50px</code>. MDB5 default uses <code>0.25rem (4px)</code> for all standard radii. The <code>8px</code> md radius is the notable divergence.</div>
 </section>
 
 <!-- ═══ NAVBAR ═══ -->
@@ -402,11 +611,9 @@
 <section class="sec" id="buttons">
   <h2>Buttons <span class="override-tag">OVERRIDDEN</span></h2>
   <p class="sd">All semantic variants, sizes, and states.</p>
-  <div class="override-detail">
-    <strong>Overrides applied:</strong> Button colors follow theme overrides. Production uses <code>pill shape (border-radius: 50px)</code> for primary actions — this is a custom decision, not an MDB5 default (<code>4px</code>). The <code>btn-rounded</code> MDB class achieves this, but your system appears to apply it as the default shape.
-  </div>
   <h3>Filled</h3>
   <div class="cr"><button class="btn-t btn-tp">Primary</button><button class="btn-t btn-ts">Secondary</button><button class="btn-t btn-tsc">Success</button><button class="btn-t btn-td">Danger</button><button class="btn-t btn-tw">Warning</button><button class="btn-t btn-ti">Info</button></div>
+  <div class="override-detail">Button colors mapped to foundant tokens: bg → <code>--colors-brand-primary-dark-blue</code>, hover → <code>--colors-state-layers-dark-hover</code>, focus ring → <code>rgba(45,59,74,0.25)</code>. Production uses standard MDB border-radius (not pill). <code>btn-sm fw-bold</code> is the standard modifier pattern.</div>
   <h3>Outline</h3>
   <div class="cr"><button class="btn-t btn-to">Primary</button><button class="btn-t" style="background:transparent;border-color:var(--t-danger);color:var(--t-danger)">Danger</button><button class="btn-t" style="background:transparent;border-color:var(--g400);color:var(--g600)">Neutral</button></div>
   <h3>Ghost / Link</h3>
@@ -451,11 +658,9 @@
 <section class="sec" id="badges">
   <h2>Badges &amp; Chips <span class="override-tag">OVERRIDDEN</span></h2>
   <p class="sd">Status indicators and tags.</p>
-  <div class="override-detail">
-    <strong>Overrides applied:</strong> All badge colors follow theme overrides. Subtle background tints (<code>*-bg-subtle</code>) have been customized for each semantic color. Production uses pill-shaped badges.
-  </div>
   <h3>Subtle</h3>
   <div class="cr"><span class="badge-t bp">Primary</span><span class="badge-t bs">Approved</span><span class="badge-t bd">Denied</span><span class="badge-t bw">Pending</span><span class="badge-t bi">In Review</span></div>
+  <div class="override-detail">All badge colors follow theme overrides. Subtle background tints (<code>*-bg-subtle</code>) customized for each semantic color. Pill shape applied.</div>
   <h3>Solid</h3>
   <div class="cr"><span style="padding:3px 9px;border-radius:var(--r-rnd);font-size:11px;font-weight:500;color:#fff;background:var(--t-primary)">Primary</span><span style="padding:3px 9px;border-radius:var(--r-rnd);font-size:11px;font-weight:500;color:#fff;background:var(--t-success)">Success</span><span style="padding:3px 9px;border-radius:var(--r-rnd);font-size:11px;font-weight:500;color:#fff;background:var(--t-danger)">Danger</span></div>
   <h3>Chips</h3>
@@ -466,14 +671,12 @@
 <section class="sec" id="alerts">
   <h2>Alerts <span class="override-tag">OVERRIDDEN</span></h2>
   <p class="sd">Contextual feedback messages.</p>
-  <div class="override-detail">
-    <strong>Overrides applied:</strong> Alert colors follow theme overrides. Background tints and text emphasis colors are all customized from MDB5 defaults.
-  </div>
   <div class="alert-t ap"><i class="fas fa-info-circle" style="margin-top:1px"></i> Informational alert.</div>
   <div class="alert-t as"><i class="fas fa-check-circle" style="margin-top:1px"></i> Application submitted successfully.</div>
   <div class="alert-t aw"><i class="fas fa-exclamation-triangle" style="margin-top:1px"></i> Past review deadline.</div>
   <div class="alert-t ad"><i class="fas fa-times-circle" style="margin-top:1px"></i> Error processing payment.</div>
   <div class="alert-t ai"><i class="fas fa-info-circle" style="margin-top:1px"></i> New grant cycle opens Jan 15.</div>
+  <div class="override-detail">Alert colors follow theme overrides. Background tints and text emphasis colors are all customized from MDB5 defaults.</div>
 </section>
 
 <!-- ═══ TABLES ═══ -->
@@ -532,15 +735,19 @@
 <section class="sec" id="inputs">
   <h2>Text Inputs <span class="override-tag">OVERRIDDEN</span></h2>
   <p class="sd">Standard top-label inputs.</p>
-  <div class="override-detail">
-    <strong>Overrides applied:</strong> Form control border: <code>#dee2e6</code> → <code>#bdbdbd</code>. Focus border color: <code>#1266F1</code> → <code>#3b71ca</code>. Focus ring: <code>rgba(18,102,241,0.25)</code> → <code>rgba(59,113,202,0.25)</code>. Input focus label color uses <code>#3b71ca</code>.
-  </div>
   <div class="row g-3" style="max-width:560px">
     <div class="col-md-6"><label class="lbl-t">Organization Name</label><input class="inp-t" placeholder="Enter name" /></div>
     <div class="col-md-6"><label class="lbl-t">Email</label><input class="inp-t" type="email" placeholder="name@example.com" /></div>
     <div class="col-12"><label class="lbl-t">Description</label><textarea class="inp-t" rows="2" placeholder="Enter details..." style="resize:vertical"></textarea></div>
     <div class="col-md-6"><label class="lbl-t">With Helper</label><input class="inp-t" /><div style="font-size:11px;color:var(--g500);margin-top:3px">Helper text below input.</div></div>
     <div class="col-md-6"><label class="lbl-t">Disabled</label><input class="inp-t" value="Cannot edit" disabled style="background:var(--g200);cursor:not-allowed" /></div>
+  </div>
+  <div class="override-detail">
+    Form border: MDB <code>#dee2e6</code> → Foundant <code>--colors-borders-enabled</code> (#757575) ·
+    Focus border: MDB <code>#1266F1</code> → Foundant <code>--colors-brand-primary-dark-blue</code> (#2D3B4A) ·
+    Focus ring: Foundant <code>rgba(45,59,74,0.25)</code> ·
+    Valid: Foundant <code>--colors-semantic-success-0</code> (#67CF9D) ·
+    Invalid: Foundant <code>--colors-semantic-danger-0</code> (#BD3B39)
   </div>
 </section>
 
@@ -571,9 +778,6 @@
 <section class="sec" id="datepicker">
   <h2>Datepicker <span class="override-tag">OVERRIDDEN</span></h2>
   <p class="sd">Calendar selection (static).</p>
-  <div class="override-detail">
-    <strong>Overrides applied:</strong> Datepicker header bg: <code>#3b71ca</code> (matches primary override). Toggle focus color: <code>#3b71ca</code>. Cell-in-range bg: <code>#b1c6ea</code>. These are set via dedicated <code>--mdb-datepicker-*</code> variables.
-  </div>
   <div style="max-width:260px"><label class="lbl-t">Date</label><div style="position:relative"><input class="inp-t" value="04/28/2026" /><i class="fas fa-calendar" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--g400);font-size:13px"></i></div></div>
   <div style="height:12px"></div>
   <div style="width:260px;border:1px solid var(--t-bdr);border-radius:var(--r-md);overflow:hidden">
@@ -587,6 +791,7 @@
       <div style="padding:5px">26</div><div style="padding:5px">27</div><div style="padding:5px;background:var(--t-primary);color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;margin:auto">28</div><div style="padding:5px">29</div><div style="padding:5px">30</div><div style="padding:5px;color:var(--g300)">1</div><div style="padding:5px;color:var(--g300)">2</div>
     </div>
   </div>
+  <div class="override-detail">Datepicker header bg uses <code>--colors-brand-primary-dark-blue</code> (#2D3B4A). Toggle focus and cell-in-range colors follow primary token.</div>
 </section>
 
 <!-- ═══ AUTOCOMPLETE ═══ -->
@@ -601,9 +806,6 @@
 <section class="sec" id="stepper">
   <h2>Stepper <span class="override-tag">OVERRIDDEN</span></h2>
   <p class="sd">Multi-step progress.</p>
-  <div class="override-detail">
-    <strong>Overrides applied:</strong> Stepper mobile bg: <code>#fbfbfb</code> (matches light override). Step indicator colors follow theme primary/success overrides.
-  </div>
   <div style="display:flex;align-items:center;justify-content:center">
     <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:32px;height:32px;border-radius:50%;background:var(--t-success);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px"><i class="fas fa-check" style="font-size:11px"></i></div><span style="font-size:10px;color:var(--t-success-txt);font-weight:500">Details</span></div>
     <div style="flex:1;height:2px;background:var(--t-success);max-width:80px"></div>
@@ -613,18 +815,20 @@
     <div style="flex:1;height:2px;background:var(--g300);max-width:80px"></div>
     <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:32px;height:32px;border-radius:50%;background:var(--g300);color:var(--g500);display:flex;align-items:center;justify-content:center;font-size:13px">4</div><span style="font-size:10px;color:var(--g500)">Submit</span></div>
   </div>
+  <div class="override-detail">Stepper mobile bg: <code>#fbfbfb</code> (matches light override). Step indicator colors follow theme primary/success overrides.</div>
 </section>
 
 <!-- ═══ VALIDATION ═══ -->
 <section class="sec" id="validation">
   <h2>Validation <span class="override-tag">OVERRIDDEN</span></h2>
   <p class="sd">Valid/invalid states.</p>
-  <div class="override-detail">
-    <strong>Overrides applied:</strong> Valid color: <code>#00B74A</code> → <code>#14a44d</code>. Invalid color: <code>#F93154</code> → <code>#dc4c64</code>. Valid border: <code>#00B74A</code> → <code>#14a44d</code>. Invalid border: <code>#F93154</code> → <code>#dc4c64</code>.
-  </div>
   <div style="max-width:440px;display:flex;flex-direction:column;gap:14px">
     <div><label class="lbl-t">Valid</label><input class="inp-t" style="border-color:var(--t-valid)" value="Community Health Alliance" /><div style="font-size:11px;color:var(--t-valid);margin-top:3px"><i class="fas fa-check-circle me-1"></i>Looks good!</div></div>
     <div><label class="lbl-t">Invalid</label><input class="inp-t" style="border-color:var(--t-invalid)" placeholder="Required" /><div style="font-size:11px;color:var(--t-invalid);margin-top:3px"><i class="fas fa-times-circle me-1"></i>Required field.</div></div>
+  </div>
+  <div class="override-detail">
+    Valid: MDB <code>#00B74A</code> → Foundant <code>--colors-semantic-success-0</code> (#67CF9D) ·
+    Invalid: MDB <code>#F93154</code> → Foundant <code>--colors-semantic-danger-0</code> (#BD3B39)
   </div>
 </section>
 
@@ -726,22 +930,130 @@
   </div>
 </section>
 
+<!-- ═══ DANGER CONTRAST MATRIX MODAL ═══ -->
+<div class="cm-overlay" id="dangerMatrix" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="cm-modal">
+    <div class="cm-modal-header">
+      <h3>Danger Color Contrast Matrix</h3>
+      <button class="cm-modal-close" onclick="document.getElementById('dangerMatrix').classList.remove('open')">&times;</button>
+    </div>
+    <div class="cm-modal-body">
+      <p style="font-size:11px;color:#6b7280;margin:0 0 12px">Every foreground × background pairing · WCAG 2.2 AA</p>
+
+      <div class="cm-filter-bar">
+        <span>Show:</span>
+        <button class="cm-filter-btn active" onclick="filterMatrix('All',this)">All</button>
+        <button class="cm-filter-btn" onclick="filterMatrix('AA Pass',this)">AA Pass</button>
+        <button class="cm-filter-btn" onclick="filterMatrix('AA Large',this)">AA Large</button>
+        <button class="cm-filter-btn" onclick="filterMatrix('Fail',this)">Fail</button>
+      </div>
+
+      <div class="cm-legend">
+        <div class="cm-legend-item"><div class="cm-legend-dot" style="background:#dcfce7;border:1px solid #16653433"></div><span style="color:#166534">AA Pass ≥4.5:1</span></div>
+        <div class="cm-legend-item"><div class="cm-legend-dot" style="background:#fef9c3;border:1px solid #854d0e33"></div><span style="color:#854d0e">AA Large ≥3:1</span></div>
+        <div class="cm-legend-item"><div class="cm-legend-dot" style="background:#fee2e2;border:1px solid #991b1b33"></div><span style="color:#991b1b">Fail &lt;3:1</span></div>
+      </div>
+
+      <div style="overflow-x:auto">
+        <table class="cm-table" id="matrixTable"></table>
+      </div>
+
+      <div class="cm-summary">
+        <div class="cm-summary-title">AA Pass count per background</div>
+        <div class="cm-summary-row" id="matrixSummary"></div>
+      </div>
+
+      <p style="font-size:9px;color:#9ca3af;margin:12px 0 0">Columns = foreground · Rows = background</p>
+    </div>
+  </div>
+</div>
+
 <div style="padding:28px 0;text-align:center;color:var(--g400);font-size:11px;border-top:1px solid var(--t-bdr);margin-top:12px">Foundant Component Reference · GLM Production vs MDB5 Default</div>
 
 </div><!-- /main -->
 </div><!-- /app -->
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.min.js"></script>
 <script>
 function st(t){
   document.getElementById('app').setAttribute('data-theme',t);
   document.getElementById('bP').classList.toggle('on',t==='production');
   document.getElementById('bD').classList.toggle('on',t==='mdb-default');
   document.getElementById('ll').textContent=t==='production'?'GLM Production':'MDB5 Default';
-  document.getElementById('oc').textContent=t==='production'?'9 overridden · 18 default':'Stock MDB5 7.x values';
+  document.getElementById('oc').textContent=t==='production'?'Foundant design tokens applied · 9 overridden · 18 default':'Stock MDB5 7.x values';
 }
 const tl=document.querySelectorAll('.toc a'),ss=document.querySelectorAll('.sec[id]');
 window.addEventListener('scroll',()=>{let c='';ss.forEach(s=>{if(s.offsetTop-72<=window.scrollY)c=s.id});tl.forEach(l=>l.classList.toggle('on',l.getAttribute('href')==='#'+c))});
+
+// ── Contrast Matrix ──
+const dangerPalette=[
+  {step:50,hex:"#FAEAEA"},{step:100,hex:"#F2BEBE"},{step:200,hex:"#E89090"},
+  {step:300,hex:"#DD6463"},{step:400,hex:"#D44D4B"},{step:500,hex:"#BD3B39"},
+  {step:600,hex:"#A33230"},{step:700,hex:"#882927"},{step:800,hex:"#6B1F1E"},
+  {step:900,hex:"#4D1514"}
+];
+
+function lum(hex){
+  const r=parseInt(hex.slice(1,3),16)/255,g=parseInt(hex.slice(3,5),16)/255,b=parseInt(hex.slice(5,7),16)/255;
+  const f=c=>c<=0.03928?c/12.92:Math.pow((c+0.055)/1.055,2.4);
+  return 0.2126*f(r)+0.7152*f(g)+0.0722*f(b);
+}
+function cr(a,b){const l1=lum(a),l2=lum(b);const[h,l]=l1>l2?[l1,l2]:[l2,l1];return(h+0.05)/(l+0.05)}
+function wcag(r){
+  if(r>=4.5)return{label:"AA Pass",bg:"#dcfce7",color:"#166534"};
+  if(r>=3)return{label:"AA Large",bg:"#fef9c3",color:"#854d0e"};
+  return{label:"Fail",bg:"#fee2e2",color:"#991b1b"};
+}
+
+let currentFilter="All";
+
+function buildMatrix(){
+  const p=dangerPalette,t=document.getElementById('matrixTable');
+  let html='<thead><tr><td style="width:62px"><div style="font-size:8px;color:#9ca3af;text-align:center;line-height:1.2">FG →<br>BG ↓</div></td>';
+  p.forEach(s=>{
+    const fg=lum(s.hex)>0.18?"#111":"#fff";
+    html+=`<td style="width:62px"><div class="cm-th-swatch" style="background:${s.hex}"><span style="font-size:8px;font-weight:700;color:${fg}">${s.step}</span></div><div class="cm-th-hex">${s.hex}</div></td>`;
+  });
+  html+='</tr></thead><tbody>';
+
+  const passCounts=new Array(p.length).fill(0);
+
+  p.forEach((bg,bi)=>{
+    const fg=lum(bg.hex)>0.18?"#111":"#fff";
+    html+=`<tr><td style="padding-right:3px"><div class="cm-th-swatch" style="background:${bg.hex}"><span style="font-size:8px;font-weight:700;color:${fg}">${bg.step}</span></div><div class="cm-th-hex">${bg.hex}</div></td>`;
+    p.forEach((f,fi)=>{
+      if(fi===bi){html+=`<td><div class="cm-diag">—</div></td>`;return}
+      const ratio=cr(f.hex,bg.hex);
+      const w=wcag(ratio);
+      const show=currentFilter==="All"||w.label===currentFilter;
+      if(w.label==="AA Pass")passCounts[bi]++;
+      html+=`<td><div class="cm-cell" data-label="${w.label}" style="background:${show?w.bg:'#f9fafb'};opacity:${show?1:0.15}">`;
+      if(show){html+=`<span class="cm-cell-label" style="color:${w.color}">${w.label}</span><span class="cm-cell-ratio" style="color:${w.color}">${ratio.toFixed(2)}:1</span>`}
+      else{html+=`<span style="color:#d1d5db">·</span>`}
+      html+=`</div></td>`;
+    });
+    html+='</tr>';
+  });
+  html+='</tbody>';
+  t.innerHTML=html;
+
+  // Summary
+  const s=document.getElementById('matrixSummary');
+  s.innerHTML=p.map((v,i)=>{
+    const fg=lum(v.hex)>0.18?"#111":"#fff";
+    const sc=passCounts[i];
+    const clr=sc>=5?"#166534":sc>=3?"#854d0e":"#991b1b";
+    return `<div class="cm-summary-item"><div class="cm-summary-swatch" style="background:${v.hex}"><span style="color:${fg}">${v.step}</span></div><div class="cm-summary-score" style="color:${clr}">${sc}/9</div><div class="cm-summary-label">AA Pass</div></div>`;
+  }).join('');
+}
+
+function filterMatrix(f,btn){
+  currentFilter=f;
+  document.querySelectorAll('.cm-filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  buildMatrix();
+}
+
+buildMatrix();
 </script>
 </body>
 </html>
