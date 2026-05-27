@@ -174,7 +174,7 @@
       --t-h4-size: 0.875rem;
       --t-h5-size: 0.75rem;
       --t-h6-size: 0.75rem;
-      --t-h-weight: 700;
+      --t-h-weight: 500;
     }
 
     /* ═══════════════════════════════════
@@ -526,7 +526,7 @@
           <td><strong>h1</strong></td>
           <td><code style="font-size:11px">1.75rem</code></td>
           <td>28px</td>
-          <td>700</td>
+          <td>500</td>
           <td><code style="font-size:11px">--type-heading-h1</code></td>
           <td>Page titles. One per page.</td>
         </tr>
@@ -534,7 +534,7 @@
           <td><strong>h2</strong></td>
           <td><code style="font-size:11px">1.25rem</code></td>
           <td>20px</td>
-          <td>700</td>
+          <td>500</td>
           <td><code style="font-size:11px">--type-heading-h2</code></td>
           <td>Section headers. Card titles, panel headers.</td>
         </tr>
@@ -542,7 +542,7 @@
           <td><strong>h3</strong></td>
           <td><code style="font-size:11px">1rem</code></td>
           <td>16px</td>
-          <td>700</td>
+          <td>500</td>
           <td><code style="font-size:11px">--type-heading-h3</code></td>
           <td>Subsection headers. Same size as body; relies on weight for hierarchy.</td>
         </tr>
@@ -550,7 +550,7 @@
           <td><strong>h4</strong></td>
           <td><code style="font-size:11px">0.875rem</code></td>
           <td>14px</td>
-          <td>700</td>
+          <td>500</td>
           <td><code style="font-size:11px">--type-heading-h4</code></td>
           <td>Field group labels, minor sections, modal headers.</td>
         </tr>
@@ -558,7 +558,7 @@
           <td><strong>h5</strong></td>
           <td><code style="font-size:11px">0.75rem</code></td>
           <td>12px</td>
-          <td>700</td>
+          <td>500</td>
           <td><code style="font-size:11px">--type-heading-h5</code></td>
           <td>Overline / category labels. Sidebar section dividers.</td>
         </tr>
@@ -566,7 +566,7 @@
           <td><strong>h6</strong></td>
           <td><code style="font-size:11px">0.75rem</code></td>
           <td>12px</td>
-          <td>700</td>
+          <td>500</td>
           <td><code style="font-size:11px">--type-heading-h6</code></td>
           <td>Rarely used. Same size as h5, available for deep nesting.</td>
         </tr>
@@ -574,7 +574,7 @@
     </table>
   </div>
   <div class="override-detail">
-    Scale compressed for data-dense SaaS context. MDB5 defaults: h1=2.5rem, h2=2rem, h3=1.75rem, h4=1.5rem, h5=1.25rem, h6=1rem (weight 500). All GLM headings use <code>font-weight: 700</code> and <code>Roboto</code>. h1 at <code>1.75rem</code> matches current production value.
+    Scale compressed for data-dense SaaS context. MDB5 defaults: h1=2.5rem, h2=2rem, h3=1.75rem, h4=1.5rem, h5=1.25rem, h6=1rem (weight 500). GLM overrides sizes but keeps <code>font-weight: 500</code> (same as MDB default). Font family: <code>Roboto</code>. h1 at <code>1.75rem</code> matches current production value.
   </div>
   </div>
   <h3>Body &amp; Inline</h3>
@@ -1066,7 +1066,7 @@ function st(t){
 
   // Update heading specimen labels
   const sizes = t==='production'
-    ? {h1:'1.75rem (28px) / 700',h2:'1.25rem (20px) / 700',h3:'1rem (16px) / 700',h4:'0.875rem (14px) / 700',h5:'0.75rem (12px) / 700',h6:'0.75rem (12px) / 700'}
+    ? {h1:'1.75rem (28px) / 500',h2:'1.25rem (20px) / 500',h3:'1rem (16px) / 500',h4:'0.875rem (14px) / 500',h5:'0.75rem (12px) / 500',h6:'0.75rem (12px) / 500'}
     : {h1:'2.5rem (40px) / 500',h2:'2rem (32px) / 500',h3:'1.75rem (28px) / 500',h4:'1.5rem (24px) / 500',h5:'1.25rem (20px) / 500',h6:'1rem (16px) / 500'};
   document.querySelectorAll('.heading-specimen').forEach(el => {
     const lvl = el.dataset.level;
