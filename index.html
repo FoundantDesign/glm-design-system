@@ -166,6 +166,15 @@
       --r-pill: 50rem;
 
       --layer-color: var(--colors-brand-primary-dark-blue);
+
+      /* ── Heading scale ── */
+      --t-h1-size: 1.5rem;
+      --t-h2-size: 1.25rem;
+      --t-h3-size: 1rem;
+      --t-h4-size: 0.875rem;
+      --t-h5-size: 0.75rem;
+      --t-h6-size: 0.75rem;
+      --t-h-weight: 700;
     }
 
     /* ═══════════════════════════════════
@@ -191,6 +200,15 @@
       --g50:#fbfbfb; --g100:#f5f5f5; --g200:#eee; --g300:#e0e0e0; --g400:#bdbdbd; --g500:#9e9e9e; --g600:#757575; --g700:#616161; --g800:#4f4f4f; --g900:#262626;
       --r-xs:4px; --r-sm:4px; --r-md:4px; --r-rnd:50px; --r-pill:50rem;
       --layer-color:#1266F1;
+
+      /* ── Heading scale (MDB5 defaults) ── */
+      --t-h1-size: 2.5rem;
+      --t-h2-size: 2rem;
+      --t-h3-size: 1.75rem;
+      --t-h4-size: 1.5rem;
+      --t-h5-size: 1.25rem;
+      --t-h6-size: 1rem;
+      --t-h-weight: 500;
     }
 
     *{box-sizing:border-box}
@@ -235,7 +253,7 @@
     /* ── Main ── */
     .main{margin-left:240px;padding:66px 36px 28px;max-width:1140px}
     .sec{background:var(--t-surface);border-radius:var(--r-md);padding:28px;margin-bottom:20px;box-shadow:var(--t-shadow-sm)}
-    .sec h2{font-family:var(--t-heading);font-size:20px;font-weight:700;margin:0 0 4px;color:var(--t-body)}
+    .sec h2{font-family:var(--t-heading);font-size:var(--t-h2-size);font-weight:var(--t-h-weight);margin:0 0 4px;color:var(--t-body)}
     .sec .sd{color:var(--g600);font-size:12px;margin-bottom:16px;border-bottom:1px solid var(--t-bdr);padding-bottom:12px}
     .sec h3{font-size:11px;font-weight:600;color:var(--g500);margin:16px 0 8px;text-transform:uppercase;letter-spacing:.5px}
     .cr{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start;margin-bottom:10px}
@@ -297,7 +315,7 @@
 
     .modal-t{border:1px solid var(--t-bdr);border-radius:var(--r-md);box-shadow:var(--t-shadow-lg);overflow:hidden;background:#fff}
     .modal-th{padding:14px 18px;border-bottom:1px solid var(--t-bdr);display:flex;justify-content:space-between;align-items:center}
-    .modal-th h5{margin:0;font-family:var(--t-heading);font-size:16px;font-weight:600;color:var(--t-body)}
+    .modal-th h5{margin:0;font-family:var(--t-heading);font-size:var(--t-h5-size);font-weight:var(--t-h-weight);color:var(--t-body)}
     .modal-tb{padding:18px;font-size:13px;color:var(--g700)}
     .modal-tf{padding:10px 18px;border-top:1px solid var(--t-bdr);display:flex;justify-content:flex-end;gap:6px}
 
@@ -389,7 +407,7 @@
 <div class="main">
 
 <div style="margin-bottom:24px">
-  <h1 style="font-family:var(--t-heading);font-size:26px;font-weight:700;margin:0 0 4px">Foundant Component Reference</h1>
+  <h1 style="font-family:var(--t-heading);font-size:var(--t-h1-size);font-weight:var(--t-h-weight);margin:0 0 4px">Foundant Component Reference</h1>
   <p style="color:var(--g600);font-size:13px;margin:0">Toggle between <strong>GLM Production</strong> (what's actually shipping) and <strong>MDB5 Default</strong> (out-of-box). Green <span class="override-tag" style="display:inline">OVERRIDDEN</span> tags show where engineers have customized. Orange <span class="no-override-tag" style="display:inline">DEFAULT</span> tags flag areas still using MDB5 stock values — potential gaps.</p>
 </div>
 
@@ -478,21 +496,86 @@
 
 <!-- ═══ TYPOGRAPHY ═══ -->
 <section class="sec" id="typography">
-  <h2>Typography <span class="no-override-tag">DEFAULT</span></h2>
+  <h2>Typography <span class="override-tag">OVERRIDDEN</span></h2>
   <p class="sd">Font family, heading scale, body text, and inline styles.</p>
-
-  <div class="no-override-detail">
-    <strong>No override detected:</strong> Both production and MDB5 default use <code>Roboto, sans-serif</code> for body and headings. The foundant.css design tokens specify <code>Poppins</code> for headings, but this has not been applied in production. Heading sizes h2–h4 have been overridden in a separate stylesheet but the font-family remains MDB5 default.
-  </div>
 
   <h3>Headings</h3>
   <div style="margin-bottom:12px">
-    <div style="font-family:var(--t-heading);font-size:2.5rem;font-weight:700;margin:6px 0">h1. Heading</div>
-    <div style="font-family:var(--t-heading);font-size:2rem;font-weight:700;margin:6px 0">h2. Heading (2rem)</div>
-    <div style="font-family:var(--t-heading);font-size:1.75rem;font-weight:600;margin:6px 0">h3. Heading (1.75rem)</div>
-    <div style="font-family:var(--t-heading);font-size:1.5rem;font-weight:600;margin:6px 0">h4. Heading (1.5rem)</div>
-    <div style="font-family:var(--t-heading);font-size:1.25rem;font-weight:500;margin:6px 0">h5. Heading</div>
-    <div style="font-family:var(--t-heading);font-size:1rem;font-weight:500;margin:6px 0">h6. Heading</div>
+    <div style="font-family:var(--t-heading);font-size:var(--t-h1-size);font-weight:var(--t-h-weight);margin:6px 0" class="heading-specimen" data-level="h1">h1. Heading</div>
+    <div style="font-family:var(--t-heading);font-size:var(--t-h2-size);font-weight:var(--t-h-weight);margin:6px 0" class="heading-specimen" data-level="h2">h2. Heading</div>
+    <div style="font-family:var(--t-heading);font-size:var(--t-h3-size);font-weight:var(--t-h-weight);margin:6px 0" class="heading-specimen" data-level="h3">h3. Heading</div>
+    <div style="font-family:var(--t-heading);font-size:var(--t-h4-size);font-weight:var(--t-h-weight);margin:6px 0" class="heading-specimen" data-level="h4">h4. Heading</div>
+    <div style="font-family:var(--t-heading);font-size:var(--t-h5-size);font-weight:var(--t-h-weight);margin:6px 0" class="heading-specimen" data-level="h5">h5. Heading</div>
+    <div style="font-family:var(--t-heading);font-size:var(--t-h6-size);font-weight:var(--t-h-weight);margin:6px 0" class="heading-specimen" data-level="h6">h6. Heading</div>
+  </div>
+  <div class="production-only">
+  <div style="overflow-x:auto;margin:12px 0 16px">
+    <table class="tbl-t" style="font-size:12px">
+      <thead>
+        <tr>
+          <th>Level</th>
+          <th>rem</th>
+          <th>px</th>
+          <th>Weight</th>
+          <th>Token</th>
+          <th>Usage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>h1</strong></td>
+          <td><code style="font-size:11px">1.5rem</code></td>
+          <td>24px</td>
+          <td>700</td>
+          <td><code style="font-size:11px">--type-heading-h1</code></td>
+          <td>Page titles. One per page.</td>
+        </tr>
+        <tr>
+          <td><strong>h2</strong></td>
+          <td><code style="font-size:11px">1.25rem</code></td>
+          <td>20px</td>
+          <td>700</td>
+          <td><code style="font-size:11px">--type-heading-h2</code></td>
+          <td>Section headers. Card titles, panel headers.</td>
+        </tr>
+        <tr>
+          <td><strong>h3</strong></td>
+          <td><code style="font-size:11px">1rem</code></td>
+          <td>16px</td>
+          <td>700</td>
+          <td><code style="font-size:11px">--type-heading-h3</code></td>
+          <td>Subsection headers. Same size as body; relies on weight for hierarchy.</td>
+        </tr>
+        <tr>
+          <td><strong>h4</strong></td>
+          <td><code style="font-size:11px">0.875rem</code></td>
+          <td>14px</td>
+          <td>700</td>
+          <td><code style="font-size:11px">--type-heading-h4</code></td>
+          <td>Field group labels, minor sections, modal headers.</td>
+        </tr>
+        <tr>
+          <td><strong>h5</strong></td>
+          <td><code style="font-size:11px">0.75rem</code></td>
+          <td>12px</td>
+          <td>700</td>
+          <td><code style="font-size:11px">--type-heading-h5</code></td>
+          <td>Overline / category labels. Sidebar section dividers.</td>
+        </tr>
+        <tr>
+          <td><strong>h6</strong></td>
+          <td><code style="font-size:11px">0.75rem</code></td>
+          <td>12px</td>
+          <td>700</td>
+          <td><code style="font-size:11px">--type-heading-h6</code></td>
+          <td>Rarely used. Same size as h5, available for deep nesting.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="override-detail">
+    Scale compressed for data-dense SaaS context. MDB5 defaults: h1=2.5rem, h2=2rem, h3=1.75rem, h4=1.5rem, h5=1.25rem, h6=1rem (weight 500). All GLM headings use <code>font-weight: 700</code> and <code>Roboto</code>.
+  </div>
   </div>
   <h3>Body &amp; Inline</h3>
   <p style="margin:4px 0">Default body: 1rem (16px), weight 400, line-height 1.6.</p>
@@ -648,9 +731,9 @@
   <p class="sd">Content containers.</p>
   <div class="no-override-detail"><strong>No structural override detected:</strong> Card borders, padding, and layout use MDB5 defaults. Colors change via theme.</div>
   <div class="row g-3">
-    <div class="col-md-4"><div class="card-t"><div class="card-tb"><div style="font-family:var(--t-heading);font-weight:600;font-size:15px;margin-bottom:6px">Basic Card</div><p style="font-size:12px;color:var(--g600);margin:0 0 10px">Supporting text.</p><button class="btn-t btn-tp btn-sm2">Action</button></div></div></div>
+    <div class="col-md-4"><div class="card-t"><div class="card-tb"><div style="font-family:var(--t-heading);font-weight:var(--t-h-weight);font-size:var(--t-h3-size);margin-bottom:6px">Basic Card</div><p style="font-size:12px;color:var(--g600);margin:0 0 10px">Supporting text.</p><button class="btn-t btn-tp btn-sm2">Action</button></div></div></div>
     <div class="col-md-4"><div class="card-t"><div class="card-th">Header</div><div class="card-tb"><p style="font-size:12px;color:var(--g600);margin:0">Body content.</p></div><div class="card-tf">Updated 2 days ago</div></div></div>
-    <div class="col-md-4"><div class="card-t"><div style="height:80px;background:linear-gradient(135deg,var(--t-primary),var(--t-info));display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px"><i class="fas fa-image me-1"></i> Image</div><div class="card-tb"><div style="font-family:var(--t-heading);font-weight:600;font-size:15px;margin-bottom:6px">Image Card</div><p style="font-size:12px;color:var(--g600);margin:0">With header.</p></div></div></div>
+    <div class="col-md-4"><div class="card-t"><div style="height:80px;background:linear-gradient(135deg,var(--t-primary),var(--t-info));display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px"><i class="fas fa-image me-1"></i> Image</div><div class="card-tb"><div style="font-family:var(--t-heading);font-weight:var(--t-h-weight);font-size:var(--t-h3-size);margin-bottom:6px">Image Card</div><p style="font-size:12px;color:var(--g600);margin:0">With header.</p></div></div></div>
   </div>
 </section>
 
@@ -907,7 +990,7 @@
   <p class="sd">Slide-in panel.</p>
   <div class="no-override-detail"><strong>No structural override detected.</strong></div>
   <div style="width:270px;height:260px;background:#fff;border:1px solid var(--t-bdr);border-radius:0 var(--r-md) var(--r-md) 0;box-shadow:var(--t-shadow-lg)">
-    <div style="padding:12px 16px;border-bottom:1px solid var(--t-bdr);display:flex;justify-content:space-between;align-items:center"><span style="font-family:var(--t-heading);font-weight:600;font-size:14px">Filters</span><button style="background:none;border:none;font-size:16px;color:var(--g400);cursor:pointer">&times;</button></div>
+    <div style="padding:12px 16px;border-bottom:1px solid var(--t-bdr);display:flex;justify-content:space-between;align-items:center"><span style="font-family:var(--t-heading);font-weight:var(--t-h-weight);font-size:var(--t-h4-size)">Filters</span><button style="background:none;border:none;font-size:16px;color:var(--g400);cursor:pointer">&times;</button></div>
     <div style="padding:14px 16px;font-size:13px">
       <p style="font-weight:500;margin:0 0 6px;font-size:12px">Status</p>
       <div class="form-check"><input class="form-check-input" type="checkbox" checked><label class="form-check-label" style="font-size:12px">Active</label></div>
@@ -979,7 +1062,16 @@ function st(t){
   document.getElementById('bP').classList.toggle('on',t==='production');
   document.getElementById('bD').classList.toggle('on',t==='mdb-default');
   document.getElementById('ll').textContent=t==='production'?'GLM Production':'MDB5 Default';
-  document.getElementById('oc').textContent=t==='production'?'Foundant design tokens applied · 9 overridden · 18 default':'Stock MDB5 7.x values';
+  document.getElementById('oc').textContent=t==='production'?'Foundant design tokens applied · 10 overridden · 17 default':'Stock MDB5 7.x values';
+
+  // Update heading specimen labels
+  const sizes = t==='production'
+    ? {h1:'1.5rem (24px) / 700',h2:'1.25rem (20px) / 700',h3:'1rem (16px) / 700',h4:'0.875rem (14px) / 700',h5:'0.75rem (12px) / 700',h6:'0.75rem (12px) / 700'}
+    : {h1:'2.5rem (40px) / 500',h2:'2rem (32px) / 500',h3:'1.75rem (28px) / 500',h4:'1.5rem (24px) / 500',h5:'1.25rem (20px) / 500',h6:'1rem (16px) / 500'};
+  document.querySelectorAll('.heading-specimen').forEach(el => {
+    const lvl = el.dataset.level;
+    el.textContent = lvl + '. Heading (' + sizes[lvl] + ')';
+  });
 }
 const tl=document.querySelectorAll('.toc a'),ss=document.querySelectorAll('.sec[id]');
 window.addEventListener('scroll',()=>{let c='';ss.forEach(s=>{if(s.offsetTop-72<=window.scrollY)c=s.id});tl.forEach(l=>l.classList.toggle('on',l.getAttribute('href')==='#'+c))});
