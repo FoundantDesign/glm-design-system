@@ -70,7 +70,7 @@
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: var(--font-body); font-size: 16px; background: var(--app-bg); color: var(--primary); }
-h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); font-weight: 500; color: var(--primary); }
+h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); font-weight: 500; color: var(--primary); margin: 0; }
 a { color: var(--link); text-decoration: none; }
 svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
 
@@ -150,7 +150,7 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
 /* RECORD HEADER */
 .ft-record-header { margin-bottom: 20px; }
 .ft-record-header h1 {
-  font-size: 1.5rem; font-weight: 500;
+  font-size: 1.75rem; font-weight: 500;
   display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;
 }
 .ft-record-meta {
@@ -162,15 +162,15 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
 /* HERO CARD */
 .ft-hero {
   background: var(--surface); border: var(--border); border-radius: var(--radius);
-  padding: 20px 24px; margin-bottom: var(--gap);
-  display: flex; align-items: center; gap: 32px; flex-wrap: wrap;
+  padding: 20px 24px 12px; margin-bottom: var(--gap);
+  display: flex; align-items: flex-start; gap: 32px; flex-wrap: wrap;
 }
 .ft-hero__amount-block { display: flex; flex-direction: column; gap: 2px; }
 .ft-hero__amount-label { font-size: 0.75rem; color: var(--neutral-40); font-weight: 400; }
 .ft-hero__amount-value { font-size: 1.5rem; font-weight: 700; font-family: var(--font-heading); color: var(--primary); }
-.ft-hero__divider { width: 1px; height: 48px; background: var(--border-color); flex-shrink: 0; }
-.ft-hero__stage-track { display: flex; align-items: center; gap: 0; flex: 1; min-width: 280px; }
-.ft-hero__stage-step { display: flex; flex-direction: column; align-items: center; flex: 1; }
+.ft-hero__divider { width: 1px; height: 48px; background: var(--border-color); flex-shrink: 0; margin-top: 2px; }
+.ft-hero__stage-track { display: flex; align-items: flex-start; flex: 1; min-width: 280px; }
+.ft-hero__stage-step { display: flex; flex-direction: column; align-items: center; flex: 0 0 auto; width: 48px; }
 .ft-hero__stage-label { font-size: 0.65rem; color: var(--neutral-40); margin-top: 4px; text-align: center; white-space: nowrap; }
 .ft-hero__stage-node {
   width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border-color);
@@ -179,7 +179,7 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
 }
 .ft-hero__stage-node.done { background: var(--success-50); border-color: var(--success-0); color: #2a7a52; }
 .ft-hero__stage-node.active { background: var(--warning-50); border-color: var(--warning-0); color: #8a6d00; }
-.ft-hero__stage-line { flex: 1; height: 2px; background: var(--border-color); margin-top: -14px; }
+.ft-hero__stage-line { flex: 1; height: 1px; background: var(--border-color); margin-top: 14px; margin-left: -10px; margin-right: -10px; }
 .ft-hero__stage-line.done { background: var(--success-0); }
 
 /* BENTO */
@@ -205,12 +205,13 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
   font-size: 0.8rem;
 }
 .ft-row:last-child { border-bottom: none; }
-.ft-row--rd { grid-template-columns: minmax(100px,1fr) 140px 90px auto; gap: 8px; }
-.ft-row--fu { grid-template-columns: minmax(120px,1fr) 90px 90px; gap: 8px; }
-.ft-row__name { color: #777; font-weight: 400; }
-.ft-row__badge { }
-.ft-row__date { font-size: 0.75rem; color: var(--neutral-40); font-weight: 400; white-space: nowrap; }
-.ft-row__actions { display: flex; align-items: center; gap: 6px; justify-content: flex-end; }
+.ft-row--rd { grid-template-columns: 120px 160px 1fr auto; gap: 8px; }
+.ft-row--fu { grid-template-columns: minmax(80px, 1fr) 120px 120px 120px auto; gap: 8px; }
+.ft-row__name { color: #777; font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ft-row__badge { text-align: left; }
+.ft-row__date { font-size: 0.75rem; color: var(--neutral-40); font-weight: 400; white-space: nowrap; text-align: left; }
+.ft-row__assignee { font-size: 0.75rem; color: var(--neutral-40); font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left; }
+.ft-row__actions { display: flex; align-items: center; gap: 6px; justify-content: flex-end; white-space: nowrap; }
 
 /* RECORD TYPE LABELS */
 .ft-record-type-badge {
@@ -477,6 +478,9 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
     <symbol id="ic-maximize" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
       <rect x="3" y="3" width="10" height="10" rx="1"/>
     </symbol>
+    <symbol id="ic-alarm" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="8" cy="9" r="5.5"/><path d="M8 6.5V9l2 1.5"/><path d="M3.5 3L1.5 5M12.5 3l2 2"/>
+    </symbol>
   </defs>
 </svg>
 
@@ -713,28 +717,28 @@ var DATA = {
     loiClass:'ft-badge--complete',loi:'LOI Complete',appStatus:'Application Complete',appClass:'ft-badge--complete',decStatus:'Not Started',decClass:'ft-badge--closed',appDue:'04/15/2025' },
 
   /* ── DECISION STAGE ── */
-  'dec-draft': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'Approval Draft',statusClass:'ft-badge--draft',requested:'$85,000',awarded:'$70,000',showAward:true,followups:[],loiDot:'dot-complete',appDot:'dot-complete',decDot:'dot-active',fuDot:'dot-pending',
+  'dec-draft': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'Approval Draft',statusClass:'ft-badge--draft',requested:'$85,000',awarded:'$85,000',paid:'$0',showAward:true,followups:[],loiDot:'dot-complete',appDot:'dot-complete',decDot:'dot-active',fuDot:'dot-pending',
     loiClass:'ft-badge--complete',loi:'LOI Complete',appStatus:'Application Complete',appClass:'ft-badge--complete',decStatus:'Approval Draft',decClass:'ft-badge--draft',appDue:'04/15/2025',decDue:'06/01/2025' },
-  'dec-approved': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'Approved',statusClass:'ft-badge--approved',requested:'$85,000',awarded:'$70,000',showAward:true,followups:[],loiDot:'dot-complete',appDot:'dot-complete',decDot:'dot-complete',fuDot:'dot-pending',
+  'dec-approved': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'Approved',statusClass:'ft-badge--approved',requested:'$85,000',awarded:'$85,000',paid:'$0',showAward:true,followups:[],loiDot:'dot-complete',appDot:'dot-complete',decDot:'dot-complete',fuDot:'dot-pending',
     loiClass:'ft-badge--complete',loi:'LOI Complete',appStatus:'Application Complete',appClass:'ft-badge--complete',decStatus:'Approved',decClass:'ft-badge--approved',appDue:'04/15/2025',decDue:'06/01/2025' },
 
   /* ── FOLLOW UP STAGE ── */
-  'fu-draft': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'Follow Up Draft',statusClass:'ft-badge--draft',requested:'$85,000',awarded:'$70,000',showAward:true,
-    followups:[{name:'Mid-Year Narrative Report',due:'12/31/2025',status:'Draft',cls:'ft-badge--draft',overdue:false},{name:'Final Financial Report',due:'07/31/2026',status:'Not Started',cls:'ft-badge--closed',overdue:false},{name:'Site Visit Confirmation',due:'09/15/2025',status:'Not Started',cls:'ft-badge--closed',overdue:false}],
+  'fu-draft': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'Follow Up Draft',statusClass:'ft-badge--draft',requested:'$85,000',awarded:'$85,000',paid:'$35,000',showAward:true,
+    followups:[{name:'Mid-Year Narrative Report',due:'12/31/2025',status:'Draft',cls:'ft-badge--draft',overdue:false,assignee:'Priya Anand'},{name:'Final Financial Report',due:'07/31/2026',status:'Not Started',cls:'ft-badge--closed',overdue:false,assignee:''},{name:'Site Visit Confirmation',due:'09/15/2025',status:'Not Started',cls:'ft-badge--closed',overdue:false,assignee:''}],
     loiDot:'dot-complete',appDot:'dot-complete',decDot:'dot-complete',fuDot:'dot-active',
     loiClass:'ft-badge--complete',loi:'LOI Complete',appStatus:'Application Complete',appClass:'ft-badge--complete',decStatus:'Approved',decClass:'ft-badge--approved',appDue:'04/15/2025',decDue:'06/01/2025' },
-  'fu-submitted': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'Follow Up Submitted',statusClass:'ft-badge--submitted',requested:'$85,000',awarded:'$70,000',showAward:true,
-    followups:[{name:'Mid-Year Narrative Report',due:'12/31/2025',status:'Submitted',cls:'ft-badge--submitted',overdue:false},{name:'Final Financial Report',due:'07/31/2026',status:'Assigned',cls:'ft-badge--assigned',overdue:false},{name:'Site Visit Confirmation',due:'09/15/2025',status:'Assigned',cls:'ft-badge--assigned',overdue:true}],
+  'fu-submitted': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'Follow Up Submitted',statusClass:'ft-badge--submitted',requested:'$85,000',awarded:'$85,000',paid:'$70,000',showAward:true,
+    followups:[{name:'Mid-Year Narrative Report',due:'12/31/2025',status:'Submitted',cls:'ft-badge--submitted',overdue:false,assignee:'Priya Anand'},{name:'Final Financial Report',due:'07/31/2026',status:'Assigned',cls:'ft-badge--assigned',overdue:false,assignee:'Marcus Webb'},{name:'Site Visit Confirmation',due:'09/15/2025',status:'Assigned',cls:'ft-badge--assigned',overdue:true,assignee:'Marcus Webb'}],
     loiDot:'dot-complete',appDot:'dot-complete',decDot:'dot-complete',fuDot:'dot-active',hasOverdue:true,
     loiClass:'ft-badge--complete',loi:'LOI Complete',appStatus:'Application Complete',appClass:'ft-badge--complete',decStatus:'Approved',decClass:'ft-badge--approved',appDue:'04/15/2025',decDue:'06/01/2025' },
-  'fu-complete': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'Follow Up Complete',statusClass:'ft-badge--complete',requested:'$85,000',awarded:'$70,000',showAward:true,
-    followups:[{name:'Mid-Year Narrative Report',due:'12/31/2025',status:'Complete',cls:'ft-badge--complete',overdue:false},{name:'Final Financial Report',due:'07/31/2026',status:'Complete',cls:'ft-badge--complete',overdue:false},{name:'Site Visit Confirmation',due:'09/15/2025',status:'Complete',cls:'ft-badge--complete',overdue:false}],
+  'fu-complete': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'Follow Up Complete',statusClass:'ft-badge--complete',requested:'$85,000',awarded:'$85,000',paid:'$85,000',showAward:true,
+    followups:[{name:'Mid-Year Narrative Report',due:'12/31/2025',status:'Complete',cls:'ft-badge--complete',overdue:false,assignee:'Priya Anand'},{name:'Final Financial Report',due:'07/31/2026',status:'Complete',cls:'ft-badge--complete',overdue:false,assignee:'Marcus Webb'},{name:'Site Visit Confirmation',due:'09/15/2025',status:'Complete',cls:'ft-badge--complete',overdue:false,assignee:'Marcus Webb'}],
     loiDot:'dot-complete',appDot:'dot-complete',decDot:'dot-complete',fuDot:'dot-complete',
     loiClass:'ft-badge--complete',loi:'LOI Complete',appStatus:'Application Complete',appClass:'ft-badge--complete',decStatus:'Approved',decClass:'ft-badge--approved',appDue:'04/15/2025',decDue:'06/01/2025' },
 
   /* ── CLOSED ── */
-  'closed': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'Closed',statusClass:'ft-badge--closed',requested:'$85,000',awarded:'$70,000',showAward:true,
-    followups:[{name:'Mid-Year Narrative Report',due:'12/31/2025',status:'Complete',cls:'ft-badge--complete',overdue:false},{name:'Final Financial Report',due:'07/31/2026',status:'Complete',cls:'ft-badge--complete',overdue:false},{name:'Site Visit Confirmation',due:'09/15/2025',status:'Complete',cls:'ft-badge--complete',overdue:false}],
+  'closed': { title:'Workforce Pathways Initiative',org:'Northgate Community Foundation',program:'Workforce Development',type:'Project Support',status:'Closed',statusClass:'ft-badge--closed',requested:'$85,000',awarded:'$85,000',paid:'$85,000',showAward:true,
+    followups:[{name:'Mid-Year Narrative Report',due:'12/31/2025',status:'Complete',cls:'ft-badge--complete',overdue:false,assignee:'Priya Anand'},{name:'Final Financial Report',due:'07/31/2026',status:'Complete',cls:'ft-badge--complete',overdue:false,assignee:'Marcus Webb'},{name:'Site Visit Confirmation',due:'09/15/2025',status:'Complete',cls:'ft-badge--complete',overdue:false,assignee:'Marcus Webb'}],
     loiDot:'dot-complete',appDot:'dot-complete',decDot:'dot-complete',fuDot:'dot-complete',
     loiClass:'ft-badge--complete',loi:'LOI Complete',appStatus:'Application Complete',appClass:'ft-badge--complete',decStatus:'Approved',decClass:'ft-badge--approved',appDue:'04/15/2025',decDue:'06/01/2025' }
 };
@@ -743,17 +747,17 @@ var DATA = {
 /* Each entry: array of { label, style ('filled'|'outline'), icon (optional) } */
 /* Order: outline actions left, primary right, Actions dropdown appended after */
 var ACTION_BUTTONS = {
-  'loi-submitted':      [{ label:'Assign/View Evaluators', style:'outline' }],
-  'loi-complete':       [{ label:'Assign Next Form', style:'filled' }],
+  'loi-submitted':      [{ label:'Assign/View Evaluators', style:'outline' },{ label:'Approve Request', style:'outline' }],
+  'loi-complete':       [{ label:'Approve Request', style:'outline' },{ label:'Assign Next Form', style:'filled' }],
   'app-draft':          [{ label:'Save Application', style:'outline' },{ label:'Approve Request', style:'outline' },{ label:'Application Complete', style:'filled' }],
   'app-submitted':      [{ label:'Email Aaron Rodgers', style:'outline' },{ label:'Application Incomplete', style:'outline' },{ label:'Application Complete', style:'filled' }],
   'app-complete':       [{ label:'Email Aaron Rodgers', style:'outline' },{ label:'Skip Application Evaluations', style:'outline' },{ label:'Assign/View Evaluators', style:'filled' }],
   'app-evals-assigned': [{ label:'Assign/View Evaluators', style:'outline' }],
   'app-evals-closed':   [{ label:'Approve Request', style:'filled' }],
   'dec-draft':          [{ label:'Assign/View Evaluators', style:'outline' },{ label:'Send Email', style:'outline' },{ label:'Save Approval', style:'outline' },{ label:'Approve Request', style:'filled' }],
-  'dec-approved':       [{ label:'Email', style:'outline' },{ label:'Edit Follow Ups', style:'outline' },{ label:'Assign Follow Ups', style:'filled' }],
-  'fu-draft':           [{ label:'Assign Follow Ups', style:'outline' },{ label:'Edit Follow Ups', style:'outline' }],
-  'fu-submitted':       [{ label:'Assign Follow Ups', style:'outline' },{ label:'Edit Follow Ups', style:'outline' },{ label:'Email Assignee', style:'outline' },{ label:'Follow Up Incomplete', style:'outline' },{ label:'Follow Up Complete', style:'filled' }],
+  'dec-approved':       [{ label:'Email', style:'outline' },{ label:'Assign Follow Ups', style:'filled' }],
+  'fu-draft':           [{ label:'Close Request', style:'outline' }],
+  'fu-submitted':       [{ label:'Follow Up Incomplete', style:'outline' },{ label:'Follow Up Complete', style:'filled' },{ label:'Close Request', style:'outline' }],
   'fu-complete':        [{ label:'Close Request', style:'outline' }],
   'closed':             [{ label:'Email', style:'outline' }]
 };
@@ -794,7 +798,17 @@ function openFormView(formType) {
   activeFormView = formType;
   /* Locked to slide-over (Pattern B) */
   document.getElementById('slideover-title').textContent = formType;
-  document.getElementById('slideover-body').innerHTML = renderFormContent(formType);
+  var bodyHtml = renderFormContent(formType);
+  /* Check if this is a follow-up by matching against current data follow-up names */
+  var data = d();
+  var isFollowUp = false;
+  for (var i = 0; i < data.followups.length; i++) {
+    if (data.followups[i].name === formType) { isFollowUp = true; break; }
+  }
+  if (isFollowUp && stageLevel() >= 4) {
+    bodyHtml += '<div style="padding-top:16px;border-top:var(--border);margin-top:20px"><button class="btn-ft-filled btn-ft-default">Mark Followup Complete</button></div>';
+  }
+  document.getElementById('slideover-body').innerHTML = bodyHtml;
   document.getElementById('slideover-overlay').classList.add('open');
   document.getElementById('slideover-panel').classList.add('open');
 }
@@ -836,17 +850,16 @@ function renderHeader() {
   }
 
   /* Actions dropdown (MDB5) */
-  var dd = '<div class="dropdown"><button class="btn-ft-outline btn-ft-sm dropdown-toggle" data-mdb-toggle="dropdown">Actions</button><ul class="dropdown-menu" style="border-radius:var(--radius);border-color:var(--border-color);font-size:0.8rem;min-width:220px"><li><a class="dropdown-item" style="font-family:var(--font-body)" href="#">Assign Users</a></li><li><a class="dropdown-item" style="font-family:var(--font-body)" href="#">Create Documents</a></li><li><hr class="dropdown-divider"></li><li><a class="dropdown-item" style="font-family:var(--font-body)" href="#">Request Change Log</a></li><li><a class="dropdown-item" style="font-family:var(--font-body)" href="#">Reassign Organization</a></li><li><hr class="dropdown-divider"></li><li><a class="dropdown-item" style="font-family:var(--font-body);color:var(--danger-0)" href="#" data-mdb-toggle="modal" data-mdb-target="#deleteModal">Delete Request</a></li></ul></div>';
+  var dd = '<div class="dropdown"><button class="btn-ft-outline btn-ft-sm dropdown-toggle" data-mdb-toggle="dropdown">Actions</button><ul class="dropdown-menu" style="border-radius:var(--radius);border-color:var(--border-color);font-size:0.8rem;min-width:220px"><li><a class="dropdown-item" style="font-family:var(--font-body)" href="#">Revert Status</a></li><li><a class="dropdown-item" style="font-family:var(--font-body)" href="#">Assign Users</a></li><li><a class="dropdown-item" style="font-family:var(--font-body)" href="#">Create Documents</a></li><li><hr class="dropdown-divider"></li><li><a class="dropdown-item" style="font-family:var(--font-body)" href="#">Request Change Log</a></li><li><a class="dropdown-item" style="font-family:var(--font-body)" href="#">Reassign Organization</a></li><li><hr class="dropdown-divider"></li><li><a class="dropdown-item" style="font-family:var(--font-body);color:var(--danger-0)" href="#">Deny Request</a></li><li><a class="dropdown-item" style="font-family:var(--font-body);color:var(--danger-0)" href="#">Abandon Request</a></li><li><a class="dropdown-item" style="font-family:var(--font-body);color:var(--danger-0)" href="#" data-mdb-toggle="modal" data-mdb-target="#deleteModal">Delete Request</a></li></ul></div>';
 
   /* Record type label */
   var labelHtml = '';
   if (state.labelStyle === 'badge') {
-    labelHtml = '<div><span class="ft-record-type-badge">Request Record</span></div>';
+    labelHtml = '<div><span class="ft-record-type-badge">Request Summary</span></div>';
+  } else if (state.labelStyle === 'backlink') {
+    labelHtml = '<div><a href="#" style="font-size:0.8rem;color:var(--link);font-family:var(--font-body);font-weight:500;display:inline-flex;align-items:center;gap:4px;margin-bottom:4px"><svg width="12" height="12" style="color:var(--link)"><use href="#ic-arrow-left"/></svg>Back to all Requests</a></div>';
   }
   var titleText = data.title;
-  if (state.labelStyle === 'allcaps') {
-    titleText = 'GRANT REQUEST: ' + data.title;
-  }
 
   var html = '<div class="ft-record-header">' + labelHtml + '<div style="display:flex;align-items:center;gap:8px"><h1>' + titleText + '</h1><div style="display:flex;align-items:center;gap:8px;margin-left:auto">' + actionBtns + dd + '</div></div><div class="ft-record-meta"><span class="org">' + data.org + '</span><span class="sep">|</span><span>' + data.program + '</span><span class="sep">|</span><span>' + data.type + '</span></div></div>';
   html += renderHeroCard(data);
@@ -863,11 +876,11 @@ function renderHeroCard(data) {
     track += '<div class="ft-hero__stage-step"><div class="ft-hero__stage-node ' + nc + '">' + nl + '</div><div class="ft-hero__stage-label">' + s.label + '</div></div>';
     if (i < stages.length - 1) track += '<div class="ft-hero__stage-line' + (s.done ? ' done' : '') + '"></div>';
   }
-  var awardBlock = data.showAward ? '<div class="ft-hero__amount-block"><div class="ft-hero__amount-label">Awarded</div><div class="ft-hero__amount-value">' + data.awarded + '</div></div><div class="ft-hero__divider"></div>' : '<div class="ft-hero__amount-block"><div class="ft-hero__amount-label">Awarded</div><div class="ft-hero__amount-value" style="color:#aaa">TBD</div></div><div class="ft-hero__divider"></div>';
-  var reqDisplay = stageLevel() <= 1 ? '<div class="ft-hero__amount-value" style="color:#aaa">TBD</div>' : '<div class="ft-hero__amount-value">' + data.requested + '</div>';
+  var awardedDisplay = data.showAward ? '<div class="ft-hero__amount-value">' + data.awarded + '</div>' : '<div class="ft-hero__amount-value" style="color:#aaa">TBD</div>';
+  var paidDisplay = data.paid ? '<div class="ft-hero__amount-value">' + data.paid + '</div>' : '<div class="ft-hero__amount-value" style="color:#aaa">TBD</div>';
   var showOverdue = state.overdue || data.hasOverdue;
-  var overdueHtml = showOverdue ? '<div class="ft-hero__overdue">Overdue</div>' : '';
-  return '<div class="ft-hero"><div class="ft-hero__amount-block"><div class="ft-hero__amount-label">Requested</div>' + reqDisplay + '</div><div class="ft-hero__divider"></div>' + awardBlock + '<div class="ft-hero__amount-block"><div class="ft-hero__amount-label">Status</div><div style="margin-top:4px"><span class="ft-badge ' + data.statusClass + '">' + data.status + '</span>' + overdueHtml + '</div></div><div class="ft-hero__divider"></div><div class="ft-hero__stage-track">' + track + '</div></div>';
+  var overdueHtml = showOverdue ? '<div class="ft-hero__overdue"><svg width="12" height="12" style="color:var(--danger-0);margin-right:3px;margin-bottom:3px"><use href="#ic-alarm"/></svg>Past Due</div>' : '';
+  return '<div class="ft-hero"><div class="ft-hero__amount-block"><div class="ft-hero__amount-label">Awarded</div>' + awardedDisplay + '</div><div class="ft-hero__divider"></div><div class="ft-hero__amount-block"><div class="ft-hero__amount-label">Paid</div>' + paidDisplay + '</div><div class="ft-hero__divider"></div><div class="ft-hero__amount-block"><div class="ft-hero__amount-label">Status</div><div><span class="ft-badge ' + data.statusClass + '">' + data.status + '</span>' + overdueHtml + '</div></div><div class="ft-hero__divider"></div><div class="ft-hero__stage-track">' + track + '</div></div>';
 }
 
 function renderRequestDetailsBento(data) {
@@ -879,21 +892,37 @@ function renderRequestDetailsBento(data) {
   html += '<div class="ft-kebab-wrap"><button class="ft-kebab-btn" onclick="toggleKebab(\'' + kebabId + '\',event)"><svg width="14" height="14"><use href="#ic-kebab"/></svg></button><div class="ft-kebab-menu" id="' + kebabId + '"><button class="ft-kebab-menu__item">View Request History</button><button class="ft-kebab-menu__item">View Submission History</button></div></div>';
   html += '</div></div>';
 
-  var rdRow = function(label, badgeHtml, date) {
-    var dateHtml = date ? date : '';
+  var rdRow = function(label, badgeHtml, date, isComplete, prefixOverride, isSubmitted) {
+    var prefix = 'Due ';
+    if (prefixOverride) { prefix = prefixOverride + ' '; }
+    else if (isComplete) { prefix = 'Modified '; }
+    else if (isSubmitted) { prefix = 'Submitted '; }
+    var dateHtml = date ? prefix + date : '';
+    if (date && state.overdue && !isComplete) {
+      dateHtml = '<span class="ft-overdue-text"><svg width="12" height="12" style="color:var(--danger-0);margin-right:2px;margin-bottom:3px"><use href="#ic-alarm"/></svg>Past Due</span><br>' + date;
+    }
     return '<div class="ft-row ft-row--rd"><span class="ft-row__name">' + label + '</span><span class="ft-row__badge">' + badgeHtml + '</span><span class="ft-row__date">' + dateHtml + '</span><span class="ft-row__actions"><button class="ft-card-link" onclick="openFormView(\'' + label.replace(/'/g, "\\'") + '\')"><svg width="12" height="12"><use href="#ic-external"/></svg> View</button><button class="ft-card-link" title="Download PDF"><svg width="14" height="14"><use href="#ic-pdf"/></svg></button></span></div>';
   };
 
-  html += rdRow('Eligibility Quiz', '<span class="ft-badge ft-badge--complete">Passed</span>', '01/05/2025');
-  if (sl >= 1) html += rdRow('LOI', '<span class="ft-badge ' + data.loiClass + '">' + data.loi + '</span>', '02/10/2025');
-  if (sl >= 2) html += rdRow('Application', '<span class="ft-badge ' + data.appClass + '">' + data.appStatus + '</span>', data.appDue);
+  html += rdRow('Eligibility Quiz', '<span class="ft-badge ft-badge--complete">Passed</span>', '01/05/2025', true);
+  if (sl >= 1) {
+    var loiComplete = (data.loiDot === 'dot-complete');
+    var loiSubmitted = (data.loi === 'LOI Submitted');
+    html += rdRow('LOI', '<span class="ft-badge ' + data.loiClass + '">' + data.loi + '</span>', '02/10/2025', loiComplete, null, loiSubmitted);
+  }
+  if (sl >= 2) {
+    var appComplete = (data.appStatus === 'Application Complete');
+    var appSubmitted = (data.appStatus === 'Application Submitted');
+    html += rdRow('Application', '<span class="ft-badge ' + data.appClass + '">' + data.appStatus + '</span>', data.appDue, appComplete, null, appSubmitted);
+  }
   if (sl >= 2 && (data.appStatus === 'Application Complete' || data.decStatus !== 'Not Started')) {
-    html += rdRow('Evaluation 1', '<span class="ft-badge ft-badge--complete">Complete</span>', '05/20/2025');
-    html += rdRow('Evaluation 2', '<span class="ft-badge ft-badge--complete">Complete</span>', '05/22/2025');
+    html += rdRow('Evaluation 1', '<span class="ft-badge ft-badge--complete">Complete</span>', '05/20/2025', true);
+    html += rdRow('Evaluation 2', '<span class="ft-badge ft-badge--complete">Complete</span>', '05/22/2025', true);
   }
   if (sl >= 3) {
     var al = data.decStatus === 'Denied' ? 'Denial' : 'Approval';
-    html += rdRow(al, '<span class="ft-badge ' + data.decClass + '">' + data.decStatus + '</span>', data.decDue);
+    var decComplete = (data.decStatus === 'Approved' || data.decStatus === 'Denied');
+    html += rdRow(al, '<span class="ft-badge ' + data.decClass + '">' + data.decStatus + '</span>', data.decDue, decComplete, decComplete ? 'Decision' : null);
   }
   html += '</div>';
   return html;
@@ -906,17 +935,31 @@ function renderAwardBento(data) {
   html += '</div></div>';
   if (data.showAward) { html += '<div class="ft-kv"><span class="ft-kv__label">Installment Total</span><span class="ft-kv__value">' + data.awarded + '</span></div><div class="ft-kv"><span class="ft-kv__label">Cancelled Total</span><span class="ft-kv__value">$0.00</span></div><div class="ft-kv"><span class="ft-kv__label">Amount Paid</span><span class="ft-kv__value">$35,000.00</span></div><div class="ft-kv"><span class="ft-kv__label">Balance</span><span class="ft-kv__value">$35,000.00</span></div><div class="ft-kv"><span class="ft-kv__label">Number of Installments</span><span class="ft-kv__value">2</span></div>'; }
   else html += '<div style="font-size:0.8rem;color:#aaa;padding:8px 0">No installments created yet. Award details will appear once the grant is approved.</div>';
+  var showCsuiteButtons = (stageLevel() >= 4);
+  if (showCsuiteButtons) {
+    html += '<div style="display:flex;gap:8px;padding-top:10px;margin-top:0"><button class="btn-ft-outline" style="font-size:0.7rem;padding:3px 10px 2px">CSuite Sync</button><button class="btn-ft-outline" style="font-size:0.7rem;padding:3px 10px 2px">Approve Next Installment</button></div>';
+  }
   html += '</div>'; return html;
 }
 
 function renderDocsBento() { return '<div class="ft-bento"><div class="ft-bento__header"><span class="ft-bento__title">Documents</span><div class="ft-bento__actions"><button class="btn-ft-outline btn-ft-sm">View All</button><button class="btn-ft-outline btn-ft-sm">Upload</button></div></div><div class="ft-kv"><span class="ft-kv__label">Grant Agreement</span><span class="ft-kv__value">PDF - 03/15/2025</span></div><div class="ft-kv"><span class="ft-kv__label">Board Resolution</span><span class="ft-kv__value">PDF - 02/01/2025</span></div><div class="ft-kv"><span class="ft-kv__label">Budget Narrative</span><span class="ft-kv__value">XLSX - 01/20/2025</span></div><div class="ft-kv"><span class="ft-kv__label">IRS Determination Letter</span><span class="ft-kv__value">PDF - 12/15/2024</span></div></div>'; }
 
-function renderFinCompBento() { return '<div class="ft-bento"><div class="ft-bento__header"><span class="ft-bento__title">Financials and Compliance</span><div class="ft-bento__actions"><button class="btn-ft-outline btn-ft-sm">View All</button></div></div><div class="ft-kv"><span class="ft-kv__label">Tax Status</span><span class="ft-kv__value"><span class="ft-badge ft-badge--exempt">Exempt</span></span></div><div class="ft-kv"><span class="ft-kv__label">OFAC Check</span><span class="ft-kv__value"><span class="ft-badge ft-badge--clear">Clear</span></span></div><div class="ft-kv"><span class="ft-kv__label">IRS Classification</span><span class="ft-kv__value">501(c)(3)</span></div><div class="ft-kv"><span class="ft-kv__label">Board Conflict</span><span class="ft-kv__value"><span class="ft-badge ft-badge--clear">Clear</span></span></div><div class="ft-kv"><span class="ft-kv__label">Last Verified</span><span class="ft-kv__value">04/30/2025</span></div><div style="display:flex;gap:8px;padding-top:10px;border-top:1px solid var(--border-color);margin-top:7px"><button class="btn-ft-outline" style="font-size:0.7rem;padding:3px 10px 2px">Acknowledge</button><button class="btn-ft-outline" style="font-size:0.7rem;padding:3px 10px 2px">View Candid Profile</button></div></div>'; }
+function renderFinCompBento() { return '<div class="ft-bento"><div class="ft-bento__header"><span class="ft-bento__title">Financials and Compliance</span><div class="ft-bento__actions"><button class="btn-ft-outline btn-ft-sm">View All</button></div></div><div class="ft-kv"><span class="ft-kv__label">Tax Status</span><span class="ft-kv__value"><span class="ft-badge ft-badge--exempt">Exempt</span></span></div><div class="ft-kv"><span class="ft-kv__label">OFAC Check</span><span class="ft-kv__value"><span class="ft-badge ft-badge--clear">Clear</span></span></div><div class="ft-kv"><span class="ft-kv__label">IRS Classification</span><span class="ft-kv__value">501(c)(3)</span></div><div class="ft-kv"><span class="ft-kv__label">Board Conflict</span><span class="ft-kv__value"><span class="ft-badge ft-badge--clear">Clear</span></span></div><div class="ft-kv"><span class="ft-kv__label">Last Verified</span><span class="ft-kv__value">04/30/2025</span></div><div style="display:flex;gap:8px;padding-top:10px;margin-top:0"><button class="btn-ft-outline" style="font-size:0.7rem;padding:3px 10px 2px">Acknowledge</button><button class="btn-ft-outline" style="font-size:0.7rem;padding:3px 10px 2px">View Candid Profile</button></div></div>'; }
 
 function renderFollowUpRow(fu) {
   var isOverdue = fu.overdue || state.overdue;
-  var overdueTag = isOverdue ? '<span class="ft-overdue-text">Overdue</span> ' : '';
-  return '<div class="ft-row ft-row--fu"><span class="ft-row__name">' + fu.name + '</span><span class="ft-row__badge">' + overdueTag + '<span class="ft-badge ' + fu.cls + '">' + fu.status + '</span></span><span class="ft-row__date">Due ' + fu.due + '</span></div>';
+  var isComplete = (fu.status === 'Complete');
+  var isSubmitted = (fu.status === 'Submitted');
+  var prefix = 'Due ';
+  if (isComplete) { prefix = 'Modified '; }
+  else if (isSubmitted) { prefix = 'Submitted '; }
+  var dateHtml = prefix + fu.due;
+  if (isOverdue && !isComplete) {
+    dateHtml = '<span class="ft-overdue-text"><svg width="12" height="12" style="color:var(--danger-0);margin-right:2px;margin-bottom:3px"><use href="#ic-alarm"/></svg>Past Due</span><br>' + fu.due;
+  }
+  var showAssignee = (fu.assignee && (fu.status === 'Assigned' || fu.status === 'Submitted' || fu.status === 'Complete'));
+  var assigneeHtml = showAssignee ? '<span style="display:inline-flex;align-items:center;gap:4px">' + fu.assignee + '<button class="ft-card-link" style="padding:0" title="Email ' + fu.assignee + '"><svg width="12" height="12"><use href="#ic-envelope"/></svg></button></span>' : '';
+  return '<div class="ft-row ft-row--fu"><span class="ft-row__name">' + fu.name + '</span><span class="ft-row__badge"><span class="ft-badge ' + fu.cls + '">' + fu.status + '</span></span><span class="ft-row__assignee">' + assigneeHtml + '</span><span class="ft-row__date">' + dateHtml + '</span><span class="ft-row__actions"><button class="ft-card-link" onclick="openFormView(\'' + fu.name.replace(/'/g, "\\'") + '\')"><svg width="12" height="12"><use href="#ic-external"/></svg> View</button><button class="ft-card-link" title="Download PDF"><svg width="14" height="14"><use href="#ic-pdf"/></svg></button></span></div>';
 }
 
 function renderBentos() {
@@ -942,23 +985,39 @@ function renderBentos() {
 
     /* Request Details sub-section (reversed) */
     html += '<div class="ft-bento__sub-header">Request History</div>';
-    var rdRow = function(label, badgeHtml, date) {
-      var dateHtml = date ? date : '';
+    var rdRow = function(label, badgeHtml, date, isComplete, prefixOverride, isSubmitted) {
+      var prefix = 'Due ';
+      if (prefixOverride) { prefix = prefixOverride + ' '; }
+      else if (isComplete) { prefix = 'Modified '; }
+      else if (isSubmitted) { prefix = 'Submitted '; }
+      var dateHtml = date ? prefix + date : '';
+      if (date && state.overdue && !isComplete) {
+        dateHtml = '<span class="ft-overdue-text"><svg width="12" height="12" style="color:var(--danger-0);margin-right:2px;margin-bottom:3px"><use href="#ic-alarm"/></svg>Past Due</span><br>' + date;
+      }
       return '<div class="ft-row ft-row--rd"><span class="ft-row__name">' + label + '</span><span class="ft-row__badge">' + badgeHtml + '</span><span class="ft-row__date">' + dateHtml + '</span><span class="ft-row__actions"><button class="ft-card-link" onclick="openFormView(\'' + label.replace(/'/g, "\\'") + '\')"><svg width="12" height="12"><use href="#ic-external"/></svg> View</button><button class="ft-card-link" title="Download PDF"><svg width="14" height="14"><use href="#ic-pdf"/></svg></button></span></div>';
     };
 
     /* Build rows in forward order, then reverse */
     var rdRows = [];
-    rdRows.push(rdRow('Eligibility Quiz', '<span class="ft-badge ft-badge--complete">Passed</span>', '01/05/2025'));
-    if (sl >= 1) rdRows.push(rdRow('LOI', '<span class="ft-badge ' + data.loiClass + '">' + data.loi + '</span>', '02/10/2025'));
-    if (sl >= 2) rdRows.push(rdRow('Application', '<span class="ft-badge ' + data.appClass + '">' + data.appStatus + '</span>', data.appDue));
+    rdRows.push(rdRow('Eligibility Quiz', '<span class="ft-badge ft-badge--complete">Passed</span>', '01/05/2025', true));
+    if (sl >= 1) {
+      var loiComplete2 = (data.loiDot === 'dot-complete');
+      var loiSubmitted2 = (data.loi === 'LOI Submitted');
+      rdRows.push(rdRow('LOI', '<span class="ft-badge ' + data.loiClass + '">' + data.loi + '</span>', '02/10/2025', loiComplete2, null, loiSubmitted2));
+    }
+    if (sl >= 2) {
+      var appComplete2 = (data.appStatus === 'Application Complete');
+      var appSubmitted2 = (data.appStatus === 'Application Submitted');
+      rdRows.push(rdRow('Application', '<span class="ft-badge ' + data.appClass + '">' + data.appStatus + '</span>', data.appDue, appComplete2, null, appSubmitted2));
+    }
     if (sl >= 2 && (data.appStatus === 'Application Complete' || data.decStatus !== 'Not Started')) {
-      rdRows.push(rdRow('Evaluation 1', '<span class="ft-badge ft-badge--complete">Complete</span>', '05/20/2025'));
-      rdRows.push(rdRow('Evaluation 2', '<span class="ft-badge ft-badge--complete">Complete</span>', '05/22/2025'));
+      rdRows.push(rdRow('Evaluation 1', '<span class="ft-badge ft-badge--complete">Complete</span>', '05/20/2025', true));
+      rdRows.push(rdRow('Evaluation 2', '<span class="ft-badge ft-badge--complete">Complete</span>', '05/22/2025', true));
     }
     if (sl >= 3) {
       var al = data.decStatus === 'Denied' ? 'Denial' : 'Approval';
-      rdRows.push(rdRow(al, '<span class="ft-badge ' + data.decClass + '">' + data.decStatus + '</span>', data.decDue));
+      var decComplete2 = (data.decStatus === 'Approved' || data.decStatus === 'Denied');
+      rdRows.push(rdRow(al, '<span class="ft-badge ' + data.decClass + '">' + data.decStatus + '</span>', data.decDue, decComplete2, decComplete2 ? 'Decision' : null));
     }
     rdRows.reverse();
     html += rdRows.join('');
@@ -974,7 +1033,9 @@ function renderBentos() {
   } else {
     /* ── SEPARATE LAYOUT (original) ── */
     html += '<div class="ft-grid-1-1">' + renderRequestDetailsBento(data) + renderAwardBento(data) + '</div>';
-    html += '<div class="ft-grid-1-1"><div class="ft-bento"><div class="ft-bento__header"><span class="ft-bento__title">Follow Ups</span><div class="ft-bento__actions"><button class="btn-ft-outline btn-ft-sm">View All</button><button class="btn-ft-filled btn-ft-sm">Add</button></div></div>';
+    var fuBtns = '';
+    if (sl >= 4) { fuBtns = '<button class="btn-ft-outline btn-ft-sm">Assign Follow Ups</button><button class="btn-ft-outline btn-ft-sm">Edit Follow Ups</button><button class="btn-ft-filled btn-ft-sm">Add</button>'; }
+    html += '<div class="ft-grid-1-1"><div class="ft-bento"><div class="ft-bento__header"><span class="ft-bento__title">Follow Ups</span><div class="ft-bento__actions">' + fuBtns + '</div></div>';
     if (data.followups.length === 0) html += '<div style="font-size:0.8rem;color:#aaa;padding:8px 0">No follow-ups assigned yet. They will appear once the grant is awarded.</div>';
     else {
       for (var j = 0; j < data.followups.length; j++) {
@@ -987,7 +1048,21 @@ function renderBentos() {
 
   /* Shared bottom bentos */
   html += '<div class="ft-grid-1-1">' + renderDocsBento() + renderFinCompBento() + '</div>';
-  html += '<div class="ft-grid-1-1"><div class="ft-bento"><div class="ft-bento__header"><span class="ft-bento__title">CSuite</span></div><div style="font-size:0.8rem;color:#aaa;padding:8px 0">CommunitySuite integration -- content TBD.</div></div><div class="ft-bento-placeholder"><div style="font-size:0.8rem;font-weight:600;font-family:var(--font-heading);color:#bbb;margin-bottom:4px">Application Analysis</div><div class="ft-bento-placeholder__label">AI-powered analysis -- deferred to future iteration</div></div></div>';
+  if (sl >= 3) {
+    html += '<div class="ft-grid-1"><div class="ft-bento"><div class="ft-bento__header"><span class="ft-bento__title">CSuite</span><div class="ft-bento__actions"><button class="btn-ft-outline btn-ft-sm">CSuite Sync</button></div></div>';
+    html += '<div class="ft-kv"><span class="ft-kv__label">CSuite ID</span><span class="ft-kv__value" style="color:var(--link)">93829</span></div>';
+    html += '<div class="ft-kv"><span class="ft-kv__label">Date</span><span class="ft-kv__value">06/07/2024</span></div>';
+    html += '<div class="ft-kv"><span class="ft-kv__label">Amount</span><span class="ft-kv__value">$70,000.00</span></div>';
+    html += '<div class="ft-kv"><span class="ft-kv__label">Status</span><span class="ft-kv__value">Voucher</span></div>';
+    html += '<div class="ft-kv"><span class="ft-kv__label">Vendor Name</span><span class="ft-kv__value">Northgate Community Foundation</span></div>';
+    html += '<div class="ft-kv"><span class="ft-kv__label">Sponsored Vendor Name</span><span class="ft-kv__value"></span></div>';
+    html += '<div class="ft-kv"><span class="ft-kv__label">Fund Names</span><span class="ft-kv__value">Workforce Development Fund</span></div>';
+    html += '</div></div>';
+  } else {
+    html += '<div class="ft-grid-1"><div class="ft-bento"><div class="ft-bento__header"><span class="ft-bento__title">CSuite</span></div>';
+    html += '<div style="font-size:0.8rem;color:#aaa;padding:8px 0">No CSuite data available yet. CSuite details will appear once the grant is approved and synced.</div>';
+    html += '</div></div>';
+  }
   grid.innerHTML = html;
 }
 
@@ -1068,11 +1143,11 @@ ftProto.addSection({ label:'Bento Layout', id:'layout',
 });
 
 ftProto.addSection({ label:'Record Type Label', id:'label-style',
-  options:[{label:'Badge above H1',value:'badge',active:true},{label:'All Caps H1',value:'allcaps'},{label:'None',value:'none'}],
+  options:[{label:'Badge',value:'badge',active:true},{label:'Back Link',value:'backlink'},{label:'None',value:'none'}],
   onChange:function(v){ state.labelStyle=v; render(); }
 });
 
-ftProto.addSection({ label:'Overdue State', id:'overdue-toggle',
+ftProto.addSection({ label:'Past Due State', id:'overdue-toggle',
   options:[{label:'Off',value:'off',active:true},{label:'On',value:'on'}],
   onChange:function(v){ state.overdue=(v==='on'); render(); }
 });
