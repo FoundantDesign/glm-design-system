@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Key Interactions Timeline — Version A</title>
+<!--
+  KEY INTERACTIONS TIMELINE — VERSION A (No Visualization)
+  User testing stimulus — org scope, hardcoded, no prototype controls
+  List + date range picker + filter pills + search
+-->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css">
+<style>
+:root {
+  --font-body: Roboto, sans-serif;
+  --font-heading: Roboto, sans-serif;
+  --app-bg: #F5F5F5;
+  --surface: #FFFFFF;
+  --primary: #2D3B4A;
+  --primary-hover: #424F5C;
+  --primary-pressed: #57626E;
+  --outline-hover: #EAEAED;
+  --border-color: #E0E0E0;
+  --border: 1px solid #E0E0E0;
+  --radius: 6px;
+  --form-radius: 4px;
+  --pill: 999px;
+  --sidebar-active: #D5E2FA;
+  --sidebar-hover: #F5F5F5;
+  --link: #1B76D2;
+  --gap: 16px;
+  --nav-height: 55px;
+  --sidebar-width: 250px;
+  --neutral-30: #616161;
+  --neutral-40: #757575;
+  --neutral-50: #BDBDBD;
+  --neutral-60: #E0E0E0;
+  --neutral-70: #EEEEEE;
+  --neutral-80: #F5F5F5;
+  --neutral-90: #FAFAFA;
+  --state-dark-hover: #424F5C;
+  --state-light-hover: #EAEAED;
+  --success-0: #67CF9D; --success-50: #E1F5EB;
+  --danger-0: #BD3B39;  --danger-50: #FCDDDD;
+  --warning-0: #F4C862; --warning-50: #FFF4D1;
+  --info-0: #536E8A;    --info-50: #D5E2FA;
+  --mdb-primary: #2D3B4A;
+  --mdb-body-bg: #F5F5F5;
+  --mdb-body-color: #2D3B4A;
+  --mdb-border-color: #E0E0E0;
+  --mdb-border-radius: 6px;
+  --mdb-border-radius-pill: 999px;
+  --mdb-font-sans-serif: Roboto, sans-serif;
+  --mdb-link-color: #1B76D2;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); font-size: 16px; background: var(--app-bg); color: var(--primary); }
+h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); font-weight: 500; color: var(--primary); }
+a { color: var(--link); text-decoration: none; }
+svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
+
+/* NAVBAR */
+.ft-navbar {
+  background: var(--surface); border-bottom: var(--border);
+  height: var(--nav-height); padding: 0 20px;
+  display: flex; align-items: center; gap: 18px;
+  position: sticky; top: 0; z-index: 200;
+}
+.ft-navbar__logo {
+  width: 36px; height: 36px; background: var(--primary);
+  border-radius: var(--radius); display: flex; align-items: center;
+  justify-content: center; font-family: var(--font-heading);
+  font-weight: 700; font-size: 11px; color: #fff; flex-shrink: 0;
+}
+.ft-navbar__item {
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.8rem;
+  color: var(--primary); text-transform: uppercase; background: none;
+  border: none; cursor: pointer; white-space: nowrap;
+  display: flex; align-items: center; gap: 3px;
+}
+.ft-navbar__search {
+  flex: 1; max-width: 420px; border: var(--border);
+  border-radius: var(--form-radius); padding: 5px 12px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.85rem; color: #bbb; background: var(--surface);
+}
+.ft-navbar__spacer { flex: 1; }
+.ft-navbar__role {
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.8rem;
+  color: var(--primary); background: none; border: none; cursor: pointer;
+  display: flex; align-items: center; gap: 3px; white-space: nowrap;
+}
+.ft-navbar__utils { display: flex; align-items: center; gap: 14px; }
+.ft-navbar__utils svg { cursor: pointer; }
+
+/* PAGE */
+.ft-page { display: flex; background: var(--app-bg); min-height: calc(100vh - var(--nav-height)); }
+.ft-content { flex: 1; padding: 24px; min-width: 0; }
+
+/* SIDEBAR */
+.ft-sidebar {
+  width: var(--sidebar-width); background: var(--surface);
+  border-right: var(--border); flex-shrink: 0; padding-top: 8px;
+}
+.ft-sidebar__contact {
+  background: #EBEBEB; border-radius: var(--radius);
+  padding: 12px; margin: 8px 10px 15px;
+  box-shadow: 0 2px 8px 2px rgba(0,0,0,0.08);
+}
+.ft-sidebar__contact-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.ft-sidebar__contact-row:last-child { margin-bottom: 0; }
+.ft-sidebar__contact-row svg { flex-shrink: 0; color: var(--primary); }
+.ft-sidebar__contact-row span {
+  font-size: 0.7rem; color: var(--primary);
+  text-transform: uppercase; font-family: var(--font-body); font-weight: 400; word-break: break-all;
+}
+.ft-sidebar__item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px; cursor: pointer; font-size: 0.875rem;
+  font-family: var(--font-body); color: var(--primary); font-weight: 400;
+  background: transparent; border: none; width: 100%; text-align: left; transition: background 0.1s;
+}
+.ft-sidebar__item:hover { background: var(--sidebar-hover); font-weight: 700; }
+.ft-sidebar__item.active { background: var(--sidebar-active); font-weight: 700; }
+.ft-sidebar__label { flex: 1; }
+.ft-sidebar__count {
+  background: var(--primary); color: #fff; border-radius: var(--pill);
+  font-size: 0.65rem; font-weight: 700; padding: 1px 7px; font-family: var(--font-heading);
+}
+
+/* RECORD HEADER */
+.ft-record-header {
+  margin-bottom: 20px;
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+.ft-record-header__main { flex: 1; min-width: 0; }
+.ft-record-header__actions { flex-shrink: 0; padding-top: 4px; }
+.ft-record-header h1 { font-size: 1.75rem; font-weight: 500; display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.ft-record-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 0.85rem; color: #666; }
+.ft-record-meta .org { font-weight: 600; color: var(--primary); }
+.ft-record-meta .sep { color: #ccc; }
+
+/* BADGES */
+.ft-badge { display: inline-block; border-radius: var(--pill); font-size: 0.75rem; font-weight: 500; padding: 2px 10px; white-space: nowrap; color: var(--primary); font-family: var(--font-body); }
+.ft-badge--approved, .ft-badge--clear { background: var(--success-50); }
+.ft-badge--manual, .ft-badge--upcoming { background: var(--info-50); }
+.ft-badge--overdue, .ft-badge--loi-draft { background: var(--danger-50); }
+.ft-badge--pending, .ft-badge--draft { background: var(--warning-50); }
+
+/* BUTTONS */
+.btn-ft-filled, .btn-ft-outline {
+  border-radius: var(--pill); font-family: var(--font-heading); font-weight: 700;
+  cursor: pointer; border: 2px solid var(--primary);
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.75rem; padding: 4px 14px 3px; transition: background 0.1s;
+}
+.btn-ft-filled { background: var(--primary); color: #fff; }
+.btn-ft-filled:hover { background: var(--primary-hover); border-color: var(--primary-hover); }
+.btn-ft-outline { background: transparent; color: var(--primary); }
+.btn-ft-outline:hover { background: var(--outline-hover); }
+.btn-ft-default { font-size: 0.875rem; padding: 5px 12px; }
+.btn-ft-sm { font-size: 0.75rem; padding: 4px 14px 3px; }
+
+/* SECTION WRAPPER */
+.ki-section { background: var(--surface); border: var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: var(--gap); }
+
+/* TOP CONTROL BAR */
+.ki-topbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.ki-search-wrap {
+  flex: 1; min-width: 240px; border: var(--border); border-radius: var(--form-radius);
+  padding: 5px 12px; display: flex; align-items: center; gap: 8px;
+  font-size: 0.85rem; color: #bbb; background: var(--surface);
+}
+.ki-search-wrap input {
+  border: none; outline: none; flex: 1; font-family: var(--font-body);
+  font-size: 0.85rem; color: var(--primary); background: transparent;
+}
+.ki-search-wrap input::placeholder { color: #bbb; }
+
+/* VIEW SWITCHER */
+.ki-viewswitch {
+  display: inline-flex; align-items: center; gap: 0;
+  border: 1px solid var(--primary); border-radius: var(--pill); overflow: hidden;
+}
+.ki-viewswitch button {
+  background: transparent; color: var(--primary);
+  border: none; padding: 4px 14px; cursor: pointer;
+  font-family: var(--font-heading); font-weight: 700; font-size: 0.75rem;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.ki-viewswitch button:hover { background: var(--outline-hover); }
+.ki-viewswitch button.active { background: var(--primary); color: #fff; }
+.ki-viewswitch__count {
+  font-size: 0.65rem; font-weight: 700; opacity: 0.75;
+  padding: 1px 6px; border-radius: var(--pill);
+  background: rgba(0,0,0,0.08);
+}
+.ki-viewswitch button.active .ki-viewswitch__count { background: rgba(255,255,255,0.2); }
+
+/* FILTER PILLS */
+.ki-filters { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.ki-filters__label {
+  font-family: var(--font-heading); font-weight: 500;
+  font-size: 0.75rem; color: var(--neutral-30);
+  text-transform: uppercase; letter-spacing: 0.04em;
+  margin-right: 4px;
+}
+.ki-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid var(--primary); border-radius: var(--pill);
+  background: var(--surface); color: var(--primary);
+  font-family: var(--font-body); font-weight: 500; font-size: 0.8rem;
+  padding: 3px 11px; cursor: pointer; transition: background 0.1s, color 0.1s;
+  user-select: none;
+}
+.ki-pill:hover { background: var(--outline-hover); }
+.ki-pill.active { background: var(--primary); color: #fff; }
+.ki-pill.active svg { color: #fff; }
+.ki-pill svg { color: var(--primary); }
+.ki-pill[disabled], .ki-pill.disabled {
+  border-color: var(--neutral-50); color: var(--neutral-40);
+  background: var(--surface); cursor: not-allowed; opacity: 0.6;
+}
+.ki-pill[disabled]:hover, .ki-pill.disabled:hover { background: var(--surface); }
+.ki-pill__count {
+  font-size: 0.7rem; font-weight: 700; padding-left: 4px;
+  font-family: var(--font-heading); opacity: 0.7;
+}
+
+/* DATE RANGE PICKER */
+.ki-nav-wrap {
+  background: var(--surface); border: var(--border); border-radius: var(--radius);
+  padding: 14px 16px; margin-bottom: var(--gap);
+}
+.ki-versionA__bar { display: flex; align-items: center; gap: 10px; }
+.ki-versionA__label {
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.75rem;
+  color: var(--neutral-30); text-transform: uppercase; letter-spacing: 0.04em;
+}
+.ki-daterange { position: relative; }
+.ki-daterange__trigger {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid var(--primary); border-radius: var(--pill);
+  background: var(--surface); color: var(--primary);
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.85rem;
+  padding: 5px 14px; cursor: pointer;
+}
+.ki-daterange__trigger:hover { background: var(--outline-hover); }
+.ki-daterange__popover {
+  position: absolute; top: calc(100% + 6px); left: 0;
+  background: var(--surface); border: var(--border); border-radius: var(--radius);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  min-width: 320px; z-index: 10; display: none;
+  padding: 14px 16px;
+}
+.ki-daterange__popover.open { display: block; }
+.ki-daterange__section { display: flex; flex-direction: column; gap: 8px; }
+.ki-daterange__section-label {
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.7rem;
+  color: var(--neutral-30); text-transform: uppercase; letter-spacing: 0.04em;
+}
+.ki-daterange__presets { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.ki-daterange__presets button {
+  background: var(--surface); border: 1px solid var(--neutral-60);
+  border-radius: var(--form-radius); padding: 6px 10px;
+  font-family: var(--font-body); font-weight: 400; font-size: 0.8rem;
+  color: var(--primary); cursor: pointer; text-align: left;
+}
+.ki-daterange__presets button:hover { background: var(--outline-hover); }
+.ki-daterange__presets button.active { background: var(--info-50); border-color: var(--info-0); font-weight: 500; }
+.ki-daterange__divider { height: 1px; background: var(--border-color); margin: 12px 0; }
+.ki-daterange__custom { display: flex; flex-direction: column; gap: 8px; }
+.ki-daterange__custom label {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-body); font-size: 0.8rem; color: var(--primary);
+}
+.ki-daterange__custom input[type="date"] {
+  flex: 1; border: 1px solid var(--neutral-60); border-radius: var(--form-radius);
+  padding: 4px 8px; font-family: var(--font-body); font-size: 0.85rem;
+  color: var(--primary); background: var(--surface);
+}
+.ki-daterange__custom input[type="date"]:focus {
+  border-color: var(--primary); outline: none;
+  box-shadow: 0 0 0 1px var(--primary);
+}
+.ki-daterange__apply {
+  align-self: flex-end;
+  background: var(--primary); color: #fff;
+  border: 2px solid var(--primary); border-radius: var(--pill);
+  font-family: var(--font-heading); font-weight: 700; font-size: 0.75rem;
+  padding: 4px 14px; cursor: pointer;
+}
+.ki-daterange__apply:hover { background: var(--primary-hover); border-color: var(--primary-hover); }
+
+/* SCOPED-RANGE BANNER */
+.ki-scoped {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--info-50); border-radius: var(--radius);
+  padding: 8px 14px; margin-bottom: var(--gap);
+  font-family: var(--font-body); font-size: 0.85rem; color: var(--primary);
+}
+.ki-scoped strong { font-weight: 700; }
+.ki-scoped button {
+  background: transparent; border: none; color: var(--primary);
+  font-family: var(--font-heading); font-weight: 700; font-size: 0.75rem;
+  cursor: pointer; text-decoration: underline;
+}
+
+/* INTERACTION CARD */
+.ki-card {
+  background: var(--surface); border: var(--border); border-radius: var(--radius);
+  padding: 12px 14px; width: 100%;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+.ki-card.is-system { background: var(--neutral-90); border-style: dashed; }
+.ki-card__head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 10px; margin-bottom: 2px;
+}
+.ki-card__title-wrap { display: flex; align-items: flex-start; gap: 8px; min-width: 0; }
+.ki-card__title-wrap svg { color: var(--primary); margin-top: 2px; flex-shrink: 0; }
+.ki-card.is-system .ki-card__title-wrap svg { color: var(--neutral-40); }
+.ki-card__title {
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.9rem;
+  color: var(--primary); line-height: 1.25; word-break: break-word;
+}
+.ki-card.is-system .ki-card__title { color: var(--neutral-30); font-weight: 400; }
+.ki-card__actions { display: flex; gap: 8px; flex-shrink: 0; }
+.ki-card__actions svg { color: var(--primary); cursor: pointer; opacity: 0.6; transition: opacity 0.1s; }
+.ki-card__actions svg:hover { opacity: 1; }
+.ki-card__actions .pinned { opacity: 1; }
+.ki-card__meta {
+  font-family: var(--font-body); font-size: 0.72rem; color: var(--neutral-30);
+  margin-left: 24px; margin-bottom: 4px;
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+}
+.ki-card__meta .sep { color: #ccc; }
+.ki-card__meta .req { color: var(--link); cursor: pointer; }
+.ki-card__body {
+  font-family: var(--font-body); font-size: 0.78rem; color: var(--primary);
+  line-height: 1.45; margin-left: 24px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.ki-card.is-system .ki-card__body { color: var(--neutral-30); }
+.ki-card.is-pinned { border-left: 3px solid var(--primary); }
+.ki-card__date-warn {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--font-body); font-size: 0.7rem; color: var(--warning-0);
+  font-weight: 500;
+}
+
+/* VERTICAL TIMELINE */
+.ki-vert {
+  background: var(--surface); border: var(--border); border-radius: var(--radius);
+  padding: 24px 20px; position: relative;
+}
+.ki-vert__rail { position: relative; padding-left: 28px; }
+.ki-vert__rail::before {
+  content: '';
+  position: absolute; top: 14px; bottom: 14px; left: 9px;
+  width: 2px; background: var(--neutral-60);
+}
+.ki-vert__month {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.95rem;
+  color: var(--primary); background: var(--info-50);
+  padding: 6px 12px; border-radius: var(--radius);
+  margin-left: -28px; margin-bottom: 14px; margin-top: 6px;
+}
+.ki-vert__gap {
+  display: flex; align-items: center; gap: 10px;
+  margin-left: -10px; margin-bottom: 14px; margin-top: 6px;
+}
+.ki-vert__gap-dot {
+  width: 8px; height: 8px; border-radius: 50%; border: 2px dashed var(--neutral-60);
+  background: var(--surface);
+}
+.ki-vert__gap-label {
+  font-family: var(--font-heading); font-weight: 700; font-size: 0.65rem;
+  color: var(--neutral-40); text-transform: uppercase; letter-spacing: 0.08em;
+}
+.ki-vert__item { position: relative; margin-bottom: 12px; }
+.ki-vert__dot {
+  position: absolute; left: -26px; top: 14px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--primary); border: 2px solid var(--surface);
+  box-shadow: 0 0 0 2px var(--primary);
+}
+.ki-vert__dot--system {
+  background: var(--surface); box-shadow: 0 0 0 2px var(--neutral-50);
+}
+
+/* EMPTY STATE */
+.ki-empty {
+  padding: 60px 20px; text-align: center;
+  font-family: var(--font-body); color: var(--neutral-30); font-size: 0.9rem;
+  background: var(--surface); border: var(--border); border-radius: var(--radius);
+}
+.ki-empty__title {
+  font-family: var(--font-heading); font-weight: 500; font-size: 1rem;
+  color: var(--primary); margin-bottom: 6px;
+}
+
+/* UNDATED INFO BANNER */
+.ki-undated-info {
+  background: var(--warning-50); border-radius: var(--radius);
+  padding: 12px 14px; margin-bottom: var(--gap);
+  font-family: var(--font-body); font-size: 0.85rem; color: var(--primary);
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.ki-undated-info svg { color: var(--warning-0); flex-shrink: 0; margin-top: 2px; }
+.ki-undated-info strong { font-weight: 700; }
+</style>
+
+<!-- INLINE SVG ICON SYMBOLS -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="ic-home" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2 6.5L8 2l6 4.5V14a1 1 0 01-1 1H3a1 1 0 01-1-1V6.5z"/><path d="M6 15v-5h4v5"/>
+    </symbol>
+    <symbol id="ic-search" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3.5 3.5"/>
+    </symbol>
+    <symbol id="ic-user" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-5 6-5s6 1.7 6 5"/>
+    </symbol>
+    <symbol id="ic-dollar" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M8 1v14M11 4H6.5a2.5 2.5 0 000 5h3a2.5 2.5 0 010 5H5"/>
+    </symbol>
+    <symbol id="ic-clock" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="8" r="6.5"/><path d="M8 5v3.5l2.5 1.5"/>
+    </symbol>
+    <symbol id="ic-file" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 1H4a1 1 0 00-1 1v12a1 1 0 001 1h8a1 1 0 001-1V6L9 1z"/><path d="M9 1v5h5"/>
+    </symbol>
+    <symbol id="ic-chat" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14 10a2 2 0 01-2 2H5l-3 3V4a2 2 0 012-2h8a2 2 0 012 2v6z"/>
+    </symbol>
+    <symbol id="ic-shield" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 1l6 2.5v4C14 11 11.5 14 8 15 4.5 14 2 11 2 7.5v-4L8 1z"/>
+    </symbol>
+    <symbol id="ic-grid" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/>
+      <rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/>
+    </symbol>
+    <symbol id="ic-gear" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="8" r="2.5"/><path d="M8 1.5V3m0 10v1.5M1.5 8H3m10 0h1.5M3.1 3.1l1 1m7.8 7.8 1 1M12.9 3.1l-1 1M4.1 11.9l-1 1"/>
+    </symbol>
+    <symbol id="ic-chevron" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M2 3.5l3 3 3-3"/>
+    </symbol>
+    <symbol id="ic-chevron-down" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M2 3.5l3 3 3-3"/>
+    </symbol>
+    <symbol id="ic-pencil" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 2l3 3-8 8H3v-3l8-8z"/>
+    </symbol>
+    <symbol id="ic-compass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="8" r="6.5"/><path d="M10.5 5.5l-2 4.5-4.5 2 2-4.5 4.5-2z"/>
+    </symbol>
+    <symbol id="ic-lightbulb" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M8 1a5 5 0 013.5 8.5c-.5.5-.5 1-.5 1.5H5c0-.5 0-1-.5-1.5A5 5 0 018 1z"/>
+      <path d="M6 11h4M6.5 13h3"/>
+    </symbol>
+    <symbol id="ic-gift" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="1" y="6" width="14" height="3" rx="1"/><path d="M2 9v5h12V9M8 6V15M8 6S6 3 4.5 3 2 4 3 5.5 6 6 8 6zM8 6s2-3 3.5-3S14 4 13 5.5 10 6 8 6z"/>
+    </symbol>
+    <symbol id="ic-phone" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 1h3l1.5 3.5-2 1.2a9 9 0 004.8 4.8l1.2-2L15 11v3a1 1 0 01-1 1A13 13 0 012 2a1 1 0 011-1z"/>
+    </symbol>
+    <symbol id="ic-envelope" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="1" y="3" width="14" height="10" rx="1"/><path d="M1 4l7 5 7-5"/>
+    </symbol>
+    <symbol id="ic-building" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="2" width="12" height="13" rx="1"/><path d="M5 15V9h6v6M5 5h1m3 0h1M5 7h1m3 0h1"/>
+    </symbol>
+    <symbol id="ic-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <path d="M2 8l4 4 8-8"/>
+    </symbol>
+    <symbol id="ic-info" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="8" r="6.5"/><path d="M8 7v5M8 5v.5"/>
+    </symbol>
+    <symbol id="ic-close" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M3 3l10 10M13 3L3 13"/>
+    </symbol>
+    <symbol id="ic-plus" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M8 3v10M3 8h10"/>
+    </symbol>
+    <symbol id="ic-calendar" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="3" width="12" height="11" rx="1"/>
+      <path d="M2 6h12M5 2v2M11 2v2"/>
+    </symbol>
+    <symbol id="ic-help" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="8" r="6.5"/>
+      <path d="M6 6a2 2 0 014 0c0 1-1 1.5-2 2v.5M8 11.5v.5"/>
+    </symbol>
+    <symbol id="ic-note" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 2h7l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z"/>
+      <path d="M10 2v3h3"/><path d="M5 8h6M5 10.5h6M5 13h4"/>
+    </symbol>
+    <symbol id="ic-in-person" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="5" cy="5" r="2"/><circle cx="11" cy="5" r="2"/>
+      <path d="M1.5 14c0-2.2 1.6-3.5 3.5-3.5s3.5 1.3 3.5 3.5"/>
+      <path d="M7.5 14c0-2.2 1.6-3.5 3.5-3.5s3.5 1.3 3.5 3.5"/>
+    </symbol>
+    <symbol id="ic-video" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="1.5" y="4" width="9" height="8" rx="1"/>
+      <path d="M10.5 7l4-2v6l-4-2z"/>
+    </symbol>
+    <symbol id="ic-pin" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M10.62 1.52a.5.5 0 00-.7 0L8.06 3.38 5.4 4.06a.5.5 0 00-.24.84l2.06 2.06L3.5 10.7a.5.5 0 00.7.7l3.74-3.74 2.06 2.06a.5.5 0 00.84-.24l.68-2.66 1.86-1.86a.5.5 0 000-.7l-2.76-2.74z"/>
+    </symbol>
+    <symbol id="ic-award" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="8" cy="6" r="4"/><path d="M5.5 9l-1 5 3.5-2 3.5 2-1-5"/>
+    </symbol>
+    <symbol id="ic-form" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="2" width="10" height="12" rx="1"/>
+      <path d="M5 5h6M5 8h6M5 11h4"/>
+    </symbol>
+    <symbol id="ic-payment" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="1.5" y="4" width="13" height="9" rx="1"/>
+      <path d="M1.5 7h13M4 10.5h2"/>
+    </symbol>
+    <symbol id="ic-installment" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="1.5" y="6" width="3" height="7"/>
+      <rect x="6.5" y="3" width="3" height="10"/>
+      <rect x="11.5" y="8" width="3" height="5"/>
+    </symbol>
+    <symbol id="ic-system" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="3" width="12" height="9" rx="1"/>
+      <path d="M2 6l6 4 6-4"/><path d="M5 14h6"/>
+    </symbol>
+  </defs>
+</svg>
+
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="ft-navbar">
+  <div class="ft-navbar__logo">FT</div>
+  <svg width="16" height="16" style="color:var(--primary);cursor:pointer"><use href="#ic-home"/></svg>
+  <button class="ft-navbar__item">SEARCH <svg width="10" height="10"><use href="#ic-chevron"/></svg></button>
+  <button class="ft-navbar__item">TOOLS <svg width="10" height="10"><use href="#ic-chevron"/></svg></button>
+  <button class="ft-navbar__item">COMMUNICATIONS <svg width="10" height="10"><use href="#ic-chevron"/></svg></button>
+  <button class="ft-navbar__item">REPORTING <svg width="10" height="10"><use href="#ic-chevron"/></svg></button>
+  <div class="ft-navbar__search">
+    <svg width="13" height="13" style="color:#aaa"><use href="#ic-search"/></svg>
+    search
+  </div>
+  <div class="ft-navbar__spacer"></div>
+  <button class="ft-navbar__role">ROLE (PROGRAM OFFICER) <svg width="10" height="10"><use href="#ic-chevron"/></svg></button>
+  <div class="ft-navbar__utils">
+    <svg width="16" height="16" style="color:var(--primary)"><use href="#ic-compass"/></svg>
+    <svg width="16" height="16" style="color:var(--primary)"><use href="#ic-lightbulb"/></svg>
+    <svg width="16" height="16" style="color:var(--primary)"><use href="#ic-gift"/></svg>
+    <svg width="16" height="16" style="color:var(--primary)"><use href="#ic-grid"/></svg>
+    <svg width="16" height="16" style="color:var(--primary)"><use href="#ic-gear"/></svg>
+    <svg width="16" height="16" style="color:var(--primary)"><use href="#ic-user"/></svg>
+  </div>
+</nav>
+
+<!-- PAGE -->
+<div class="ft-page">
+
+  <!-- SIDEBAR -->
+  <aside class="ft-sidebar">
+    <div class="ft-sidebar__contact">
+      <div class="ft-sidebar__contact-row">
+        <svg width="14" height="14"><use href="#ic-building"/></svg>
+        <span>Cedar Ridge Foundation</span>
+      </div>
+      <div class="ft-sidebar__contact-row">
+        <svg width="14" height="14"><use href="#ic-envelope"/></svg>
+        <span>contact@cedarridge.org</span>
+      </div>
+      <div class="ft-sidebar__contact-row">
+        <svg width="14" height="14"><use href="#ic-phone"/></svg>
+        <span>612.724.7457</span>
+      </div>
+    </div>
+    <button class="ft-sidebar__item" onclick="setSidebarActive(this)">
+      <svg width="15" height="15"><use href="#ic-home"/></svg>
+      <span class="ft-sidebar__label">Summary</span>
+    </button>
+    <button class="ft-sidebar__item" onclick="setSidebarActive(this)">
+      <svg width="15" height="15"><use href="#ic-user"/></svg>
+      <span class="ft-sidebar__label">Contacts</span>
+    </button>
+    <button class="ft-sidebar__item" onclick="setSidebarActive(this)">
+      <svg width="15" height="15"><use href="#ic-dollar"/></svg>
+      <span class="ft-sidebar__label">Requests</span>
+      <span class="ft-sidebar__count">2</span>
+    </button>
+    <button class="ft-sidebar__item" onclick="setSidebarActive(this)">
+      <svg width="15" height="15"><use href="#ic-file"/></svg>
+      <span class="ft-sidebar__label">Documents</span>
+    </button>
+    <button class="ft-sidebar__item" onclick="setSidebarActive(this)">
+      <svg width="15" height="15"><use href="#ic-shield"/></svg>
+      <span class="ft-sidebar__label">Compliance</span>
+    </button>
+    <button class="ft-sidebar__item active" onclick="setSidebarActive(this); document.getElementById('interactions-section').scrollIntoView({behavior:'smooth'})">
+      <svg width="15" height="15"><use href="#ic-chat"/></svg>
+      <span class="ft-sidebar__label">Interactions</span>
+      <span class="ft-sidebar__count">98</span>
+    </button>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="ft-content">
+
+    <!-- RECORD HEADER -->
+    <div class="ft-record-header">
+      <div class="ft-record-header__main">
+        <h1>Cedar Ridge Foundation
+          <svg width="16" height="16" style="color:#aaa;cursor:pointer"><use href="#ic-pencil"/></svg>
+        </h1>
+        <div class="ft-record-meta">
+          <span class="org">Environment and Conservation</span>
+          <span class="sep">|</span>
+          <span>Active grantee, 2 requests</span>
+          <span class="sep">|</span>
+          <span>Total awarded: $105,000</span>
+        </div>
+      </div>
+      <div class="ft-record-header__actions">
+        <button class="btn-ft-filled btn-ft-default">
+          <svg width="12" height="12" style="color:#fff"><use href="#ic-plus"/></svg>
+          Add Interaction
+        </button>
+      </div>
+    </div>
+
+    <!-- TOP CONTROLS -->
+    <div class="ki-section">
+      <h2 id="interactions-section" style="font-size:1.25rem;font-weight:500;font-family:var(--font-heading);color:var(--primary);margin-bottom:14px">Interactions</h2>
+      <div class="ki-topbar">
+        <div class="ki-viewswitch" id="view-switch">
+          <button class="active" data-view="dated">
+            <svg width="13" height="13"><use href="#ic-calendar"/></svg>
+            Dated <span class="ki-viewswitch__count" id="dated-count">0</span>
+          </button>
+          <button data-view="undated">
+            <svg width="13" height="13"><use href="#ic-help"/></svg>
+            Undated <span class="ki-viewswitch__count" id="undated-count">0</span>
+          </button>
+        </div>
+        <div class="ki-search-wrap">
+          <svg width="13" height="13" style="color:#aaa"><use href="#ic-search"/></svg>
+          <input type="text" id="search-input" placeholder="Search interactions by title or content">
+        </div>
+      </div>
+      <div class="ki-filters" id="filter-pills">
+        <span class="ki-filters__label">Filter by type</span>
+      </div>
+    </div>
+
+    <!-- DATE RANGE PICKER -->
+    <div class="ki-nav-wrap">
+      <div class="ki-versionA__bar">
+        <span class="ki-versionA__label">Date range</span>
+        <div class="ki-daterange" id="ki-daterange">
+          <button class="ki-daterange__trigger" id="ki-daterange-trigger" type="button">
+            <svg width="13" height="13"><use href="#ic-calendar"/></svg>
+            <span id="ki-daterange-label">All time</span>
+            <svg width="10" height="10"><use href="#ic-chevron-down"/></svg>
+          </button>
+          <div class="ki-daterange__popover" id="ki-daterange-popover">
+            <div class="ki-daterange__section">
+              <div class="ki-daterange__section-label">Quick ranges</div>
+              <div class="ki-daterange__presets">
+                <button data-preset="all" class="active">All time</button>
+                <button data-preset="12m">Last 12 months</button>
+                <button data-preset="6m">Last 6 months</button>
+                <button data-preset="3m">Last 3 months</button>
+              </div>
+            </div>
+            <div class="ki-daterange__divider"></div>
+            <div class="ki-daterange__section">
+              <div class="ki-daterange__section-label">Custom range</div>
+              <div class="ki-daterange__custom">
+                <label>From <input type="date" id="ki-date-from"></label>
+                <label>To <input type="date" id="ki-date-to"></label>
+                <button type="button" id="ki-date-apply" class="ki-daterange__apply">Apply</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCOPED RANGE BANNER -->
+    <div id="scoped-banner" style="display:none"></div>
+
+    <!-- TIMELINE -->
+    <div id="timeline"></div>
+
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.umd.min.js"></script>
+<script>
+/* ====================================================
+   SEEDED DATA
+   ==================================================== */
+var ORG_INTERACTIONS = [
+  { id: 1, type: 'email', system: false, pinned: false, title: 'Initial inquiry about environmental grant opportunity', request: 'Urban Greenways Initiative', date: '2022-02-08', author: 'Megan Dahl', body: 'Aaron reached out via our contact form asking about funding opportunities for a proposed greenway and community garden project. Sent preliminary eligibility guidelines and invited him to submit an LOI.' },
+  { id: 2, type: 'phone', system: false, pinned: true, title: 'Introductory call: scope and timeline', request: 'Urban Greenways Initiative', date: '2022-02-22', author: 'Sarah Johnson', body: '30-minute introductory call with Aaron Rodgers and Yvette Chen. Discussed scope, expected outcomes, fit with our Environment program, and timeline for the Q2 cycle.' },
+  { id: 3, type: 'email', system: false, pinned: false, title: 'Shared LOI template and review criteria', request: 'Urban Greenways Initiative', date: '2022-03-04', author: 'Megan Dahl', body: 'Sent the LOI template, review rubric, and a calendar of upcoming deadlines. Also included our annual report so they can see prior funded projects.' },
+  { id: 4, type: 'system-email', system: true, pinned: false, title: 'LOI form sent', request: 'Urban Greenways Initiative', date: '2022-03-04', author: 'System', body: 'Automated: LOI form delivered to applicant.' },
+  { id: 5, type: 'submitted-form', system: false, pinned: false, title: 'LOI submitted', request: 'Urban Greenways Initiative', date: '2022-03-18', author: 'Aaron Rodgers', body: 'Letter of inquiry submitted for the Urban Greenways Initiative project.' },
+  { id: 6, type: 'system-email', system: true, pinned: false, title: 'LOI received confirmation sent', request: 'Urban Greenways Initiative', date: '2022-03-18', author: 'System', body: 'Automated receipt confirmation to applicant.' },
+  { id: 7, type: 'note', system: false, pinned: false, title: 'LOI review note: strong candidate', request: 'Urban Greenways Initiative', date: '2022-03-29', author: 'Sarah Johnson', body: 'LOI is well-organized, partnerships in place, clear outcomes. Recommending invitation to submit full proposal.' },
+  { id: 8, type: 'system-email', system: true, pinned: false, title: 'Full application form sent', request: 'Urban Greenways Initiative', date: '2022-04-02', author: 'System', body: 'Automated: full application form delivered.' },
+  { id: 9, type: 'in-person', system: false, pinned: true, title: 'Site visit: proposed greenway corridor', request: 'Urban Greenways Initiative', date: '2022-04-09', author: 'Sarah Johnson', body: 'Walked the proposed greenway corridor with Aaron and Yvette. The project is well-scoped, partnerships with three neighborhood associations are in place, and the city has signaled written support.' },
+  { id: 10, type: 'note', system: false, pinned: false, title: 'Internal: budget consideration', request: 'Urban Greenways Initiative', date: '2022-04-22', author: 'Sarah Johnson', body: 'Budget requested is $75K. Given our 2022 program area allocation and competing asks, recommending we fund at $60K with a request to narrow phase 1 scope.' },
+  { id: 11, type: 'submitted-form', system: false, pinned: false, title: 'Full application submitted', request: 'Urban Greenways Initiative', date: '2022-04-30', author: 'Aaron Rodgers', body: 'Complete application package submitted.' },
+  { id: 12, type: 'system-email', system: true, pinned: false, title: 'Application received confirmation', request: 'Urban Greenways Initiative', date: '2022-04-30', author: 'System', body: 'Automated confirmation of receipt.' },
+  { id: 13, type: 'video', system: false, pinned: false, title: 'Follow-up video call: budget negotiation', request: 'Urban Greenways Initiative', date: '2022-05-14', author: 'Sarah Johnson', body: 'Called Aaron to share that we are recommending $60K vs. $75K requested and walked through scope adjustments. He understood and will revise the phase 1 plan.' },
+  { id: 14, type: 'award', system: false, pinned: true, title: 'Award decision: $60,000', request: 'Urban Greenways Initiative', date: '2022-06-03', author: 'Board', body: 'Board approved at $60,000 over 12 months.' },
+  { id: 15, type: 'email', system: false, pinned: false, title: 'Award notification', request: 'Urban Greenways Initiative', date: '2022-06-03', author: 'Megan Dahl', body: 'Formal award notification sent. Grant agreement and payment schedule attached.' },
+  { id: 16, type: 'system-email', system: true, pinned: false, title: 'Award notification email sent', request: 'Urban Greenways Initiative', date: '2022-06-03', author: 'System', body: 'Automated award notification.' },
+  { id: 17, type: 'payment', system: false, pinned: false, title: 'Payment 1 of 2: $30,000', request: 'Urban Greenways Initiative', date: '2022-06-15', author: 'Finance', body: 'First installment of $30,000 disbursed.' },
+  { id: 18, type: 'installment', system: false, pinned: false, title: 'Installment scheduled: payment 2', request: 'Urban Greenways Initiative', date: '2022-06-15', author: 'Finance', body: 'Second installment of $30,000 scheduled for 2023-01-15 upon receipt of Q1 progress report.' },
+  { id: 19, type: 'system-email', system: true, pinned: false, title: 'Welcome packet email sent', request: 'Urban Greenways Initiative', date: '2022-06-20', author: 'System', body: 'Automated grantee onboarding packet.' },
+  { id: 20, type: 'phone', system: false, pinned: false, title: 'Check-in: 90 days into phase 1', request: 'Urban Greenways Initiative', date: '2022-09-12', author: 'Sarah Johnson', body: 'Brief check-in with Yvette. Phase 1 on track. Two of three neighborhood plots broken ground.' },
+  { id: 21, type: 'system-email', system: true, pinned: false, title: 'Q1 progress report reminder', request: 'Urban Greenways Initiative', date: '2022-10-01', author: 'System', body: 'Automated reminder: Q1 progress report due 10/31/2022.' },
+  { id: 22, type: 'system-email', system: true, pinned: false, title: 'Q1 progress report reminder (2nd)', request: 'Urban Greenways Initiative', date: '2022-10-15', author: 'System', body: 'Automated reminder: 16 days remaining.' },
+  { id: 23, type: 'submitted-form', system: false, pinned: false, title: 'Q1 progress report submitted', request: 'Urban Greenways Initiative', date: '2022-10-24', author: 'Aaron Rodgers', body: 'Q1 progress report submitted seven days early.' },
+  { id: 24, type: 'note', system: false, pinned: false, title: 'Q1 report reviewed: strong', request: 'Urban Greenways Initiative', date: '2022-10-26', author: 'Megan Dahl', body: 'Narrative is strong, photos attached, financials align with budget. No action needed beyond acknowledgment.' },
+  { id: 25, type: 'system-email', system: true, pinned: false, title: 'Q1 report acknowledgment email', request: 'Urban Greenways Initiative', date: '2022-10-26', author: 'System', body: 'Automated acknowledgment to applicant.' },
+  { id: 26, type: 'email', system: false, pinned: false, title: 'Holiday update from Aaron', request: 'Urban Greenways Initiative', date: '2022-12-19', author: 'Aaron Rodgers', body: 'Year-end update with photos from the December community planting event.' },
+  { id: 27, type: 'system-email', system: true, pinned: false, title: 'Q2 progress report reminder', request: 'Urban Greenways Initiative', date: '2023-01-02', author: 'System', body: 'Automated reminder: Q2 progress report due 1/31/2023.' },
+  { id: 28, type: 'submitted-form', system: false, pinned: false, title: 'Q2 progress report submitted', request: 'Urban Greenways Initiative', date: '2023-01-22', author: 'Aaron Rodgers', body: 'Q2 progress report submitted.' },
+  { id: 29, type: 'payment', system: false, pinned: false, title: 'Payment 2 of 2: $30,000', request: 'Urban Greenways Initiative', date: '2023-01-25', author: 'Finance', body: 'Second installment of $30,000 disbursed upon receipt of Q2 report.' },
+  { id: 30, type: 'note', system: false, pinned: false, title: 'Q2 review: project pacing well', request: 'Urban Greenways Initiative', date: '2023-01-28', author: 'Megan Dahl', body: 'Phase 1 essentially complete. Phase 2 launching on schedule.' },
+  { id: 31, type: 'system-email', system: true, pinned: false, title: 'Payment confirmation sent', request: 'Urban Greenways Initiative', date: '2023-01-25', author: 'System', body: 'Automated payment confirmation.' },
+  { id: 32, type: 'phone', system: false, pinned: false, title: 'Check-in call with Yvette', request: 'Urban Greenways Initiative', date: '2023-03-14', author: 'Sarah Johnson', body: 'Brief catch-up. Two more neighborhood gardens planted.' },
+  { id: 33, type: 'in-person', system: false, pinned: false, title: 'Spring tour: phase 2 sites', request: 'Urban Greenways Initiative', date: '2023-04-11', author: 'Sarah Johnson', body: 'Visited the new phase 2 corridor sites. Strong volunteer turnout, good press from local outlets.' },
+  { id: 34, type: 'system-email', system: true, pinned: false, title: 'Q3 progress report reminder', request: 'Urban Greenways Initiative', date: '2023-04-01', author: 'System', body: 'Automated reminder.' },
+  { id: 35, type: 'submitted-form', system: false, pinned: false, title: 'Q3 progress report submitted', request: 'Urban Greenways Initiative', date: '2023-04-25', author: 'Aaron Rodgers', body: 'Q3 progress report submitted.' },
+  { id: 36, type: 'note', system: false, pinned: false, title: 'Q3 review notes', request: 'Urban Greenways Initiative', date: '2023-04-27', author: 'Megan Dahl', body: 'On track. Suggested they explore matching funding for phase 3 expansion.' },
+  { id: 37, type: 'email', system: false, pinned: false, title: 'Email exchange about phase 3 expansion', request: 'Urban Greenways Initiative', date: '2023-05-09', author: 'Aaron Rodgers', body: 'Aaron asked for advice on positioning a phase 3 expansion ask with the city. Offered to make introductions.' },
+  { id: 38, type: 'system-email', system: true, pinned: false, title: 'Annual report reminder', request: 'Urban Greenways Initiative', date: '2023-07-01', author: 'System', body: 'Automated reminder.' },
+  { id: 39, type: 'system-email', system: true, pinned: false, title: 'Annual report reminder (2nd)', request: 'Urban Greenways Initiative', date: '2023-07-15', author: 'System', body: 'Automated reminder.' },
+  { id: 40, type: 'submitted-form', system: false, pinned: false, title: 'Annual report submitted', request: 'Urban Greenways Initiative', date: '2023-07-28', author: 'Aaron Rodgers', body: 'Annual report submitted.' },
+  { id: 41, type: 'phone', system: false, pinned: false, title: 'Yvette: phase 3 application planning', request: 'Urban Greenways Initiative', date: '2023-08-22', author: 'Sarah Johnson', body: 'Yvette called about timing for phase 3. Aligned on submitting in fall cycle.' },
+  { id: 42, type: 'note', system: false, pinned: false, title: 'Internal: Cedar Ridge as exemplar', request: 'Urban Greenways Initiative', date: '2023-09-04', author: 'Sarah Johnson', body: 'Discussed Cedar Ridge as a case study for our annual report. Strong outcomes story.' },
+  { id: 43, type: 'email', system: false, pinned: false, title: 'Press coverage from local paper', request: 'Urban Greenways Initiative', date: '2023-09-19', author: 'Aaron Rodgers', body: 'Forwarded a feature article from the Tribune about the greenway project.' },
+  { id: 44, type: 'system-email', system: true, pinned: false, title: 'Q4 progress report reminder', request: 'Urban Greenways Initiative', date: '2023-10-01', author: 'System', body: 'Automated reminder.' },
+  { id: 45, type: 'submitted-form', system: false, pinned: false, title: 'Q4 progress report submitted', request: 'Urban Greenways Initiative', date: '2023-10-23', author: 'Aaron Rodgers', body: 'Q4 progress report submitted.' },
+  { id: 46, type: 'note', system: false, pinned: false, title: 'Q4 review notes', request: 'Urban Greenways Initiative', date: '2023-10-25', author: 'Megan Dahl', body: 'On track for grant closure.' },
+  { id: 47, type: 'video', system: false, pinned: false, title: 'Final report planning call', request: 'Urban Greenways Initiative', date: '2024-01-18', author: 'Sarah Johnson', body: 'Walked through final report expectations and timeline.' },
+  { id: 48, type: 'system-email', system: true, pinned: false, title: 'Final report reminder', request: 'Urban Greenways Initiative', date: '2024-02-01', author: 'System', body: 'Automated reminder.' },
+  { id: 49, type: 'submitted-form', system: false, pinned: false, title: 'Final narrative report submitted', request: 'Urban Greenways Initiative', date: '2024-02-26', author: 'Aaron Rodgers', body: 'Final narrative and financial report submitted. Strong outcomes documented.' },
+  { id: 50, type: 'submitted-form', system: false, pinned: false, title: 'Final financial report submitted', request: 'Urban Greenways Initiative', date: '2024-02-28', author: 'Aaron Rodgers', body: 'Final financial report submitted.' },
+  { id: 51, type: 'note', system: false, pinned: false, title: 'Final review and closure recommendation', request: 'Urban Greenways Initiative', date: '2024-03-08', author: 'Megan Dahl', body: 'Reports are strong. Recommending grant closure.' },
+  { id: 52, type: 'in-person', system: false, pinned: true, title: 'Ribbon cutting and grant closure event', request: 'Urban Greenways Initiative', date: '2024-05-20', author: 'Sarah Johnson', body: 'Attended the greenway ribbon-cutting. Three neighborhoods represented, about 80 community members present, strong press coverage. Clear outcomes delivered.' },
+  { id: 53, type: 'system-email', system: true, pinned: false, title: 'Grant closed notification', request: 'Urban Greenways Initiative', date: '2024-06-01', author: 'System', body: 'Automated grant closure notification.' },
+  { id: 54, type: 'email', system: false, pinned: false, title: 'Casual check-in: how things are going', request: null, date: '2024-08-12', author: 'Sarah Johnson', body: 'Quick email asking how Aaron and Yvette are doing post-grant.' },
+  { id: 55, type: 'email', system: false, pinned: false, title: 'Aaron mentions a possible new project', request: null, date: '2024-09-04', author: 'Aaron Rodgers', body: 'Aaron mentioned interest in a youth-focused environmental education program for next year.' },
+  { id: 56, type: 'email', system: false, pinned: false, title: 'Introduction to Youth Nature Programs idea', request: 'Youth Nature Programs', date: '2025-01-15', author: 'Megan Dahl', body: 'Aaron flagged a second potential project: a youth nature education program they would like to propose. Sent LOI template.' },
+  { id: 57, type: 'system-email', system: true, pinned: false, title: 'LOI form sent', request: 'Youth Nature Programs', date: '2025-01-15', author: 'System', body: 'Automated: LOI form delivered.' },
+  { id: 58, type: 'phone', system: false, pinned: false, title: 'Discovery call: youth program scope', request: 'Youth Nature Programs', date: '2025-02-04', author: 'Sarah Johnson', body: 'Discussed proposed scope, ages served, partnership structure with local schools.' },
+  { id: 59, type: 'submitted-form', system: false, pinned: false, title: 'LOI submitted', request: 'Youth Nature Programs', date: '2025-02-21', author: 'Aaron Rodgers', body: 'Letter of inquiry for Youth Nature Programs.' },
+  { id: 60, type: 'system-email', system: true, pinned: false, title: 'LOI received confirmation', request: 'Youth Nature Programs', date: '2025-02-21', author: 'System', body: 'Automated receipt.' },
+  { id: 61, type: 'note', system: false, pinned: false, title: 'LOI review: needs sustainability work', request: 'Youth Nature Programs', date: '2025-03-08', author: 'Sarah Johnson', body: 'Concept is strong but the sustainability plan beyond the grant period is thin. Recommending invitation with feedback.' },
+  { id: 62, type: 'email', system: false, pinned: false, title: 'Feedback shared and full app invited', request: 'Youth Nature Programs', date: '2025-03-12', author: 'Megan Dahl', body: 'Sent feedback letter and full application invitation.' },
+  { id: 63, type: 'system-email', system: true, pinned: false, title: 'Full application form sent', request: 'Youth Nature Programs', date: '2025-03-12', author: 'System', body: 'Automated form delivery.' },
+  { id: 64, type: 'video', system: false, pinned: true, title: 'Strategy conversation: program design', request: 'Youth Nature Programs', date: '2025-04-22', author: 'Sarah Johnson', body: 'Deeper conversation with Aaron and Yvette on the Youth Nature Programs design. Raised questions about sustainability and youth outcome measurement. They will revise.' },
+  { id: 65, type: 'in-person', system: false, pinned: false, title: 'Dropped by their office during community visit', request: null, date: '2025-05-08', author: 'Sarah Johnson', body: 'Was in the neighborhood for another site visit, stopped by to say hello.' },
+  { id: 66, type: 'system-email', system: true, pinned: false, title: 'Application deadline reminder', request: 'Youth Nature Programs', date: '2025-06-01', author: 'System', body: 'Automated reminder.' },
+  { id: 67, type: 'system-email', system: true, pinned: false, title: 'Application deadline reminder (2nd)', request: 'Youth Nature Programs', date: '2025-06-15', author: 'System', body: 'Automated reminder: 15 days remaining.' },
+  { id: 68, type: 'system-email', system: true, pinned: false, title: 'Application deadline reminder (3rd)', request: 'Youth Nature Programs', date: '2025-06-25', author: 'System', body: 'Automated reminder: 5 days remaining.' },
+  { id: 69, type: 'phone', system: false, pinned: false, title: 'Aaron: needs more time on application', request: 'Youth Nature Programs', date: '2025-06-27', author: 'Sarah Johnson', body: 'Aaron asked for a 2-week extension on the application. Approved.' },
+  { id: 70, type: 'system-email', system: true, pinned: false, title: 'Deadline extension granted', request: 'Youth Nature Programs', date: '2025-06-27', author: 'System', body: 'Automated notification of extension to 7/14/2025.' },
+  { id: 71, type: 'submitted-form', system: false, pinned: false, title: 'Full application submitted', request: 'Youth Nature Programs', date: '2025-07-11', author: 'Aaron Rodgers', body: 'Full application submitted with revised sustainability plan and outcome metrics.' },
+  { id: 72, type: 'system-email', system: true, pinned: false, title: 'Application receipt confirmation', request: 'Youth Nature Programs', date: '2025-07-11', author: 'System', body: 'Automated confirmation.' },
+  { id: 73, type: 'note', system: false, pinned: false, title: 'External reviewer assignments', request: 'Youth Nature Programs', date: '2025-08-04', author: 'Megan Dahl', body: 'Assigned to two external reviewers for evaluation.' },
+  { id: 74, type: 'note', system: false, pinned: false, title: 'External review summary', request: 'Youth Nature Programs', date: '2025-09-22', author: 'Megan Dahl', body: 'Both reviewers favorable. Average score 8.4/10. Sustainability plan now strong.' },
+  { id: 75, type: 'video', system: false, pinned: false, title: 'Pre-decision call with Aaron', request: 'Youth Nature Programs', date: '2025-10-08', author: 'Sarah Johnson', body: 'Walked Aaron through the timeline for board decision and requested final clarifications.' },
+  { id: 76, type: 'note', system: false, pinned: false, title: 'Internal: recommending board approval', request: 'Youth Nature Programs', date: '2025-11-30', author: 'Sarah Johnson', body: 'After revisions, recommending board approval at $45K over 18 months.' },
+  { id: 77, type: 'award', system: false, pinned: true, title: 'Award decision: $45,000', request: 'Youth Nature Programs', date: '2026-01-30', author: 'Board', body: 'Board approved at $45,000 over 18 months.' },
+  { id: 78, type: 'email', system: false, pinned: false, title: 'Award notification sent', request: 'Youth Nature Programs', date: '2026-02-02', author: 'Megan Dahl', body: 'Formal award notification sent.' },
+  { id: 79, type: 'system-email', system: true, pinned: false, title: 'Award notification email sent', request: 'Youth Nature Programs', date: '2026-02-02', author: 'System', body: 'Automated.' },
+  { id: 80, type: 'system-email', system: true, pinned: false, title: 'Welcome packet sent', request: 'Youth Nature Programs', date: '2026-02-04', author: 'System', body: 'Automated grantee onboarding.' },
+  { id: 81, type: 'phone', system: false, pinned: false, title: 'Kickoff call', request: 'Youth Nature Programs', date: '2026-02-18', author: 'Sarah Johnson', body: 'Kickoff call completed. Reviewed grant terms, reporting schedule, and first 90-day milestones.' },
+  { id: 82, type: 'payment', system: false, pinned: false, title: 'Payment 1 of 3: $15,000', request: 'Youth Nature Programs', date: '2026-02-20', author: 'Finance', body: 'First installment disbursed.' },
+  { id: 83, type: 'installment', system: false, pinned: false, title: 'Installments 2 and 3 scheduled', request: 'Youth Nature Programs', date: '2026-02-20', author: 'Finance', body: 'Installments scheduled for 2026-08-20 and 2027-02-20 contingent on progress reports.' },
+  { id: 84, type: 'system-email', system: true, pinned: false, title: 'Payment 1 confirmation', request: 'Youth Nature Programs', date: '2026-02-20', author: 'System', body: 'Automated payment confirmation.' },
+  { id: 85, type: 'email', system: false, pinned: false, title: 'Aaron: program launch this week', request: 'Youth Nature Programs', date: '2026-03-09', author: 'Aaron Rodgers', body: 'Update that the program is launching with three school partner sites this week.' },
+  { id: 86, type: 'in-person', system: false, pinned: false, title: 'Visit to first program session', request: 'Youth Nature Programs', date: '2026-03-21', author: 'Sarah Johnson', body: 'Attended the first afterschool session at Lincoln Elementary. Strong engagement, 18 kids enrolled.' },
+  { id: 87, type: 'note', system: false, pinned: false, title: 'Internal: program off to a strong start', request: 'Youth Nature Programs', date: '2026-03-23', author: 'Sarah Johnson', body: 'Early signs are very positive.' },
+  { id: 88, type: 'email', system: false, pinned: false, title: 'Photos from week 2', request: 'Youth Nature Programs', date: '2026-04-04', author: 'Aaron Rodgers', body: 'Aaron shared photos and quick narrative from the second week of programming.' },
+  { id: 89, type: 'phone', system: false, pinned: false, title: 'Quick call: media inquiry coordination', request: 'Youth Nature Programs', date: '2026-04-15', author: 'Sarah Johnson', body: 'Local NPR affiliate wants to do a story. Coordinated quotes and timing.' },
+  { id: 90, type: 'in-person', system: false, pinned: false, title: 'Aaron at our annual grantee convening', request: null, date: '2023-11-09', author: 'Sarah Johnson', body: 'Aaron attended our annual grantee convening. Networked with three other org leads.' },
+  { id: 91, type: 'in-person', system: false, pinned: false, title: 'Aaron at 2024 grantee convening', request: null, date: '2024-11-07', author: 'Sarah Johnson', body: 'Aaron attended again. Notes from his table conversation captured separately.' },
+  { id: 92, type: 'email', system: false, pinned: false, title: 'Cedar Ridge announcement: leadership transition', request: null, date: '2025-03-01', author: 'Aaron Rodgers', body: 'Aaron announced that Yvette is stepping into a co-director role.' },
+  { id: 93, type: 'note', system: false, pinned: false, title: 'Historical comment: pre-system context', request: 'Urban Greenways Initiative', date: null, createDate: '2022-01-30', author: 'Sarah Johnson', body: 'Historical comment imported from the prior system. Original date not preserved. Context: Cedar Ridge was referred to us by United Way.' },
+  { id: 94, type: 'note', system: false, pinned: false, title: 'Historical comment: board interest', request: null, date: null, createDate: '2022-02-04', author: 'Megan Dahl', body: 'Historical comment imported. Board member expressed interest in environmental projects.' },
+  { id: 95, type: 'phone', system: false, pinned: false, title: 'Quick call (date not captured)', request: 'Urban Greenways Initiative', date: null, createDate: '2023-06-12', author: 'Sarah Johnson', body: 'Brief call with Aaron, exact date not captured at logging time.' },
+  { id: 96, type: 'email', system: false, pinned: false, title: 'Email exchange (no date set)', request: 'Youth Nature Programs', date: null, createDate: '2025-08-15', author: 'Megan Dahl', body: 'Email thread about program timeline; date field skipped during entry.' },
+  { id: 97, type: 'note', system: false, pinned: false, title: 'Historical comment: in-kind donation', request: null, date: null, createDate: '2023-04-02', author: 'Sarah Johnson', body: 'Historical comment imported. Note about a small in-kind donation Cedar Ridge made to a partner org.' },
+  { id: 98, type: 'phone', system: false, pinned: false, title: 'Voicemail (date unknown)', request: null, date: null, createDate: '2024-09-20', author: 'Sarah Johnson', body: 'Logged a voicemail from Aaron but did not capture the date he left it.' }
+];
+
+var TYPE_META = {
+  'note':           { label: 'Notes',           icon: 'ic-note' },
+  'phone':          { label: 'Phone',           icon: 'ic-phone' },
+  'email':          { label: 'Email',           icon: 'ic-envelope' },
+  'in-person':      { label: 'In Person',       icon: 'ic-in-person' },
+  'video':          { label: 'Video',           icon: 'ic-video' },
+  'award':          { label: 'Awards',          icon: 'ic-award' },
+  'submitted-form': { label: 'Submitted Forms', icon: 'ic-form' },
+  'payment':        { label: 'Payments',        icon: 'ic-payment' },
+  'installment':    { label: 'Installments',    icon: 'ic-installment' },
+  'system-email':   { label: 'System Emails',   icon: 'ic-system' }
+};
+var TYPE_ORDER = ['note','phone','email','in-person','video','award','submitted-form','payment','installment','system-email'];
+
+var state = {
+  view: 'dated',
+  activeTypes: { 'note': false, 'phone': false, 'email': false, 'in-person': false, 'video': false, 'award': false, 'submitted-form': false, 'payment': false, 'installment': false, 'system-email': false },
+  search: '',
+  scopeRange: null,
+  dateRange: null
+};
+
+/* UTILS */
+function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+function formatDate(iso) {
+  if (!iso) return '';
+  var p = iso.split('-');
+  return p[1] + '/' + p[2] + '/' + p[0];
+}
+function monthKey(iso) {
+  if (!iso) return null;
+  return iso.split('-')[0] + '-' + iso.split('-')[1];
+}
+function monthLabel(key) {
+  var p = key.split('-');
+  var names = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  return names[parseInt(p[1], 10) - 1] + ' ' + p[0];
+}
+function monthsBetween(keyA, keyB) {
+  var a = keyA.split('-'); var b = keyB.split('-');
+  return (parseInt(b[0],10) - parseInt(a[0],10)) * 12 + (parseInt(b[1],10) - parseInt(a[1],10));
+}
+function gapPhrase(months) {
+  if (months < 1) return '';
+  if (months === 1) return '1 month earlier';
+  if (months < 12) return months + ' months earlier';
+  var years = Math.floor(months / 12);
+  var rem = months % 12;
+  if (rem === 0) return years === 1 ? '1 year earlier' : years + ' years earlier';
+  return years + 'y ' + rem + 'm earlier';
+}
+function formatDateShort(iso) {
+  if (!iso) return '';
+  var p = iso.split('-');
+  return p[1] + '/' + p[2] + '/' + p[0].slice(2);
+}
+
+/* DATA */
+function datedData() {
+  var out = [];
+  for (var i = 0; i < ORG_INTERACTIONS.length; i++) {
+    if (ORG_INTERACTIONS[i].date) out.push(ORG_INTERACTIONS[i]);
+  }
+  return out;
+}
+function undatedData() {
+  var out = [];
+  for (var i = 0; i < ORG_INTERACTIONS.length; i++) {
+    if (!ORG_INTERACTIONS[i].date) out.push(ORG_INTERACTIONS[i]);
+  }
+  return out;
+}
+function hasActiveTypeFilters() {
+  for (var k in state.activeTypes) { if (state.activeTypes[k]) return true; }
+  return false;
+}
+function applyFilters(items) {
+  var out = [];
+  var q = state.search.toLowerCase();
+  var anyActive = hasActiveTypeFilters();
+  for (var i = 0; i < items.length; i++) {
+    var it = items[i];
+    if (anyActive && !state.activeTypes[it.type]) continue;
+    if (q && it.title.toLowerCase().indexOf(q) === -1 && it.body.toLowerCase().indexOf(q) === -1 && (it.author || '').toLowerCase().indexOf(q) === -1) continue;
+    out.push(it);
+  }
+  return out;
+}
+function applyScopeRange(items) {
+  if (!state.scopeRange) return items;
+  var out = [];
+  for (var i = 0; i < items.length; i++) {
+    var k = monthKey(items[i].date);
+    if (k >= state.scopeRange.startKey && k <= state.scopeRange.endKey) out.push(items[i]);
+  }
+  return out;
+}
+function currentDatedData() {
+  var items = applyFilters(datedData());
+  items = applyScopeRange(items);
+  items.sort(function(a, b) { return a.date < b.date ? 1 : (a.date > b.date ? -1 : 0); });
+  return items;
+}
+function currentUndatedData() {
+  var items = applyFilters(undatedData());
+  items.sort(function(a, b) {
+    var ac = a.createDate || ''; var bc = b.createDate || '';
+    return ac < bc ? 1 : (ac > bc ? -1 : 0);
+  });
+  return items;
+}
+function dataSpan() {
+  var src = datedData();
+  if (src.length === 0) return null;
+  var min = src[0].date, max = src[0].date;
+  for (var i = 1; i < src.length; i++) {
+    if (src[i].date < min) min = src[i].date;
+    if (src[i].date > max) max = src[i].date;
+  }
+  return { min: monthKey(min), max: monthKey(max) };
+}
+
+/* CARDS */
+function cardHtml(it) {
+  var meta = TYPE_META[it.type];
+  var pinClass = it.pinned ? ' is-pinned' : '';
+  var sysClass = it.system ? ' is-system' : '';
+  var orgRequest = it.request ? '<span class="req">' + it.request + '</span><span class="sep">|</span>' : '';
+  var dateInfo = '';
+  if (it.date) {
+    dateInfo = '<span>' + formatDate(it.date) + '</span><span class="sep">|</span><span>' + it.author + '</span>';
+  } else {
+    var cd = it.createDate ? formatDate(it.createDate) : 'unknown';
+    dateInfo = '<span class="ki-card__date-warn"><svg width="11" height="11"><use href="#ic-help"/></svg>Date not set</span><span class="sep">|</span><span>logged ' + cd + '</span><span class="sep">|</span><span>' + it.author + '</span>';
+  }
+  var pinIcon = it.pinned
+    ? '<svg width="14" height="14" class="pinned"><use href="#ic-pin"/></svg>'
+    : '<svg width="14" height="14"><use href="#ic-pin"/></svg>';
+  return '<div class="ki-card' + pinClass + sysClass + '">' +
+    '<div class="ki-card__head">' +
+      '<div class="ki-card__title-wrap">' +
+        '<svg width="16" height="16"><use href="#' + meta.icon + '"/></svg>' +
+        '<div class="ki-card__title">' + it.title + '</div>' +
+      '</div>' +
+      '<div class="ki-card__actions">' + pinIcon + '</div>' +
+    '</div>' +
+    '<div class="ki-card__meta">' + orgRequest + dateInfo + '</div>' +
+    '<div class="ki-card__body">' + it.body + '</div>' +
+  '</div>';
+}
+
+/* VERTICAL TIMELINE */
+function renderVertical(data) {
+  if (data.length === 0) {
+    return '<div class="ki-empty"><div class="ki-empty__title">No interactions match the current filters.</div>Try clearing the date range, search, or type filters above.</div>';
+  }
+  var html = '<div class="ki-vert"><div class="ki-vert__rail">';
+  var lastKey = null;
+  for (var i = 0; i < data.length; i++) {
+    var it = data[i];
+    var k = monthKey(it.date);
+    if (k !== lastKey) {
+      if (lastKey !== null) {
+        var gap = monthsBetween(k, lastKey);
+        var phrase = gapPhrase(gap);
+        if (phrase) {
+          html += '<div class="ki-vert__gap"><div class="ki-vert__gap-dot"></div><div class="ki-vert__gap-label">' + phrase + '</div></div>';
+        }
+      }
+      html += '<div class="ki-vert__month"><svg width="13" height="13" style="color:var(--primary)"><use href="#ic-calendar"/></svg>' + monthLabel(k) + '</div>';
+      lastKey = k;
+    }
+    var dotCls = it.system ? ' ki-vert__dot--system' : '';
+    html += '<div class="ki-vert__item" id="ki-item-' + it.id + '"><div class="ki-vert__dot' + dotCls + '"></div>' + cardHtml(it) + '</div>';
+  }
+  html += '</div></div>';
+  return html;
+}
+
+/* UNDATED VIEW */
+function renderUndated() {
+  var data = currentUndatedData();
+  var info = '<div class="ki-undated-info"><svg width="16" height="16"><use href="#ic-info"/></svg><div><strong>These interactions don\'t have a "happened on" date.</strong> They include historical comments imported without dates and interactions where the date field was skipped. They\'re shown by their logged date as a secondary signal. You can edit any of these to add the actual interaction date.</div></div>';
+  if (data.length === 0) {
+    return info + '<div class="ki-empty"><div class="ki-empty__title">No undated interactions.</div>Every interaction in this view has a date set.</div>';
+  }
+  var html = info + '<div class="ki-vert"><div class="ki-vert__rail">';
+  for (var i = 0; i < data.length; i++) {
+    html += '<div class="ki-vert__item" id="ki-item-' + data[i].id + '"><div class="ki-vert__dot ki-vert__dot--system"></div>' + cardHtml(data[i]) + '</div>';
+  }
+  html += '</div></div>';
+  return html;
+}
+
+/* TIMELINE DISPATCH */
+function renderTimeline() {
+  var host = document.getElementById('timeline');
+  if (state.view === 'undated') {
+    host.innerHTML = renderUndated();
+  } else {
+    host.innerHTML = renderVertical(currentDatedData());
+  }
+}
+
+/* FILTER PILLS */
+function renderFilterPills() {
+  var host = document.getElementById('filter-pills');
+  var html = '<span class="ki-filters__label">Filter by type</span>';
+  var anyActive = hasActiveTypeFilters();
+  html += '<button class="ki-pill' + (anyActive ? '' : ' disabled') + '" ' + (anyActive ? 'onclick="clearTypeFilters()"' : 'disabled') + '>Show all</button>';
+  var counts = {};
+  var datedSet = datedData();
+  for (var i = 0; i < datedSet.length; i++) { counts[datedSet[i].type] = (counts[datedSet[i].type] || 0) + 1; }
+  for (var j = 0; j < TYPE_ORDER.length; j++) {
+    var t = TYPE_ORDER[j];
+    var meta = TYPE_META[t];
+    var cnt = counts[t] || 0;
+    if (cnt === 0) continue;
+    var active = state.activeTypes[t];
+    html += '<button class="ki-pill' + (active ? ' active' : '') + '" data-type="' + t + '" onclick="togglePill(\'' + t + '\')">' +
+      '<svg width="13" height="13"><use href="#' + meta.icon + '"/></svg>' + meta.label +
+      '<span class="ki-pill__count">' + cnt + '</span></button>';
+  }
+  host.innerHTML = html;
+}
+
+function clearTypeFilters() {
+  for (var k in state.activeTypes) { state.activeTypes[k] = false; }
+  renderAll();
+}
+function togglePill(type) {
+  state.activeTypes[type] = !state.activeTypes[type];
+  renderAll();
+}
+
+/* VIEW SWITCH COUNTS */
+function renderViewSwitchCounts() {
+  document.getElementById('dated-count').textContent = applyFilters(datedData()).length;
+  document.getElementById('undated-count').textContent = applyFilters(undatedData()).length;
+}
+
+/* SCOPED BANNER */
+function renderScopedBanner() {
+  var host = document.getElementById('scoped-banner');
+  if (!state.scopeRange) { host.style.display = 'none'; host.innerHTML = ''; return; }
+  host.style.display = '';
+  host.className = 'ki-scoped';
+  host.innerHTML = '<span>Showing interactions in <strong>' + state.scopeRange.label + '</strong> (' + currentDatedData().length + ' of ' + applyFilters(datedData()).length + ' total)</span><button onclick="clearScopeRange()">Clear range</button>';
+}
+function clearScopeRange() {
+  state.scopeRange = null;
+  state.dateRange = null;
+  /* Reset the preset buttons */
+  var presets = document.querySelectorAll('.ki-daterange__presets button');
+  for (var i = 0; i < presets.length; i++) {
+    presets[i].classList.toggle('active', presets[i].getAttribute('data-preset') === 'all');
+  }
+  document.getElementById('ki-daterange-label').textContent = 'All time';
+  renderScopedBanner();
+  renderTimeline();
+}
+
+/* DATE RANGE PRESET */
+function applyDateRangePreset(preset) {
+  if (preset === 'all') {
+    state.dateRange = null;
+    state.scopeRange = null;
+    document.getElementById('ki-daterange-label').textContent = 'All time';
+  } else {
+    var months = parseInt(preset, 10);
+    var span = dataSpan();
+    if (!span) return;
+    var endKey = span.max;
+    var pp = endKey.split('-');
+    var y = parseInt(pp[0], 10), m = parseInt(pp[1], 10);
+    for (var i = 0; i < months - 1; i++) { m--; if (m < 1) { m = 12; y--; } }
+    var startKey = y + '-' + pad2(m);
+    var label = 'Last ' + months + ' months';
+    state.dateRange = { preset: preset, label: label };
+    state.scopeRange = { startKey: startKey, endKey: endKey, label: label };
+    document.getElementById('ki-daterange-label').textContent = label;
+  }
+  /* Update active preset button */
+  var presets = document.querySelectorAll('.ki-daterange__presets button');
+  for (var j = 0; j < presets.length; j++) {
+    presets[j].classList.toggle('active', presets[j].getAttribute('data-preset') === preset);
+  }
+  renderScopedBanner();
+  renderTimeline();
+}
+
+function applyCustomDateRange(from, to) {
+  var startKey = from ? from.substring(0, 7) : null;
+  var endKey = to ? to.substring(0, 7) : null;
+  if (!startKey && !endKey) return;
+  var span = dataSpan();
+  if (!startKey) startKey = span.min;
+  if (!endKey) endKey = span.max;
+  var label = formatDateShort(from) + ' to ' + formatDateShort(to);
+  state.dateRange = { preset: 'custom', from: from, to: to, label: label };
+  state.scopeRange = { startKey: startKey, endKey: endKey, label: label };
+  document.getElementById('ki-daterange-label').textContent = label;
+  /* Deactivate all presets */
+  var presets = document.querySelectorAll('.ki-daterange__presets button');
+  for (var i = 0; i < presets.length; i++) { presets[i].classList.remove('active'); }
+  renderScopedBanner();
+  renderTimeline();
+}
+
+/* RENDER ALL */
+function renderAll() {
+  renderFilterPills();
+  renderViewSwitchCounts();
+  renderScopedBanner();
+  renderTimeline();
+}
+
+/* SIDEBAR ACTIVE */
+function setSidebarActive(el) {
+  var its = document.querySelectorAll('.ft-sidebar__item');
+  for (var i = 0; i < its.length; i++) its[i].classList.remove('active');
+  el.classList.add('active');
+}
+
+/* WIRE DATE RANGE PICKER */
+(function() {
+  var trigger = document.getElementById('ki-daterange-trigger');
+  var popover = document.getElementById('ki-daterange-popover');
+
+  trigger.onclick = function(e) {
+    e.stopPropagation();
+    popover.classList.toggle('open');
+  };
+
+  var presetBtns = popover.querySelectorAll('[data-preset]');
+  for (var i = 0; i < presetBtns.length; i++) {
+    (function(btn) {
+      btn.onclick = function() {
+        applyDateRangePreset(btn.getAttribute('data-preset'));
+        popover.classList.remove('open');
+      };
+    })(presetBtns[i]);
+  }
+
+  document.getElementById('ki-date-apply').onclick = function() {
+    var from = document.getElementById('ki-date-from').value;
+    var to = document.getElementById('ki-date-to').value;
+    if (!from && !to) return;
+    applyCustomDateRange(from, to);
+    popover.classList.remove('open');
+  };
+
+  document.addEventListener('click', function(e) {
+    if (!popover.contains(e.target) && !trigger.contains(e.target)) {
+      popover.classList.remove('open');
+    }
+  });
+})();
+
+/* WIRE VIEW SWITCH */
+(function() {
+  var btns = document.querySelectorAll('#view-switch button');
+  for (var i = 0; i < btns.length; i++) {
+    (function(b) {
+      b.addEventListener('click', function() {
+        state.view = b.getAttribute('data-view');
+        var all = document.querySelectorAll('#view-switch button');
+        for (var j = 0; j < all.length; j++) all[j].classList.remove('active');
+        b.classList.add('active');
+        renderAll();
+      });
+    })(btns[i]);
+  }
+})();
+
+/* SEARCH */
+document.getElementById('search-input').addEventListener('input', function(e) {
+  state.search = e.target.value;
+  renderAll();
+});
+
+/* GO */
+renderAll();
+</script>
+</body>
+</html>
