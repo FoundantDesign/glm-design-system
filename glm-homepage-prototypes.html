@@ -1,0 +1,1857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLM Homepage — 5 Variant Prototype</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --font-body: Roboto, sans-serif;
+  --font-heading: Roboto, sans-serif;
+  --app-bg: #F5F5F5;
+  --surface: #FFFFFF;
+  --primary: #2D3B4A;
+  --primary-hover: #424F5C;
+  --outline-hover: #EAEAED;
+  --border-color: #E0E0E0;
+  --radius: 6px;
+  --form-radius: 4px;
+  --pill: 999px;
+  --sidebar-active: #D5E2FA;
+  --sidebar-hover: #F5F5F5;
+  --link: #1B76D2;
+  --gap: 16px;
+  --nav-height: 55px;
+  --sidebar-width: 220px;
+  --success-bg: #E1F5EB; --success-fg: #2A8C5D;
+  --danger-bg:  #FCDDDD; --danger-fg:  #BD3B39;
+  --warning-bg: #FFF4D1; --warning-fg: #C47F1A;
+  --info-bg:    #D5E2FA; --info-fg:    #536E8A;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); font-size: 14px; background: var(--app-bg); color: var(--primary); min-height: 100vh; }
+h1 { font-weight: 500; font-size: 1.75rem; color: var(--primary); }
+h2 { font-weight: 500; font-size: 1.25rem; color: var(--primary); }
+h3 { font-weight: 500; font-size: 1rem; color: var(--primary); }
+h4 { font-weight: 500; font-size: 0.875rem; color: var(--primary); }
+a  { color: var(--link); text-decoration: none; }
+
+.ft-navbar {
+  background: var(--surface); border-bottom: 1px solid var(--border-color);
+  height: var(--nav-height); padding: 0 20px;
+  display: flex; align-items: center; gap: 18px;
+  position: sticky; top: 0; z-index: 200;
+}
+.ft-navbar__logo {
+  width: 36px; height: 36px; background: var(--primary); border-radius: var(--radius);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 11px; color: #fff; flex-shrink: 0;
+}
+.ft-navbar__item {
+  font-weight: 500; font-size: 0.78rem; color: var(--primary);
+  text-transform: uppercase; background: none; border: none; cursor: pointer;
+  white-space: nowrap; display: flex; align-items: center; gap: 3px;
+}
+.ft-navbar__search {
+  flex: 1; max-width: 420px; border: 1px solid var(--border-color);
+  border-radius: var(--form-radius); padding: 5px 12px;
+  display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: #bbb;
+}
+.ft-navbar__spacer { flex: 1; }
+.ft-navbar__role {
+  font-weight: 500; font-size: 0.78rem; color: var(--primary);
+  background: none; border: none; cursor: pointer;
+  display: flex; align-items: center; gap: 3px; white-space: nowrap;
+}
+.ft-navbar__utils { display: flex; align-items: center; gap: 14px; }
+.ft-navbar__utils i { font-size: 16px; cursor: pointer; color: var(--primary); }
+
+.ft-page { background: var(--app-bg); min-height: calc(100vh - var(--nav-height)); }
+.ft-page--sidebar { display: flex; min-height: calc(100vh - var(--nav-height)); }
+
+.ft-sidebar {
+  width: var(--sidebar-width); background: var(--surface);
+  border-right: 1px solid var(--border-color); flex-shrink: 0;
+  padding: 8px 0; display: flex; flex-direction: column;
+}
+.ft-sidebar__section-label {
+  font-size: 0.64rem; font-weight: 500; color: #aaa;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  padding: 10px 16px 4px;
+}
+.ft-sidebar__item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 16px; cursor: pointer; font-size: 0.82rem;
+  color: var(--primary); background: transparent; border: none;
+  width: 100%; text-align: left; transition: background 0.1s;
+}
+.ft-sidebar__item:hover { background: var(--sidebar-hover); font-weight: 500; }
+.ft-sidebar__item.active { background: var(--sidebar-active); font-weight: 500; }
+.ft-sidebar__item i { font-size: 14px; flex-shrink: 0; width: 16px; text-align: center; }
+.ft-sidebar__count {
+  margin-left: auto; background: var(--primary); color: #fff;
+  border-radius: var(--pill); font-size: 0.62rem; font-weight: 700;
+  padding: 1px 7px;
+}
+.ft-sidebar__count--alert { background: var(--danger-fg); }
+
+.ft-main { flex: 1; min-width: 0; }
+.ft-content { padding: 22px 24px; }
+.ft-page-title { padding: 18px 24px 0; display: flex; align-items: baseline; gap: 10px; }
+.ft-page-title .subtitle { font-size: 0.78rem; color: #888; }
+
+.ft-bento {
+  background: var(--surface); border: 1px solid var(--border-color);
+  border-radius: var(--radius); padding: 16px;
+}
+.ft-bento__header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+
+.ft-bento__actions { display: flex; gap: 6px; }
+
+.btn-ft-filled, .btn-ft-outline {
+  border-radius: var(--pill); font-family: var(--font-body); font-weight: 500;
+  cursor: pointer; border: 2px solid var(--primary);
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.72rem; padding: 4px 13px 3px;
+}
+.btn-ft-filled { background: var(--primary); color: #fff; }
+.btn-ft-filled:hover { background: var(--primary-hover); }
+.btn-ft-outline { background: transparent; color: var(--primary); }
+.btn-ft-outline:hover { background: var(--outline-hover); }
+.btn-ft-default { font-size: 0.82rem; padding: 5px 14px; }
+
+.ft-badge {
+  display: inline-block; border-radius: var(--pill); font-size: 0.68rem;
+  font-weight: 500; padding: 2px 9px; white-space: nowrap; color: var(--primary);
+}
+.ft-badge--success { background: var(--success-bg); }
+.ft-badge--danger  { background: var(--danger-bg); color: var(--danger-fg); }
+.ft-badge--warning { background: var(--warning-bg); }
+.ft-badge--info    { background: var(--info-bg); }
+.ft-badge--neutral { background: #F0F0F0; color: #777; }
+
+.ft-kv {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 6px 0; border-bottom: 1px solid var(--border-color); font-size: 0.8rem;
+}
+.ft-kv:last-child { border-bottom: none; }
+.ft-kv__label { color: #777; }
+.ft-kv__value { font-weight: 500; }
+
+.kpi-card {
+  background: var(--surface); border: 1px solid var(--border-color);
+  border-radius: var(--radius); padding: 16px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.kpi-card__label { font-size: 0.72rem; color: #888; display: flex; align-items: center; gap: 6px; }
+.kpi-card__label i { font-size: 13px; color: #bbb; }
+.kpi-card__value { font-size: 1.75rem; font-weight: 500; color: var(--primary); line-height: 1.1; }
+.kpi-card__sub   { font-size: 0.7rem; color: #999; }
+.kpi-card--danger  .kpi-card__value { color: var(--danger-fg); }
+.kpi-card--warning .kpi-card__value { color: var(--warning-fg); }
+.kpi-card--success .kpi-card__value { color: var(--success-fg); }
+.kpi-card--impact  .kpi-card__value { color: #185FA5; }
+
+.workload-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 0; border-bottom: 1px solid var(--border-color);
+  font-size: 0.8rem; gap: 8px;
+}
+.workload-row:last-child { border-bottom: none; }
+.workload-row__label { flex: 1; }
+.workload-row__count { font-weight: 500; min-width: 24px; text-align: right; }
+.workload-row--link .workload-row__label { color: var(--link); cursor: pointer; }
+.workload-row--link .workload-row__label:hover { text-decoration: underline; }
+
+.timeline-item {
+  display: flex; gap: 10px; padding: 6px 0;
+  border-bottom: 1px solid var(--border-color); font-size: 0.8rem;
+}
+.timeline-item:last-child { border-bottom: none; }
+.timeline-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+.dot-danger  { background: var(--danger-fg); }
+.dot-warning { background: #F4C862; }
+.dot-info    { background: var(--link); }
+.dot-neutral { background: #CCC; }
+.timeline-item__title { font-weight: 500; }
+.timeline-item__meta  { color: #888; margin-top: 1px; font-size: 0.74rem; }
+
+.chart-bar-wrap { display: flex; flex-direction: column; gap: 7px; }
+.chart-bar-row  { display: flex; align-items: center; gap: 10px; font-size: 0.76rem; }
+.chart-bar-row__label { width: 130px; color: #777; text-align: right; flex-shrink: 0; font-size: 0.72rem; }
+.chart-bar-row__track { flex: 1; height: 7px; background: #F0F0F0; border-radius: 3px; overflow: hidden; }
+.chart-bar-row__fill  { height: 100%; border-radius: 3px; }
+.chart-bar-row__val   { width: 36px; font-weight: 500; font-size: 0.78rem; }
+
+.insight-hero {
+  background: var(--primary); border-radius: var(--radius);
+  padding: 20px 22px; color: #fff; margin-bottom: var(--gap);
+}
+.insight-hero__eyebrow  { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.07em; opacity: 0.6; margin-bottom: 5px; }
+.insight-hero__headline { font-size: 1.05rem; font-weight: 500; line-height: 1.35; margin-bottom: 14px; }
+.insight-hero__stats    { display: flex; gap: 24px; flex-wrap: wrap; }
+.insight-hero__stat-val { font-size: 1.35rem; font-weight: 500; }
+.insight-hero__stat-label { font-size: 0.65rem; opacity: 0.65; }
+
+/* AI bentos -- V4 Narrative */
+.ai-bento {
+  background: var(--surface); border: 1px solid var(--border-color);
+  border-radius: var(--radius); padding: 16px;
+}
+.ai-bento__header {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 4px;
+}
+.ai-bento__icon {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: linear-gradient(135deg, #536E8A 0%, #1B76D2 100%);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.ai-bento__icon svg { width: 10px; height: 10px; }
+.ai-bento__label {
+  font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; color: #1B76D2;
+}
+.ai-bento__timestamp {
+  font-size: 0.6rem; color: #aaa; margin-left: auto;
+}
+.ai-bento__headline {
+  font-size: 1rem; font-weight: 500; color: var(--primary);
+  line-height: 1.4; margin-bottom: 14px; margin-top: 8px;
+}
+.ai-bento__stats {
+  display: flex; gap: 0; border: 1px solid var(--border-color);
+  border-radius: var(--form-radius); overflow: hidden; margin-bottom: 14px;
+}
+.ai-bento__stat {
+  flex: 1; padding: 10px 12px; border-right: 1px solid var(--border-color);
+}
+.ai-bento__stat:last-child { border-right: none; }
+.ai-bento__stat-val { font-size: 1.25rem; font-weight: 500; color: var(--primary); }
+.ai-bento__stat-val--up { color: #67CF9D; }
+.ai-bento__stat-val--warn { color: #F4C862; }
+.ai-bento__stat-label { font-size: 0.65rem; color: #888; margin-top: 1px; }
+.ai-bento__divider { border: none; border-top: 1px solid var(--border-color); margin: 12px 0; }
+.ai-bento__supporting {
+  font-size: 0.78rem; color: #666; line-height: 1.5;
+}
+.ai-bento__supporting strong { color: var(--primary); font-weight: 500; }
+
+/* Nudge rows */
+.nudge-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 0; border-bottom: 1px solid var(--border-color);
+}
+.nudge-row:last-child { border-bottom: none; padding-bottom: 0; }
+.nudge-icon {
+  width: 28px; height: 28px; border-radius: var(--form-radius);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.nudge-icon--danger { background: #FCDDDD; color: #BD3B39; }
+.nudge-icon--warning { background: #FFF4D1; color: #9a7a00; }
+.nudge-icon--info { background: #D5E2FA; color: #536E8A; }
+.nudge-icon--success { background: #E1F5EB; color: #2a8a5e; }
+.nudge-body { flex: 1; }
+.nudge-body__sentence { font-size: 0.82rem; color: var(--primary); line-height: 1.45; }
+.nudge-body__action { font-size: 0.75rem; color: var(--link); margin-top: 3px; cursor: pointer; }
+
+.program-card {
+  background: var(--surface); border: 1px solid var(--border-color);
+  border-radius: var(--radius); padding: 14px 16px;
+}
+.program-card__name  { font-weight: 500; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+
+.wl-tile {
+  background: var(--surface); border: 1px solid var(--border-color);
+  border-radius: var(--radius); padding: 14px 16px; margin-bottom: var(--gap);
+}
+.wl-tile__header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.wl-tile__stage  { font-weight: 500; display: flex; align-items: center; gap: 7px; }
+.wl-tile__total  { font-size: 0.72rem; color: #888; }
+.wl-status-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 5px 0; border-bottom: 1px solid var(--border-color);
+  font-size: 0.8rem; cursor: pointer;
+}
+.wl-status-row:last-child { border-bottom: none; }
+.wl-status-row:hover { background: #fafafa; padding-left: 4px; transition: padding 0.1s; }
+.wl-status-row__name { color: var(--link); }
+.wl-status-row__count {
+  background: var(--primary); color: #fff;
+  border-radius: var(--pill); font-size: 0.62rem;
+  font-weight: 700; padding: 1px 8px; min-width: 28px; text-align: center;
+}
+.wl-status-row__count--zero { background: #E0E0E0; color: #999; }
+.wl-status-row__name--muted { color: #999; }
+
+#map-container { position: relative; }
+#map-tooltip {
+  position: absolute; background: var(--primary); color: #fff;
+  border-radius: 4px; padding: 6px 10px; font-size: 0.72rem;
+  pointer-events: none; display: none; z-index: 10; white-space: nowrap; line-height: 1.5;
+}
+.state-path { cursor: pointer; transition: opacity 0.12s; }
+.state-path:hover { opacity: 0.7; }
+.chart-wrap { position: relative; width: 100%; }
+
+.g4  { display: grid; grid-template-columns: repeat(4,1fr); gap: var(--gap); margin-bottom: var(--gap); }
+.g3  { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--gap); margin-bottom: var(--gap); }
+.g2  { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); margin-bottom: var(--gap); }
+.g21 { display: grid; grid-template-columns: 2fr 1fr; gap: var(--gap); margin-bottom: var(--gap); }
+.g1  { margin-bottom: var(--gap); }
+.stack { display: flex; flex-direction: column; gap: var(--gap); }
+
+.view { display: none; }
+.view.active { display: block; }
+
+.ft-panel {
+  position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+  background: var(--primary); border-radius: var(--radius);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.22); width: 330px;
+  font-family: var(--font-body); max-height: calc(100vh - 80px);
+  display: flex; flex-direction: column;
+}
+.ft-panel__header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 14px; cursor: pointer; user-select: none; flex-shrink: 0;
+}
+.ft-panel__title  { font-size: 0.78rem; font-weight: 700; color: #fff; }
+.ft-panel__toggle { background: none; border: none; color: #fff; cursor: pointer; font-size: 0.72rem; font-weight: 500; font-family: var(--font-body); }
+.ft-panel__body   { padding: 0 14px 14px; display: none; overflow-y: auto; }
+.ft-panel__body.open { display: block; }
+.ft-panel__section { margin-bottom: 12px; }
+.ft-panel__section:last-child { margin-bottom: 0; }
+.ft-panel__section-label { font-size: 0.62rem; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+.ft-panel__row    { display: flex; gap: 4px; flex-wrap: wrap; }
+.ft-panel__btn {
+  flex: 1; padding: 5px 6px; border-radius: 3px; font-size: 0.67rem;
+  font-family: var(--font-body); font-weight: 500; cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7);
+  white-space: nowrap; text-align: center; transition: all 0.1s;
+}
+.ft-panel__btn:hover  { background: rgba(255,255,255,0.2); color: #fff; }
+.ft-panel__btn.active { background: #fff; color: var(--primary); border-color: #fff; }
+.ft-panel__hint { font-size: 0.62rem; color: rgba(255,255,255,0.4); margin-top: 10px; line-height: 1.4; }
+
+/* ── Process workload bento ── */
+.process-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+.process-table__head th {
+  font-size: 0.62rem; font-weight: 500; color: #aaa;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  padding: 0 6px 8px; text-align: center; border-bottom: 1px solid var(--border-color);
+}
+.process-table__head th:first-child { text-align: left; padding-left: 0; }
+.process-table tr td { padding: 7px 6px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+.process-table tr:last-child td { border-bottom: none; }
+.process-table td:first-child { padding-left: 0; font-weight: 500; color: var(--primary); max-width: 160px; }
+.process-chip {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 34px; padding: 2px 6px; border-radius: 3px;
+  font-size: 0.68rem; font-weight: 500; color: var(--primary);
+  background: #F0F0F0; white-space: nowrap;
+}
+.process-chip--active  { background: var(--info-bg); color: var(--info-fg); }
+.process-chip--alert   { background: var(--danger-bg); color: var(--danger-fg); }
+.process-chip--success { background: var(--success-bg); color: var(--success-fg); }
+.process-chip--empty   { background: transparent; color: #CCC; font-size: 0.62rem; }
+.process-chip-cell     { text-align: center; }
+</style>
+</head>
+<body>
+
+<nav class="ft-navbar">
+  <div class="ft-navbar__logo">FT</div>
+  <button class="ft-navbar__item">SEARCH <i class="fa-regular fa-chevron-down fa-xs"></i></button>
+  <button class="ft-navbar__item">TOOLS <i class="fa-regular fa-chevron-down fa-xs"></i></button>
+  <button class="ft-navbar__item">COMMUNICATIONS <i class="fa-regular fa-chevron-down fa-xs"></i></button>
+  <button class="ft-navbar__item">REPORTING <i class="fa-regular fa-chevron-down fa-xs"></i></button>
+  <div class="ft-navbar__search">
+    <i class="fa-regular fa-magnifying-glass" style="color:#bbb;font-size:13px"></i>
+    search
+  </div>
+  <div class="ft-navbar__spacer"></div>
+  <button class="ft-navbar__role">ROLE (ADMINISTRATOR) <i class="fa-regular fa-chevron-down fa-xs"></i></button>
+  <div class="ft-navbar__utils">
+    <i class="fa-regular fa-compass"></i>
+    <i class="fa-regular fa-lightbulb"></i>
+    <i class="fa-regular fa-gift"></i>
+    <i class="fa-regular fa-grid-2"></i>
+    <i class="fa-regular fa-gear"></i>
+    <i class="fa-regular fa-circle-user"></i>
+  </div>
+</nav>
+
+
+<!-- V1: FOUNDATION IMPACT -->
+<div class="view active" id="v-impact">
+  <div class="ft-page--sidebar">
+
+    <aside class="ft-sidebar">
+      <div class="ft-sidebar__section-label">Dashboard</div>
+      <button class="ft-sidebar__item active" onclick="setSidebarActive(this)">
+        <i class="fa-regular fa-grid-2"></i>
+        <span>Open Requests</span>
+        <span class="ft-sidebar__count">130</span>
+      </button>
+      <button class="ft-sidebar__item" onclick="setSidebarActive(this)">
+        <i class="fa-regular fa-user-check"></i>
+        <span>Your Evaluations</span>
+        <span class="ft-sidebar__count">14</span>
+      </button>
+      <button class="ft-sidebar__item" onclick="setSidebarActive(this)">
+        <i class="fa-regular fa-list-check"></i>
+        <span>Your Follow Ups</span>
+        <span class="ft-sidebar__count ft-sidebar__count--alert">5</span>
+      </button>
+      <button class="ft-sidebar__item" onclick="setSidebarActive(this)">
+        <i class="fa-regular fa-chart-bar"></i>
+        <span>Metrics Dashboard</span>
+      </button>
+      <div class="ft-sidebar__section-label" style="margin-top:6px">Workload</div>
+      <button class="ft-sidebar__item" onclick="setSidebarActive(this)">
+        <i class="fa-regular fa-file-lines"></i>
+        <span>LOI</span>
+        <span class="ft-sidebar__count">7</span>
+      </button>
+      <button class="ft-sidebar__item" onclick="setSidebarActive(this)">
+        <i class="fa-regular fa-file-contract"></i>
+        <span>Application</span>
+        <span class="ft-sidebar__count">47</span>
+      </button>
+      <button class="ft-sidebar__item" onclick="setSidebarActive(this)">
+        <i class="fa-regular fa-gavel"></i>
+        <span>Decision</span>
+        <span class="ft-sidebar__count">9</span>
+      </button>
+      <button class="ft-sidebar__item" onclick="setSidebarActive(this)">
+        <i class="fa-regular fa-arrow-rotate-right"></i>
+        <span>Follow Up</span>
+        <span class="ft-sidebar__count ft-sidebar__count--alert">33</span>
+      </button>
+    </aside>
+
+    <div class="ft-main">
+      <div class="ft-page-title">
+        <h1 class="ft-greeting"></h1>
+        <span class="subtitle">Cedar Ridge Foundation</span>
+      </div>
+      <div class="ft-content">
+      <div class="g21" style="align-items:stretch">
+        <div class="stack" style="display:flex;flex-direction:column">
+          <div class="ft-bento" style="flex:1">
+                    <div class="ft-bento__header">
+                      <h2 class="ft-bento__title">Foundation impact</h2>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;margin-top:8px">
+                      <div style="padding:24px 20px 24px 0;border-right:1px solid var(--border-color);border-bottom:1px solid var(--border-color)">
+                        <div style="font-size:0.78rem;color:#888;margin-bottom:8px">Amount awarded since founding</div>
+                        <div style="font-size:2rem;font-weight:500;color:var(--primary);line-height:1.1">$5,843,387</div>
+                      </div>
+                      <div style="padding:24px 0 24px 20px;border-bottom:1px solid var(--border-color)">
+                        <div style="font-size:0.78rem;color:#888;margin-bottom:8px">Awarded this year</div>
+                        <div style="font-size:2rem;font-weight:500;color:var(--primary);line-height:1.1">$1,905,400</div>
+                      </div>
+                      <div style="padding:24px 20px 8px 0;border-right:1px solid var(--border-color)">
+                        <div style="font-size:0.78rem;color:#888;margin-bottom:8px">Total grants awarded</div>
+                        <div style="font-size:2rem;font-weight:500;color:var(--primary);line-height:1.1">117</div>
+                      </div>
+                      <div style="padding:24px 0 8px 20px">
+                        <div style="font-size:0.78rem;color:#888;margin-bottom:8px">Grants this year</div>
+                        <div style="font-size:2rem;font-weight:500;color:var(--primary);line-height:1.1">70</div>
+                      </div>
+                    </div>
+                  </div>
+          <div class="ft-bento" style="flex:1">
+                    <div class="ft-bento__header">
+                      <h2 class="ft-bento__title">Active processes</h2>
+                      <button class="btn-ft-outline">View all</button>
+                    </div>
+                    <table class="process-table">
+                      <thead class="process-table__head">
+                        <tr>
+                          <th>Process</th>
+                          <th title="Eligibility Quiz">EQ</th>
+                          <th title="Letter of Intent">LOI</th>
+                          <th title="Application">App</th>
+                          <th title="Decision">Dec</th>
+                          <th title="Follow Up">FU</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>2025 Spring Grants</td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--active">12</span></td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--active">7</span></td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--alert">26</span></td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--success">4</span></td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--alert">14</span></td>
+                        </tr>
+                        <tr>
+                          <td>Community Impact Fund</td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--active">9</span></td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--active">3</span></td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--active">7</span></td>
+                        </tr>
+                        <tr>
+                          <td>Board Discretionary</td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--active">5</span></td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--success">2</span></td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                        </tr>
+                        <tr>
+                          <td>General Inquiry &mdash; Tracking</td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--active">3</span></td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--active">4</span></td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--active">8</span></td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                        </tr>
+                        <tr>
+                          <td>Responsive Grants</td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--active">2</span></td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--alert">11</span></td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--active">1</span></td>
+                          <td class="process-chip-cell"><span class="process-chip process-chip--active">5</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+        </div>
+        <div class="stack">
+          <div class="ft-bento">
+                      <div class="ft-bento__header">
+                        <h2 class="ft-bento__title" id="geo-title">Funding by location</h2>
+                        <span style="font-size:0.7rem;color:#aaa">Share of awarded dollars</span>
+                      </div>
+                    <div id="map-wrap">
+                      <div id="map-container" style="position:relative">
+                        <div id="map-tooltip"></div>
+                        <svg id="us-map-real" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 959 593" style="width:100%;height:auto;display:block">
+            <title>Blank map of the United States, territories not included</title>
+
+
+          <g class="state">
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="al" d="m 643,467.4 .4,-7.3 -.9,-1.2 -1.7,-.7 -2.5,-2.8 .5,-2.9 48.8,-5.1 -.7,-2.2 -1.5,-1.5 -.5,-1.4 .6,-6.3 -2.4,-5.7 .5,-2.6 .3,-3.7 2.2,-3.8 -.2,-1.1 -1.7,-1 v -3.2 l -1.8,-1.9 -2.9,-6.1 -12.9,-45.8 -45.7,4 1.3,2 -1.3,67 4.4,33.2 .9,-.5 1.3,.1 .6,.4 .8,-.1 2,-3.8 v -2.3 l 1.1,-1.1 1.4,.5 3.4,6.4 v .9 l -3.3,2.2 3.5,-.4 4.9,-1.6 z">
+          <title>Alabama</title></path>
+
+          <!-- The scale of Alaska is 42% that of the contiguous United States, so its area is reduced to about 17.6%. The Islands of Four Mountains, Andreanof Islands, Rat Islands and Near Islands are not shown. -->
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ak" d="m 15.8,572 h 2.4 l .7,.7 -1,1.2 -1.9,.2 -2.5,1.3 -3.7,-.1 2.2,-.9 .3,-1.1 2.5,-.3 z m 8.3,-1.7 1.3,.5 h .9 l .5,1.2 .3,-.6 .9,.2 1.1,1.5 0,.5 -4.2,1.9 -2.4,-.1 -1,-.5 -1.1,.7 -2,0 -1.1,-1.4 4.7,-.5 z m 5.4,-.1 1,.1 .7,.7 v 1 l -1.3,.1 -.9,-1.1 z m 2.5,.3 1.3,-.1 -.1,1 -1.1,.6 z m .3,2.2 3.4,-.1 .2,1.1 -1.3,.1 -.3,-.5 -.8,.6 -.4,-.6 -.9,-.2 z m 166.3,7.6 2.1,.1 -1,1.9 -1.1,-.1 -.4,-.8 .5,-1.3 m -1.1,-2.9 .6,-1.3 -.2,-2.3 2.4,-.5 4.5,4.4 1.3,3.4 1.9,1.6 .3,5.1 -1.4,0 -1.3,-2.3 -3.1,-2.4 h -.6 l 1.1,2.8 1.7,.2 .2,2.1 -.9,.1 -4.1,-4.4 -.1,-.9 1.9,-1 0,-1 -.5,-.8 -1.6,-.6 -1.7,-1.3 1.4,.1 .5,-.4 -.6,-.9 -.6,.5 z m -3.6,-9.1 1.3,.1 2.4,2.5 -.2,.8 -.8,-.1 -.1,1.8 .5,.5 0,1.5 -.8,.3 -.4,1.2 -.8,-.4 -.4,-2.2 1.1,-1.4 -2.1,-2.2 .1,-1.2 z m 1.5,-1.5 1.9,.2 2.5,.1 3.4,3.2 -.2,.5 -1.1,.6 -1.1,-.2 -.1,-.7 -1.2,-1.6 -.3,.7 1,1.3 -.2,1.2 -.8,-.1 -1.3,.2 -.1,-1.7 -2.6,-2.8 z m -12.7,-8.9 .9,-.4 h 1.6 l .7,-.5 4.1,2.2 .1,1.5 -.5,.5 h -.8 l -1.4,-.7 1.1,1.3 1.8,0 .5,2 -.9,0 -2.2,-1.5 -1.1,-.2 .6,1.3 .1,.9 .8,-.6 1.7,1.2 1.3,-.1 -.2,.8 1.9,4.3 0,3.4 .4,2.1 -.8,.3 -1.2,-2 -.5,-1.5 -1.6,-1.6 -.2,-2.7 -.6,-1.7 h -.7 l .3,1.1 0,.5 -1.4,1 .1,-3.3 -1.6,-1.6 -1.3,-2.3 -1.2,-1.2 z m 7.2,-2.3 1.1,1.8 2.4,-.1 1,2.1 -.6,.6 2,3.2 v 1.3 l -1.2,.8 v .7 l -2,1.9 -.5,-1.4 -.1,-1.3 .6,-.7 v -1.1 l -1.5,-1.9 -.5,-3.7 -.9,-1.5 z m -56.7,-18.3 -4,4.1 v 1.6 l 2.1,-.8 .8,-1.9 2.2,-2.4 z m -31.6,16.6 0,.6 1.8,1.2 .2,-1.4 .6,.9 3.5,.1 .7,-.6 .2,-1.8 -.5,-.7 -1.4,0 0,-.8 .4,-.6 v -.4 l -1.5,-.3 -3.3,3.6 z m -8.1,6.2 1.5,5.8 h 2.1 l 2.4,-2.5 .3,1.2 6.3,-4 .7,-1 -1,-1.1 v -.7 l .5,-1.3 -.9,-.1 -2,1 0,-1.2 -2.7,-.6 -2.4,.3 -.2,3.4 -.8,-2 -1.5,-.1 -1,.6 z m -2.2,8.2 .1,-.7 2.1,-1.3 .6,.3 1.3,.2 1.3,1.2 -2.2,-.2 -.4,-.6 -1,.6 z m -5.2,3.3 -1.1,.8 1.5,1.4 .8,-.7 -.1,-1.3 z m -6.3,-7.9 1.4,.1 .4,.6 -1.8,.1 z m -13.9,11.9 v .5 l .7,.1 -.1,-.6 z m -.4,-3.2 -1,1 v .5 l .7,1.1 1,-1 -.7,-.1 z m -2,-.8 -.3,1 -1.3,.1 -.4,.2 0,1.3 -.5,.9 .6,0 .7,-.9 .8,-.1 .9,-1 .2,-1.3 z m -4.4,-2 -.2,1.8 1.4,.8 1.2,-.6 0,-1 1.7,-.3 -.1,-.6 -.9,-.2 -.7,.6 -.9,-.5 z m -4.9,-.1 1,.7 -.3,1.2 -1.4,-1.1 z m -4.2,1.3 1.4,.1 -.7,.8 z m -3.5,3 1.8,1.1 -1.7,.1 z m -25.4,-31.2 1.2,.6 -.8,.6 z m -.7,-6.3 .4,1.2 .8,-1.2 z m 24.3,-19.3 1.5,-.1 .9,.4 1.1,-.5 1.3,-.1 1.6,.8 .8,1.9 -.1,.9 -1.2,2 -2.4,-.2 -2.1,-1.8 -1,-.4 -1.1,-2 z m -21.1,-14.4 .1,1.9 2,2 v .5 l -.8,-.2 -1.7,-.8 -.3,-1.1 -.3,-1.6 z m 18.3,-23.3 v 1.2 l 1.9,1.8 h 2.3 l .6,1.1 v 1.6 l 2.1,1.9 1.8,1.2 -.1,.7 -.7,1.1 -1.4,-1.2 -2.1,.1 -.8,-.8 -.9,-2.1 -1.5,-2.2 -2.6,-.1 -1,-.7 1,-2.1 z m 16.8,-4.5 1,0 .1,1.1 h -1 z m 16.2,19.7 .9,.1 0,1.2 -1.7,-.5 z m 127.8,77.7 -1.2,.4 -.1,1.1 h 1.2 z m -157.6,-4.5 -1.3,-.4 -4.1,.6 -2.8,1.4 -.1,1.9 1.9,.7 1.5,-.9 1.7,-.1 4.7,1.4 .1,-1.3 -1.6,-1.1 z m 2.1,2.3 -.4,-1.4 1.2,.2 .1,1.4 1.8,0 .4,-2.5 .3,2.4 2.5,-.1 3.2,-3.3 .8,.1 -.7,1.3 1.4,.9 4.2,-.2 2.6,-1.2 1.4,-.1 .3,1.5 .6,-.5 .4,-1.4 5.9,.2 1.9,-1.6 -1.3,-1.1 .6,-1.2 2.6,.2 -.2,-1.2 2.5,.2 .7,-1.1 1.1,.2 4.6,-1.9 .2,-1.7 5.6,-2.4 2,-1.9 1.2,-.6 1.3,.8 2.3,-.9 1.1,-1.9 .5,-1.3 1.7,-.9 1.5,-.7 .4,-1.4 -1.1,-1.7 -2.2,-.2 -.2,-1.3 .8,-1.6 1.4,-.2 1.3,-1.5 1.9,-.1 3.4,-3.2 .4,-1.4 1.5,-2.3 3.8,-4.1 2.5,-.9 1.9,-.9 2.1,.8 1.4,2.6 -1.5,0 -1.4,-1.5 -3,2 -1.7,.1 -.2,3.1 -3.1,4.9 .6,2 2.3,0 -.6,1 -1.4,.1 -2.4,1.8 0,.9 1.9,1 3.4,-.6 1.4,-1.7 1.4,.1 3,-1.7 .5,-2.3 1.6,-.1 6.3,.8 1,-1.1 1,-4.5 -1.6,1.1 .6,-2.2 -1.6,-1.4 .8,-1.5 .1,1.5 3.4,0 .7,-1 1.6,-.1 -.3,1.7 1.9,.1 -1.9,1.3 4.1,1.1 -3.5,.4 -1.3,1.2 .9,1.4 4.6,-1.7 2.3,1.7 .7,-.9 .6,1.4 4,2.3 h 2.9 l 3.9,-.5 4.3,1.1 2,1.9 4.5,.4 1.8,-1.5 .8,2.4 -1.8,.7 1.2,1.2 7.4,3.8 1.4,2.5 5.4,4.1 3.3,-2 -.6,-2.2 -3.5,-2 3.1,1.2 .5,-.7 .9,1.3 0,2.7 2.1,-.6 2.1,1.8 -2.5,-9.8 1.2,1.3 1.4,6 2.2,2.5 2.4,-.4 1.8,3.5 h .9 l .6,5.6 3.4,.5 1.6,2.2 1.8,1.1 .4,2.8 -1.8,2.6 2.9,1.6 1.2,-2.4 -.2,3.1 -.8,.9 1.4,1.7 .7,-2.4 -.2,-1.2 .8,.2 .6,2.3 -1,1.4 .6,2.6 .5,.4 .3,-1.6 .7,.6 -.3,2 1.2,.2 -.4,.9 1.7,-.1 0,-1 h -1 l .1,-1.7 -.8,-.6 1.7,-.3 .5,-.8 0,-1.6 .5,1.3 -.6,1.8 1.2,3.9 1.8,.1 2.2,-4.2 .1,-1.9 -1.3,-4 -.1,-1.2 .5,-1.2 -.7,-.7 -1.7,.1 -2.5,-2 -1.7,0 -2,-1.4 -1.5,0 -.5,-1.6 -1.4,-.3 -.2,-1.5 -1,-.5 .1,-1.7 -5.1,-7.4 -1.8,-1.5 v -1.2 l -4.3,-3.5 -.7,-1.1 -1.6,-2 -1.9,-.6 0,-2.2 -1.2,-1.3 -1.7,-.7 -2.1,1.3 -1.6,2.1 -.4,2.4 -1.5,.1 -2.5,2.7 -.8,-.3 v -2.5 l -2.4,-2.2 -2.3,-2 -.5,-2 -2.5,-1.3 .2,-2.2 -2.8,-.1 -.7,1.1 -1.2,0 -.7,-.7 -1.2,.8 -1.8,-1.2 0,-85.8 -6.9,-4.1 -1.8,-.5 -2.2,1.1 -2.2,.1 -2.3,-1.6 -4.3,-.6 -5.8,-3.6 -5.7,-.4 -2,.5 -.2,-1.8 -1.8,-.7 1.1,-1 -.2,-.9 -3.2,-1.1 h -2.4 l -.4,.4 -.9,-.6 .1,-2.6 -.8,-.9 -2.5,2.9 -.8,-.1 v -.8 l 1.7,-.8 v -.8 l -1.9,-2.4 -1.1,-.1 -4.5,3.1 h -3.9 l .4,-.9 -1.8,-.1 -5.2,3.4 -1.8,0 -.6,-.8 -2.7,1.5 -3.6,3.7 -2.8,2.7 -1.5,1.2  -2.6,.1 -2.2,-.4 -2.3,-1.3 v 0 l -2.8,3.9 -.1,2.4 2.6,2.4 2.1,4.5 .2,5.3 2.9,2 3.4,.4 .7,.8 -1.5,2.3 .7,2.7 -1.7,-2.6 v -2.4 l -1.5,-.3 .1,1.2 .7,2.1 2.9,3.7 h -1.4 l -2.2,1.1 -6.2,-2.5 -.1,-2 1.4,-1.3 0,-1.4 -2.1,-.5 -2.3,.2 -4.8,.2 1.5,2.3 -1.9,-1.8 -8.4,1.2 -.8,1.5 4.9,4.7 -.8,1.4 -.3,2 -.7,.8 -.1,1.9 4.4,3.6 4.1,.2 4.6,1.9 h 2 l .8,-.6 3.8,.1 .1,-.8 1.2,1.1 .1,2 -2.5,-.1 .1,3.3 .5,3.2 -2.9,2.7 -1.9,-.1 -2,-.8 -1,.1 -3.1,2.1 -1.7,.2 -1.4,-2.8 -3.1,0 -2.2,2 -.5,1.8 -3.3,1.8 -5.3,4.3 -.3,3.1 .7,2.2 1,1.2 1,-.4 .9,1 -.8,.6 -1.5,.9 1.1,1.5 -2.6,1.1 .8,2.2 1.7,2.3 .8,4.1 4,1.5 2.6,-.8 1.7,-1.1 .5,2.1 .3,4.4 -1.9,1.4 0,4.4 -.6,.9 h -1.7 l 1.7,1.2 2.1,-.1 .4,-1 4.6,-.6 2,2.6 1.3,-.7 1.3,5.1 1,.5 1,-.7 .1,-2.4 .9,-1 .7,1.1 .2,1.6 1.6,.4 4.7,-1.2 .2,1.2 -2,1.1 -1.6,1.7 -2.8,7 -4.3,2 -1.4,1.5 -.3,1.4 -1,-.6 -9.3,3.3 -1.8,4.1 -1.3,-.4 .5,-1.1 -1.5,-1.4 -3.5,-.2 -5.3,3.2 -2.2,1.3 -2.3,0 -.5,2.4 z">
+          <title>Alaska</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="az" d="m 139.6,387.6 3,-2.2 .8,-2.4 -1,-1.6 -1.8,-.2 -1.1,-1.6 1.1,-6.9 1.6,-.3 2.4,-3.2 1.6,-7 2.4,-3.6 4.8,-1.7 1.3,-1.3 -.4,-1.9 -2.3,-2.5 -1.2,-5.8 -1.4,-1.8 -1.3,-3.4 .9,-2.1 1.4,-3 .5,-2.9 -.5,-4.9 1,-13.6 3.5,-.6 3.7,1.4 1.2,2.7 h 2 l 2.4,-2.9 3.4,-17.5 46.2,8.2 40,6 -17.4,124.1 -37.3,-5.4 -64.2,-37.5 .5,-2.9 2,-1.8 z">
+          <title>Arizona</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ar" d="m 584.2,367 .9,-2.2 1.2,.5 .7,-1 -.8,-.7 .3,-1.5 -1.1,-.9 .6,-1 -.1,-1.5 -1.1,-.1 .8,-.8 1.3,.8 .3,-1.4 -.4,-1.1 .1,-.7 2,.6 -.4,-1.5 1.6,-1.3 -.5,-.9 -1.1,.1 -.6,-.9 .9,-.9 1.6,-.2 .5,-.8 1.4,-.2 -.1,-.8 -.9,-.9 v -.5 h 1.5 l .4,-.7 -1.4,-1 -.1,-.6 -11.2,.8 2.8,-5.1 1.7,-1.5 v -2.2 l -1.6,-2.5 -39.8,2 -39.1,.7 4.1,24.4 -.7,39 2.6,2.3 2.8,-1.3 3.2,.8 .2,11.9 52.3,-1.3 1.2,-1.5 .5,-3 -1.5,-2.3 -.5,-2.2 .9,-.7 v -.8 l -1.7,-1.1 -.1,-.7 1.6,-.9 -1.2,-1.1 1.7,-7.1 3.4,-1.6 v -.8 l -1.1,-1.4 2.9,-5.4 h 1.9 l 1.5,-1.2 -.3,-5.2 3.1,-4.5 1.8,-.6 -.5,-3.1 z">
+          <title>Arkansas</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ca" d="m 69.4,365.6 3.4,5.2 -1.4,.1 -1.8,-1.9 z m 1.9,-9.8 1.8,4.1 2.6,1 .7,-.6 -1.3,-2.5 -2.6,-2.4 z m -19.9,-19 v 2.4 l 2,1.2 4.4,-.2 1,-1 -3.1,-.2 z m -5.9,.1 3.3,.5 1.4,2.2 h -3.8 z m 47.9,45.5 -1,-3 .2,-3 -.4,-7.9 -1.8,-4.8 -1.2,-1.4 -.6,-1.5 -7,-8.6 -3.6,.1 -2,-1.9 1.1,-1.8 -.7,-3.7 -2.2,-1.2 -3.9,-.6 -2.8,-1.3 -1.5,-1.9 -4.5,-6.6 -2.7,-2.2 -3.7,-.5 -3.1,-2.3 -4.7,-1.5 -2.8,-.3 -2.5,-2.5 .2,-2.8 .8,-4.8 1.8,-5.1 -1.4,-1.6 -4,-9.4 -2.7,-3.7 -.4,-3 -1.6,-2.3 .2,-2.5 -2,-5 -2.9,-2.7 .6,-7.1 2.4,-.8 1.8,-3.1 -.4,-3.2 -1,-.9 h -2.5 l -2.5,-3.3 -1.5,-3.5 v -7.5 l 1.2,-4.2 .2,-2.1 2.5,.2 -.1,1.6 -.8,.7 v 2.5 l 3.7,3.2 v -4.7 l -1.4,-3.4 .5,-1.1 -1,-1.7 2.8,-1.5 -1.9,-3 -1.4,.5 -1.5,3.8 .5,1.3 -.8,1 -.9,-.1 -5.4,-6.1 .7,-5.6 -1.1,-3.9 -6.5,-12.8 .8,-10.7 2.3,-3.6 .2,-6.4 -5.5,-11.1 .3,-5.2 6.9,-7.5 1.7,-2.4 -.1,-1.4 4,-9.2 .1,-8.4 .9,-2.5 66.1,18.6 -16.4,63.1 1.1,3.5 70.4,105 -.9,2.1 1.3,3.4 1.4,1.8 1.2,5.8 2.3,2.5 .4,1.9 -1.3,1.3 -4.8,1.7 -2.4,3.6 -1.6,7 -2.4,3.2 -1.6,.3 -1.1,6.9 1.1,1.6 1.8,.2 1,1.6 -.8,2.4 -3,2.2 -2.2,-.1 z">
+          <title>California</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="co" d="m 374.6,323.3 -16.5,-1 -51.7,-4.8 -52.6,-6.5 11.5,-88.3 44.9,5.7 37.5,3.4 33.1,2.4 -1.4,22.1 z">
+          <title>Colorado</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ct" d="m 873.5,178.9 .4,-1.1 -3.2,-12.3 -.1,-.3 -14.9,3.4 v .7 l -.9,.3 -.5,-.7 -10.5,2.4 2.8,16.3 1.8,1.5 -3.5,3.4 1.7,2.2 5.4,-4.5 1.7,-1.3 h .8 l 2.4,-3.1 1.4,.1 2.9,-1.1 h 2.1 l 5.3,-2.7 2.8,-.9 1,-1 1.5,.5 z">
+          <title>Connecticut</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="de" d="m 822.2,226.6 -1.6,.3 -1.5,1.1 -1.2,2.1 7.6,27.1 10.9,-2.3 -2.2,-7.6 -1.1,.5 -3.3,-2.6 -.5,-1.7 -1.8,-1 -.2,-3.7 -2.1,-2.2 -1.1,-.8 -1.2,-1.1 -.4,-3.2 .3,-2.1 1,-2.2 z">
+          <title>Delaware</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="fl" d="m 751.7,445.1 -4,-.7 -1.7,-.9 -2.2,1.4 v 2.5 l 1.4,2.1 -.5,4.3 -2.1,.6 -1,-1.1 -.6,-3.2 -50.1,3.3 -3.3,-6 -48.8,5.1 -.5,2.9 2.5,2.8 1.7,.7 .9,1.2 -.4,7.3 -1.1,.6 .5,.4 1,-.3 .7,-.8 10.5,-2.7 9.2,-.5 8.1,1.9 8.5,5 2.4,.8 2.2,2 -.1,2.7 h 2.4 l 1.9,-1 2.5,.1 2,-.8 2.9,-2 3.1,-2.9 1.1,-.4 .6,.5 h 1.4 l .5,-.8 -.5,-1.2 -.6,-.6 .2,-.8 2,-1.1 5,-.4 .8,1 1,.1 2.3,1 3,1.8 1.2,1.7 1.1,1.2 2.8,1.4 v 2.4 l 2.8,1.9 1,.1 1.6,1.4 .7,1.6 1,.2 .8,2.1 .7,.6 1,-1.1 2.9,.1 .5,1.4 1.1,.9 v 1.3 l 2.9,2.2 .2,9.6 -1.8,5.8 1,1.2 -.2,3.4 -.8,1.4 .7,1.2 2.3,2.3 .3,1.5 .8,1 -.4,-1.9 1.3,-.6 .8,-3.6 -3,-1.2 .1,-.6 2.6,-.4 .9,2.6 1.1,.6 .1,-2 1.1,.3 .6,.8 -.1,.7 -2.9,4.2 -.2,1.1 -1.7,1.9 v 1.1 l 3.7,3.8 5.3,7.9 1.8,2.1 v 1.8 l 2.8,4.6 2.3,.6 .7,-1.2 -2.1,.3 -3,-4.5 .2,-1.4 1.5,-.8 v -1.5 l -.6,-1.3 .9,-.9 .4,.9 .7,.5 v 4 l -1.2,-.6 -.8,.9 1.4,1.6 1,2.6 1.2,-.6 2.3,1.2 2.1,2.2 1.6,5.1 3.1,4.8 .8,-1.3 2.8,-.5 3.2,1.3 .3,1.7 3.3,3.8 .1,1.1 2.2,2.7 -.7,.5 v 2.7 l 2.7,1.4 h 1.5 l 2.7,-1.8 1.5,.3 1.1,.4 2.3,-1.7 .2,-.7 1.2,.3 2.4,-1.7 1.3,-2.3 -.7,-3.2 -.2,-1.3 1.1,-4 .6,-.2 .6,1.6 .8,-1.8 -.8,-7.2 -.4,-10.5 -1,-6.8 -.7,-1.7 -6.6,-11.1 -5.2,-9.1 -2.2,-3.3 -1.3,-3.6 -.2,-3.4 .9,-.3 v -.9 l -1.1,-2.2 -4,-4 -7.6,-9.7 -5.7,-10.4 -4.3,-10.7 -.6,-3.7 -1.2,-1 -.5,-3.8 z m 9.2,134.5 1.7,-.1 -.7,-1 z m 7.3,-1.1 v -.7 l 1.6,-.2 3.7,-3.3 1.5,-.6 2.4,-.9 .3,1.3 1.7,.8 -2.6,1.2 h -2.4 l -3.9,2.5 z m 17.2,-7.6 -3,1.4 -1,1.3 1.1,.1 z m 3.8,-2.9 -1.1,.3 -1.4,2 1.1,-.2 1.5,-1.6 z m 8.3,-15.7 -1.7,5.6 -.8,1 -1,2.6 -1.2,1.6 -.7,1.7 -1.9,2.2 v .9 l 2.7,-2.8 2.4,-3.5 .6,-2 2.1,-4.9 z">
+          <title>Florida</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ga" d="m 761.8,414.1 v 1.4 l -4.2,6.2 -1.2,.2 1.5,.5 v 2 l -.9,1.1 -.6,6 -2.3,6.2 .5,2 .7,5.1 -3.6,.3 -4,-.7 -1.7,-.9 -2.2,1.4 v 2.5 l 1.4,2.1 -.5,4.3 -2.1,.6 -1,-1.1 -.6,-3.2 -50.1,3.3 -3.3,-6 -.7,-2.2 -1.5,-1.5 -.5,-1.4 .6,-6.3 -2.4,-5.7 .5,-2.6 .3,-3.7 2.2,-3.8 -.2,-1.1 -1.7,-1 v -3.2 l -1.8,-1.9 -2.9,-6.1 -12.9,-45.8 22.9,-2.9 21.4,-3 -.1,1.9 -1.9,1 -1.4,3.2 .2,1.3 6.1,3.8 2.6,-.3 3.1,4 .4,1.7 4.2,5.1 2.6,1.7 1.4,.2 2.2,1.6 1.1,2.2 2,1.6 1.8,.5 2.7,2.7 .1,1.4 2.6,2.8 5,2.3 3.6,6.7 .3,2.7 3.9,2.1 2.5,4.8 .8,3.1 4.2,.4 z">
+          <title>Georgia</title></path>
+
+          <!-- Hawaii is shown in the same scale as the contiguous United States. The Northwestern Hawaiian Islands are not shown. -->
+          <path style="cursor:pointer;transition:opacity 0.12s" class="hi" d="m 317,553.7 -.2,3.2 1.7,1.9 .1,1.2 -4.8,4.5 -.1,1.2 1.9,3.2 1.7,4.2 v 2.6 l -.5,1.2 .1,3.4 4.1,2.1 1.1,1.1 1.2,-1.1 2.1,-3.6 4.5,-2.9 3.3,-.5 2.5,-1 1.7,-1.2 3.2,-3.5 -2.8,-1.1 -1.4,-1.4 .1,-1.7 -.5,-.6 h -2 l .2,-2.5 -.7,-1.2 -2.6,-2.3 -4.5,-1.9 -2.8,-.2 -3.3,-2.7 -1.2,-.6 z m -15.3,-17 -1.1,1.5 -.1,1.7 2.7,2.4 1.9,.5 .6,1 .4,3 3.6,.2 5.3,-2.6 -.1,-2.5 -1.4,-.5 -3.5,-2.6 -1.8,-.3 -2.9,1.3 -1.5,-2.7 z m -1.5,11.5 .9,-1.4 2.5,-.3 .6,1.8 z m -7,-8.7 1.7,4 3.1,-.6 .3,-2 -1.4,-1.5 z m -4.1,-6.7 -1.1,2.4 h 5 l 4.8,1.6 2.5,-1.6 .2,-1.5 -4.8,.2 z m -16,-10.6 -1.9,2.1 -2.9,.6 .8,2.2 2.2,2.8 .1,1 2.1,-.3 2.3,.1 1.7,1.2 3.5,-.8 v -.7 l -1,-.8 -.5,-2.1 -.8,-.3 -.5,1 -1.2,-1.3 .2,-1.4 -1.8,-3.3 -1.1,-.7 z m -31.8,-12.4 -4.2,2.9 .2,2.3 2.4,1.2 1.9,1.3 2.7,.4 2.6,-2.2 -.2,-1.9 .8,-1.7 v -1.4 l -1,-.9 z m -10.8,4.8 -.3,1.2 -1.9,.9 -.6,1.8 1,.8 1.1,-1.5 1.9,-.6 .4,-2.6 z">
+          <title>Hawaii</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="id" d="m 165.3,183.1 -24.4,-5.4 8.5,-37.3 2.9,-5.8 .4,-2.1 .8,-.9 -.9,-2 -2.9,-1.2 .2,-4.2 4,-5.8 2.5,-.8 1.6,-2.3 -.1,-1.6 1.8,-1.6 3.2,-5.5 4.2,-4.8 -.5,-3.2 -3.5,-3.1 -1.6,-3.6 1.1,-4.3 -.7,-4 12.7,-56.1 14.2,3 -4.8,22 3.7,7.4 -1.6,4.8 3.6,4.8 1.9,.7 3.9,8.3 v 2.1 l 2.3,3 h .9 l 1.4,2.1 h 3.2 v 1.6 l -7.1,17 -.5,4.1 1.4,.5 1.6,2.6 2.8,-1.4 3.6,-2.4 1.9,1.9 .5,2.5 -.5,3.2 2.5,9.7 2.6,3.5 2.3,1.4 .4,3 v 4.1 l 2.3,2.3 1.6,-2.3 6.9,1.6 2.1,-1.2 9,1.7 2.8,-3.3 1.8,-.6 1.2,1.8 1.6,4.1 .9,.1 -8.5,54.8 -47.9,-8.2 z">
+          <title>Idaho</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="il" d="m 623.5,265.9 -1,5.2 v 2 l 2.4,3.5 v .7 l -.3,.9 .9,1.9 -.3,2.4 -1.6,1.8 -1.3,4.2 -3.8,5.3 -.1,7 h -1 l .9,1.9 v .9 l -2.2,2.7 .1,1.1 1.5,2.2 -.1,.9 -3.7,.6 -.6,1.2 -1.2,-.6 -1,.5 -.4,3.3 1.7,1.8 -.4,2.4 -1.5,.3 -6.9,-3 -4,3.7 .3,1.8 h -2.8 l -1.4,-1.5 -1.8,-3.8 v -1.9 l .8,-.6 .1,-1.3 -1.7,-1.9 -.9,-2.5 -2.7,-4.1 -4.8,-1.3 -7.4,-7.1 -.4,-2.4 2.8,-7.6 -.4,-1.9 1.2,-1.1 v -1.3 l -2.8,-1.5 -3,-.7 -3.4,1.2 -1.3,-2.3 .6,-1.9 -.7,-2.4 -8.6,-8.4 -2.2,-1.5 -2.5,-5.9 -1.2,-5.4 1.4,-3.7 .7,-.7 .1,-2.3 -.7,-.9 1,-1.5 1.8,-.6 .9,-.3 1,-1.2 v -2.4 l 1.7,-2.4 .5,-.5 .1,-3.5 -.9,-1.4 -1,-.3 -1.1,-1.6 1,-4 3,-.8 h 2.4 l 4.2,-1.8 1.7,-2.2 .1,-2.4 1.1,-1.3 1.3,-3.2 -.1,-2.6 -2.8,-3.5 h -1.2 l -.9,-1.1 .2,-1.6 -1.7,-1.7 -2.5,-1.3 .5,-.6 45.9,-2.8 .1,4.6 3.4,4.6 1.2,4.1 1.6,3.2 z">
+          <title>Illinois</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="in" d="m 629.2,214.8 -5.1,2.3 -4.7,-1.4 4.1,50.2 -1,5.2 v 2 l 2.4,3.5 v .7 l -.3,.9 .9,1.9 -.3,2.4 -1.6,1.8 -1.3,4.2 -3.8,5.3 -.1,7 h -1 l .9,1.9 1.1,.8 .6,-1 -.7,-1.7 4.6,-.5 .2,1.2 1.1,.2 .4,-.9 -.6,-1.3 .3,-.8 1.3,.8 1.7,-.4 1.7,.6 3.4,2.1 1.8,-2.8 3.5,-2.2 3,3.3 1.6,-2.1 .3,-2.7 3.8,-2.3 .2,1.3 1.9,1.2 3,-.2 1.2,-.7 .1,-3.4 2.5,-3.7 4.6,-4.4 -.1,-1.7 1.2,-3.8 2.2,1 6.7,-4.5 -.4,-1.7 -1.5,-2.1 1,-1.9 -6.6,-57.2 -.1,-1.4 -32.4,3.4 z">
+          <title>Indiana</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ia" d="m 556.9,183 2.1,1.6 .6,1.1 -1.6,3.3 -.1,2.5 2,5.5 2.7,1.5 3.3,.7 1.3,2.8 -.5,.6 2.5,1.3 1.7,1.7 -.2,1.6 .9,1.1 h 1.2 l 2.8,3.5 .1,2.6 -1.3,3.2 -1.1,1.3 -.1,2.4 -1.7,2.2 -4.2,1.8 h -2.4 l -3,.8 -1,4 1.1,1.6 1,.3 .9,1.4 -.1,3.5 -.5,.5 -1.7,2.4 v 2.4 l -1,1.2 -.9,.3 -1.8,.6 -1,1.5 .7,.9 -.1,2.3 -.7,.7 -1.5,-.8 -1.1,-1.1 -.6,-1.6 -1.7,-1.3 -14.3,.8 -27.2,1.2 -25.9,-.1 -1.8,-4.4 .7,-2.2 -.8,-3.3 .2,-2.9 -1.3,-.7 -.4,-6.1 -2.8,-5 -.2,-3.7 -2.2,-4.3 -1.3,-3.7 v -1.4 l -.6,-1.7 v -2.3 l -.5,-.9 -.7,-1.7 -.3,-1.3 -1.3,-1.2 1,-4.3 1.7,-5.1 -.7,-2 -1.3,-.4 -.4,-1.6 1,-.5 .1,-1.1 -1.3,-1.5 .1,-1.6 2.2,.1 h 28.2 l 36.3,-.9 18.6,-.7 z">
+          <title>Iowa</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ks" d="m 459.1,259.5 -43.7,-1.2 -36,-2 -4.8,67 67.7,2.9 62,.1 -.5,-48.1 -3.2,-.7 -2.6,-4.7 -2.5,-2.5 .5,-2.3 2.7,-2.6 .1,-1.2 -1.5,-2.1 -.9,1 -2,-.6 -2.9,-3 z">
+          <title>Kansas</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ky" d="m 692.1,322.5 -20.5,1.4 -5.2,.8 -17.4,1 -2.6,.8 -22.6,2 -.7,-.6 h -3.7 l 1.2,3.2 -.6,.9 -23.3,1.5 1,-2.7 1.4,.9 .7,-.4 1.2,-4.1 -1,-1 1,-2 .2,-.9 -1.3,-.8 -.3,-1.8 4,-3.7 6.9,3 1.5,-.3 .4,-2.4 -1.7,-1.8 .4,-3.3 1,-.5 1.2,.6 .6,-1.2 3.7,-.6 .1,-.9 -1.5,-2.2 -.1,-1.1 2.2,-2.7 0,-.9 1.1,.8 .6,-1 -.7,-1.7 4.6,-.5 .2,1.2 1.1,.2 .4,-.9 -.6,-1.3 .3,-.8 1.3,.8 1.7,-.4 1.7,.6 3.4,2.1 1.8,-2.8 3.5,-2.2 3,3.3 1.6,-2.1 .3,-2.7 3.8,-2.3 .2,1.3 1.9,1.2 3,-.2 1.2,-.7 .1,-3.4 2.5,-3.7 4.6,-4.4 -.1,-1.7 1.2,-3.8 2.2,1 6.7,-4.5 -.4,-1.7 -1.5,-2.1 1,-1.9 1.3,.5 2.2,.1 1.9,-.8 2.9,1.2 2.2,3.4 v 1 l 4.1,.7 2.3,-.2 1.9,2.1 2.2,.2 v -1 l 1.9,-.8 3,.8 1.2,.8 1.3,-.7 h .9 l .6,-1.7 3.4,-1.8 .5,.8 .8,2.9 3.5,1.4 1.2,2.1 -.1,1.1 .6,1 -.6,3.6 1.9,1.6 .8,1.1 1,.6 -.1,.9 4.4,5.6 h 1.4 l 1.5,1.8 1.2,.3 1.4,-.1 -4.9,6.6 -2.9,1 -3,3 -.4,2.2 -2.1,1.3 -.1,1.7 -1.4,1.4 -1.8,.5 -.5,1.9 -1,.4 -6.9,4.2 z m -98,11.3 -.7,-.7 .2,-1 h 1.1 l .7,.7 -.3,1 z">
+          <title>Kentucky</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="la" d="m 602.5,472.8 -1.2,-1.8 .3,-1.3 -4.8,-6.8 .9,-4.6 1,-1.4 .1,-1.4 -36,2 1.7,-11.9 2.4,-4.8 6,-8.4 -1.8,-2.5 h 2 v -3.3 l -2.4,-2.5 .5,-1.7 -1.2,-1 -1.6,-7.1 .6,-1.4 -52.3,1.3 .5,19.9 .7,3.4 2.6,2.8 .7,5.4 3.8,4.6 .8,4.3 h 1 l -.1,7.3 -3.3,6.4 1.3,2.3 -1.3,1.5 .7,3 -.1,4.3 -2.2,3.5 -.1,.8 -1.7,1.2 1,1.8 1.2,1.1 1.6,-1.3 5.3,-.9 6.1,-.1 9.6,3.8 8,1 1.5,-1.4 1.8,-.2 4.8,2.2 1.6,-.4 1.1,-1.5 -4.2,-1.8 -2.2,1 -1.1,-.2 -1.4,-2 3.3,-2.2 1.6,-.1 v 1.7 l 1.5,-.1 3.4,-.3 .4,2.3 1.1,.4 .6,1.9 4.8,1 1.7,1.6 v .7 h -1.2 l -1.5,1.7 1.7,1.2 5.4,1 2.7,2.8 4.4,-1 -3.7,.2 -.1,-.6 2.8,-.7 .2,-1.8 1.2,-.3 v -1.4 l 1.1,.1 v 1.6 l 2.5,.1 .8,-1.9 .9,.3 .2,2.5 1.2,.2 -1.8,2 2.6,-.9 2,-1.1 2.9,-3.3 h -.7 l -1.3,1.2 -.4,-.1 -.5,-.8 .9,-1.2 v -2.3 l 1.1,-.8 .7,.7 1,-.8 1,-.1 .6,1.3 -.6,1.9 h 2.4 l 5.1,1.7 .5,1.3 1.6,1.4 2.8,.1 1.3,.7 1.8,-1 .9,-1.7 v -1.7 h -1.4 l -1.2,-1.4 -1.1,-1.1 -3.2,-.9 -2.6,.2 -4.2,-2.4 v -2.3 l 1.3,-1 2.4,.6 -3.1,-1.6 .2,-.8 h 3.6 l 2.6,-3.5 -2.6,-1.8 .8,-1.5 -1.2,-.8 h -.8 l -2,2.1 v 2.1 l -.6,.7 -1.1,-.1 -1.6,-1.4 h -1.3 v -1.5 l .6,-.7 .8,.7 1.7,-1.6 .7,-1.6 .8,-.3 z m -10.3,-2.7 1.9,1 .8,1.1 2.5,.1 1.5,.8 .2,1.4 -.4,.6 -.9,-1.5 -1.4,1.2 -.9,1.4 -2.8,.8 -1.6,.1 -3.7,-1 .1,-1.7 2,-2 1.1,-2.4 z m -4.7,1.2 v 1.1 l -1.8,2 h -1.2 v -2.2 l 1.6,-1.5 z">
+          <title>Louisiana</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="me" d="m 875,128.7 .6,4 3.2,2 .8,2.2 2.3,1.4 1.4,-.3 1,-3 -.8,-2.9 1.6,-.9 .5,-2.8 -.6,-1.3 3.3,-1.9 -2.2,-2.3 .9,-2.4 1.4,-2.2 .5,3.2 1.6,-2 1.3,.9 1.2,-.8 v -1.7 l 3.2,-1.3 .3,-2.9 2.5,-.2 2.7,-3.7 v -.7 l -.9,-.5 -.1,-3.3 .6,-1.1 .2,1.6 1,-.5 -.2,-3.2 -.9,.3 -.1,1.2 -1.2,-1.4 .9,-1.4 .6,.1 1.1,-.4 .5,2.8 2,-.3 2.9,.7 v -1 l -1.1,-1.2 1.3,.1 .1,-2.3 .6,.8 .3,1.9 2.1,1.5 .2,-1 .9,-.2 -.3,-.8 .8,-.6 -.1,-1.6 -1.6,-.2 -2,.7 1.4,-1.6 .7,-.8 1.3,-.2 .4,1.3 1.7,1.6 .4,-2.1 2.3,-1.2 -.9,-1.3 .1,-1.7 1.1,.5 h .7 l 1.7,-1.4 .4,-2.3 2.2,.3 .1,-.7 .2,-1.6 .5,1.4 1.5,-1 2.3,-4.1 -.1,-2.2 -1.4,-2 -3,-3.2 h -1.9 l -.8,2.2 -2.9,-3 .3,-.8 v -1.5 l -1.6,-4.5 -.8,-.2 -.7,.4 h -4.8 l -.3,-3.6 -8.1,-26 -7.3,-3.7 -2.9,-.1 -6.7,6.6 -2.7,-1 -1,-3.9 h -2.7 l -6.9,19.5 .7,6.2 -1.7,2.4 -.4,4.6 1.3,3.7 .8,.2 v 1.6 l -1.6,4.5 -1.5,1.4 -1.3,2.2 -.4,7.8 -2.4,-1 -1.5,.4 z m 34.6,-24.7 -1,.8 v 1.3 l .7,-.8 .9,.8 .4,-.5 1.1,.2 -1,-.8 .4,-.8 z m -1.7,2.6 -1,1.1 .5,.4 -.1,1 h 1.1 v -1.8 z m -3,-1.6 .9,1.3 1,.5 .3,-1 v -1.8 l -1.3,-.7 -.4,1.2 z m -1,5 -1.7,-1.7 1.6,-2.4 .8,.3 .2,1.1 1,.8 v 1.1 l -1,1 z">
+          <title>Maine</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="md" d="m 822.9,269.3 0,-1.7 h -.8 l 0,1.8 z m 11.8,-3.9 1.2,-2.2 .1,-2.5 -.6,-.6 -.7,.9 -.2,2.1 -.8,1.4 -.3,1.1 -4.6,1.6 -.7,.8 -1.3,.2 -.4,.9 -1.3,.6 -.3,-2.5 .4,-.7 -.8,-.5 .2,-1.5 -1.6,1 v -2 l 1.2,-.3 -1.9,-.4 -.7,-.8 .4,-1.3 -.8,-.6 -.7,1.6 .5,.8 -.7,.6 -1.1,.5 -2,-1 -.2,-1.2 -1,-1.1 -1.4,-1.7 1.5,-.8 -1,-.6 v -.9 l .6,-1 1.7,-.3 -1.4,-.6 -.1,-.7 -1.3,-.1 -.4,1.1 -.6,.3 .1,-3.4 1,-1 .8,.7 .1,-1.6 -1,-.9 -.9,1.1 -1,1.4 -.6,-1 .2,-2.4 .9,-1 .9,.9 1.2,-.7 -.4,-1.7 -1,1 -.9,-2.1 -.2,-1.7 1.1,-2.4 1.1,-1.4 1.4,-.2 -.5,-.8 .5,-.6 -.3,-.7 .2,-2.1 -1.5,.4 -.8,1.1 1,1.3 -2.6,3.6 -.9,-.4 -.7,.9 -.6,2.2 -1.8,.5 1.3,.6 1.3,1.3 -.2,.7 .9,1.2 -1.1,1 .5,.3 -.5,1.3 v 2.1 l -.5,1.3 .9,1.1 .7,3.4 1.3,1.4 1.6,1.4 .4,2.8 1.6,2 .4,1.4 v 1 h -.7 l -1.5,-1.2 -.4,.2 -1.2,-.2 -1.7,-1.4 -1.4,-.3 -1,.5 -1.2,-.3 -.4,.2 -1.7,-.8 -1,-1 -1,-1.3 -.6,-.2 -.8,.7 -1.6,1.3 -1.1,-.8 -.4,-2.3 .8,-2.1 -.3,-.5 .3,-.4 -.7,-1 1,-.1 1,-.9 .4,-1.8 1.7,-2.6 -2.6,-1.8 -1,1.7 -.6,-.6 h -1 l -.6,-.1 -.4,-.4 .1,-.5 -1.7,-.6 -.8,.3 -1.2,-.1 -.7,-.7 -.5,-.2 -.2,-.7 .6,-.8 v -.9 l -1.2,-.2 -1,-.9 -.9,.1 -1.6,-.3 -.9,-.4 .2,-1.6 -1,-.5 -.2,-.7 h -.7 l -.8,-1.2 .2,-1 -2.6,.4 -2.2,-1.6 -1.4,.3 -.9,1.4 h -1.3 l -1.7,2.9 -3.3,.4 -1.9,-1 -2.6,3.8 -2.2,-.3 -3.1,3.9 -.9,1.6 -1.8,1.6 -1.7,-11.4 60.5,-11.8 7.6,27.1 10.9,-2.3 0,5.3 -.1,3.1 -1,1.8 z m -13.4,-1.8 -1.3,.9 .8,1.8 1.7,.8 -.4,-1.6 z">
+          <title>Maryland</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ma" d="m 899.9,174.2 h 3.4 l .9,-.6 .1,-1.3 -1.9,-1.8 .4,1 -1.5,1.5 h -2.3 l .1,.8 z m -9,1.8 -1.2,-.6 1,-.8 .6,-2.1 1.2,-1 .8,-.2 .6,.9 1.1,.2 .6,-.6 .5,1.9 -1.3,.3 -2.8,.7 z m -34.9,-23.4 18.4,-3.8 1,-1.5 .3,-1.7 1.9,-.6 .5,-1.1 1.7,-1.1 1.3,.3 1.7,3.3 1,.4 1.1,-1.3 .8,1.3 v 1.1 l -3,2.4 .2,.8 -.9,1 .4,.8 -1.3,.3 .9,1.2 -.8,.7 .6,1 .9,-.2 .3,-.8 1.1,.6 h 1.8 l 2.5,2.6 .2,2.6 1.8,.1 .8,1.1 .6,2 1,.7 h 1.9 l 1.9,-.1 .8,-.9 1.6,-1.2 1.1,-.3 -1.2,-2.1 -.3,.9 -1.5,-3.6 h -.8 l -.4,.9 -1.2,-1 1.3,-1.1 1.8,.4 2.3,2.1 1.3,2.7 1.2,3.3 -1,2.8 v -1.8 l -.7,-1 -3.5,2.3 -.9,-.3 -1.6,1 -.1,1.2 -2.2,1.2 -2,2.1 -2,1.9 h -1.2 l 3.3,-3.3 .5,-1.9 -.5,-.6 -.3,-1.3 -.9,-.1 -.1,1.3 -1,1.2 h -1.2 l -.3,1.1 .4,1.2 -1.2,1.1 -1.1,-.2 -.4,1 -1.4,-3 -1.3,-1.1 -2.6,-1.3 -.6,-2.2 h -.8 l -.7,-2.6 -6.5,2 -.1,-.3 -14.9,3.4 v .7 l -.9,.3 -.5,-.7 -10.5,2.4 -.7,-1 .5,-15 z">
+          <title>Massachusetts</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="mi" d="m 663.3,209.8 .1,1.4 21.4,-3.5 .5,-1.2 3.9,-5.9 v -4.3 l .8,-2.1 2.2,-.8 2,-7.8 1,-.5 1,.6 -.2,.6 -1.1,.8 .3,.9 .8,.4 1.9,-1.4 .4,-9.8 -1.6,-2.3 -1.2,-3.7 v -2.5 l -2.3,-4.4 v -1.8 l -1.2,-3.3 -2.3,-3 -2.9,-1 -4.8,3 -2.5,4.6 -.2,.9 -3,3.5 -1.5,-.2 -2.9,-2.8 -.1,-3.4 1.5,-1.9 2,-.2 1.2,-1.7 .2,-4 .8,-.8 1.1,-.1 .9,-1.7 -.2,-9.6 -.3,-1.3 -1.2,-1.2 -1.7,-1 -.1,-1.8 .7,-.6 1.8,.8 -.3,-1.7 -1.9,-2.7 -.7,-1.6 -1.1,-1.1 h -2.2 l -8.1,-2.9 -1.4,-1.7 -3.1,-.3 -1.2,.3 -4.4,-2.3 h -1.4 l .5,1 -2.7,-.1 .1,.6 .6,.6 -2.5,2.1 .1,1.8 1.5,2.3 1.5,.2 v .6 l -1.5,.5 -2.1,-.1 -2.8,2.5 .1,2.5 .4,5.8 -2.2,3.4 .8,-4.5 -.8,-.6 -.9,5.3 -1,-2.3 .5,-2.3 -.5,-1 .6,-1.3 -.6,-1.1 1,-1 v -1.2 l -1.3,.6 -1.3,3.1 -.7,.7 -1.3,2.4 -1.7,-.2 -.1,1.2 h -1.6 l .2,1.5 .2,2 -3,1.2 .1,1.3 1,1.7 -.1,5.2 -1.3,4.4 -1.7,2.5 1.2,1.4 .8,3.5 -1,2.5 -.2,2.1 1.7,3.4 2.5,4.9 1.2,1.9 1.6,6.9 -.1,8.8 -.9,3.9 -2,3.2 -.9,3.7 -2,3 -1.2,1 z m -95.8,-96.8 3,3.8 17,3.8 1.4,1 4,.8 .7,.5 2.8,-.2 4.9,.8 1.4,1.5 -1,1 .8,.8 3.8,.7 1.2,1.2 .1,4.4 -1.3,2.8 2,.1 1,-.8 .9,.8 -1.1,3.1 1,1.6 1.2,.3 .8,-1.8 2.9,-4.6 1.6,-6 2.3,-2 -.5,-1.6 .5,-.9 1,1.6 -.3,2.2 2.9,-2.2 .2,-2.3 2.1,.6 .8,-1.6 .7,.6 -.7,1.5 -1,.5 -1,2 1.4,1.8 1.1,-.5 -.5,-.7 1,-1.5 1.9,-1.7 h .8 l .2,-2.6 2,-1.8 7.9,-.5 1.9,-3.1 3.8,-.3 3.8,1.2 4.2,2.7 .7,-.2 -.2,-3.5 .7,-.2 4.5,1.1 1.5,-.2 2.9,-.7 1.7,.4 1.8,.1 v -1.1 l -.7,-.9 -1.5,-.2 -1.1,-.8 .5,-1.4 -.8,-.3 -2.6,.1 -.1,-1 1.1,-.8 .6,.8 .5,-1.8 -.7,-.7 .7,-.2 -1.4,-1.3 .3,-1.3 .1,-1.9 h -1.3 l -1.5,1 -1.9,.1 -.5,1.8 -1.9,.2 -.3,-1.2 -2.2,.1 -1,1.2 -.7,-.1 -.2,-.8 -2.6,.4 -.1,-4.8 1,-2 -.7,-.1 -1.8,1.1 h -2.2 l -3.8,2.7 -6.2,.3 -4.1,.8 -1.9,1.5 -1.4,1.3 -2.5,1.7 -.3,.8 -.6,-1.7 -1.3,-.6 v .6 l .7,.7 v 1.3 l -1.5,-.6 h -.6 l -.3,1.2 -2,-1.9 -1.3,-.2 -1.3,1.5 -3.2,-.1 -.5,-1.4 -2,-1.9 -1.3,-1.6 v -.7 l -1.1,-1.4 -2.6,-1.2 -3.3,-.1 -1.1,-.9 h -1.4 l -.7,.4 -2.2,2.2 -.7,1.1 -1,-.7 .2,-1 .8,-2.1 3.2,-5 .8,-.2 1.7,-1.9 .7,-1.6 3,-.6 .8,-.6 -.1,-1 -.5,-.5 -4.5,.2 -2,.5 -2.6,1.2 -1.2,1.2 -1.7,2.2 -1.8,1 -3.3,3.4 -.4,1.6 -7.4,4.6 -4,.5 -1.8,.4 -2.3,3 -1.8,.7 -4.4,2.3 z m 100.7,3.8 3.8,.1 .6,-.5 -.2,-2 -1.7,-1.8 -1.9,.1 -.1,.5 1.1,.4 -1.6,.8 -.3,1 -.6,-.6 -.4,.8 z m -75.1,-41.9 -2.3,.2 -2.7,1.9 -7.1,5.3 .8,1 1.8,.3 2.8,-2 -1.1,-.5 2.3,-1.6 h 1 l 3,-1.9 -.1,-.9 z m 41.1,62.8 v 1 l 2.1,1.6 -.2,-2.4 z m -.7,2.8 1.1,.1 v .9 h -1 z m 21.4,-21.3 v .9 l .8,-.2 v -.5 z m 4.7,3.1 -.1,-1.1 -1.6,-.2 -.6,-.4 h -.9 l -.4,.3 .9,.4 1.1,1.1 z m -18,1.2 -.1,1.1 -.3,.7 .2,2.2 .4,.3 .7,.1 .5,-.9 .1,-1.6 -.3,-.6 -.1,-1.1 z">
+          <title>Michigan</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="mn" d="m 464.7,68.6 -1.1,2.8 .8,1.4 -.3,5.1 -.5,1.1 2.7,9.1 1.3,2.5 .7,14 1,2.7 -.4,5.8 2.9,7.4 .3,5.8 -.1,2.1 -.1,2.2 -.9,2 -3.1,1.9 -.3,1.2 1.7,2.5 .4,1.8 2.6,.6 1.5,1.9 -.2,39.5 h 28.2 l 36.3,-.9 18.6,-.7 -1.1,-4.5 -.2,-3 -2.2,-3 -2.8,-.7 -5.2,-3.6 -.6,-3.3 -6.3,-3.1 -.2,-1.3 h -3.3 l -2.2,-2.6 -2,-1.3 .7,-5.1 -.9,-1.6 .5,-5.4 1,-1.8 -.3,-2.7 -1.2,-1.3 -1.8,-.3 v -1.7 l 2.8,-5.8 5.9,-3.9 -.4,-13 .9,.4 .6,-.5 .1,-1.1 .9,-.6 1.4,1.2 .7,-.1 v 0 l -1.2,-2.2 4.3,-3.1 3.1,-3.7 1.6,-.8 4.7,-5.9 6.3,-5.8 3.9,-2.1 6.3,-2.7 7.6,-4.5 -.6,-.4 -3.7,.7 -2.8,.1 -1,-1.6 -1.4,-.9 -9.8,1.2 -1,-2.8 -1.6,-.1 -1.7,.8 -3.7,3.1 h -4.1 l -2.1,-1 -.3,-1.7 -3.9,-.8 -.6,-1.6 -.7,-1.3 -1,.9 -2.6,.1 -9.9,-5.5 h -2.9 l -.8,-.7 -3.1,1.3 -.8,1.3 -3.3,.8 -1.3,-.2 v -1.7 l -.7,-.9 h -5.9 l -.4,-1.4 h -2.6 l -1.1,.4 -2.4,-1.7 .3,-1.4 -.6,-2.4 -.7,-1.1 -.2,-3 -1,-3.1 -2.1,-1.6 h -2.9 l .1,8 -30.9,-.4 z">
+          <title>Minnesota</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ms" d="m 623.8,468.6 -5,.1 -2.4,-1.5 -7.9,2.5 -.9,-.7 -.5,.2 -.1,1.6 -.6,.1 -2.6,2.7 -.7,-.1 -.6,-.7 -1.2,-1.8 .3,-1.3 -4.8,-6.8 .9,-4.6 1,-1.4 .1,-1.4 -36,2 1.7,-11.9 2.4,-4.8 6,-8.4 -1.8,-2.5 h 2 v -3.3 l -2.4,-2.5 .5,-1.7 -1.2,-1 -1.6,-7.1 .6,-1.4 1.2,-1.5 .5,-3 -1.5,-2.3 -.5,-2.2 .9,-.7 v -.8 l -1.7,-1.1 -.1,-.7 1.6,-.9 -1.2,-1.1 1.7,-7.1 3.4,-1.6 v -.8 l -1.1,-1.4 2.9,-5.4 h 1.9 l 1.5,-1.2 -.3,-5.2 3.1,-4.5 1.8,-.6 -.5,-3.1 38.3,-2.6 1.3,2 -1.3,67 4.4,33.2 z">
+          <title>Mississippi</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="mo" d="m 555.3,248.9 -1.1,-1.1 -.6,-1.6 -1.7,-1.3 -14.3,.8 -27.2,1.2 -25.9,-.1 1.3,1.3 -.3,1.4 2.1,3.7 3.9,6.3 2.9,3 2,.6 .9,-1 1.5,2.1 -.1,1.2 -2.7,2.6 -.5,2.3 2.5,2.5 2.6,4.7 3.2,.7 .5,48.1 .2,10.8 39.1,-.7 39.8,-2 1.6,2.5 v 2.2 l -1.7,1.5 -2.8,5.1 11.2,-.8 1,-2 1.2,-.5 v -.7 l -1.2,-1.1 -.6,-1 1.7,.2 .8,-.7 -1.4,-1.5 1.4,-.5 .1,-1 -.6,-1 v -1.3 l -.7,-.7 .2,-1 h 1.1 l .7,.7 -.3,1 .8,.7 .8,-1 1,-2.7 1.4,.9 .7,-.4 1.2,-4.1 -1,-1 1,-2 .2,-.9 -1.3,-.8 h -2.8 l -1.4,-1.5 -1.8,-3.8 v -1.9 l .8,-.6 .1,-1.3 -1.7,-1.9 -.9,-2.5 -2.7,-4.1 -4.8,-1.3 -7.4,-7.1 -.4,-2.4 2.8,-7.6 -.4,-1.9 1.2,-1.1 v -1.3 l -2.8,-1.5 -3,-.7 -3.4,1.2 -1.3,-2.3 .6,-1.9 -.7,-2.4 -8.6,-8.4 -2.2,-1.5 -2.5,-5.9 -1.2,-5.4 1.4,-3.7 z">
+          <title>Missouri</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="mt" d="m 247,130.5 57.3,7.9 51,5.3 2,-20.7 5.2,-66.7 -53.5,-5.6 -54.3,-7.7 -65.9,-12.5 -4.8,22 3.7,7.4 -1.6,4.8 3.6,4.8 1.9,.7 3.9,8.3 v 2.1 l 2.3,3 h .9 l 1.4,2.1 h 3.2 v 1.6 l -7.1,17 -.5,4.1 1.4,.5 1.6,2.6 2.8,-1.4 3.6,-2.4 1.9,1.9 .5,2.5 -.5,3.2 2.5,9.7 2.6,3.5 2.3,1.4 .4,3 v 4.1 l 2.3,2.3 1.6,-2.3 6.9,1.6 2.1,-1.2 9,1.7 2.8,-3.3 1.8,-.6 1.2,1.8 1.6,4.1 .9,.1 z">
+          <title>Montana</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ne" d="m 402.5,191.1 38,1.6 3.4,3.2 1.7,.2 2.1,2 1.8,-.1 1.8,-2 1.5,.6 1,-.7 .7,.5 .9,-.4 .7,.4 .9,-.4 1,.5 1.4,-.6 2,.6 .6,1.1 6.1,2.2 1.2,1.3 .9,2.6 1.8,.7 1.5,-.2 .5,.9 v 2.3 l .6,1.7 v 1.4 l 1.3,3.7 2.2,4.3 .2,3.7 2.8,5 .4,6.1 1.3,.7 -.2,2.9 .8,3.3 -.7,2.2 1.8,4.4 1.3,1.3 -.3,1.4 2.1,3.7 3.9,6.3 h -32.4 l -43.7,-1.2 -36,-2 1.4,-22.1 -33.1,-2.4 3.7,-44.2 z">
+          <title>Nebraska</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="nv" d="m 167.6,296.8 -3.4,17.5 -2.4,2.9 h -2 l -1.2,-2.7 -3.7,-1.4 -3.5,.6 -1,13.6 .5,4.9 -.5,2.9 -1.4,3 -70.4,-105 -1.1,-3.5 16.4,-63.1 47,11.2 24.4,5.4 23.3,4.7 z">
+          <title>Nevada</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="nh" d="m 862.6,93.6 -1.3,.1 -1,-1.1 -1.9,1.4 -.5,6.1 1.2,2.3 -1.1,3.5 2.1,2.8 -.4,1.7 .1,1.3 -1.1,2.1 -1.4,.4 -.6,1.3 -2.1,1 -.7,1.5 1.4,3.4 -.5,2.5 .5,1.5 -1,1.9 .4,1.9 -1.3,1.9 .2,2.2 -.7,1.1 .7,4.5 .7,1.5 -.5,2.6 .9,1.8 -.2,2.5 -.5,1.3 -.1,1.4 2.1,2.6 18.4,-3.8 1,-1.5 .3,-1.7 1.9,-.6 .5,-1.1 1.7,-1.1 1.3,.3 .8,-4.8 -2.3,-1.4 -.8,-2.2 -3.2,-2 -.6,-4 -11.9,-36.8 z">
+          <title>New Hampshire</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="nj" d="m 842.5,195.4 -14.6,-4.9 -1.8,2.5 .1,2.2 -3,5.4 1.5,1.8 -.7,2 -1,1 .5,3.6 2.7,.9 1,2.8 2.1,1.1 4.2,3.2 -3.3,2.6 -1.6,2.3 -1.8,3 -1.6,.6 -1.4,1.7 -1,2.2 -.3,2.1 .8,.9 .4,2.3 1.2,.6 2.4,1.5 1.8,.8 1.6,.8 .1,1.1 .8,.1 1.1,-1.2 .8,.4 2.1,.2 -.2,2.9 .2,2.5 1.8,-.7 1.5,-3.9 1.6,-4.8 2.9,-2.8 .6,-3.5 -.6,-1.2 1.7,-2.9 v -1.2 l -.7,-1.1 1.2,-2.7 -.3,-3.6 -.6,-8.2 -1.2,-1.4 v 1.4 l .5,.6 h -1.1 l -.6,-.4 -1.3,-.2 -.9,.6 -1.2,-1.6 .7,-1.7 v -1 l 1.7,-.7 .8,-2.1 z">
+          <title>New Jersey</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="nm" d="m 357.5,332.9 h -.8 l -7.9,99.3 -31.8,-2.6 -34.4,-3.6 -.3,3 2,2.2 -30.8,-4.1 -1.4,10.2 -15.7,-2.2 17.4,-124.1 52.6,6.5 51.7,4.8 z">
+          <title>New Mexico</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ny" d="m 872.9,181.6 -1.3,.1 -.5,1 z m -30.6,22.7 .7,.6 1.3,-.3 1.1,.3 .9,-1.3 h 1.9 l 2.4,-.9 5.1,-2.1 -.5,-.5 -1.9,.8 -2,.9 .2,-.8 2.6,-1.1 .8,-1 1.2,.1 4.1,-2.3 v .7 l -4.2,3 4.5,-2.8 1.7,-2.2 1.5,-.1 4.5,-3.1 3.2,-3.1 3,-2.3 1,-1.2 -1.7,-.1 -1,1.2 -.2,.7 -.9,.7 -.8,-1.1 -1.7,1 -.1,.9 -.9,-.2 .5,-.9 -1.2,-.7 -.6,.9 .9,.3 .2,.5 -.3,.5 -1.4,2.6 h -1.9 l .9,-1.8 .9,-.6 .3,-1.7 1.4,-1.6 .9,-.8 1.5,-.7 -1.2,-.2 -.7,.9 h -.7 l -1.1,.8 -.2,1 -2.2,2.1 -.4,.9 -1.4,.9 -7.7,1.9 .2,.9 -.9,.7 -2,.3 -1,-.6 -.2,1.1 -1.1,-.4 .1,1 -1.2,-.1 -1.2,.5 -.2,1.1 h -1 l .2,1 h -.7 l .2,1 -1.8,.4 -1.5,2.3 z m -.8,-.4 -1.6,.4 v 1 l -.7,1.6 .6,.7 2.4,-2.3 -.1,-.9 z m -10.1,-95.2 -.6,1.9 1.4,.9 -.4,1.5 .5,3.2 2.2,2.3 -.4,2.2 .6,2 -.4,1 -.3,3.8 3.1,6.7 -.8,1.8 .9,2.2 .9,-1.6 1.9,1.5 3,14.2 -.5,2 1.1,1 -.5,15 .7,1 2.8,16.3 1.8,1.5 -3.5,3.4 1.7,2.2 -1.3,3.3 -1.5,1.7 -1.5,2.3 -.2,-.7 .4,-5.9 -14.6,-4.9 -1.6,-1.1 -1.9,.3 -3,-2.2 -3,-5.8 h -2 l -.4,-1.5 -1.7,-1.1 -70.5,13.9 -.8,-6 4.3,-3.9 .6,-1.7 3.9,-2.5 .6,-2.4 2.3,-2 .8,-1.1 -1.7,-3.3 -1.7,-.5 -1.8,-3 -.2,-3.2 7.6,-3.9 8.2,-1.6 h 4.4 l 3.2,1.6 .9,-.1 1.8,-1.6 3.4,-.7 h 3 l 2.6,-1.3 2.5,-2.6 2.4,-3.1 1.9,-.4 1.1,-.5 .4,-3.2 -1.4,-2.7 -1.2,-.7 2,-1.3 -.1,-1.8 h -1.5 l -2.3,-1.4 -.1,-3.1 6.2,-6.1 .7,-2.4 3.7,-6.3 5.9,-6.4 2.1,-1.7 2.5,.1 20.6,-5.2 z">
+          <title>New York</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="nc" d="m 829,300.1 -29.1,6.1 -39.4,7.3 -29.4,3.5 v 5.2 l -1.5,-.1 -1.4,1.2 -2.4,5.2 -2.6,-1.1 -3.5,2.5 -.7,2.1 -1.5,1.2 -.8,-.8 -.1,-1.5 -.8,-.2 -4,3.3 -.6,3.4 -4.7,2.4 -.5,1.2 -3.2,2.6 -3.6,.5 -4.6,3 -.8,4.1 -1.3,.9 -1.5,-.1 -1.4,1.3 -.1,4.9 21.4,-3 4.4,-1.9 1.3,-.1 7.3,-4.3 23.2,-2.2 .4,.5 -.2,1.4 .7,.3 1.2,-1.5 3.3,3 .1,2.6 19.7,-2.8 24.5,17.1 4,-2.2 3,-.7 h 1.7 l 1.1,1.1 .8,-2 .6,-5 1.7,-3.9 5.4,-6.1 4.1,-3.5 5.4,-2.3 2.5,-.4 1.3,.4 .7,1.1 3.3,-6.6 3.3,-5.3 -.7,-.3 -4.4,6.8 -.5,-.8 2,-2.2 -.4,-1.5 -2,-.5 1,1.3 -1.2,.1 -1.2,-1.8 -1.2,2 -1.6,.2 1,-2.7 .7,-1.7 -.2,-2.9 -2.2,-.1 .9,-.9 1.1,.3 2.7,.1 .8,-.5 h 2.3 l 2,-1.9 .2,-3.2 1.3,-1.4 1.2,-.2 1.3,-1 -.5,-3.7 -2.2,-3.8 -2.7,-.2 -.9,1.6 -.5,-1 -2.7,.2 -1.2,.4 -1.9,1.2 -.3,-.4 h -.9 l -1.8,1.2 -2.6,.5 v -1.3 l .8,-1 1,.7 h 1 l 1.7,-2.1 3.7,-1.7 2,-2.2 h 2.4 l .8,1.3 1.7,.8 -.5,-1.5 -.3,-1.6 -2.8,-3.1 -.3,-1.4 -.4,1 -.9,-1.3 z m 7,31 2.7,-2.5 4.6,-3.3 v -3.7 l -.4,-3.1 -1.7,-4.2 1.5,1.4 1,3.2 .4,7.6 -1.7,.4 -3.1,2.4 -3.2,3.2 z m 1.9,-19.3 -.9,-.2 v 1 l 2.5,2.2 -.2,-1.4 z m 2.9,2.1 -1.4,-2.8 -2.2,-3.4 -2.4,-3 -2.2,-4.3 -.8,-.7 2.2,4.3 .3,1.3 3.4,5.5 1.8,2.1 z">
+          <title>North Carolina</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="nd" d="m 464.7,68.6 -1.1,2.8 .8,1.4 -.3,5.1 -.5,1.1 2.7,9.1 1.3,2.5 .7,14 1,2.7 -.4,5.8 2.9,7.4 .3,5.8 -.1,2.1 -29.5,-.4 -46,-2.1 -39.2,-2.9 5.2,-66.7 44.5,3.4 55.3,1.6 z">
+          <title>North Dakota</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="oh" d="m 685.7,208.8 1.9,-.4 3,1.3 2.1,.6 .7,.9 h 1 l 1,-1.5 1.3,.8 h 1.5 l -.1,1 -3.1,.5 -2,1.1 1.9,.8 1.6,-1.5 2.4,-.4 2.2,1.5 1.5,-.1 2.5,-1.7 3.6,-2.1 5.2,-.3 4.9,-5.9 3.8,-3.1 9.3,-5.1 4.9,29.9 -2.2,1.2 1.4,2.1 -.1,2.2 .6,2 -1.1,3.4 -.1,5.4 -1,3.6 .5,1.1 -.4,2.2 -1.1,.5 -2,3.3 -1.8,2 h -.6 l -1.8,1.7 -1.3,-1.2 -1.5,1.8 -.3,1.2 h -1.3 l -1.3,2.2 .1,2.1 -1,.5 1.4,1.1 v 1.9 l -1,.2 -.7,.8 -1,.5 -.6,-2.1 -1.6,-.5 -1,2.3 -.3,2.2 -1.1,1.3 1.3,3.6 -1.5,.8 -.4,3.5 h -1.5 l -3.2,1.4 -1.2,-2.1 -3.5,-1.4 -.8,-2.9 -.5,-.8 -3.4,1.8 -.6,1.7 h -.9 l -1.3,.7 -1.2,-.8 -3,-.8 -1.9,.8 v 1 l -2.2,-.2 -1.9,-2.1 -2.3,.2 -4.1,-.7 v -1 l -2.2,-3.4 -2.9,-1.2 -1.9,.8 -2.2,-.1 -1.3,-.5 -6.6,-57.2 21.4,-3.5 z">
+          <title>Ohio</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ok" d="m 501.5,398.6 -4.6,-3.8 -2.2,-.9 -.5,1.6 -5.1,.3 -.6,-1.5 -5,2.5 -1.6,-.7 -3.7,.3 -.6,1.7 -3.6,.9 -1.3,-1.2 -1.2,.1 -2,-1.8 -2.1,.7 -2,-.5 -1.8,-2 -2.5,4.2 -1.2,.8 -1,-1.8 .3,-2 -1.2,-.7 -2.3,2.5 -1.7,-1.2 -.1,-1.5 -1.3,.5 -2.6,-1.7 -3,2.6 -2.3,-1.1 .7,-2.1 -2.3,.1 -1.9,-3 -3.5,-1.1 -2,2.3 -2.3,-2.2 -1.4,.4 -2,.1 -3.5,-1.9 -2.3,.1 -1.2,-.7 -.5,-2.9 -2.3,-1.7 -1.1,1.5 -1.4,-1 -1.2,-.4 -1.1,1 -1.5,-.3 -2.5,-3 -2.7,-1.3 1.4,-42.7 -52.6,-3.2 .6,-10.6 16.5,1 67.7,2.9 62,.1 .2,10.8 4.1,24.4 -.7,39 z">
+          <title>Oklahoma</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="or" d="m 93.9,166.5 47,11.2 8.5,-37.3 2.9,-5.8 .4,-2.1 .8,-.9 -.9,-2 -2.9,-1.2 .2,-4.2 4,-5.8 2.5,-.8 1.6,-2.3 -.1,-1.6 1.8,-1.6 3.2,-5.5 4.2,-4.8 -.5,-3.2 -3.5,-3.1 -1.6,-3.6 -30.3,-7.3 -2.8,1 -5.4,-.9 -1.8,-.9 -1.5,1.2 -3.3,-.4 -4.5,.5 -.9,.7 -4.2,-.4 -.8,-1.6 -1.2,-.2 -4.4,1.3 -1.6,-1.1 -2.2,.8 -.2,-1.8 -2.3,-1.2 -1.5,-.2 -1,-1.1 -3,.3 -1.2,-.8 h -1.2 l -1.2,.9 -5.5,.7 -6.6,-4.2 1.1,-5.6 -.4,-4.1 -3.2,-3.7 -3.7,.1 -.4,-1.1 .4,-1.2 -.7,-.8 -1,.1 -1.1,1.3 -1.5,-.2 -.5,-1.1 -1,-.1 -.7,.6 -2,-1.9 v 4.3 l -1.3,1.3 -1.1,3.5 -.1,2.3 -4.5,12.3 -13.2,31.3 -3.2,4.6 -1.6,-.1 .1,2.1 -5.2,7.1 -.3,3.3 1,1.3 .1,2.4 -1.2,1.1 -1.2,3 .1,5.7 1.2,2.9 z">
+          <title>Oregon</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="pa" d="m 826.3,189.4 -1.9,.3 -3,-2.2 -3,-5.8 h -2 l -.4,-1.5 -1.7,-1.1 -70.5,13.9 -.8,-6 -4.2,3.4 -.9,.1 -2.7,3 -3.3,1.7 4.9,29.9 3.2,19.7 17.4,-2.9 60.5,-11.8 1.2,-2.1 1.5,-1.1 1.6,-.3 1.6,.6 1.4,-1.7 1.6,-.6 1.8,-3 1.6,-2.3 3.3,-2.6 -4.2,-3.2 -2.1,-1.1 -1,-2.8 -2.7,-.9 -.5,-3.6 1,-1 .7,-2 -1.5,-1.8 3,-5.4 -.1,-2.2 1.8,-2.5 z">
+          <title>Pennsylvania</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ri" d="m 883.2,170.7 -1.3,-1.1 -2.6,-1.3 -.6,-2.2 h -.8 l -.7,-2.6 -6.5,2 3.2,12.3 -.4,1.1 .4,1.8 5.6,-3.6 .1,-3 -.8,-.8 .4,-.6 -.1,-1.3 -.9,-.7 1.2,-.4 -.9,-1.6 1.8,.7 .3,1.4 .7,1.2 -1.4,-.8 1.1,1.7 -.3,1.2 -.6,-1.1 v 2.5 l .6,-.9 .4,.9 1.3,-1.5 -.2,-2.5 1.4,3.1 1,-.9 z m -4.7,12.2 h .9 l .5,-.6 -.8,-1.3 -.7,.7 z">
+          <title>Rhode Island</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="sc" d="m 772.3,350.2 -19.7,2.8 -.1,-2.6 -3.3,-3 -1.2,1.5 -.7,-.3 .2,-1.4 -.4,-.5 -23.2,2.2 -7.3,4.3 -1.3,.1 -4.4,1.9 -.1,1.9 -1.9,1 -1.4,3.2 .2,1.3 6.1,3.8 2.6,-.3 3.1,4 .4,1.7 4.2,5.1 2.6,1.7 1.4,.2 2.2,1.6 1.1,2.2 2,1.6 1.8,.5 2.7,2.7 .1,1.4 2.6,2.8 5,2.3 3.6,6.7 .3,2.7 3.9,2.1 2.5,4.8 .8,3.1 4.2,.4 .8,-1.5 h .6 l 1.8,-1.5 .5,-2 3.2,-2.1 .3,-2.4 -1.2,-.9 .8,-.7 .8,.4 1.3,-.4 1.8,-2.1 3.8,-1.8 1.6,-2.4 .1,-.7 4.8,-4.4 -.1,-.5 -.9,-.8 1.1,-1.5 h .8 l .4,.5 .7,-.8 h 1.3 l .6,-1.5 2.3,-2.1 -.3,-5.4 .8,-2.3 3.6,-6.2 2.4,-2.2 2.2,-1.1 z">
+          <title>South Carolina</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="sd" d="m 396.5,125.9 46,2.1 29.5,.4 -.1,2.2 -.9,2 -3.1,1.9 -.3,1.2 1.7,2.5 .4,1.8 2.6,.6 1.5,1.9 -.2,39.5 -2.2,-.1 -.1,1.6 1.3,1.5 -.1,1.1 -1,.5 .4,1.6 1.3,.4 .7,2 -1.7,5.1 -1,4.3 1.3,1.2 .3,1.3 .7,1.7 -1.5,.2 -1.8,-.7 -.9,-2.6 -1.2,-1.3 -6.1,-2.2 -.6,-1.1 -2,-.6 -1.4,.6 -1,-.5 -.9,.4 -.7,-.4 -.9,.4 -.7,-.5 -1,.7 -1.5,-.6 -1.8,2 -1.8,.1 -2.1,-2 -1.7,-.2 -3.4,-3.2 -38,-1.6 -51.1,-3.5 3.9,-43.9 2,-20.7 z">
+          <title>South Dakota</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="tn" d="m 620.9,365.1 45.7,-4 22.9,-2.9 .1,-4.9 1.4,-1.3 1.5,.1 1.3,-.9 .8,-4.1 4.6,-3 3.6,-.5 3.2,-2.6 .5,-1.2 4.7,-2.4 .6,-3.4 4,-3.3 .8,.2 .1,1.5 .8,.8 1.5,-1.2 .7,-2.1 3.5,-2.5 2.6,1.1 2.4,-5.2 1.4,-1.2 1.5,.1 0,-5.2 .3,-.7 -4.6,.5 -.2,1 -28.9,3.3 -5.6,1.4 -20.5,1.4 -5.2,.8 -17.4,1 -2.6,.8 -22.6,2 -.7,-.6 h -3.7 l 1.2,3.2 -.6,.9 -23.3,1.5 -.8,1 -.8,-.7 h -1 v 1.3 l .6,1 -.1,1 -1.4,.5 1.4,1.5 -.8,.7 -1.7,-.2 .6,1 1.2,1.1 v .7 l -1.2,.5 -1,2 .1,.6 1.4,1 -.4,.7 h -1.5 v .5 l .9,.9 .1,.8 -1.4,.2 -.5,.8 -1.6,.2 -.9,.9 .6,.9 1.1,-.1 .5,.9 -1.6,1.3 .4,1.5 -2,-.6 -.1,.7 .4,1.1 -.3,1.4 -1.3,-.8 -.8,.8 1.1,.1 .1,1.5 -.6,1 1.1,.9 -.3,1.5 .8,.7 -.7,1 -1.2,-.5 -.9,2.2 -1.6,.7 z">
+          <title>Tennessee</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="tx" d="m 282.3,429 .3,-3 34.4,3.6 31.8,2.6 7.9,-99.3 .8,0 52.6,3.2 -1.4,42.7 2.7,1.3 2.5,3 1.5,.3 1.1,-1 1.2,.4 1.4,1 1.1,-1.5 2.3,1.7 .5,2.9 1.2,.7 2.3,-.1 3.5,1.9 2,-.1 1.4,-.4 2.3,2.2 2,-2.3 3.5,1.1 1.9,3 2.3,-.1 -.7,2.1 2.3,1.1 3,-2.6 2.6,1.7 1.3,-.5 .1,1.5 1.7,1.2 2.3,-2.5 1.2,.7 -.3,2 1,1.8 1.2,-.8 2.5,-4.2 1.8,2 2,.5 2.1,-.7 2,1.8 1.2,-.1 1.3,1.2 3.6,-.9 .6,-1.7 3.7,-.3 1.6,.7 5,-2.5 .6,1.5 5.1,-.3 .5,-1.6 2.2,.9 4.6,3.8 6.4,1.9 2.6,2.3 2.8,-1.3 3.2,.8 .2,11.9 .5,19.9 .7,3.4 2.6,2.8 .7,5.4 3.8,4.6 .8,4.3 h 1 l -.1,7.3 -3.3,6.4 1.3,2.3 -1.3,1.5 .7,3 -.1,4.3 -2.2,3.5 -.1,.8 -1.7,1.2 1,1.8 1.2,1.1 -3.5,.3 -8.4,3.9 -3.5,1.4 -1.8,1.8 -.7,-.5 2.1,-2.3 1.8,-.7 .5,-.9 -2.9,-.1 -.7,-.8 .8,-2 -.9,-1.8 h -.6 l -2.4,1.3 -1.9,2.6 .3,1.7 3.3,3.4 1.3,.3 v .8 l -2.3,1.6 -4.9,4 -4,3.9 -3.2,1.4 -5,3 -3.7,2 -4.5,1.9 -4.1,2.5 3.2,-3 v -1.1 l .6,-.8 -.2,-1.8 -1.5,-.1 -1.1,1.5 -2.6,1.3 -1.8,-1.2 -.3,-1.7 h -1.5 l .8,2.2 1.4,.7 1.2,.9 1.8,1.6 -.7,.8 -3.9,1.7 -1.7,.1 -1.2,-1.2 -.5,2.1 .5,1.1 -2.7,2 -1.5,.2 -.8,.7 -.4,1.7 -1.8,3.3 -1.6,.7 -1.6,-.6 -1.8,1.1 .3,1.4 1.3,.8 1,.8 -1.8,3.5 -.3,2.8 -1,1.7 -1.4,1 -2.9,.4 1.8,.6 1.9,-.6 -.4,3.2 -1.1,-.1 .2,1.2 .3,1.4 -1.3,.9 v 3.1 l 1.6,1.4 .6,3.1 -.4,2.2 -1,.4 .4,1.5 1.1,.4 .8,1.7 v 2.6 l 1.1,2.1 2.2,2.6 -.1,.7 -2.2,-.2 -1.6,1.4 .2,1.4 -.9,-.3 -1.4,-.2 -3.4,-3.7 -2.3,-.6 h -7.1 l -2.8,-.8 -3.6,-3 -1.7,-1 -2.1,.1 -3.2,-2.6 -5.4,-1.6 v -1.3 l -1.4,-1.8 -.9,-4.7 -1.1,-1.7 -1.7,-1.4 v -1.6 l -1.4,-.6 .6,-2.6 -.3,-2.2 -1.3,-1.4 .7,-3 -.8,-3.2 -1.7,-1.4 h -1.1 l -4,-3.5 .1,-1.9 -.8,-1.7 -.8,-.2 -.9,-2.4 -2,-1.6 -2.9,-2.5 -.2,-2.1 -1,-.7 .2,-1.6 .5,-.7 -1.4,-1.5 .1,-.7 -2,-2.2 .1,-2.1 -2.7,-4.9 -.1,-1.7 -1.8,-3.1 -5.1,-4.8 v -1.1 l -3.3,-1.7 -.1,-1.8 -1.2,-.4 v -.7 l -.8,-.2 -2.1,-2.8 h -.8 l -.7,-.6 -1.3,1.1 h -2.2 l -2.6,-1.1 h -4.6 l -4.2,-2.1 -1.3,1.9 -2.2,-.6 -3.3,1.2 -1.7,2.8 -2,3.2 -1.1,4.4 -1.4,1.2 -1.1,.1 -.9,1.6 -1.3,.6 -.1,1.8 -2.9,.1 -1.8,-1.5 h -1 l -2,-2.9 -3.6,-.5 -1.7,-2.3 -1.3,-.2 -2.1,-.8 -3.4,-3.4 .2,-.8 -1.6,-1.2 -1,-.1 -3.4,-3.1 -.1,-2 -2.3,-4 .2,-1.6 -.7,-1.3 .8,-1.5 -.1,-2.4 -2.6,-4.1 -.6,-4.2 -1.6,-1.6 v -1 l -1.2,-.2 -.7,-1.1 -2.4,-1.7 -.9,-.1 -1.9,-1.6 v -1.1 l -2.9,-1.8 -.6,-2.1 -2.6,-2.3 -3.2,-4.4 -3,-1.3 -2.1,-1.8 .2,-1.2 -1.3,-1.4 -1.7,-3.7 -2.4,-1 z m 174.9,138.3 .8,.1 -.6,-4.8 -3.5,-12.3 -.2,-8.1 4.9,-10.5 6.1,-8.2 7.2,-5.1 v -.7 h -.8 l -2.6,1 -3.6,2.3 -.7,1.5 -8.2,11.6 -2.8,7.9 v 8.8 l 3.6,12 z">
+          <title>Texas</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ut" d="m 233.2,217.9 3.3,-21.9 -47.9,-8.2 -21,109 46.2,8.2 40,6 11.5,-88.3 z">
+          <title>Utah</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="vt" d="m 859.1,102.4 -1.1,3.5 2.1,2.8 -.4,1.7 .1,1.3 -1.1,2.1 -1.4,.4 -.6,1.3 -2.1,1 -.7,1.5 1.4,3.4 -.5,2.5 .5,1.5 -1,1.9 .4,1.9 -1.3,1.9 .2,2.2 -.7,1.1 .7,4.5 .7,1.5 -.5,2.6 .9,1.8 -.2,2.5 -.5,1.3 -.1,1.4 2.1,2.6 -12.4,2.7 -1.1,-1 .5,-2 -3,-14.2 -1.9,-1.5 -.9,1.6 -.9,-2.2 .8,-1.8 -3.1,-6.7 .3,-3.8 .4,-1 -.6,-2 .4,-2.2 -2.2,-2.3 -.5,-3.2 .4,-1.5 -1.4,-.9 .6,-1.9 -.8,-1.7 27.3,-6.9 z">
+          <title>Vermont</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="va" d="m 834.7,265.4 -1.1,2.8 .5,1.1 .4,-1.1 .8,-3.1 z m -34.6,-7 -.7,-1 1,-.1 1,-.9 .4,-1.8 -.2,-.5 .1,-.5 -.3,-.7 -.6,-.5 -.4,-.1 -.5,-.4 -.6,-.6 h -1 l -.6,-.1 -.4,-.4 .1,-.5 -1.7,-.6 -.8,.3 -1.2,-.1 -.7,-.7 -.5,-.2 -.2,-.7 .6,-.8 v -.9 l -1.2,-.2 -1,-.9 -.9,.1 -1.6,-.3 -.4,.7 -.4,1.6 -.5,2.3 -10,-5.2 -.2,.9 .9,1.6 -.8,2.3 .1,2.9 -1.2,.8 -.5,2.1 -.9,.8 -1.4,1.8 -.9,.8 -1,2.5 -2.4,-1.1 -2.3,8.5 -1.3,1.6 -2.8,-.5 -1.3,-1.9 -2.3,-.7 -.1,4.7 -1.4,1.7 .4,1.5 -2.1,2.2 .4,1.9 -3.7,6.3 -1,3.3 1.5,1.2 -1.5,1.9 .1,1.4 -2.3,2 -.7,-1.1 -4.3,3.1 -1.5,-1 -.6,1.4 .8,.5 -.5,.9 -5.5,2.4 -3,-1.8 -.8,1.7 -1.9,1.8 -2.3,.1 -4.4,-2.3 -.1,-1.5 -1.5,-.7 .8,-1.2 -.7,-.6 -4.9,6.6 -2.9,1 -3,3 -.4,2.2 -2.1,1.3 -.1,1.7 -1.4,1.4 -1.8,.5 -.5,1.9 -1,.4 -6.9,4.2 28.9,-3.3 .2,-1 4.6,-.5 -.3,.7 29.4,-3.5 39.4,-7.3 29.1,-6.1 -.6,-1.2 .4,-.1 .9,.9 -.1,-1.4 -.3,-1.9 1.6,1.2 .9,2.1 v -1.3 l -3.4,-5.5 v -1.2 l -.7,-.8 -1.3,.7 .5,1.4 h -.8 l -.4,-1 -.6,.9 -.9,-1.1 -2.1,-.1 -.2,.7 1.5,2.1 -1.4,-.7 -.5,-1 -.4,.8 -.8,.1 -1.5,1.7 .3,-1.6 v -1.4 l -1.5,-.7 -1.8,-.5 -.2,-1.7 -.6,-1.3 -.6,1.1 -1.7,-1 -2,.3 .2,-.9 1.5,-.2 .9,.5 1.7,-.8 .9,.4 .5,1 v .7 l 1.9,.4 .3,.9 .9,.4 .9,1.2 1.4,-1.6 h .6 l -.1,-2.1 -1.3,1 -.6,-.9 1.5,-.2 -1.2,-.9 -1.2,.6 -.1,-1.7 -1.7,.2 -2.2,-1.1 -1.8,-2.2 3.6,2.2 .9,.3 1.7,-.8 -1.7,-.9 .6,-.6 -1,-.5 .8,-.2 -.3,-.9 1.1,.9 .4,-.8 .4,1.3 1.2,.8 .6,-.5 -.5,-.6 -.1,-2.5 -1.1,-.1 -1.6,-.8 .9,-1.1 -2,-.1 -.4,-.5 -1.4,.6 -1.4,-.8 -.5,-1.2 -2.1,-1.2 -2.1,-1.8 -2.2,-1.9 3,1.3 .9,1.2 2.1,.7 2.3,2.5 .2,-1.7 .6,1.3 2.3,.5 v -4 l -.8,-1.1 1.1,.4 .1,-1.6 -3.1,-1.4 -1.6,-.2 -1.3,-.2 .3,-1.2 -1.5,-.3 -.1,-.6 h -1.8 l -.2,.8 -.7,-1 h -2.7 l -1,-.4 -.2,-1 -1.2,-.6 -.4,-1.5 -.6,-.4 -.7,1.1 -.9,.2 -.9,.7 h -1.5 l -.9,-1.3 .4,-3.1 .5,-2.4 .6,.5 z m 21.9,11.6 .9,-.1 0,-.6 -.8,.1 z m 7.5,14.2 -1,2.7 1.2,-1.3 z m -1.8,-15.3 .7,.3 -.2,1.9 -.5,-.5 -1.3,1 1,.4 -1.8,4.4 .1,8.1 1.9,3.1 .5,-1.5 .4,-2.7 -.3,-2.3 .7,-.9 -.2,-1.4 1.2,-.6 -.6,-.5 .5,-.7 .8,1.1 -.2,1.1 -.4,3.9 1.1,-2.2 .4,-3.1 .1,-3 -.3,-2 .6,-2.3 1.1,-1.8 .1,-2.2 .3,-.9 -4.6,1.6 -.7,.8 z">
+          <title>Virginia</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="wa" d="m 161.9,83.6 .7,4 -1.1,4.3 -30.3,-7.3 -2.8,1 -5.4,-.9 -1.8,-.9 -1.5,1.2 -3.3,-.4 -4.5,.5 -.9,.7 -4.2,-.4 -.8,-1.6 -1.2,-.2 -4.4,1.3 -1.6,-1.1 -2.2,.8 -.2,-1.8 -2.3,-1.2 -1.5,-.2 -1,-1.1 -3,.3 -1.2,-.8 h -1.2 l -1.2,.9 -5.5,.7 -6.6,-4.2 1.1,-5.6 -.4,-4.1 -3.2,-3.7 -3.7,.1 -.4,-1.1 .4,-1.2 -.7,-.8 -1,.1 -2.1,-1.5 -1.2,.4 -2,-.1 -.7,-1.5 -1.6,-.3 2.5,-7.5 -.7,6 .5,.5 v -2 l .8,-.2 1.1,2.3 -.5,-2.2 1.2,-4.2 1.8,.4 -1.1,-2 -1,.3 -1.5,-.4 .2,-4.2 .2,1.5 .9,.5 .6,-1.6 h 3.2 l -2.2,-1.2 -1.7,-1.9 -1.4,1.6 1.2,-3.1 -.3,-4.6 -.2,-3.6 .9,-6.1 -.5,-2 -1.4,-2.1 .1,-4 .4,-2.7 2,-2.3 -.7,-1.4 .2,-.6 .9,.1 7.8,7.6 4.7,1.9 5.1,2.5 3.2,-.1 .2,3 1,-1.6 h .7 l .6,2.7 .5,-2.6 1.4,-.2 .5,.7 -1.1,.6 .1,1.6 .7,-1.5 h 1.1 l -.4,2.6 -1.1,-.8 .4,1.4 -.1,1.5 -.8,.7 -2.5,2.9 1.2,-3.4 -1.6,.4 -.4,2.1 -3.8,2.8 -.4,1 -2.1,2.2 -.1,1 h 2.2 l 2.4,-.2 .5,-.9 -3.9,.5 v -.6 l 2.6,-2.8 1.8,-.8 1.9,-.2 1,-1.6 3,-2.3 v -1.4 h 1.1 l .1,4 h -1.5 l -.6,.8 -1.1,-.9 .3,1.1 v 1.7 l -.7,.7 -.3,-1.6 -.8,.8 .7,.6 -.9,1.1 h 1.3 l .7,-.5 .1,2 -1,1.9 -.9,1 -.1,1.8 -1,-.2 -.2,-1.4 .9,-1.1 -.8,-.5 -.8,.7 -.7,2.2 -.8,.9 -.1,-2 .8,-1.1 -.2,-1.1 -1.2,1.2 .1,2.2 -.6,.4 -2.1,-.4 -1.3,1.2 2.2,-.6 -.2,2.2 1,-1.8 .4,1.4 .5,-1 .7,1.8 h .7 l .7,-.8 .6,-.1 2,-1.9 .2,-1.2 .8,.6 .3,.9 .7,-.3 .1,-1.2 h 1.3 l .2,-2.9 -.1,-2.7 .9,.3 -.7,-2.1 1.4,-.8 .2,-2.4 2.3,-2.2 1,.1 .3,-1.4 -1.2,-1.4 -.1,-3.5 -.8,.9 .7,2.9 -.6,.1 -.6,-1.9 -.6,-.5 .3,-2.3 1.8,-.1 .3,.7 .3,-1.6 -1.6,-1.7 -.6,-1.6 -.2,2 .9,1.1 -.7,.4 -1,-.8 -1.8,1.3 1.5,.5 .2,2.4 -.3,1.8 .9,-1.3 1.4,2.3 -.4,1.9 h -1.5 v -1.2 l -1.5,-1.2 .5,-3 -1.9,-2.6 2.7,-3 .6,-4.1 h .9 l 1.4,3.2 v -2.6 l 1.2,.3 v -3.3 l -.9,-.8 -1.2,2.5 -1,-3 1.3,-.1 -1.5,-4.9 1.9,-.6 25.4,7.5 31.7,8 23.6,5.5 z m -78.7,-39.4 h .5 l .1,.8 -.5,.3 .1,.6 -.7,.4 -.2,-.9 .5,-.4 z m 5,-4.3 -1.2,1.9 -.1,.8 .4,.2 .5,-.6 1.1,.1 z m -.4,-21.6 .5,.6 1.3,-.3 .2,-1 1.2,-1.8 -1,-.4 -.7,1.6 -.1,-1.6 -1.1,.2 -.7,1.4 z m 3.2,-5.5 .7,1.5 -.9,.2 -.8,.4 -.2,-2.4 z m -2.7,-1.6 -1.1,-.2 .5,1.4 z m -1,2.5 .8,.4 -.4,1.1 1.7,-.5 -.2,-2.2 -.9,-.2 z m -2.7,-.4 .3,2.7 1.6,1.3 .6,-1.9 -1.1,-2.2 z m 1.9,-1.1 -1.1,-1 -.9,.1 1.8,1.5 z m 3.2,-7 h -1.2 v .8 l 1.2,.6 z m -.9,32.5 .4,-2.7 h -1.1 l -.2,1.9 z">
+          <title>Washington</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="wv" d="m 723.4,297.5 -.8,1.2 1.5,.7 .1,1.5 4.4,2.3 2.3,-.1 1.9,-1.8 .8,-1.7 3,1.8 5.5,-2.4 .5,-.9 -.8,-.5 .6,-1.4 1.5,1 4.3,-3.1 .7,1.1 2.3,-2 -.1,-1.4 1.5,-1.9 -1.5,-1.2 1,-3.3 3.7,-6.3 -.4,-1.9 2.1,-2.2 -.4,-1.5 1.4,-1.7 .1,-4.7 2.3,.7 1.3,1.9 2.8,.5 1.3,-1.6 2.3,-8.5 2.4,1.1 1,-2.5 .9,-.8 1.4,-1.8 .9,-.8 .5,-2.1 1.2,-.8 -.1,-2.9 .8,-2.3 -.9,-1.6 .2,-.9 10,5.2 .5,-2.3 .4,-1.6 .4,-.7 -.9,-.4 .2,-1.6 -1,-.5 -.2,-.7 h -.7 l -.8,-1.2 .2,-1 -2.6,.4 -2.2,-1.6 -1.4,.3 -.9,1.4 h -1.3 l -1.7,2.9 -3.3,.4 -1.9,-1 -2.6,3.8 -2.2,-.3 -3.1,3.9 -.9,1.6 -1.8,1.6 -1.7,-11.4 -17.4,2.9 -3.2,-19.7 -2.2,1.2 1.4,2.1 -.1,2.2 .6,2 -1.1,3.4 -.1,5.4 -1,3.6 .5,1.1 -.4,2.2 -1.1,.5 -2,3.3 -1.8,2 h -.6 l -1.8,1.7 -1.3,-1.2 -1.5,1.8 -.3,1.2 h -1.3 l -1.3,2.2 .1,2.1 -1,.5 1.4,1.1 v 1.9 l -1,.2 -.7,.8 -1,.5 -.6,-2.1 -1.6,-.5 -1,2.3 -.3,2.2 -1.1,1.3 1.3,3.6 -1.5,.8 -.4,3.5 h -1.5 l -3.2,1.4 -.1,1.1 .6,1 -.6,3.6 1.9,1.6 .8,1.1 1,.6 -.1,.9 4.4,5.6 h 1.4 l 1.5,1.8 1.2,.3 1.4,-.1 z">
+          <title>West Virginia</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="wi" d="m 611,144 -2.9,.8 .2,2.3 -2.4,3.4 -.2,3.1 .6,.7 .8,-.7 .5,-1.6 2,-1.1 1.6,-4.2 3.5,-1.1 .8,-3.3 .7,-.9 .4,-2.1 1.8,-1.1 v -1.5 l 1,-.9 1.4,.1 v 2 l -1,.1 .5,1.2 -.7,2.2 -.6,.1 -1.2,4.5 -.7,.5 -2.8,7.2 -.3,4.2 .6,2 .1,1.3 -2.4,1.9 .3,1.9 -.9,3.1 .3,1.6 .4,3.7 -1.1,4.1 -1.5,5 1,1.5 -.3,.3 .8,1.7 -.5,1.1 1.1,.9 v 2.7 l 1.3,1.5 -.4,3 .3,4 -45.9,2.8 -1.3,-2.8 -3.3,-.7 -2.7,-1.5 -2,-5.5 .1,-2.5 1.6,-3.3 -.6,-1.1 -2.1,-1.6 -.2,-2.6 -1.1,-4.5 -.2,-3 -2.2,-3 -2.8,-.7 -5.2,-3.6 -.6,-3.3 -6.3,-3.1 -.2,-1.3 h -3.3 l -2.2,-2.6 -2,-1.3 .7,-5.1 -.9,-1.6 .5,-5.4 1,-1.8 -.3,-2.7 -1.2,-1.3 -1.8,-.3 v -1.7 l 2.8,-5.8 5.9,-3.9 -.4,-13 .9,.4 .6,-.5 .1,-1.1 .9,-.6 1.4,1.2 .7,-.1 h 2.6 l 6.8,-2.6 .3,-1 h 1.2 l .7,-1.2 .4,.8 1.8,-.9 1.8,-1.7 .3,.5 1,-1 2.2,1.6 -.8,1.6 -1.2,1.4 .5,1.5 -1.4,1.6 .4,.9 2.3,-1.1 v -1.4 l 3.3,1.9 1.9,.7 1.9,.7 3,3.8 17,3.8 1.4,1 4,.8 .7,.5 2.8,-.2 4.9,.8 1.4,1.5 -1,1 .8,.8 3.8,.7 1.2,1.2 .1,4.4 -1.3,2.8 2,.1 1,-.8 .9,.8 -1.1,3.1 1,1.6 1.2,.3 z m -49.5,-37.3 -.5,.1 -1.5,1.6 .2,.5 1.5,-.6 v -.6 l .9,-.3 z m 1.6,-1.1 -1,.3 -.2,.7 .9,-.1 z m -1.3,-1.6 -.2,.9 h 1.7 l .6,-.4 .1,-1 z m 2.8,-3 -.3,1.9 1.2,-.5 .1,-1.4 z m 58.3,31.9 -2,.3 -.4,1.3 1.3,1.7 z">
+          <title>Wisconsin</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="wy" d="m 355.3,143.7 -51,-5.3 -57.3,-7.9 -2,10.7 -8.5,54.8 -3.3,21.9 32.1,4.8 44.9,5.7 37.5,3.4 3.7,-44.2 z">
+          <title>Wyoming</title></path>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="dc" d="m 803.5,252 -2.6,-1.8 -1,1.7 .5,.4 .4,.1 .6,.5 .3,.7 -.1,.5 .2,.5 z">
+          <title>District of Columbia</title></path>
+
+          </g>
+
+          <g class="borders" fill="none">
+          <path style="cursor:pointer;transition:opacity 0.12s" class="al-fl" d="m 687.6,447.4 -48.8,5.1 -.5,2.9 2.5,2.8 1.7,.7 .9,1.2 -.4,7.3 -1.1,.6"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="al-ga" d="m 666.6,361.1 12.9,45.8 2.9,6.1 1.8,1.9 v 3.2 l 1.7,1 .2,1.1 -2.2,3.8 -.3,3.7 -.5,2.6 2.4,5.7 -.6,6.3 .5,1.4 1.5,1.5 .7,2.2"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="al-ms" d="m 620.9,365.1 1.3,2 -1.3,67 4.4,33.2"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="al-tn" d="m 620.9,365.1 45.7,-4"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ar-la" d="m 516.7,414.2 52.3,-1.3"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ar-mo" d="m 591.7,344.9 -11.2,.8 2.8,-5.1 1.7,-1.5 v -2.2 l -1.6,-2.5 -39.8,2 -39.1,.7"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ar-ms" d="m 569,412.9 1.2,-1.5 .5,-3 -1.5,-2.3 -.5,-2.2 .9,-.7 v -.8 l -1.7,-1.1 -.1,-.7 1.6,-.9 -1.2,-1.1 1.7,-7.1 3.4,-1.6 0,-.8 -1.1,-1.4 2.9,-5.4 h 1.9 l 1.5,-1.2 -.3,-5.2 3.1,-4.5 1.8,-.6 -.5,-3.1"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ar-ok" d="m 507.9,400.5 .7,-39 -4.1,-24.4"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ar-tn" d="m 582.6,367.7 1.6,-.7 .9,-2.2 1.2,.5 .7,-1 -.8,-.7 .3,-1.5 -1.1,-.9 .6,-1 -.1,-1.5 -1.1,-.1 .8,-.8 1.3,.8 .3,-1.4 -.4,-1.1 .1,-.7 2,.6 -.4,-1.5 1.6,-1.3 -.5,-.9 -1.1,.1 -.6,-.9 .9,-.9 1.6,-.2 .5,-.8 1.4,-.2 -.1,-.8 -.9,-.9 0,-.5 h 1.5 l .4,-.7 -1.4,-1 -.1,-.6"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ar-tx" d="m 507.9,400.5 2.6,2.3 2.8,-1.3 3.2,.8 .2,11.9"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="az-ca" d="m 149,338.1 -.9,2.1 1.3,3.4 1.4,1.8 1.2,5.8 2.3,2.5 .4,1.9 -1.3,1.3 -4.8,1.7 -2.4,3.6 -1.6,7 -2.4,3.2 -1.6,.3 -1.1,6.9 1.1,1.6 1.8,.2 1,1.6 -.8,2.4 -3,2.2 -2.2,-.1"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="az-nm" d="m 253.8,311 -17.4,124.1"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="az-nv" d="m 167.6,296.8 -3.4,17.5 -2.4,2.9 h -2 l -1.2,-2.7 -3.7,-1.4 -3.5,.6 -1,13.6 .5,4.9 -.5,2.9 -1.4,3"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="az-ut" d="m 167.6,296.8 46.2,8.2 40,6"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ca-nv" d="m 93.9,166.5 -16.4,63.1 1.1,3.5 70.4,105"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ca-or" d="m 27.8,147.9 66.1,18.6"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="co-ks" d="m 379.4,256.3 -4.8,67"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="co-ne" d="m 347.7,231.8 33.1,2.4 -1.4,22.1"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="co-nm" d="m 253.8,311 52.6,6.5 51.7,4.8"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="co-ok" d="m 358.1,322.3 16.5,1"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="co-ut" d="m 265.3,222.7 -11.5,88.3"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="co-wy" d="m 265.3,222.7 44.9,5.7 37.5,3.4"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ct-ma" d="m 843.8,171.3 10.5,-2.4 .5,.7 .9,-.3 0,-.7 14.9,-3.4 .1,.3"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ct-ny" d="m 846.6,194.7 -1.7,-2.2 3.5,-3.4 -1.8,-1.5 -2.8,-16.3"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ct-ri" d="m 870.7,165.5 3.2,12.3 -.4,1.1 .4,1.8"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="dc-md" d="m 801.8,254.6 1.7,-2.6 -2.6,-1.8 -1,1.7"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="dc-va" d="m 799.9,251.9 .5,.4 .4,.1 .6,.5 .3,.7 -.1,.5 .2,.5"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="de-md" d="m 817.9,230.1 7.6,27.1 10.9,-2.3"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="de-nj" d="m 823.8,227.2 -1,2.2 -.3,2.1"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="de-pa" d="m 817.9,230.1 1.2,-2.1 1.5,-1.1 1.6,-.3 1.6,.6"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="fl-ga" d="m 687.6,447.4 3.3,6 50.1,-3.3 .6,3.2 1,1.1 2.1,-.6 .5,-4.3 -1.4,-2.1 v -2.5 l 2.2,-1.4 1.7,.9 4,.7 3.6,-.3"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ga-nc" d="m 689.5,358.2 21.4,-3"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ga-sc" d="m 710.9,355.2 -.1,1.9 -1.9,1 -1.4,3.2 .2,1.3 6.1,3.8 2.6,-.3 3.1,4 .4,1.7 4.2,5.1 2.6,1.7 1.4,.2 2.2,1.6 1.1,2.2 2,1.6 1.8,.5 2.7,2.7 .1,1.4 2.6,2.8 5,2.3 3.6,6.7 .3,2.7 3.9,2.1 2.5,4.8 .8,3.1 4.2,.4"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ga-tn" d="m 666.6,361.1 22.9,-2.9"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ia-il" d="m 556.8,249.7 .7,-.7 .1,-2.3 -.7,-.9 1,-1.5 1.8,-.6 .9,-.3 1,-1.2 0,-2.4 1.7,-2.4 .5,-.5 .1,-3.5 -.9,-1.4 -1,-.3 -1.1,-1.6 1,-4 3,-.8 h 2.4 l 4.2,-1.8 1.7,-2.2 .1,-2.4 1.1,-1.3 1.3,-3.2 -.1,-2.6 -2.8,-3.5 -1.2,0 -.9,-1.1 .2,-1.6 -1.7,-1.7 -2.5,-1.3 .5,-.6"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ia-mn" d="m 473.6,182 28.2,0 36.3,-.9 18.6,-.7"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ia-mo" d="m 484.5,246.8 25.9,.1 27.2,-1.2 14.3,-.8 1.7,1.3 .6,1.6 1.1,1.1 1.5,.8"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ia-ne" d="m 484.5,246.8 -1.8,-4.4 .7,-2.2 -.8,-3.3 .2,-2.9 -1.3,-.7 -.4,-6.1 -2.8,-5 -.2,-3.7 -2.2,-4.3 -1.3,-3.7 v -1.4 l -.6,-1.7 v -2.3 l -.5,-.9"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ia-sd" d="m 473.5,204.2 -.7,-1.7 -.3,-1.3 -1.3,-1.2 1,-4.3 1.7,-5.1 -.7,-2 -1.3,-.4 -.4,-1.6 1,-.5 .1,-1.1 -1.3,-1.5 .1,-1.6 2.2,.1"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ia-wi" d="m 567.2,202 -1.3,-2.8 -3.3,-.7 -2.7,-1.5 -2,-5.5 .1,-2.5 1.6,-3.3 -.6,-1.1 -2.1,-1.6 -.2,-2.6"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="id-mt" d="m 188.8,30.5 -4.8,22 3.7,7.4 -1.6,4.8 3.6,4.8 1.9,.7 3.9,8.3 v 2.1 l 2.3,3 h .9 l 1.4,2.1 h 3.2 v 1.6 l -7.1,17 -.5,4.1 1.4,.5 1.6,2.6 2.8,-1.4 3.6,-2.4 1.9,1.9 .5,2.5 -.5,3.2 2.5,9.7 2.6,3.5 2.3,1.4 .4,3 v 4.1 l 2.3,2.3 1.6,-2.3 6.9,1.6 2.1,-1.2 9,1.7 2.8,-3.3 1.8,-.6 1.2,1.8 1.6,4.1 .9,.1"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="id-nv" d="m 140.9,177.7 24.4,5.4 23.3,4.7"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="id-or" d="m 140.9,177.7 8.5,-37.3 2.9,-5.8 .4,-2.1 .8,-.9 -.9,-2 -2.9,-1.2 .2,-4.2 4,-5.8 2.5,-.8 1.6,-2.3 -.1,-1.6 1.8,-1.6 3.2,-5.5 4.2,-4.8 -.5,-3.2 -3.5,-3.1 -1.6,-3.6"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="id-ut" d="m 236.5,196 -47.9,-8.2"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="id-wa" d="m 174.6,27.5 -12.7,56.1 .7,4 -1.1,4.3"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="id-wy" d="m 245,141.2 -8.5,54.8"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="il-in" d="m 619.4,215.7 4.1,50.2 -1,5.2 v 2 l 2.4,3.5 v .7 l -.3,.9 .9,1.9 -.3,2.4 -1.6,1.8 -1.3,4.2 -3.8,5.3 -.1,7 h -1 l .9,1.9"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="il-ky" d="m 599.9,322.5 -.3,-1.8 4,-3.7 6.9,3 1.5,-.3 .4,-2.4 -1.7,-1.8 .4,-3.3 1,-.5 1.2,.6 .6,-1.2 3.7,-.6 .1,-.9 -1.5,-2.2 -.1,-1.1 2.2,-2.7 v -.9"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="il-mo" d="m 599.9,322.5 -2.8,0 -1.4,-1.5 -1.8,-3.8 v -1.9 l .8,-.6 .1,-1.3 -1.7,-1.9 -.9,-2.5 -2.7,-4.1 -4.8,-1.3 -7.4,-7.1 -.4,-2.4 2.8,-7.6 -.4,-1.9 1.2,-1.1 v -1.3 l -2.8,-1.5 -3,-.7 -3.4,1.2 -1.3,-2.3 .6,-1.9 -.7,-2.4 -8.6,-8.4 -2.2,-1.5 -2.5,-5.9 -1.2,-5.4 1.4,-3.7"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="il-wi" d="m 567.2,202 45.9,-2.8"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="in-ky" d="m 618.3,302.7 1.1,.8 .6,-1 -.7,-1.7 4.6,-.5 .2,1.2 1.1,.2 .4,-.9 -.6,-1.3 .3,-.8 1.3,.8 1.7,-.4 1.7,.6 3.4,2.1 1.8,-2.8 3.5,-2.2 3,3.3 1.6,-2.1 .3,-2.7 3.8,-2.3 .2,1.3 1.9,1.2 3,-.2 1.2,-.7 .1,-3.4 2.5,-3.7 4.6,-4.4 -.1,-1.7 1.2,-3.8 2.2,1 6.7,-4.5 -.4,-1.7 -1.5,-2.1 1,-1.9"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="in-mi" d="m 630.9,213.2 32.4,-3.4 .1,1.4"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="in-oh" d="m 670,268.4 -6.6,-57.2"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ks-mo" d="m 504.3,326.3 -.5,-48.1 -3.2,-.7 -2.6,-4.7 -2.5,-2.5 .5,-2.3 2.7,-2.6 .1,-1.2 -1.5,-2.1 -.9,1 -2,-.6 -2.9,-3"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ks-ne" d="m 379.4,256.3 36,2 43.7,1.2 h 32.4"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ks-ok" d="m 374.6,323.3 67.7,2.9 62,.1"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ky-mo" d="m 596.7,333.5 1,-2.7 1.4,.9 .7,-.4 1.2,-4.1 -1,-1 1,-2 .2,-.9 -1.3,-.8 m -5.8,11.3 -.7,-.7 .2,-1 h 1.1 l .7,.7 -.3,1"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ky-oh" d="m 670,268.4 1.3,.5 2.2,.1 1.9,-.8 2.9,1.2 2.2,3.4 v 1 l 4.1,.7 2.3,-.2 1.9,2.1 2.2,.2 v -1 l 1.9,-.8 3,.8 1.2,.8 1.3,-.7 h .9 l .6,-1.7 3.4,-1.8 .5,.8 .8,2.9 3.5,1.4 1.2,2.1"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ky-tn" d="m 596.7,333.5 23.3,-1.5 .6,-.9 -1.2,-3.2 h 3.7 l .7,.6 22.6,-2 2.6,-.8 17.4,-1 5.2,-.8 20.5,-1.4 5.6,-1.4 m -103.6,12.7 h 1"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ky-va" d="m 697.7,321.1 6.9,-4.2 1,-.4 .5,-1.9 1.8,-.5 1.4,-1.4 .1,-1.7 2.1,-1.3 .4,-2.2 3,-3 2.9,-1 4.9,-6.6"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ky-wv" d="m 709.3,279.4 -.1,1.1 .6,1 -.6,3.6 1.9,1.6 .8,1.1 1,.6 -.1,.9 4.4,5.6 h 1.4 l 1.5,1.8 1.2,.3 1.4,-.1"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="la-ms" d="m 569,412.9 -.6,1.4 1.6,7.1 1.2,1 -.5,1.7 2.4,2.5 v 3.3 l -2,0 1.8,2.5 -6,8.4 -2.4,4.8 -1.7,11.9 36,-2 -.1,1.4 -1,1.4 -.9,4.6 4.8,6.8 -.3,1.3 1.2,1.8 .6,.7"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="la-tx" d="m 516.7,414.2 .5,19.9 .7,3.4 2.6,2.8 .7,5.4 3.8,4.6 .8,4.3 h 1 l -.1,7.3 -3.3,6.4 1.3,2.3 -1.3,1.5 .7,3 -.1,4.3 -2.2,3.5 -.1,.8 -1.7,1.2 1,1.8 1.2,1.1"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ma-nh" d="m 856,152.6 18.4,-3.8 1,-1.5 .3,-1.7 1.9,-.6 .5,-1.1 1.7,-1.1 1.3,.3"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ma-ny" d="m 843.8,171.3 -.7,-1 .5,-15"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ma-ri" d="m 870.7,165.5 6.5,-2 .7,2.6 h .8 l .6,2.2 2.6,1.3 1.3,1.1 1.4,3"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ma-vt" d="m 843.6,155.3 12.4,-2.7"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="md-pa" d="m 757.4,241.9 60.5,-11.8"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="md-va" d="m 822.9,269.3 -.8,.1 m 13.2,-4.3 -.6,.3 m -1.3,.2 -4.6,1.6 -.7,.8 m -28.2,-16.1 -.6,-.6 h -1 l -.6,-.1 -.4,-.4 .1,-.5 -1.7,-.6 -.8,.3 -1.2,-.1 -.7,-.7 -.5,-.2 -.2,-.7 .6,-.8 v -.9 l -1.2,-.2 -1,-.9 -.9,.1 -1.6,-.3 m 11.6,13.5 .3,-.4 -.7,-1 1,-.1 1,-.9 .4,-1.8"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="md-wv" d="m 757.4,241.9 1.7,11.4 1.8,-1.6 .9,-1.6 3.1,-3.9 2.2,.3 2.6,-3.8 1.9,1 3.3,-.4 1.7,-2.9 h 1.3 l .9,-1.4 1.4,-.3 2.2,1.6 2.6,-.4 -.2,1 .8,1.2 h .7 l .2,.7 1,.5 -.2,1.6 .9,.4"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="me-nh" d="m 881.9,138.3 -2.3,-1.4 -.8,-2.2 -3.2,-2 -.6,-4 -11.9,-36.8"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="mi-oh" d="m 663.4,211.2 21.4,-3.5"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="mi-wi" d="m 565.6,112.3 1.9,.7 3,3.8 17,3.8 1.4,1 4,.8 .7,.5 2.8,-.2 4.9,.8 1.4,1.5 -1,1 .8,.8 3.8,.7 1.2,1.2 .1,4.4 -1.3,2.8 2,.1 1,-.8 .9,.8 -1.1,3.1 1,1.6 1.2,.3"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="mn-nd" d="m 462.3,61.3 2.4,7.3 -1.1,2.8 .8,1.4 -.3,5.1 -.5,1.1 2.7,9.1 1.3,2.5 .7,14 1,2.7 -.4,5.8 2.9,7.4 .3,5.8 -.1,2.1"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="mn-sd" d="m 473.6,182 .2,-39.5 -1.5,-1.9 -2.6,-.6 -.4,-1.8 -1.7,-2.5 .3,-1.2 3.1,-1.9 .9,-2 .1,-2.2"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="mn-wi" d="m 556.7,180.4 -1.1,-4.5 -.2,-3 -2.2,-3 -2.8,-.7 -5.2,-3.6 -.6,-3.3 -6.3,-3.1 -.2,-1.3 -3.3,0 -2.2,-2.6 -2,-1.3 .7,-5.1 -.9,-1.6 .5,-5.4 1,-1.8 -.3,-2.7 -1.2,-1.3 -1.8,-.3 v -1.7 l 2.8,-5.8 5.9,-3.9 -.4,-13 .9,.4 .6,-.5 .1,-1.1 .9,-.6 1.4,1.2 .7,-.1"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="mo-ne" d="m 491.5,259.5 -3.9,-6.3 -2.1,-3.7 .3,-1.4 -1.3,-1.3"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="mo-ok" d="m 504.3,326.3 .2,10.8"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="mo-tn" d="m 591.7,344.9 1,-2 1.2,-.5 v -.7 l -1.2,-1.1 -.6,-1 1.7,.2 .8,-.7 -1.4,-1.5 1.4,-.5 .1,-1 -.6,-1 0,-1.3 m 1,0 .8,.7 .8,-1"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ms-tn" d="m 582.6,367.7 38.3,-2.6"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="mt-nd" d="m 362.5,56.3 -5.2,66.7"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="mt-sd" d="m 357.3,123 -2,20.7"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="mt-wy" d="m 355.3,143.7 -51,-5.3 -57.3,-7.9 -2,10.7"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="nc-sc" d="m 710.9,355.2 4.4,-1.9 1.3,-.1 7.3,-4.3 23.2,-2.2 .4,.5 -.2,1.4 .7,.3 1.2,-1.5 3.3,3 .1,2.6 19.7,-2.8 24.5,17.1"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="nc-tn" d="m 731.1,317 0,5.2 -1.5,-.1 -1.4,1.2 -2.4,5.2 -2.6,-1.1 -3.5,2.5 -.7,2.1 -1.5,1.2 -.8,-.8 -.1,-1.5 -.8,-.2 -4,3.3 -.6,3.4 -4.7,2.4 -.5,1.2 -3.2,2.6 -3.6,.5 -4.6,3 -.8,4.1 -1.3,.9 -1.5,-.1 -1.4,1.3 -.1,4.9"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="nc-va" d="m 731.1,317 29.4,-3.5 39.4,-7.3 29.1,-6.1"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="nd-sd" d="m 357.3,123 39.2,2.9 46,2.1 29.5,.4"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ne-sd" d="m 351.4,187.6 51.1,3.5 38,1.6 3.4,3.2 1.7,.2 2.1,2 1.8,-.1 1.8,-2 1.5,.6 1,-.7 .7,.5 .9,-.4 .7,.4 .9,-.4 1,.5 1.4,-.6 2,.6 .6,1.1 6.1,2.2 1.2,1.3 .9,2.6 1.8,.7 1.5,-.2"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ne-wy" d="m 347.7,231.8 3.7,-44.2"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="nh-vt" d="m 857.9,100.1 1.2,2.3 -1.1,3.5 2.1,2.8 -.4,1.7 .1,1.3 -1.1,2.1 -1.4,.4 -.6,1.3 -2.1,1 -.7,1.5 1.4,3.4 -.5,2.5 .5,1.5 -1,1.9 .4,1.9 -1.3,1.9 .2,2.2 -.7,1.1 .7,4.5 .7,1.5 -.5,2.6 .9,1.8 -.2,2.5 -.5,1.3 -.1,1.4 2.1,2.6"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="nj-ny" d="m 827.9,190.5 14.6,4.9 -.4,5.9"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="nj-pa" d="m 823.8,227.2 1.4,-1.7 1.6,-.6 1.8,-3 1.6,-2.3 3.3,-2.6 -4.2,-3.2 -2.1,-1.1 -1,-2.8 -2.7,-.9 -.5,-3.6 1,-1 .7,-2 -1.5,-1.8 3,-5.4 -.1,-2.2 1.8,-2.5"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="nm-ok" d="m 358.1,322.3 -.6,10.6"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="nm-tx" d="m 284.3,431.2 -2,-2.2 .3,-3 34.4,3.6 31.8,2.6 7.9,-99.3 .8,0"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="nv-or" d="m 93.9,166.5 47,11.2"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="nv-ut" d="m 188.6,187.8 -21,109"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ny-pa" d="m 827.9,190.5 -1.6,-1.1 -1.9,.3 -3,-2.2 -3,-5.8 h -2 l -.4,-1.5 -1.7,-1.1 -70.5,13.9 -.8,-6"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ny-vt" d="m 843.6,155.3 -1.1,-1 .5,-2 -3,-14.2 -1.9,-1.5 -.9,1.6 -.9,-2.2 .8,-1.8 -3.1,-6.7 .3,-3.8 .4,-1 -.6,-2 .4,-2.2 -2.2,-2.3 -.5,-3.2 .4,-1.5 -1.4,-.9 .6,-1.9 -.8,-1.7"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="oh-pa" d="m 736.8,225.1 -4.9,-29.9"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="oh-wv" d="m 709.3,279.4 3.2,-1.4 h 1.5 l .4,-3.5 1.5,-.8 -1.3,-3.6 1.1,-1.3 .3,-2.2 1,-2.3 1.6,.5 .6,2.1 1,-.5 .7,-.8 1,-.2 v -1.9 l -1.4,-1.1 1,-.5 -.1,-2.1 1.3,-2.2 h 1.3 l .3,-1.2 1.5,-1.8 1.3,1.2 1.8,-1.7 h .6 l 1.8,-2 2,-3.3 1.1,-.5 .4,-2.2 -.5,-1.1 1,-3.6 .1,-5.4 1.1,-3.4 -.6,-2 .1,-2.2 -1.4,-2.1 2.2,-1.2"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ok-tx" d="m 357.5,332.9 52.6,3.2 -1.4,42.7 2.7,1.3 2.5,3 1.5,.3 1.1,-1 1.2,.4 1.4,1 1.1,-1.5 2.3,1.7 .5,2.9 1.2,.7 2.3,-.1 3.5,1.9 2,-.1 1.4,-.4 2.3,2.2 2,-2.3 3.5,1.1 1.9,3 2.3,-.1 -.7,2.1 2.3,1.1 3,-2.6 2.6,1.7 1.3,-.5 .1,1.5 1.7,1.2 2.3,-2.5 1.2,.7 -.3,2 1,1.8 1.2,-.8 2.5,-4.2 1.8,2 2,.5 2.1,-.7 2,1.8 1.2,-.1 1.3,1.2 3.6,-.9 .6,-1.7 3.7,-.3 1.6,.7 5,-2.5 .6,1.5 5.1,-.3 .5,-1.6 2.2,.9 4.6,3.8 6.4,1.9"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="or-wa" d="m 161.5,91.9 -30.3,-7.3 -2.8,1 -5.4,-.9 -1.8,-.9 -1.5,1.2 -3.3,-.4 -4.5,.5 -.9,.7 -4.2,-.4 -.8,-1.6 -1.2,-.2 -4.4,1.3 -1.6,-1.1 -2.2,.8 -.2,-1.8 -2.3,-1.2 -1.5,-.2 -1,-1.1 -3,.3 -1.2,-.8 h -1.2 l -1.2,.9 -5.5,.7 -6.6,-4.2 1.1,-5.6 -.4,-4.1 -3.2,-3.7 -3.7,.1 -.4,-1.1 .4,-1.2 -.7,-.8 -1,.1"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="pa-wv" d="m 736.8,225.1 3.2,19.7 17.4,-2.9"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="sd-wy" d="m 351.4,187.6 3.9,-43.9"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="tn-va" d="m 697.7,321.1 28.9,-3.3 .2,-1 4.6,-.5 -.3,.7"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="ut-wy" d="m 236.5,196 -3.3,21.9 32.1,4.8"/>
+          <path style="cursor:pointer;transition:opacity 0.12s" class="va-wv" d="m 722.7,296.9 .7,.6 -.8,1.2 1.5,.7 .1,1.5 4.4,2.3 2.3,-.1 1.9,-1.8 .8,-1.7 3,1.8 5.5,-2.4 .5,-.9 -.8,-.5 .6,-1.4 1.5,1 4.3,-3.1 .7,1.1 2.3,-2 -.1,-1.4 1.5,-1.9 -1.5,-1.2 1,-3.3 3.7,-6.3 -.4,-1.9 2.1,-2.2 -.4,-1.5 1.4,-1.7 .1,-4.7 2.3,.7 1.3,1.9 2.8,.5 1.3,-1.6 2.3,-8.5 2.4,1.1 1,-2.5 .9,-.8 1.4,-1.8 .9,-.8 .5,-2.1 1.2,-.8 -.1,-2.9 .8,-2.3 -.9,-1.6 .2,-.9 10,5.2 .5,-2.3 .4,-1.6 .4,-.7"/>
+          </g>
+
+          <circle class="state borders dccircle dc" cx="801.6" cy="252.1" r="5">
+          <title>District of Columbia</title></circle>
+
+          <path style="cursor:pointer;transition:opacity 0.12s" class="separator1" fill="none" d="m 215,493 v 55 l 36,45 m -251,-168 h 147 l 68,68 h 85 l 54,54 v 46"/>
+
+          </svg>
+                      </div>
+                      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;font-size:0.7rem;">
+                        <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#042C53;display:inline-block"></span> &gt;10%</span>
+                        <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#185FA5;display:inline-block"></span> 6-10%</span>
+                        <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#378ADD;display:inline-block"></span> 3-5%</span>
+                        <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#85B7EB;display:inline-block"></span> 1-2%</span>
+                        <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#E6F1FB;display:inline-block"></span> &lt;1%</span>
+                        <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#F0F0F0;display:inline-block"></span> None</span>
+                      </div>
+                    </div>
+                    <div id="pie-wrap" style="display:none">
+                      <div style="display:flex;gap:20px;align-items:center;">
+                        <div class="chart-wrap" style="width:180px;height:180px;flex-shrink:0"><canvas id="pieChart"></canvas></div>
+                        <div id="pieLegend" style="display:flex;flex-direction:column;gap:4px;font-size:0.72rem;"></div>
+                      </div>
+                    </div>
+                    </div>
+          <div class="ft-bento">
+                      <div class="ft-bento__header">
+                        <h2 class="ft-bento__title">Largest active awards</h2>
+                        <button class="btn-ft-outline">View all</button>
+                      </div>
+                      <div class="workload-row workload-row--link"><span class="workload-row__label">Arc of the US</span><span class="workload-row__count">$700K</span></div>
+                      <div class="workload-row workload-row--link"><span class="workload-row__label">Americare Farms</span><span class="workload-row__count">$535K</span></div>
+                      <div class="workload-row workload-row--link"><span class="workload-row__label">Americares</span><span class="workload-row__count">$470K</span></div>
+                      <div class="workload-row workload-row--link"><span class="workload-row__label">Big Brothers Big Sisters</span><span class="workload-row__count">$175K</span></div>
+                      <div class="workload-row workload-row--link"><span class="workload-row__label">Artspace Projects</span><span class="workload-row__count">$101K</span></div>
+                      <div class="workload-row workload-row--link"><span class="workload-row__label">Access College Foundation</span><span class="workload-row__count">$68K</span></div>
+                    </div>
+          <div class="ft-bento">
+                      <div class="ft-bento__header">
+                        <h2 class="ft-bento__title">Recent submissions</h2>
+                        <button class="btn-ft-outline">View all</button>
+                      </div>
+                      <div class="timeline-item">
+                        <div class="timeline-dot dot-info"></div>
+                        <div><div class="timeline-item__title">Urban Greenways Initiative</div><div class="timeline-item__meta">Application Submitted &mdash; today</div></div>
+                      </div>
+                      <div class="timeline-item">
+                        <div class="timeline-dot dot-info"></div>
+                        <div><div class="timeline-item__title">Eastside Youth Coalition</div><div class="timeline-item__meta">LOI Submitted &mdash; yesterday</div></div>
+                      </div>
+                      <div class="timeline-item">
+                        <div class="timeline-dot dot-neutral"></div>
+                        <div><div class="timeline-item__title">Lakeview Arts Center</div><div class="timeline-item__meta">Follow Up Submitted &mdash; Jun 23</div></div>
+                      </div>
+                      <div class="timeline-item">
+                        <div class="timeline-dot dot-info"></div>
+                        <div><div class="timeline-item__title">Horizon Community Fund</div><div class="timeline-item__meta">Application Submitted &mdash; Jun 22</div></div>
+                      </div>
+                    </div>
+        </div>
+      </div>
+
+      <div class="g2" style="margin-bottom:var(--gap)">
+        <div class="ft-bento">
+                  <div class="ft-bento__header">
+                    <h2 class="ft-bento__title">Upcoming installments</h2>
+                    <span style="font-size:0.7rem;color:#aaa">Next 12 months</span>
+                  </div>
+                  <div class="chart-wrap" style="height:200px"><canvas id="instChart"></canvas></div>
+                </div>
+        <div class="ft-bento">
+                  <div class="ft-bento__header">
+                    <h2 class="ft-bento__title">Amount awarded</h2>
+                    <span style="font-size:0.7rem;color:#aaa">Past 10 years</span>
+                  </div>
+                  <div class="chart-wrap" style="height:200px"><canvas id="awardChart"></canvas></div>
+                </div>
+      </div>
+
+      <div class="g1">
+        <div class="ft-bento">
+                  <div class="ft-bento__header">
+                    <h2 class="ft-bento__title">Applicant submissions</h2>
+                    <span style="font-size:0.7rem;color:#aaa">Past 12 months</span>
+                  </div>
+                  <div id="subLegend" style="display:flex;gap:16px;margin-bottom:8px;font-size:0.72rem;"></div>
+                  <div class="chart-wrap" style="height:220px"><canvas id="subChart"></canvas></div>
+                </div>
+      </div>
+    </div>
+    </div><!-- /ft-main -->
+  </div><!-- /ft-page--sidebar -->
+</div><!-- /v-impact -->
+
+
+<!-- V2: PROGRAM VIEW -->
+<div class="view" id="v-program">
+  <div class="ft-page">
+    <div class="ft-page-title">
+      <h1 class="ft-greeting"></h1>
+      <span class="subtitle">Cedar Ridge Foundation &mdash; 5 active programs</span>
+    </div>
+    <div class="ft-content">
+      <div class="g4" style="margin-bottom:var(--gap)">
+        <div class="wl-tile" style="margin-bottom:0">
+          <div class="wl-tile__header">
+            <h2 class="wl-tile__stage"><i class="fa-regular fa-file-lines" style="color:var(--info-fg)"></i> LOI</h2>
+            <span class="wl-tile__total">7 open</span>
+          </div>
+          <div class="wl-status-row"><span class="wl-status-row__name">LOI Draft</span><span class="wl-status-row__count">6</span></div>
+          <div class="wl-status-row"><span class="wl-status-row__name">LOI Submitted</span><span class="wl-status-row__count wl-status-row__count--zero">0</span></div>
+          <div class="wl-status-row"><span class="wl-status-row__name">LOI Complete</span><span class="wl-status-row__count">1</span></div>
+          <div class="wl-status-row"><span class="wl-status-row__name">Evaluations Assigned</span><span class="wl-status-row__count wl-status-row__count--zero">0</span></div>
+          <div class="wl-status-row"><span class="wl-status-row__name">Evaluations Closed</span><span class="wl-status-row__count">1</span></div>
+        </div>
+        <div class="wl-tile" style="margin-bottom:0">
+          <div class="wl-tile__header">
+            <h2 class="wl-tile__stage"><i class="fa-regular fa-file-contract" style="color:var(--warning-fg)"></i> Application</h2>
+            <span class="wl-tile__total">47 open</span>
+          </div>
+          <div class="wl-status-row"><span class="wl-status-row__name">Application Draft</span><span class="wl-status-row__count">26</span></div>
+          <div class="wl-status-row"><span class="wl-status-row__name">Application Submitted</span><span class="wl-status-row__count">14</span></div>
+          <div class="wl-status-row"><span class="wl-status-row__name">Application Complete</span><span class="wl-status-row__count">7</span></div>
+          <div class="wl-status-row"><span class="wl-status-row__name">Evaluations Assigned</span><span class="wl-status-row__count">9</span></div>
+          <div class="wl-status-row"><span class="wl-status-row__name">Evaluations Closed</span><span class="wl-status-row__count">5</span></div>
+        </div>
+        <div class="wl-tile" style="margin-bottom:0">
+          <div class="wl-tile__header">
+            <h2 class="wl-tile__stage"><i class="fa-regular fa-gavel" style="color:var(--success-fg)"></i> Decision</h2>
+            <span class="wl-tile__total">9 open</span>
+          </div>
+          <div class="wl-status-row"><span class="wl-status-row__name">Approval Draft</span><span class="wl-status-row__count">1</span></div>
+          <div class="wl-status-row"><span class="wl-status-row__name">Approved</span><span class="wl-status-row__count">7</span></div>
+          <div class="wl-status-row"><span class="wl-status-row__name">Denial Draft</span><span class="wl-status-row__count">1</span></div>
+          <div class="wl-status-row"><span class="wl-status-row__name wl-status-row__name--muted">Denied</span><span class="wl-status-row__count wl-status-row__count--zero">0</span></div>
+        </div>
+        <div class="wl-tile" style="margin-bottom:0">
+          <div class="wl-tile__header">
+            <h2 class="wl-tile__stage"><i class="fa-regular fa-arrow-rotate-right" style="color:var(--danger-fg)"></i> Follow Up</h2>
+            <span class="wl-tile__total" style="color:var(--danger-fg)">33 open</span>
+          </div>
+          <div class="wl-status-row"><span class="wl-status-row__name">Follow Up Draft</span><span class="wl-status-row__count" style="background:var(--danger-fg)">21</span></div>
+          <div class="wl-status-row"><span class="wl-status-row__name">Follow Up Submitted</span><span class="wl-status-row__count">7</span></div>
+          <div class="wl-status-row"><span class="wl-status-row__name">Follow Up Complete</span><span class="wl-status-row__count">5</span></div>
+        </div>
+      </div>
+
+      <div class="g2">
+        <div class="program-card program-card--alert">
+          <h2 class="program-card__name">Environment and Conservation <span class="ft-badge ft-badge--danger">3 past due</span></h2>
+          <div class="ft-kv"><span class="ft-kv__label">Active grants</span><span class="ft-kv__value">28</span></div>
+          <div class="ft-kv"><span class="ft-kv__label">Awarded</span><span class="ft-kv__value">$1.5M</span></div>
+          <div class="ft-kv"><span class="ft-kv__label">Follow Up Draft</span><span class="ft-kv__value" style="color:var(--danger-fg)">5 past due</span></div>
+          <div class="ft-kv"><span class="ft-kv__label">Application Submitted</span><span class="ft-kv__value">8 open</span></div>
+          <div class="ft-kv"><span class="ft-kv__label">Cycle</span><span class="ft-kv__value">Spring 2025</span></div>
+        </div>
+        <div class="program-card">
+          <h2 class="program-card__name">Education Access <span class="ft-badge ft-badge--success">On track</span></h2>
+          <div class="ft-kv"><span class="ft-kv__label">Active grants</span><span class="ft-kv__value">34</span></div>
+          <div class="ft-kv"><span class="ft-kv__label">Awarded</span><span class="ft-kv__value">$1.2M</span></div>
+          <div class="ft-kv"><span class="ft-kv__label">Follow Up Draft</span><span class="ft-kv__value">2 upcoming</span></div>
+          <div class="ft-kv"><span class="ft-kv__label">Application Submitted</span><span class="ft-kv__value">12 open</span></div>
+          <div class="ft-kv"><span class="ft-kv__label">Cycle</span><span class="ft-kv__value">Rolling</span></div>
+        </div>
+        <div class="program-card program-card--ok">
+          <h2 class="program-card__name">Health Equity <span class="ft-badge ft-badge--success">On track</span></h2>
+          <div class="ft-kv"><span class="ft-kv__label">Active grants</span><span class="ft-kv__value">21</span></div>
+          <div class="ft-kv"><span class="ft-kv__label">Awarded</span><span class="ft-kv__value">$870K</span></div>
+          <div class="ft-kv"><span class="ft-kv__label">Follow Up Draft</span><span class="ft-kv__value">1 upcoming</span></div>
+          <div class="ft-kv"><span class="ft-kv__label">LOI Submitted</span><span class="ft-kv__value">7 open</span></div>
+          <div class="ft-kv"><span class="ft-kv__label">Cycle</span><span class="ft-kv__value">Summer 2025</span></div>
+        </div>
+        <div class="program-card">
+          <h2 class="program-card__name">Arts + Culture <span class="ft-badge ft-badge--info">Evaluations open</span></h2>
+          <div class="ft-kv"><span class="ft-kv__label">Active grants</span><span class="ft-kv__value">18</span></div>
+          <div class="ft-kv"><span class="ft-kv__label">Awarded</span><span class="ft-kv__value">$580K</span></div>
+          <div class="ft-kv"><span class="ft-kv__label">Follow Up Draft</span><span class="ft-kv__value">3 upcoming</span></div>
+          <div class="ft-kv"><span class="ft-kv__label">Evaluations Assigned</span><span class="ft-kv__value">6 in progress</span></div>
+          <div class="ft-kv"><span class="ft-kv__label">Cycle</span><span class="ft-kv__value">Fall 2025 open</span></div>
+        </div>
+      </div>
+
+      <div class="g1">
+        <div class="ft-bento">
+          <div class="ft-bento__header">
+            <h2 class="ft-bento__title">Workload</h2>
+            <button class="btn-ft-outline">View all</button>
+          </div>
+          <div class="g4" style="margin-bottom:0">
+            <div class="wl-tile" style="margin-bottom:0">
+              <div class="wl-tile__header">
+                <h2 class="wl-tile__stage"><i class="fa-regular fa-file-lines" style="color:var(--info-fg)"></i> LOI</h2>
+                <span class="wl-tile__total">7 open</span>
+              </div>
+              <div class="wl-status-row"><span class="wl-status-row__name">LOI Draft</span><span class="wl-status-row__count">6</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name">LOI Submitted</span><span class="wl-status-row__count wl-status-row__count--zero">0</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name">LOI Complete</span><span class="wl-status-row__count">1</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Evaluations Assigned</span><span class="wl-status-row__count wl-status-row__count--zero">0</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Evaluations Closed</span><span class="wl-status-row__count">1</span></div>
+            </div>
+            <div class="wl-tile" style="margin-bottom:0">
+              <div class="wl-tile__header">
+                <h2 class="wl-tile__stage"><i class="fa-regular fa-file-contract" style="color:var(--warning-fg)"></i> Application</h2>
+                <span class="wl-tile__total">47 open</span>
+              </div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Application Draft</span><span class="wl-status-row__count">26</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Application Submitted</span><span class="wl-status-row__count">14</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Application Complete</span><span class="wl-status-row__count">7</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Evaluations Assigned</span><span class="wl-status-row__count">9</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Evaluations Closed</span><span class="wl-status-row__count">5</span></div>
+            </div>
+            <div class="wl-tile" style="margin-bottom:0">
+              <div class="wl-tile__header">
+                <h2 class="wl-tile__stage"><i class="fa-regular fa-gavel" style="color:var(--success-fg)"></i> Decision</h2>
+                <span class="wl-tile__total">9 open</span>
+              </div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Approval Draft</span><span class="wl-status-row__count">1</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Approved</span><span class="wl-status-row__count">7</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Denial Draft</span><span class="wl-status-row__count">1</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name wl-status-row__name--muted">Denied</span><span class="wl-status-row__count wl-status-row__count--zero">0</span></div>
+            </div>
+            <div class="wl-tile" style="margin-bottom:0">
+              <div class="wl-tile__header">
+                <h2 class="wl-tile__stage"><i class="fa-regular fa-arrow-rotate-right" style="color:var(--danger-fg)"></i> Follow Up</h2>
+                <span class="wl-tile__total" style="color:var(--danger-fg)">33 open</span>
+              </div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Follow Up Draft</span><span class="wl-status-row__count" style="background:var(--danger-fg)">21</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Follow Up Submitted</span><span class="wl-status-row__count">7</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Follow Up Complete</span><span class="wl-status-row__count">5</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="g2">
+        <div class="ft-bento">
+          <div class="ft-bento__header">
+            <h2 class="ft-bento__title">Past due items</h2>
+            <button class="btn-ft-outline">View all</button>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot dot-danger"></div>
+            <div><div class="timeline-item__title">Urban Greenways &mdash; Follow Up Draft</div><div class="timeline-item__meta">Q1 Progress Report &mdash; was due Apr 30</div></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot dot-danger"></div>
+            <div><div class="timeline-item__title">Eastside Youth Coalition &mdash; Follow Up Draft</div><div class="timeline-item__meta">Budget revision &mdash; was due Apr 15</div></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot dot-danger"></div>
+            <div><div class="timeline-item__title">Spring cycle &mdash; Evaluations Assigned</div><div class="timeline-item__meta">26 applications unassigned &mdash; 3 days overdue</div></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot dot-warning"></div>
+            <div><div class="timeline-item__title">Lakeview Arts &mdash; Follow Up Submitted</div><div class="timeline-item__meta">Final narrative review &mdash; due today</div></div>
+          </div>
+        </div>
+        <div class="ft-bento">
+          <div class="ft-bento__header">
+            <h2 class="ft-bento__title">Recent submissions</h2>
+            <button class="btn-ft-outline">View all</button>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot dot-info"></div>
+            <div><div class="timeline-item__title">Urban Greenways Initiative</div><div class="timeline-item__meta">Application Submitted &mdash; today</div></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot dot-info"></div>
+            <div><div class="timeline-item__title">Eastside Youth Coalition</div><div class="timeline-item__meta">LOI Submitted &mdash; yesterday</div></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot dot-neutral"></div>
+            <div><div class="timeline-item__title">Lakeview Arts Center</div><div class="timeline-item__meta">Follow Up Submitted &mdash; Jun 23</div></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot dot-info"></div>
+            <div><div class="timeline-item__title">Riverdale Community Health</div><div class="timeline-item__meta">Application Submitted &mdash; Jun 22</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- V3: TODAY'S WORK -->
+<div class="view" id="v-today">
+  <div class="ft-page">
+    <div class="ft-page-title">
+      <h1 class="ft-greeting"></h1>
+      <span class="subtitle">Thursday, June 25</span>
+    </div>
+    <div class="ft-content">
+      <div class="g1">
+        <div class="ft-bento">
+          <div class="ft-bento__header">
+            <h2 class="ft-bento__title">Active processes</h2>
+            <button class="btn-ft-outline">View all</button>
+          </div>
+          <table class="process-table">
+            <thead class="process-table__head">
+              <tr>
+                <th>Process</th>
+                <th title="Eligibility Quiz">EQ</th>
+                <th title="Letter of Intent">LOI</th>
+                <th title="Application">App</th>
+                <th title="Decision">Dec</th>
+                <th title="Follow Up">FU</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2025 Spring Grants</td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">12</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">7</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--alert">26</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--success">4</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--alert">14</span></td>
+              </tr>
+              <tr>
+                <td>Community Impact Fund</td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">9</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">3</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">7</span></td>
+              </tr>
+              <tr>
+                <td>Board Discretionary</td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">5</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--success">2</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+              </tr>
+              <tr>
+                <td>General Inquiry &mdash; Tracking</td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">3</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">4</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">8</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+              </tr>
+              <tr>
+                <td>Responsive Grants</td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">2</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--alert">11</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">1</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">5</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="g21">
+        <div class="ft-bento">
+          <div class="ft-bento__header">
+            <h2 class="ft-bento__title">Workload</h2>
+            <button class="btn-ft-outline">View all</button>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:var(--gap)">
+            <div class="wl-tile" style="margin-bottom:0">
+              <div class="wl-tile__header">
+                <h2 class="wl-tile__stage"><i class="fa-regular fa-file-lines" style="color:var(--info-fg)"></i> LOI</h2>
+                <span class="wl-tile__total">7 open</span>
+              </div>
+              <div class="wl-status-row"><span class="wl-status-row__name">LOI Draft</span><span class="wl-status-row__count">6</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name">LOI Submitted</span><span class="wl-status-row__count wl-status-row__count--zero">0</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name">LOI Complete</span><span class="wl-status-row__count">1</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Evaluations Assigned</span><span class="wl-status-row__count wl-status-row__count--zero">0</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Evaluations Closed</span><span class="wl-status-row__count">1</span></div>
+            </div>
+            <div class="wl-tile" style="margin-bottom:0">
+              <div class="wl-tile__header">
+                <h2 class="wl-tile__stage"><i class="fa-regular fa-file-contract" style="color:var(--warning-fg)"></i> Application</h2>
+                <span class="wl-tile__total">47 open</span>
+              </div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Application Draft</span><span class="wl-status-row__count">26</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Application Submitted</span><span class="wl-status-row__count">14</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Application Complete</span><span class="wl-status-row__count">7</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Evaluations Assigned</span><span class="wl-status-row__count">9</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Evaluations Closed</span><span class="wl-status-row__count">5</span></div>
+            </div>
+            <div class="wl-tile" style="margin-bottom:0">
+              <div class="wl-tile__header">
+                <h2 class="wl-tile__stage"><i class="fa-regular fa-gavel" style="color:var(--success-fg)"></i> Decision</h2>
+                <span class="wl-tile__total">9 open</span>
+              </div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Approval Draft</span><span class="wl-status-row__count">1</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Approved</span><span class="wl-status-row__count">7</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Denial Draft</span><span class="wl-status-row__count">1</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name wl-status-row__name--muted">Denied</span><span class="wl-status-row__count wl-status-row__count--zero">0</span></div>
+            </div>
+            <div class="wl-tile" style="margin-bottom:0">
+              <div class="wl-tile__header">
+                <h2 class="wl-tile__stage"><i class="fa-regular fa-arrow-rotate-right" style="color:var(--danger-fg)"></i> Follow Up</h2>
+                <span class="wl-tile__total" style="color:var(--danger-fg)">33 open</span>
+              </div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Follow Up Draft</span><span class="wl-status-row__count" style="background:var(--danger-fg)">21</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Follow Up Submitted</span><span class="wl-status-row__count">7</span></div>
+              <div class="wl-status-row"><span class="wl-status-row__name">Follow Up Complete</span><span class="wl-status-row__count">5</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="ft-bento">
+            <div class="ft-bento__header">
+              <h2 class="ft-bento__title">Past due items</h2>
+              <button class="btn-ft-outline">View all</button>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot dot-danger"></div>
+              <div><div class="timeline-item__title">Urban Greenways &mdash; Follow Up Draft</div><div class="timeline-item__meta">Q1 Progress Report &mdash; was due Apr 30</div></div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot dot-danger"></div>
+              <div><div class="timeline-item__title">Eastside Youth Coalition &mdash; Follow Up Draft</div><div class="timeline-item__meta">Budget revision &mdash; was due Apr 15</div></div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot dot-danger"></div>
+              <div><div class="timeline-item__title">Spring cycle &mdash; Evaluations Assigned</div><div class="timeline-item__meta">26 applications need reviewer assignment &mdash; 3 days overdue</div></div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot dot-warning"></div>
+              <div><div class="timeline-item__title">Lakeview Arts &mdash; Follow Up Submitted</div><div class="timeline-item__meta">Final narrative review &mdash; due today</div></div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot dot-warning"></div>
+              <div><div class="timeline-item__title">Horizon Community &mdash; Approval Draft</div><div class="timeline-item__meta">Board conflict review &mdash; due today</div></div>
+            </div>
+          </div>
+          <div class="ft-bento">
+            <div class="ft-bento__header"><h2 class="ft-bento__title">Coming up</h2></div>
+            <div class="workload-row"><span class="workload-row__label">Follow Up Submitted &mdash; Q2 Reports</span><span class="ft-badge ft-badge--info">Jul 31</span></div>
+            <div class="workload-row"><span class="workload-row__label">LOI Submitted deadline</span><span class="ft-badge ft-badge--info">Jul 15</span></div>
+            <div class="workload-row"><span class="workload-row__label">Approval Draft &mdash; board prep</span><span class="ft-badge ft-badge--warning">Jul 8</span></div>
+          </div>
+          <div class="ft-bento">
+            <div class="ft-bento__header"><h2 class="ft-bento__title">My queue</h2></div>
+            <div class="workload-row"><span class="workload-row__label">Application Complete &mdash; to review</span><span class="workload-row__count">12</span></div>
+            <div class="workload-row"><span class="workload-row__label">Evaluations Assigned &mdash; to complete</span><span class="workload-row__count">5</span></div>
+            <div class="workload-row"><span class="workload-row__label">Approval Draft &mdash; awaiting me</span><span class="workload-row__count" style="color:var(--danger-fg)">3</span></div>
+          </div>
+          <div class="ft-bento">
+            <div class="ft-bento__header"><h2 class="ft-bento__title">Recent submissions</h2></div>
+            <div class="timeline-item">
+              <div class="timeline-dot dot-info"></div>
+              <div><div class="timeline-item__title">Urban Greenways</div><div class="timeline-item__meta">Application Submitted &mdash; today</div></div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot dot-info"></div>
+              <div><div class="timeline-item__title">Eastside Youth Coalition</div><div class="timeline-item__meta">LOI Submitted &mdash; yesterday</div></div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot dot-neutral"></div>
+              <div><div class="timeline-item__title">Lakeview Arts Center</div><div class="timeline-item__meta">Follow Up Submitted &mdash; Jun 23</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- V4: NARRATIVE -->
+<div class="view" id="v-narrative">
+  <div class="ft-page">
+    <div class="ft-page-title">
+      <h1 class="ft-greeting"></h1>
+      <span class="subtitle">Cedar Ridge Foundation</span>
+    </div>
+    <div class="ft-content">
+      <div class="g2">
+
+        <!-- AI BENTO 1: Foundation Pulse (summary / story) -->
+        <div class="ai-bento">
+          <div class="ai-bento__header">
+            <div class="ai-bento__icon">
+              <svg viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 1l1.5 4.5H14l-3.5 2.5 1.5 4.5L8 10l-4 2.5 1.5-4.5L2 5.5h4.5z"/>
+              </svg>
+            </div>
+            <span class="ai-bento__label">Foundation Pulse</span>
+            <span class="ai-bento__timestamp">Updated just now</span>
+          </div>
+          <div class="ai-bento__headline">Cedar Ridge is tracking ahead of last year. Awards are up 23% and your spring cycle is moving faster through Application than it did in 2024.</div>
+          <div class="ai-bento__stats">
+            <div class="ai-bento__stat">
+              <div class="ai-bento__stat-val ai-bento__stat-val--up">+23%</div>
+              <div class="ai-bento__stat-label">Awards vs. last year</div>
+            </div>
+            <div class="ai-bento__stat">
+              <div class="ai-bento__stat-val">$4.8M</div>
+              <div class="ai-bento__stat-label">Awarded FY2025</div>
+            </div>
+            <div class="ai-bento__stat">
+              <div class="ai-bento__stat-val">112</div>
+              <div class="ai-bento__stat-label">Active grants</div>
+            </div>
+            <div class="ai-bento__stat">
+              <div class="ai-bento__stat-val">318</div>
+              <div class="ai-bento__stat-label">Submissions YTD</div>
+            </div>
+          </div>
+          <hr class="ai-bento__divider">
+          <div class="ai-bento__supporting">
+            <strong>47 applications</strong> moved from Submitted to Evaluations Assigned in under 8 days this cycle, compared to 14 days last spring. <strong>$47,500</strong> in installments is scheduled to go out in the next 30 days across 6 grantees. Interactions logged across organizations are up <strong>31%</strong> over the last 90 days.
+          </div>
+        </div>
+
+        <!-- AI BENTO 2: Your Attention (action nudging) -->
+        <div class="ai-bento">
+          <div class="ai-bento__header">
+            <div class="ai-bento__icon">
+              <svg viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="8" cy="8" r="6.5"/>
+                <path d="M8 5v3.5M8 11v.5"/>
+              </svg>
+            </div>
+            <span class="ai-bento__label">Your Attention</span>
+            <span class="ai-bento__timestamp">Updated just now</span>
+          </div>
+          <div class="ai-bento__headline">4 things need your attention before end of week.</div>
+
+          <div class="nudge-row">
+            <div class="nudge-icon nudge-icon--danger">
+              <i class="fa-regular fa-circle-exclamation" style="font-size:13px"></i>
+            </div>
+            <div class="nudge-body">
+              <div class="nudge-body__sentence"><strong>2 follow-up reports are more than 56 days overdue.</strong> Urban Greenways and Eastside Youth Coalition haven't submitted required progress reports.</div>
+              <div class="nudge-body__action">Review overdue items</div>
+            </div>
+          </div>
+
+          <div class="nudge-row">
+            <div class="nudge-icon nudge-icon--warning">
+              <i class="fa-regular fa-clock" style="font-size:13px"></i>
+            </div>
+            <div class="nudge-body">
+              <div class="nudge-body__sentence"><strong>3 processes have decisions due in the next 14 days</strong> with no Approval Draft started yet.</div>
+              <div class="nudge-body__action">View pending decisions</div>
+            </div>
+          </div>
+
+          <div class="nudge-row">
+            <div class="nudge-icon nudge-icon--info">
+              <i class="fa-regular fa-building" style="font-size:13px"></i>
+            </div>
+            <div class="nudge-body">
+              <div class="nudge-body__sentence"><strong>9 grantee organizations haven't had an interaction logged in 90+ days,</strong> including 3 with active awards.</div>
+              <div class="nudge-body__action">See organizations</div>
+            </div>
+          </div>
+
+          <div class="nudge-row">
+            <div class="nudge-icon nudge-icon--success">
+              <i class="fa-regular fa-circle-dollar" style="font-size:13px"></i>
+            </div>
+            <div class="nudge-body">
+              <div class="nudge-body__sentence"><strong>$47,500 in installment payments</strong> are scheduled in the next 30 days. Riverdale Community Health is the largest at $22,000.</div>
+              <div class="nudge-body__action">View installment schedule</div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="g1">
+        <div class="ft-bento">
+          <div class="ft-bento__header">
+            <h2 class="ft-bento__title">Active processes</h2>
+            <button class="btn-ft-outline">View all</button>
+          </div>
+          <table class="process-table">
+            <thead class="process-table__head">
+              <tr>
+                <th>Process</th>
+                <th title="Eligibility Quiz">EQ</th>
+                <th title="Letter of Intent">LOI</th>
+                <th title="Application">App</th>
+                <th title="Decision">Dec</th>
+                <th title="Follow Up">FU</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2025 Spring Grants</td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">12</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">7</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--alert">26</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--success">4</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--alert">14</span></td>
+              </tr>
+              <tr>
+                <td>Community Impact Fund</td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">9</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">3</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">7</span></td>
+              </tr>
+              <tr>
+                <td>Board Discretionary</td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">5</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--success">2</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+              </tr>
+              <tr>
+                <td>General Inquiry &mdash; Tracking</td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">3</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">4</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">8</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+              </tr>
+              <tr>
+                <td>Responsive Grants</td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">2</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--alert">11</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">1</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">5</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- V5: SIDEBAR WORKLOAD -->
+<div class="view" id="v-sidebar">
+  <div class="ft-page--sidebar">
+    <aside class="ft-sidebar">
+      <div class="ft-sidebar__section-label">Dashboard</div>
+      <button class="ft-sidebar__item active" onclick="setSidebarActive(this)">
+        <i class="fa-regular fa-grid-2"></i>
+        <span>Open Requests</span>
+        <span class="ft-sidebar__count">130</span>
+      </button>
+      <button class="ft-sidebar__item" onclick="setSidebarActive(this)">
+        <i class="fa-regular fa-user-check"></i>
+        <span>Your Evaluations</span>
+        <span class="ft-sidebar__count">14</span>
+      </button>
+      <button class="ft-sidebar__item" onclick="setSidebarActive(this)">
+        <i class="fa-regular fa-list-check"></i>
+        <span>Your Follow Ups</span>
+        <span class="ft-sidebar__count ft-sidebar__count--alert">5</span>
+      </button>
+      <button class="ft-sidebar__item" onclick="setSidebarActive(this)">
+        <i class="fa-regular fa-chart-bar"></i>
+        <span>Metrics Dashboard</span>
+      </button>
+      <div class="ft-sidebar__section-label" style="margin-top:6px">Workload</div>
+      <button class="ft-sidebar__item" onclick="setSidebarActive(this)">
+        <i class="fa-regular fa-file-lines"></i>
+        <span>LOI</span>
+        <span class="ft-sidebar__count">7</span>
+      </button>
+      <button class="ft-sidebar__item" onclick="setSidebarActive(this)">
+        <i class="fa-regular fa-file-contract"></i>
+        <span>Application</span>
+        <span class="ft-sidebar__count">47</span>
+      </button>
+      <button class="ft-sidebar__item" onclick="setSidebarActive(this)">
+        <i class="fa-regular fa-gavel"></i>
+        <span>Decision</span>
+        <span class="ft-sidebar__count">9</span>
+      </button>
+      <button class="ft-sidebar__item" onclick="setSidebarActive(this)">
+        <i class="fa-regular fa-arrow-rotate-right"></i>
+        <span>Follow Up</span>
+        <span class="ft-sidebar__count ft-sidebar__count--alert">33</span>
+      </button>
+    </aside>
+
+    <div class="ft-main">
+      <div class="ft-page-title">
+        <h1 class="ft-greeting"></h1>
+        <span class="subtitle">Cedar Ridge Foundation</span>
+      </div>
+      <div class="ft-content">
+        <div class="g4">
+          <div class="kpi-card kpi-card--danger">
+            <span class="kpi-card__label"><i class="fa-regular fa-circle-exclamation"></i> Past due</span>
+            <span class="kpi-card__value">14</span>
+            <span class="kpi-card__sub">Follow-ups and evaluations</span>
+          </div>
+          <div class="kpi-card kpi-card--warning">
+            <span class="kpi-card__label"><i class="fa-regular fa-clock"></i> Due this week</span>
+            <span class="kpi-card__value">23</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-card__label"><i class="fa-regular fa-inbox"></i> Open requests</span>
+            <span class="kpi-card__value">130</span>
+            <span class="kpi-card__sub">Across all active stages</span>
+          </div>
+          <div class="kpi-card kpi-card--success">
+            <span class="kpi-card__label"><i class="fa-regular fa-circle-check"></i> Approved this quarter</span>
+            <span class="kpi-card__value">$1.2M</span>
+            <span class="kpi-card__sub">18 grants</span>
+          </div>
+        </div>
+
+        <div class="g2">
+          <div class="wl-tile">
+            <div class="wl-tile__header">
+              <h2 class="wl-tile__stage"><i class="fa-regular fa-file-lines" style="color:var(--info-fg)"></i> LOI</h2>
+              <span class="wl-tile__total">7 open</span>
+            </div>
+            <div class="wl-status-row"><span class="wl-status-row__name">LOI Draft</span><span class="wl-status-row__count">6</span></div>
+            <div class="wl-status-row"><span class="wl-status-row__name">LOI Submitted</span><span class="wl-status-row__count wl-status-row__count--zero">0</span></div>
+            <div class="wl-status-row"><span class="wl-status-row__name">LOI Complete</span><span class="wl-status-row__count">1</span></div>
+            <div class="wl-status-row"><span class="wl-status-row__name">Evaluations Assigned</span><span class="wl-status-row__count wl-status-row__count--zero">0</span></div>
+            <div class="wl-status-row"><span class="wl-status-row__name">Evaluations Closed</span><span class="wl-status-row__count">1</span></div>
+          </div>
+          <div class="wl-tile">
+            <div class="wl-tile__header">
+              <h2 class="wl-tile__stage"><i class="fa-regular fa-file-contract" style="color:var(--warning-fg)"></i> Application</h2>
+              <span class="wl-tile__total">47 open</span>
+            </div>
+            <div class="wl-status-row"><span class="wl-status-row__name">Application Draft</span><span class="wl-status-row__count">26</span></div>
+            <div class="wl-status-row"><span class="wl-status-row__name">Application Submitted</span><span class="wl-status-row__count">14</span></div>
+            <div class="wl-status-row"><span class="wl-status-row__name">Application Complete</span><span class="wl-status-row__count">7</span></div>
+            <div class="wl-status-row"><span class="wl-status-row__name">Evaluations Assigned</span><span class="wl-status-row__count">9</span></div>
+            <div class="wl-status-row"><span class="wl-status-row__name">Evaluations Closed</span><span class="wl-status-row__count">5</span></div>
+          </div>
+          <div class="wl-tile">
+            <div class="wl-tile__header">
+              <h2 class="wl-tile__stage"><i class="fa-regular fa-gavel" style="color:var(--success-fg)"></i> Decision</h2>
+              <span class="wl-tile__total">9 open</span>
+            </div>
+            <div class="wl-status-row"><span class="wl-status-row__name">Approval Draft</span><span class="wl-status-row__count">1</span></div>
+            <div class="wl-status-row"><span class="wl-status-row__name">Approved</span><span class="wl-status-row__count">7</span></div>
+            <div class="wl-status-row"><span class="wl-status-row__name">Denial Draft</span><span class="wl-status-row__count">1</span></div>
+            <div class="wl-status-row"><span class="wl-status-row__name wl-status-row__name--muted">Denied</span><span class="wl-status-row__count wl-status-row__count--zero">0</span></div>
+          </div>
+          <div class="wl-tile">
+            <div class="wl-tile__header">
+              <h2 class="wl-tile__stage"><i class="fa-regular fa-arrow-rotate-right" style="color:var(--danger-fg)"></i> Follow Up</h2>
+              <span class="wl-tile__total" style="color:var(--danger-fg)">33 open</span>
+            </div>
+            <div class="wl-status-row"><span class="wl-status-row__name">Follow Up Draft</span><span class="wl-status-row__count" style="background:var(--danger-fg)">21</span></div>
+            <div class="wl-status-row"><span class="wl-status-row__name">Follow Up Submitted</span><span class="wl-status-row__count">7</span></div>
+            <div class="wl-status-row"><span class="wl-status-row__name">Follow Up Complete</span><span class="wl-status-row__count">5</span></div>
+          </div>
+        </div>
+
+        <div class="g2">
+          <div class="ft-bento">
+            <div class="ft-bento__header">
+              <h2 class="ft-bento__title">Past due items</h2>
+              <button class="btn-ft-outline">View all</button>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot dot-danger"></div>
+              <div><div class="timeline-item__title">Urban Greenways &mdash; Follow Up Draft</div><div class="timeline-item__meta">Q1 Progress Report &mdash; was due Apr 30</div></div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot dot-danger"></div>
+              <div><div class="timeline-item__title">Eastside Youth Coalition &mdash; Follow Up Draft</div><div class="timeline-item__meta">Budget revision &mdash; was due Apr 15</div></div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot dot-warning"></div>
+              <div><div class="timeline-item__title">Horizon Community &mdash; Approval Draft</div><div class="timeline-item__meta">Board conflict review &mdash; due today</div></div>
+            </div>
+          </div>
+          <div class="ft-bento">
+            <div class="ft-bento__header">
+              <h2 class="ft-bento__title">Recent submissions</h2>
+              <button class="btn-ft-outline">View all</button>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot dot-info"></div>
+              <div><div class="timeline-item__title">Urban Greenways Initiative</div><div class="timeline-item__meta">Application Submitted &mdash; today</div></div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot dot-info"></div>
+              <div><div class="timeline-item__title">Eastside Youth Coalition</div><div class="timeline-item__meta">LOI Submitted &mdash; yesterday</div></div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot dot-neutral"></div>
+              <div><div class="timeline-item__title">Lakeview Arts Center</div><div class="timeline-item__meta">Follow Up Submitted &mdash; Jun 23</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="g1">
+        <div class="ft-bento">
+          <div class="ft-bento__header">
+            <h2 class="ft-bento__title">Active processes</h2>
+            <button class="btn-ft-outline">View all</button>
+          </div>
+          <table class="process-table">
+            <thead class="process-table__head">
+              <tr>
+                <th>Process</th>
+                <th title="Eligibility Quiz">EQ</th>
+                <th title="Letter of Intent">LOI</th>
+                <th title="Application">App</th>
+                <th title="Decision">Dec</th>
+                <th title="Follow Up">FU</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2025 Spring Grants</td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">12</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">7</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--alert">26</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--success">4</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--alert">14</span></td>
+              </tr>
+              <tr>
+                <td>Community Impact Fund</td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">9</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">3</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">7</span></td>
+              </tr>
+              <tr>
+                <td>Board Discretionary</td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">5</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--success">2</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+              </tr>
+              <tr>
+                <td>General Inquiry &mdash; Tracking</td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">3</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">4</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">8</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+              </tr>
+              <tr>
+                <td>Responsive Grants</td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--empty">&mdash;</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">2</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--alert">11</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">1</span></td>
+                <td class="process-chip-cell"><span class="process-chip process-chip--active">5</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- PROTOTYPE CONTROLS -->
+<div class="ft-panel" id="ft-panel">
+  <div class="ft-panel__header" onclick="togglePanel()">
+    <span class="ft-panel__title">Prototype Controls</span>
+    <button class="ft-panel__toggle" id="ft-toggle-lbl">Show</button>
+  </div>
+  <div class="ft-panel__body" id="ft-panel-body">
+    <div class="ft-panel__section">
+      <div class="ft-panel__section-label">Layout variant</div>
+      <div class="ft-panel__row">
+        <button class="ft-panel__btn active" data-view="v-impact"    onclick="switchView(this)">Foundation</button>
+        <button class="ft-panel__btn"         data-view="v-program"   onclick="switchView(this)">Program</button>
+        <button class="ft-panel__btn"         data-view="v-today"     onclick="switchView(this)">Today</button>
+        <button class="ft-panel__btn"         data-view="v-narrative" onclick="switchView(this)">Narrative</button>
+        <button class="ft-panel__btn"         data-view="v-sidebar"   onclick="switchView(this)">Sidebar</button>
+      </div>
+    </div>
+    <div class="ft-panel__section" id="geo-toggle-section">
+      <div class="ft-panel__section-label">Foundation &mdash; geo chart</div>
+      <div class="ft-panel__row">
+        <button class="ft-panel__btn active" data-geo="map" onclick="switchGeo(this)">US Map</button>
+        <button class="ft-panel__btn"        data-geo="pie" onclick="switchGeo(this)">Pie chart</button>
+      </div>
+    </div>
+    <div class="ft-panel__section">
+      <div class="ft-panel__section-label">Greeting tone</div>
+      <div class="ft-panel__row">
+        <button class="ft-panel__btn active" data-greeting="auto"      onclick="switchGreeting(this)">Auto</button>
+        <button class="ft-panel__btn"        data-greeting="morning"   onclick="switchGreeting(this)">Morning</button>
+        <button class="ft-panel__btn"        data-greeting="afternoon" onclick="switchGreeting(this)">Afternoon</button>
+        <button class="ft-panel__btn"        data-greeting="evening"   onclick="switchGreeting(this)">Evening</button>
+        <button class="ft-panel__btn"        data-greeting="late"      onclick="switchGreeting(this)">Late night</button>
+      </div>
+    </div>
+    <div class="ft-panel__section" id="late-copy-section" style="display:none">
+      <div class="ft-panel__section-label">Late night copy</div>
+      <div class="ft-panel__row">
+        <button class="ft-panel__btn active" data-late="still"   onclick="switchLate(this)">Still at it.</button>
+        <button class="ft-panel__btn"        data-late="grants"  onclick="switchLate(this)">Late nights...</button>
+        <button class="ft-panel__btn"        data-late="youve"   onclick="switchLate(this)">You've got this.</button>
+        <button class="ft-panel__btn"        data-late="working" onclick="switchLate(this)">Working late?</button>
+      </div>
+    </div>
+    <p class="ft-panel__hint">PI-28 Homepage Dashboard &mdash; concept exploration. For internal alignment only.</p>
+  </div>
+</div>
+
+
+<script>
+/* ── Greeting ── */
+var lateOptions = { still:'Still at it.', grants:'Late nights, good grants.', youve:"You've got this.", working:'Working late?' };
+var greetings = { morning:'Good morning!', afternoon:'Good afternoon!', evening:'Good evening!', late:lateOptions.still };
+function isLateHour() { var h=new Date().getHours(); return (h>=21||h<5); }
+function getAutoGreeting() { var h=new Date().getHours(); if(h>=5&&h<12)return greetings.morning; if(h>=12&&h<17)return greetings.afternoon; if(h>=17&&h<21)return greetings.evening; return greetings.late; }
+function setGreetings(text) { var els=document.querySelectorAll('.ft-greeting'); for(var i=0;i<els.length;i++){els[i].textContent=text;} }
+function showLateCopySection(show) { document.getElementById('late-copy-section').style.display=show?'block':'none'; }
+function switchLate(btn) { var btns=document.querySelectorAll('.ft-panel__btn[data-late]'); for(var i=0;i<btns.length;i++){btns[i].classList.remove('active');} btn.classList.add('active'); greetings.late=lateOptions[btn.getAttribute('data-late')]; setGreetings(greetings.late); }
+function switchGreeting(btn) { var btns=document.querySelectorAll('.ft-panel__btn[data-greeting]'); for(var i=0;i<btns.length;i++){btns[i].classList.remove('active');} btn.classList.add('active'); var key=btn.getAttribute('data-greeting'); if(key==='auto'){showLateCopySection(isLateHour());setGreetings(getAutoGreeting());}else{showLateCopySection(key==='late');setGreetings(greetings[key]);} }
+
+/* ── View switcher ── */
+function switchView(btn) {
+  var btns=document.querySelectorAll('.ft-panel__btn[data-view]');
+  for(var i=0;i<btns.length;i++){btns[i].classList.remove('active');}
+  btn.classList.add('active');
+  var views=document.querySelectorAll('.view');
+  for(var j=0;j<views.length;j++){views[j].classList.remove('active');}
+  document.getElementById(btn.getAttribute('data-view')).classList.add('active');
+  document.getElementById('geo-toggle-section').style.display = (btn.getAttribute('data-view')==='v-impact') ? 'block' : 'none';
+}
+
+/* ── Sidebar ── */
+function setSidebarActive(el) { var items=document.querySelectorAll('.ft-sidebar__item'); for(var i=0;i<items.length;i++){items[i].classList.remove('active');} el.classList.add('active'); }
+
+/* ── Geo toggle ── */
+function switchGeo(btn) {
+  var btns=document.querySelectorAll('.ft-panel__btn[data-geo]');
+  for(var i=0;i<btns.length;i++){btns[i].classList.remove('active');}
+  btn.classList.add('active');
+  var key=btn.getAttribute('data-geo');
+  document.getElementById('map-wrap').style.display = (key==='map') ? 'block' : 'none';
+  document.getElementById('pie-wrap').style.display = (key==='pie') ? 'block' : 'none';
+}
+
+/* ── Panel toggle ── */
+function togglePanel() { var body=document.getElementById('ft-panel-body'); var lbl=document.getElementById('ft-toggle-lbl'); var open=body.classList.toggle('open'); lbl.textContent=open?'Hide':'Show'; }
+
+/* ── Charts ── */
+var C = window.Chart;
+C.defaults.font.family = 'Roboto, sans-serif';
+C.defaults.font.size = 11;
+C.defaults.color = '#888';
+var GRID='#EEEEEE', NAVY='#2D3B4A';
+
+var money = function(v){ if(Math.abs(v)>=1000000) return '$'+(v/1000000).toFixed(1)+'M'; if(Math.abs(v)>=1000) return '$'+Math.round(v/1000)+'k'; return '$'+v; };
+
+/* Pie */
+var pieLabels=['MN','CA','FL','NY','IL','CO','GA','CT','MT','DC','MO','Other'];
+var pieData=[18,12,8,9,7,8,5,6,6,5,4,12];
+var pieColors=['#042C53','#185FA5','#2D3B4A','#378ADD','#536E8A','#85B7EB','#1D9E75','#5DCAA5','#EF9F27','#FAC775','#D85A30','#B4B2A9'];
+new C(document.getElementById('pieChart'),{type:'pie',data:{labels:pieLabels,datasets:[{data:pieData,backgroundColor:pieColors,borderColor:'#fff',borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.label+': '+c.parsed+'%';}}}}}});
+var pl=document.getElementById('pieLegend');
+pieLabels.forEach(function(l,i){var d=document.createElement('div');d.style.cssText='display:flex;align-items:center;gap:5px;margin-bottom:2px;';d.innerHTML='<span style="width:9px;height:9px;border-radius:2px;background:'+pieColors[i]+';flex-shrink:0;display:inline-block"></span>'+l+' '+pieData[i]+'%';pl.appendChild(d);});
+
+/* Installments */
+new C(document.getElementById('instChart'),{type:'bar',data:{labels:['Jun 26','Jul 26','Aug 26','Sep 26','Oct 26','Nov 26','Dec 26','Jan 27','Feb 27','Mar 27','Apr 27','May 27'],datasets:[{data:[56000,48000,95000,36000,21000,0,26000,55000,0,35000,53000,50000],backgroundColor:NAVY,borderRadius:3,maxBarThickness:22}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return money(c.parsed.y);}}}},scales:{x:{grid:{display:false},ticks:{autoSkip:false,maxRotation:45,minRotation:45}},y:{grid:{color:GRID},border:{display:false},ticks:{callback:money}}}}});
+
+/* Awards */
+new C(document.getElementById('awardChart'),{type:'bar',data:{labels:['2017','2018','2019','2020','2021','2022','2023','2024','2025','2026'],datasets:[{data:[450000,400000,510000,25000,805000,395000,710000,330000,1110000,790000],backgroundColor:NAVY,borderRadius:3,maxBarThickness:28}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return money(c.parsed.y);}}}},scales:{x:{grid:{display:false}},y:{grid:{color:GRID},border:{display:false},ticks:{callback:money}}}}});
+
+/* Submissions */
+var subSets=[
+  {label:'Eligibilities',color:'#EF9F27',dash:[4,3],data:[2,0,1,2,0,0,1,0,3,1,0,1]},
+  {label:'LOIs',        color:'#1D9E75',dash:[],    data:[5,1,2,7,1,1,3,1,8,2,1,1]},
+  {label:'Applications',color:NAVY,     dash:[],    data:[28,28,23,56,29,23,26,26,44,32,20,8]}
+];
+new C(document.getElementById('subChart'),{type:'line',data:{labels:['Jul 25','Aug 25','Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26','Apr 26','May 26','Jun 26'],datasets:subSets.map(function(s){return{label:s.label,data:s.data,borderColor:s.color,backgroundColor:s.color,pointRadius:3,pointHoverRadius:5,borderWidth:2,borderDash:s.dash,tension:0.25,fill:false};})},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:GRID},border:{display:false},beginAtZero:true}}}});
+var sl=document.getElementById('subLegend');
+subSets.forEach(function(s){var d=document.createElement('div');d.style.cssText='display:flex;align-items:center;gap:5px;';d.innerHTML='<span style="width:9px;height:9px;border-radius:2px;background:'+s.color+';flex-shrink:0;display:inline-block"></span>'+s.label;sl.appendChild(d);});
+
+/* ── US Map ── */
+var stateData = {
+  'mn':18,'ca':12,'fl':8,'ny':9,'il':7,'co':8,'ga':5,'ct':6,'mt':6,'dc':5,'mo':4,
+  'tx':3,'wa':3,'or':2,'az':2,'oh':2,'pa':2,'mi':2,'wi':1,'ia':1,'ma':2,'nj':1,
+  'md':1,'va':1,'nc':1,'sc':1,'tn':1,'ky':1,'in':1,'wv':1,'ne':1,'ks':1,'ok':1,
+  'ar':1,'la':1,'ms':1,'al':1,'me':1
+};
+
+function getStateFill(pct) {
+  if(!pct) return '#E8ECF0';
+  if(pct>10) return '#042C53';
+  if(pct>=6)  return '#185FA5';
+  if(pct>=3)  return '#378ADD';
+  if(pct>=1)  return '#85B7EB';
+  return '#C8DCEF';
+}
+
+var stateNames = {
+  'al':'Alabama','ak':'Alaska','az':'Arizona','ar':'Arkansas','ca':'California',
+  'co':'Colorado','ct':'Connecticut','de':'Delaware','fl':'Florida','ga':'Georgia',
+  'hi':'Hawaii','id':'Idaho','il':'Illinois','in':'Indiana','ia':'Iowa','ks':'Kansas',
+  'ky':'Kentucky','la':'Louisiana','me':'Maine','md':'Maryland','ma':'Massachusetts',
+  'mi':'Michigan','mn':'Minnesota','ms':'Mississippi','mo':'Missouri','mt':'Montana',
+  'ne':'Nebraska','nv':'Nevada','nh':'New Hampshire','nj':'New Jersey','nm':'New Mexico',
+  'ny':'New York','nc':'North Carolina','nd':'North Dakota','oh':'Ohio','ok':'Oklahoma',
+  'or':'Oregon','pa':'Pennsylvania','ri':'Rhode Island','sc':'South Carolina',
+  'sd':'South Dakota','tn':'Tennessee','tx':'Texas','ut':'Utah','vt':'Vermont',
+  'va':'Virginia','wa':'Washington','wv':'West Virginia','wi':'Wisconsin','wy':'Wyoming',
+  'dc':'District of Columbia'
+};
+
+var tooltip = document.getElementById('map-tooltip');
+var mapContainer = document.getElementById('map-container');
+var allStatePaths = document.querySelectorAll('#us-map-real path[class]');
+
+allStatePaths.forEach(function(path) {
+  var abbr = path.getAttribute('class');
+  if(!abbr || abbr.length !== 2) return;
+  var pct = stateData[abbr] || 0;
+  path.setAttribute('fill', getStateFill(pct));
+  path.setAttribute('stroke', '#FFFFFF');
+  path.setAttribute('stroke-width', '0.8');
+  path.addEventListener('mouseenter', function(e) {
+    var name = stateNames[abbr] || abbr.toUpperCase();
+    tooltip.innerHTML = '<strong>'+name+'</strong><br>'+(pct>0 ? pct+'% of awarded dollars' : 'No grants awarded');
+    tooltip.style.display = 'block';
+    path.style.opacity = '0.75';
+  });
+  path.addEventListener('mousemove', function(e) {
+    var r = mapContainer.getBoundingClientRect();
+    tooltip.style.left = (e.clientX - r.left + 14)+'px';
+    tooltip.style.top  = (e.clientY - r.top  - 12)+'px';
+  });
+  path.addEventListener('mouseleave', function() {
+    tooltip.style.display = 'none';
+    path.style.opacity = '1';
+  });
+});
+
+/* ── Init ── */
+setGreetings(getAutoGreeting());
+showLateCopySection(isLateHour());
+document.getElementById('geo-toggle-section').style.display = 'block';
+</script>
+</body>
+</html>
