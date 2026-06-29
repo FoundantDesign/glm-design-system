@@ -1,0 +1,714 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css">
+
+<style>
+:root {
+  --font-body: Roboto, sans-serif;
+  --font-heading: Roboto, sans-serif;
+  --app-bg: #F5F5F5;
+  --surface: #FFFFFF;
+  --primary: #2D3B4A;
+  --primary-hover: #424F5C;
+  --primary-pressed: #57626E;
+  --outline-hover: #EAEAED;
+  --border-color: #E0E0E0;
+  --border: 1px solid #E0E0E0;
+  --radius: 6px;
+  --form-radius: 4px;
+  --pill: 999px;
+  --link: #1B76D2;
+  --gap: 16px;
+  --nav-height: 55px;
+  --neutral-30: #616161;
+  --neutral-40: #757575;
+  --neutral-60: #E0E0E0;
+  --neutral-70: #EEEEEE;
+  --neutral-80: #F5F5F5;
+  --success-0: #67CF9D; --success-50: #E1F5EB;
+  --danger-0:  #BD3B39; --danger-50:  #FCDDDD;
+  --warning-0: #F4C862; --warning-50: #FFF4D1;
+  --info-0:    #536E8A; --info-50:    #D5E2FA;
+  --mdb-primary: #2D3B4A;
+  --mdb-body-bg: #F5F5F5;
+  --mdb-body-color: #2D3B4A;
+  --mdb-border-color: #E0E0E0;
+  --mdb-border-radius: 6px;
+  --mdb-border-radius-pill: 999px;
+  --mdb-font-sans-serif: Roboto, sans-serif;
+  --mdb-link-color: #1B76D2;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); font-size: 16px; background: var(--app-bg); color: var(--primary); }
+h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); font-weight: 500; color: var(--primary); }
+a { color: var(--link); text-decoration: none; }
+svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
+
+/* NAVBAR */
+.ft-navbar {
+  background: var(--surface); border-bottom: var(--border);
+  height: var(--nav-height); padding: 0 20px;
+  display: flex; align-items: center; gap: 18px;
+  position: sticky; top: 0; z-index: 200;
+}
+.ft-navbar__logo {
+  width: 36px; height: 36px; background: var(--primary);
+  border-radius: var(--radius); display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-heading); font-weight: 700; font-size: 11px; color: #fff; flex-shrink: 0;
+}
+.ft-navbar__item {
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.8rem;
+  color: var(--primary); text-transform: uppercase;
+  background: none; border: none; cursor: pointer; white-space: nowrap;
+  display: flex; align-items: center; gap: 4px;
+}
+.ft-navbar__spacer { flex: 1; }
+
+/* Avatar dropdown */
+.ft-avatar-dropdown .dropdown-toggle {
+  font-family: var(--font-heading); font-weight: 500; font-size: 0.8rem;
+  color: var(--primary); text-transform: uppercase;
+  background: none; border: none; cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+}
+.ft-avatar-dropdown .dropdown-toggle::after { display: none; }
+.ft-avatar-dropdown .dropdown-menu {
+  border-radius: var(--radius); border-color: var(--border-color);
+  min-width: 260px; font-size: 0.875rem; padding: 6px 0;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+}
+.ft-avatar-dropdown .dropdown-item {
+  font-family: var(--font-body); color: var(--primary);
+  padding: 8px 16px; display: flex; align-items: center; gap: 10px;
+}
+.ft-avatar-dropdown .dropdown-item:hover { background: var(--neutral-70); }
+.ft-avatar-dropdown .dropdown-divider { border-color: var(--border-color); margin: 4px 0; }
+
+/* PAGE */
+.ft-page {
+  min-height: calc(100vh - var(--nav-height));
+  background: var(--app-bg); padding: 32px 24px;
+  display: flex; flex-direction: column; align-items: center;
+}
+
+/* FORM CONTAINER */
+.ft-form-container { width: 100%; max-width: 680px; }
+.ft-form-header { margin-bottom: 24px; }
+.ft-form-header h1 { font-size: 1.5rem; font-weight: 500; margin-bottom: 4px; }
+.ft-form-process { font-size: 0.8rem; color: var(--neutral-30); }
+
+/* FORM CARD */
+.ft-form-card {
+  background: var(--surface); border: var(--border);
+  border-radius: var(--radius); padding: 24px; margin-bottom: var(--gap);
+}
+.ft-form-section-title {
+  font-family: var(--font-heading); font-size: 1.25rem; font-weight: 500;
+  color: var(--primary); margin-bottom: 20px; padding-bottom: 10px; border-bottom: var(--border);
+}
+
+/* FIELD GROUP */
+.ft-field-group { margin-bottom: 20px; }
+.ft-field-group:last-child { margin-bottom: 0; }
+.ft-field-group:has(+ .ft-ai-wrapper) { margin-bottom: 0; }
+
+.ft-field-label {
+  display: block;
+  font-family: var(--font-body); font-size: 0.8rem; font-weight: 500;
+  color: var(--primary); margin-bottom: 5px;
+}
+.ft-field-label .required { color: var(--danger-0); margin-left: 2px; }
+.ft-field-label .ai-label-icon {
+  margin-left: 5px; vertical-align: middle;
+  color: var(--success-0); position: relative; top: -1px;
+}
+
+.ft-legacy-input,
+.ft-legacy-textarea {
+  width: 100%; border: 1px solid #b0b8c4; border-radius: var(--form-radius);
+  padding: 6px 10px; font-family: var(--font-body); font-size: 0.875rem;
+  color: var(--primary); background: var(--surface); outline: none; transition: border-color 0.15s;
+}
+.ft-legacy-input:focus,
+.ft-legacy-textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
+.ft-legacy-textarea { resize: vertical; min-height: 80px; }
+.ft-legacy-input.populated,
+.ft-legacy-textarea.populated { background: var(--info-50); }
+
+.ft-char-count { font-size: 0.75rem; color: var(--neutral-30); margin-top: 4px; }
+
+/* AI ACCEPTED BADGE */
+.ft-ai-accepted-badge {
+  display: none; font-size: 0.7rem; font-weight: 500;
+  color: var(--primary); background: var(--success-50);
+  border-radius: var(--pill); padding: 1px 8px; margin-left: 6px; vertical-align: middle;
+}
+.ft-ai-accepted-badge.visible { display: inline; }
+
+/* REPLACEMENT VARIANT: accepted filled input */
+.ft-ai-accepted-input {
+  display: none;
+  width: 100%;
+  border: 1px solid var(--primary);
+  border-radius: var(--form-radius);
+  padding: 6px 10px;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--primary);
+  background: var(--surface);
+  outline: none;
+  transition: border-color 0.15s;
+  resize: vertical;
+  margin-top: 3px;
+}
+.ft-ai-accepted-input:focus { box-shadow: 0 0 0 1px var(--primary); }
+.ft-ai-accepted-input.visible { display: block; }
+
+/* AI SUGGESTION WRAPPER */
+.ft-ai-wrapper { margin-top: 3px; border: var(--border); border-radius: var(--radius); overflow: hidden; }
+.ft-ai-wrapper.dismissed { display: none; }
+.ft-ai-wrapper.accepted  { display: none; }
+
+/* Banner */
+.ft-ai-banner {
+  background: var(--primary); display: flex; align-items: center;
+  padding: 7px 12px; min-height: 34px;
+}
+.ft-ai-banner-left { display: flex; align-items: center; gap: 8px; }
+.ft-ai-banner-label {
+  font-family: var(--font-heading); font-size: 0.875rem; font-weight: 400; color: #fff;
+}
+
+/* Default view */
+.ft-ai-default-view {
+  background: var(--surface); padding: 12px 12px 12px 14px;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+}
+.ft-ai-suggestion-text {
+  font-family: var(--font-body); font-size: 0.875rem;
+  color: var(--neutral-20, #424242); line-height: 1.55; flex: 1;
+}
+
+/* Action buttons */
+.ft-ai-action-btns { display: flex; align-items: center; gap: 4px; flex-shrink: 0; padding-top: 1px; }
+.ft-ai-action-btn {
+  width: 28px; height: 28px; border-radius: var(--form-radius);
+  border: var(--border); background: var(--neutral-80); color: var(--primary);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 0.1s, border-color 0.1s; padding: 0;
+}
+.ft-ai-action-btn:hover         { background: var(--outline-hover); border-color: #9aafc0; }
+.ft-ai-action-btn.accept:hover  { background: var(--success-50); border-color: var(--success-0); }
+.ft-ai-action-btn.dismiss:hover { background: var(--danger-50); border-color: var(--danger-0); }
+
+/* Edit view */
+.ft-ai-edit-view { background: var(--surface); padding: 10px 12px 14px; display: none; }
+.ft-ai-edit-view.active { display: block; }
+.ft-ai-edit-textarea {
+  width: 100%; border: 1px solid var(--primary); border-radius: var(--form-radius);
+  padding: 8px 10px; font-family: var(--font-body); font-size: 0.875rem;
+  color: var(--primary); line-height: 1.55; resize: vertical; min-height: 90px; outline: none;
+}
+.ft-ai-edit-textarea:focus { box-shadow: 0 0 0 1px var(--primary); }
+.ft-ai-edit-actions { display: flex; justify-content: space-between; gap: 8px; margin-top: 10px; }
+
+/* Buttons */
+.btn-ft-filled, .btn-ft-outline {
+  border-radius: var(--pill); font-family: var(--font-heading); font-weight: 700;
+  cursor: pointer; border: 2px solid var(--primary);
+  display: inline-flex; align-items: center; gap: 6px; transition: background 0.1s;
+}
+.btn-ft-filled  { background: var(--primary); color: #fff; }
+.btn-ft-filled:hover  { background: var(--primary-hover); border-color: var(--primary-hover); }
+.btn-ft-outline { background: transparent; color: var(--primary); }
+.btn-ft-outline:hover { background: var(--outline-hover); }
+.btn-ft-sm      { font-size: 0.75rem; padding: 4px 14px 3px; }
+.btn-ft-default { font-size: 0.875rem; padding: 5px 16px; }
+</style>
+
+<!-- INLINE SVG SYMBOLS -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="ic-home" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2 6.5L8 2l6 4.5V14a1 1 0 01-1 1H3a1 1 0 01-1-1V6.5z"/><path d="M6 15v-5h4v5"/>
+    </symbol>
+    <symbol id="ic-chevron" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M2 3.5l3 3 3-3"/>
+    </symbol>
+    <symbol id="ic-user" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-5 6-5s6 1.7 6 5"/>
+    </symbol>
+    <symbol id="ic-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <path d="M2 8l4 4 8-8"/>
+    </symbol>
+    <symbol id="ic-pencil" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 2l3 3-8 8H3v-3l8-8z"/>
+    </symbol>
+    <symbol id="ic-close" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M3 3l10 10M13 3L3 13"/>
+    </symbol>
+    <symbol id="ic-file" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 1H4a1 1 0 00-1 1v12a1 1 0 001 1h8a1 1 0 001-1V6L9 1z"/><path d="M9 1v5h5"/>
+    </symbol>
+    <symbol id="ic-gear" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="8" cy="8" r="2.5"/><path d="M8 1.5V3m0 10v1.5M1.5 8H3m10 0h1.5M3.1 3.1l1 1m7.8 7.8 1 1M12.9 3.1l-1 1M4.1 11.9l-1 1"/>
+    </symbol>
+    <symbol id="ic-logout" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 14H3a1 1 0 01-1-1V3a1 1 0 011-1h3M10 11l3-3-3-3M13 8H6"/>
+    </symbol>
+    <symbol id="ic-sparkles" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423L16.5 15.75l.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- NAVBAR -->
+<nav class="ft-navbar">
+  <div class="ft-navbar__logo">FT</div>
+  <svg width="16" height="16" style="color:var(--primary);cursor:pointer"><use href="#ic-home"/></svg>
+  <button class="ft-navbar__item">
+    <svg width="14" height="14"><use href="#ic-file"/></svg>
+    APPLY
+  </button>
+  <div class="ft-navbar__spacer"></div>
+  <div class="ft-avatar-dropdown dropdown">
+    <button class="dropdown-toggle" data-mdb-toggle="dropdown" aria-expanded="false">
+      <svg width="15" height="15"><use href="#ic-user"/></svg>
+      JAMES GARCIA
+      <svg width="10" height="10"><use href="#ic-chevron"/></svg>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end">
+      <li><a class="dropdown-item" href="#"><svg width="14" height="14"><use href="#ic-user"/></svg>Stop Proxying as James Garcia</a></li>
+      <li><a class="dropdown-item" href="#"><svg width="14" height="14"><use href="#ic-file"/></svg>International Brotherhood of Electrical Workers System Council</a></li>
+      <li><hr class="dropdown-divider"></li>
+      <li><a class="dropdown-item" href="#"><svg width="14" height="14"><use href="#ic-user"/></svg>Edit My Profile</a></li>
+      <li><a class="dropdown-item" href="#"><svg width="14" height="14"><use href="#ic-gear"/></svg>Preferences</a></li>
+      <li><hr class="dropdown-divider"></li>
+      <li><a class="dropdown-item" href="#"><svg width="14" height="14"><use href="#ic-logout"/></svg>Sign Out</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- PAGE -->
+<div class="ft-page">
+  <div class="ft-form-container">
+
+    <div class="ft-form-header">
+      <h1>Application</h1>
+      <div class="ft-form-process">Process: 2025 Arts Grants</div>
+    </div>
+
+    <!-- CARD 1: Organization Information -->
+    <div class="ft-form-card">
+      <div class="ft-form-section-title">Organization Information</div>
+
+      <div class="ft-field-group ft-field-has-ai">
+        <label class="ft-field-label" for="field-1">
+          Project Name <span class="required">*</span>
+          <span class="ft-ai-accepted-badge" id="badge-1">AI accepted</span>
+        </label>
+        <input type="text" class="ft-legacy-input" id="field-1" />
+        <input type="text" class="ft-ai-accepted-input" id="accepted-input-1" />
+      </div>
+
+      <div class="ft-ai-wrapper" id="suggestion-1">
+        <div class="ft-ai-banner">
+          <div class="ft-ai-banner-left">
+            <svg width="16" height="16" style="color:var(--success-0)"><use href="#ic-sparkles"/></svg>
+            <span class="ft-ai-banner-label">Suggested answer from your past applications</span>
+          </div>
+        </div>
+        <div class="ft-ai-default-view" id="default-view-1">
+          <span class="ft-ai-suggestion-text" id="suggestion-text-1">2024 General Operating Support for IBEW System Council SD</span>
+          <div class="ft-ai-action-btns">
+            <button class="ft-ai-action-btn accept" title="Accept" onclick="acceptSuggestion(1)"><svg width="12" height="12"><use href="#ic-check"/></svg></button>
+            <button class="ft-ai-action-btn edit"   title="Edit"   onclick="editSuggestion(1)"><svg width="12" height="12"><use href="#ic-pencil"/></svg></button>
+            <button class="ft-ai-action-btn dismiss" title="Dismiss" onclick="dismissSuggestion(1)"><svg width="12" height="12"><use href="#ic-close"/></svg></button>
+          </div>
+        </div>
+        <div class="ft-ai-edit-view" id="edit-view-1">
+          <textarea class="ft-ai-edit-textarea" id="edit-textarea-1">2024 General Operating Support for IBEW System Council SD</textarea>
+          <div class="ft-ai-edit-actions">
+            <button class="btn-ft-outline btn-ft-sm" onclick="cancelEdit(1)">Cancel</button>
+            <button class="btn-ft-filled btn-ft-sm"  onclick="saveEdit(1)">Save</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="ft-field-group" style="margin-top:20px">
+        <label class="ft-field-label" for="email">Email</label>
+        <input type="email" class="ft-legacy-input" id="email" />
+      </div>
+
+      <div class="ft-field-group">
+        <label class="ft-field-label" for="phone">Phone</label>
+        <input type="tel" class="ft-legacy-input" id="phone" />
+      </div>
+
+
+      <div class="ft-field-group">
+        <label class="ft-field-label" for="org-name">Organization Name</label>
+        <input type="text" class="ft-legacy-input" id="org-name" value="International Brotherhood of Electrical Workers System Council" />
+      </div>
+
+      <div class="ft-field-group">
+        <label class="ft-field-label" for="ein">EIN</label>
+        <input type="text" class="ft-legacy-input" id="ein" />
+      </div>
+
+      <div class="ft-field-group">
+        <label class="ft-field-label" for="director-name">Director Name</label>
+        <input type="text" class="ft-legacy-input" id="director-name" />
+      </div>
+
+    </div>
+
+    <!-- CARD 2: Program Description -->
+    <div class="ft-form-card">
+      <div class="ft-form-section-title">Program Description</div>
+
+      <div class="ft-field-group ft-field-has-ai">
+        <label class="ft-field-label" for="field-2">
+          Overview <span class="required">*</span>
+          <span class="ft-ai-accepted-badge" id="badge-2">AI accepted</span>
+        </label>
+        <textarea class="ft-legacy-textarea" id="field-2" rows="4"></textarea>
+        <textarea class="ft-ai-accepted-input" id="accepted-input-2" rows="4"></textarea>
+      </div>
+
+      <div class="ft-ai-wrapper" id="suggestion-2">
+        <div class="ft-ai-banner">
+          <div class="ft-ai-banner-left">
+            <svg width="16" height="16" style="color:var(--success-0)"><use href="#ic-sparkles"/></svg>
+            <span class="ft-ai-banner-label">Suggested answer from your past applications</span>
+          </div>
+        </div>
+        <div class="ft-ai-default-view" id="default-view-2">
+          <span class="ft-ai-suggestion-text" id="suggestion-text-2">The IBEW System Council provides training, labor representation, and collective bargaining support for electrical workers across South Dakota, ensuring fair wages and safe working conditions for our members.</span>
+          <div class="ft-ai-action-btns">
+            <button class="ft-ai-action-btn accept" title="Accept" onclick="acceptSuggestion(2)"><svg width="12" height="12"><use href="#ic-check"/></svg></button>
+            <button class="ft-ai-action-btn edit"   title="Edit"   onclick="editSuggestion(2)"><svg width="12" height="12"><use href="#ic-pencil"/></svg></button>
+            <button class="ft-ai-action-btn dismiss" title="Dismiss" onclick="dismissSuggestion(2)"><svg width="12" height="12"><use href="#ic-close"/></svg></button>
+          </div>
+        </div>
+        <div class="ft-ai-edit-view" id="edit-view-2">
+          <textarea class="ft-ai-edit-textarea" id="edit-textarea-2">The IBEW System Council provides training, labor representation, and collective bargaining support for electrical workers across South Dakota, ensuring fair wages and safe working conditions for our members.</textarea>
+          <div class="ft-ai-edit-actions">
+            <button class="btn-ft-outline btn-ft-sm" onclick="cancelEdit(2)">Cancel</button>
+            <button class="btn-ft-filled btn-ft-sm"  onclick="saveEdit(2)">Save</button>
+          </div>
+        </div>
+      </div>
+      <div class="ft-char-count" id="char-count-2" style="margin-top:4px">5,000 characters left of 5,000</div>
+
+      <div class="ft-field-group" style="margin-top:20px">
+        <label class="ft-field-label" style="margin-bottom:8px">Art Form</label>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <label style="display:flex;align-items:center;gap:8px;font-size:0.875rem;font-weight:400;cursor:pointer"><input type="checkbox" style="accent-color:var(--primary)"> Visual Arts</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:0.875rem;font-weight:400;cursor:pointer"><input type="checkbox" style="accent-color:var(--primary)"> Music</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:0.875rem;font-weight:400;cursor:pointer"><input type="checkbox" style="accent-color:var(--primary)"> Dance</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:0.875rem;font-weight:400;cursor:pointer"><input type="checkbox" style="accent-color:var(--primary)"> Theater</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:0.875rem;font-weight:400;cursor:pointer"><input type="checkbox" style="accent-color:var(--primary)"> Literary</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:0.875rem;font-weight:400;cursor:pointer"><input type="checkbox" style="accent-color:var(--primary)"> Media Arts</label>
+        </div>
+      </div>
+
+      <div class="ft-field-group">
+        <label class="ft-field-label" style="margin-bottom:8px">Program Type</label>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <label style="display:flex;align-items:center;gap:8px;font-size:0.875rem;font-weight:400;cursor:pointer"><input type="radio" name="program-type" checked style="accent-color:var(--primary)"> Education</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:0.875rem;font-weight:400;cursor:pointer"><input type="radio" name="program-type" style="accent-color:var(--primary)"> Performances</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:0.875rem;font-weight:400;cursor:pointer"><input type="radio" name="program-type" style="accent-color:var(--primary)"> Community Events</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:0.875rem;font-weight:400;cursor:pointer"><input type="radio" name="program-type" style="accent-color:var(--primary)"> Residencies</label>
+        </div>
+      </div>
+
+      <div class="ft-field-group">
+        <label class="ft-field-label" for="participants">Participants</label>
+        <input type="number" class="ft-legacy-input" id="participants" />
+      </div>
+
+    </div>
+
+    <!-- CARD 3: Artistic Impact -->
+    <div class="ft-form-card">
+      <div class="ft-form-section-title">Artistic Impact</div>
+
+      <div class="ft-field-group ft-field-has-ai">
+        <label class="ft-field-label" for="field-3">
+          Artistic Vision <span class="required">*</span>
+          <span class="ft-ai-accepted-badge" id="badge-3">AI accepted</span>
+        </label>
+        <textarea class="ft-legacy-textarea" id="field-3" rows="4"></textarea>
+        <textarea class="ft-ai-accepted-input" id="accepted-input-3" rows="4"></textarea>
+      </div>
+
+      <div class="ft-ai-wrapper" id="suggestion-3">
+        <div class="ft-ai-banner">
+          <div class="ft-ai-banner-left">
+            <svg width="16" height="16" style="color:var(--success-0)"><use href="#ic-sparkles"/></svg>
+            <span class="ft-ai-banner-label">Suggested answer from your past applications</span>
+          </div>
+        </div>
+        <div class="ft-ai-default-view" id="default-view-3">
+          <span class="ft-ai-suggestion-text" id="suggestion-text-3">The IBEW System Council advocates for electrical workers' rights, safety, and economic interests across South Dakota. We provide training, labor representation, and collective bargaining support to ensure fair wages, safe working conditions, and professional development opportunities for our members in the electrical trades industry.</span>
+          <div class="ft-ai-action-btns">
+            <button class="ft-ai-action-btn accept" title="Accept" onclick="acceptSuggestion(3)"><svg width="12" height="12"><use href="#ic-check"/></svg></button>
+            <button class="ft-ai-action-btn edit"   title="Edit"   onclick="editSuggestion(3)"><svg width="12" height="12"><use href="#ic-pencil"/></svg></button>
+            <button class="ft-ai-action-btn dismiss" title="Dismiss" onclick="dismissSuggestion(3)"><svg width="12" height="12"><use href="#ic-close"/></svg></button>
+          </div>
+        </div>
+        <div class="ft-ai-edit-view" id="edit-view-3">
+          <textarea class="ft-ai-edit-textarea" id="edit-textarea-3">The IBEW System Council advocates for electrical workers' rights, safety, and economic interests across South Dakota. We provide training, labor representation, and collective bargaining support to ensure fair wages, safe working conditions, and professional development opportunities for our members in the electrical trades industry.</textarea>
+          <div class="ft-ai-edit-actions">
+            <button class="btn-ft-outline btn-ft-sm" onclick="cancelEdit(3)">Cancel</button>
+            <button class="btn-ft-filled btn-ft-sm"  onclick="saveEdit(3)">Save</button>
+          </div>
+        </div>
+      </div>
+      <div class="ft-char-count" id="char-count-3" style="margin-top:4px">5,000 characters left of 5,000</div>
+
+      <div class="ft-field-group" style="margin-top:20px">
+        <label class="ft-field-label" for="artist-qual">Artist Qualifications <span class="required">*</span></label>
+        <textarea class="ft-legacy-textarea" id="artist-qual" rows="4"></textarea>
+        <div class="ft-char-count">5,000 characters left of 5,000</div>
+      </div>
+
+      <div class="ft-field-group">
+        <label class="ft-field-label" for="community-impact">Community Impact <span class="required">*</span></label>
+        <textarea class="ft-legacy-textarea" id="community-impact" rows="4"></textarea>
+        <div class="ft-char-count">5,000 characters left of 5,000</div>
+      </div>
+
+    </div>
+
+    <!-- CARD 4: Budget -->
+    <div class="ft-form-card">
+      <div class="ft-form-section-title">Budget</div>
+
+      <div class="ft-field-group">
+        <label class="ft-field-label" for="total-budget">Total Budget</label>
+        <input type="text" class="ft-legacy-input" id="total-budget" placeholder="$" />
+      </div>
+
+      <div class="ft-field-group">
+        <label class="ft-field-label" for="amount-requested">Amount Requested</label>
+        <input type="text" class="ft-legacy-input" id="amount-requested" placeholder="$" />
+      </div>
+
+      <div class="ft-field-group ft-field-has-ai">
+        <label class="ft-field-label" for="field-4">
+          Budget Narrative <span class="required">*</span>
+          <span class="ft-ai-accepted-badge" id="badge-4">AI accepted</span>
+        </label>
+        <textarea class="ft-legacy-textarea" id="field-4" rows="4"></textarea>
+        <textarea class="ft-ai-accepted-input" id="accepted-input-4" rows="4"></textarea>
+      </div>
+
+      <div class="ft-ai-wrapper" id="suggestion-4">
+        <div class="ft-ai-banner">
+          <div class="ft-ai-banner-left">
+            <svg width="16" height="16" style="color:var(--success-0)"><use href="#ic-sparkles"/></svg>
+            <span class="ft-ai-banner-label">Suggested answer from your past applications</span>
+          </div>
+        </div>
+        <div class="ft-ai-default-view" id="default-view-4">
+          <span class="ft-ai-suggestion-text" id="suggestion-text-4">The requested general operating support of $30,000 will be allocated across critical operational needs: (1) Training Program Enhancement ($12,000) - updating curriculum materials, purchasing new testing equipment, and developing online learning modules to expand access for rural members; (2) Member Services ($8,000) - improving communication systems and maintaining member databases; (3) Safety Initiative Support ($6,000) - purchasing safety training materials and updating certification programs; (4) Administrative Operations ($4,000) - office expenses and technology infrastructure.</span>
+          <div class="ft-ai-action-btns">
+            <button class="ft-ai-action-btn accept" title="Accept" onclick="acceptSuggestion(4)"><svg width="12" height="12"><use href="#ic-check"/></svg></button>
+            <button class="ft-ai-action-btn edit"   title="Edit"   onclick="editSuggestion(4)"><svg width="12" height="12"><use href="#ic-pencil"/></svg></button>
+            <button class="ft-ai-action-btn dismiss" title="Dismiss" onclick="dismissSuggestion(4)"><svg width="12" height="12"><use href="#ic-close"/></svg></button>
+          </div>
+        </div>
+        <div class="ft-ai-edit-view" id="edit-view-4">
+          <textarea class="ft-ai-edit-textarea" id="edit-textarea-4">The requested general operating support of $30,000 will be allocated across critical operational needs: (1) Training Program Enhancement ($12,000) - updating curriculum materials, purchasing new testing equipment, and developing online learning modules to expand access for rural members; (2) Member Services ($8,000) - improving communication systems and maintaining member databases; (3) Safety Initiative Support ($6,000) - purchasing safety training materials and updating certification programs; (4) Administrative Operations ($4,000) - office expenses and technology infrastructure.</textarea>
+          <div class="ft-ai-edit-actions">
+            <button class="btn-ft-outline btn-ft-sm" onclick="cancelEdit(4)">Cancel</button>
+            <button class="btn-ft-filled btn-ft-sm"  onclick="saveEdit(4)">Save</button>
+          </div>
+        </div>
+      </div>
+      <div class="ft-char-count" style="margin-top:4px">5,000 characters left of 5,000</div>
+    </div>
+
+  </div><!-- /form-container -->
+</div><!-- /ft-page -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.umd.min.js"></script>
+<script src="ft-proto-controls.js"></script>
+<script>
+  /* ── Active variant ── */
+  var activeVariant = 'alongside';
+
+  var MAX_CHARS = 5000;
+
+  function updateCharCount(id, text) {
+    var el = document.getElementById('char-count-' + id);
+    if (!el) { return; }
+    var remaining = MAX_CHARS - text.length;
+    el.textContent = remaining.toLocaleString() + ' characters left of ' + MAX_CHARS.toLocaleString();
+  }
+
+  function resetCharCount(id) {
+    var el = document.getElementById('char-count-' + id);
+    if (el) { el.textContent = '5,000 characters left of 5,000'; }
+  }
+
+  function setFieldVisibility(id, visible) {
+    var field = document.getElementById('field-' + id);
+    if (field) { field.style.display = visible ? '' : 'none'; }
+  }
+
+  function setVariant(v) {
+    activeVariant = v;
+    for (var id = 1; id <= 4; id++) {
+      /* in replace mode, hide the original input unless already dismissed */
+      var wrapper = document.getElementById('suggestion-' + id);
+      var isActive = !wrapper.classList.contains('dismissed') && !wrapper.classList.contains('accepted');
+      if (v === 'replace') {
+        if (isActive) { setFieldVisibility(id, false); }
+      } else {
+        setFieldVisibility(id, true);
+      }
+    }
+  }
+
+  /* ── Shared: edit state ── */
+  function editSuggestion(id) {
+    var text = document.getElementById('suggestion-text-' + id).textContent;
+    document.getElementById('edit-textarea-' + id).value = text;
+    document.getElementById('default-view-' + id).style.display = 'none';
+    document.getElementById('edit-view-' + id).classList.add('active');
+    document.getElementById('edit-textarea-' + id).focus();
+  }
+
+  function cancelEdit(id) {
+    document.getElementById('edit-view-' + id).classList.remove('active');
+    document.getElementById('default-view-' + id).style.display = '';
+  }
+
+  /* ── Accept / Save (both variants) ── */
+  function acceptSuggestion(id) {
+    var text = document.getElementById('suggestion-text-' + id).textContent;
+    resolveAccept(id, text, true);
+  }
+
+  function saveEdit(id) {
+    var text = document.getElementById('edit-textarea-' + id).value;
+    resolveAccept(id, text, false);
+  }
+
+  function resolveAccept(id, text, showAffordances) {
+    var wrapper = document.getElementById('suggestion-' + id);
+    var badge = document.getElementById('badge-' + id);
+    wrapper.classList.add('accepted');
+    if (showAffordances) { badge.classList.add('visible'); }
+    if (activeVariant === 'replace') {
+      var acceptedInput = document.getElementById('accepted-input-' + id);
+      acceptedInput.value = text;
+      acceptedInput.classList.add('visible');
+      if (showAffordances) { acceptedInput.style.background = 'var(--success-50)'; }
+      setFieldVisibility(id, false);
+    } else {
+      var field = document.getElementById('field-' + id);
+      field.value = text;
+      if (showAffordances) { field.classList.add('populated'); }
+    }
+    updateCharCount(id, text);
+  }
+
+  /* ── Dismiss (both variants) ── */
+  function dismissSuggestion(id) {
+    document.getElementById('suggestion-' + id).classList.add('dismissed');
+    if (activeVariant === 'replace') {
+      setFieldVisibility(id, true);
+    }
+  }
+
+  /* ── Reset ── */
+  function resetAllInstances() {
+    for (var id = 1; id <= 4; id++) {
+      var wrapper = document.getElementById('suggestion-' + id);
+      var field = document.getElementById('field-' + id);
+      var badge = document.getElementById('badge-' + id);
+      var defaultView = document.getElementById('default-view-' + id);
+      var editView = document.getElementById('edit-view-' + id);
+      var acceptedInput = document.getElementById('accepted-input-' + id);
+      wrapper.classList.remove('dismissed', 'accepted');
+      if (field) { field.value = ''; field.classList.remove('populated'); }
+      if (acceptedInput) { acceptedInput.style.background = ''; }
+      if (acceptedInput) { acceptedInput.value = ''; acceptedInput.classList.remove('visible'); }
+      badge.classList.remove('visible');
+      defaultView.style.display = '';
+      editView.classList.remove('active');
+      /* restore field visibility based on current variant */
+      setFieldVisibility(id, activeVariant !== 'replace');
+    }
+  }
+
+  function applyState(state) {
+    resetAllInstances();
+    if (state === 'default') { return; }
+    for (var id = 1; id <= 4; id++) {
+      if (state === 'edit')           { editSuggestion(id); }
+      else if (state === 'accepted')  { acceptSuggestion(id); }
+      else if (state === 'dismissed') { dismissSuggestion(id); }
+    }
+  }
+
+  /* ── Proto controls ── */
+  /* ── Live char count on edit textareas and accepted inputs ── */
+  var liveIds = [2, 3, 4];
+  for (var li = 0; li < liveIds.length; li++) {
+    (function(id) {
+      var editTA = document.getElementById('edit-textarea-' + id);
+      if (editTA) {
+        editTA.addEventListener('input', function() {
+          updateCharCount(id, editTA.value);
+        });
+      }
+      var accInput = document.getElementById('accepted-input-' + id);
+      if (accInput) {
+        accInput.addEventListener('input', function() {
+          updateCharCount(id, accInput.value);
+        });
+      }
+      var origField = document.getElementById('field-' + id);
+      if (origField) {
+        origField.addEventListener('input', function() {
+          updateCharCount(id, origField.value);
+        });
+      }
+    })(liveIds[li]);
+  }
+
+  ftProto.config.title = 'AI Suggestion States';
+  ftProto.config.startOpen = true;
+
+  ftProto.addSection({
+    label: 'Variant',
+    id: 'variant',
+    options: [
+      { label: 'Alongside input', value: 'alongside', active: true },
+      { label: 'Replaces input',  value: 'replace' }
+    ],
+    onChange: function(value) {
+      resetAllInstances();
+      setVariant(value);
+    }
+  });
+
+  ftProto.addSection({
+    label: 'Suggestion State',
+    id: 'suggestion-state',
+    options: [
+      { label: 'Default',   value: 'default',   active: true },
+      { label: 'Edit',      value: 'edit' },
+      { label: 'Accepted',  value: 'accepted' },
+      { label: 'Dismissed', value: 'dismissed' }
+    ],
+    onChange: function(value) { applyState(value); }
+  });
+
+  ftProto.init();
+</script>
