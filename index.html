@@ -438,7 +438,7 @@
   </div>
   <div class="code-block">&lt;button class="btn btn-primary"&gt;Normal&lt;/button&gt;
 &lt;button class="btn btn-primary" disabled&gt;Disabled&lt;/button&gt;</div>
-  <p class="gap-note"><span class="gap-flag">GAP — production</span> Disabled uses MDB's built-in fade (<code>opacity: 0.65</code>) via the <code>disabled</code> attribute. This foundation CSS remaps <code>--mdb-btn-disabled-bg</code> to Foundant navy so it fades the right color; <strong>production has not yet added this remap</strong>, so a disabled button in the live app currently fades MDB's default blue instead. Fix: add the disabled remaps to <code>mdb-customizations.css</code>.</p>
+  <p class="sd" style="border:none;margin:6px 0 0">Disabled uses MDB's built-in fade (<code>opacity: 0.65</code>) via the <code>disabled</code> attribute. The disabled background is remapped to the Foundant color so it fades correctly.</p>
 
   <h3>Icon buttons</h3>
   <div class="cr" style="align-items:center">
