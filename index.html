@@ -6,243 +6,21 @@
   <title>Foundant Component Reference — MDB5 Pro Kitchen Sink</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.min.css" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <!-- Authoritative GLM tokens, MDB remaps, real component classes, heading scale, .section-eyebrow.
+       This is the same file prototypes load, so the reference cannot drift from what prototypes render. -->
+  <link href="glm-prototype-foundation.css" rel="stylesheet" />
 
   <style>
-    /* ═══════════════════════════════════
-       LAYER A: GLM PRODUCTION
-       Foundant design tokens applied
-       ═══════════════════════════════════ */
-    :root, [data-theme="production"] {
-      /* ── Foundant Design Tokens ── */
-      --colors-borders-enabled: rgb(117, 117, 117);
-      --colors-borders-divider: rgb(224, 224, 224);
-      --colors-borders-hover: rgb(45, 59, 74);
-      --colors-borders-focused: rgb(45, 59, 74);
-      --colors-borders-brand: rgb(45, 59, 74);
-      --colors-borders-pressed: rgb(45, 59, 74);
-      --colors-borders-disabled: rgb(189, 189, 189);
-      --colors-borders-danger: var(--colors-semantic-danger-500);
-      --colors-borders-warning: rgb(244, 200, 98);
-      --colors-borders-success: rgb(103, 207, 157);
-      --colors-borders-info: rgb(83, 110, 138);
-      --colors-brand-primary-dark-blue: rgb(45, 59, 74);
-      --colors-brand-tertiary-white: rgb(255, 255, 255);
-      --colors-brand-orange: rgb(242, 107, 34);
-      --colors-brand-light-yellow: rgb(254, 251, 220);
-      --colors-brand-secondary-light-blue: rgb(213, 226, 250);
-      --colors-brand-yellow: rgb(246, 184, 69);
-      --colors-state-layers-dark-link: rgb(57, 110, 196);
-      --colors-state-layers-dark-hover: rgb(66, 79, 92);
-      --colors-state-layers-dark-focused: rgb(66, 79, 92);
-      --colors-state-layers-dark-pressed: rgb(87, 98, 110);
-      --colors-state-layers-light-hover: rgb(234, 235, 237);
-      --colors-state-layers-light-focused: rgb(234, 235, 237);
-      --colors-state-layers-light-pressed: rgb(213, 216, 219);
-      --colors-neutral-0: rgb(0, 0, 0);
-      --colors-neutral-10: rgb(33, 33, 33);
-      --colors-neutral-20: rgb(66, 66, 66);
-      --colors-neutral-30: rgb(97, 97, 97);
-      --colors-neutral-40: rgb(117, 117, 117);
-      --colors-neutral-50: rgb(189, 189, 189);
-      --colors-neutral-60: rgb(224, 224, 224);
-      --colors-neutral-70: rgb(238, 238, 238);
-      --colors-neutral-80: rgb(245, 245, 245);
-      --colors-neutral-90: rgb(250, 250, 250);
-      --colors-neutral-100: rgb(255, 255, 255);
-      --colors-primary-shades-0: rgb(45, 59, 74);
-      --colors-primary-shades-10: rgb(66, 79, 92);
-      --colors-primary-shades-20: rgb(87, 98, 110);
-      --colors-primary-shades-30: rgb(108, 118, 128);
-      --colors-primary-shades-40: rgb(129, 137, 146);
-      --colors-primary-shades-50: rgb(150, 157, 165);
-      --colors-primary-shades-60: rgb(171, 177, 183);
-      --colors-primary-shades-70: rgb(192, 196, 201);
-      --colors-primary-shades-80: rgb(213, 216, 219);
-      --colors-primary-shades-90: rgb(234, 235, 237);
-      --colors-semantic-success-0: rgb(103, 207, 157);
-      --colors-semantic-danger-50:  #FAEAEA;
-      --colors-semantic-danger-100: #F2BEBE;
-      --colors-semantic-danger-200: #E89090;
-      --colors-semantic-danger-300: #DD6463;
-      --colors-semantic-danger-400: #D44D4B;
-      --colors-semantic-danger-500: #BD3B39;
-      --colors-semantic-danger-600: #A33230;
-      --colors-semantic-danger-700: #882927;
-      --colors-semantic-danger-800: #6B1F1E;
-      --colors-semantic-danger-900: #4D1514;
-      --colors-semantic-danger-0: #BD3B39; /* legacy alias = danger-500 */
-      --colors-semantic-info-0: rgb(83, 110, 138);
-      --colors-semantic-success-50: rgb(225, 245, 235);
-      --colors-semantic-warning-0: rgb(244, 200, 98);
-      --colors-semantic-warning-50: rgb(255, 244, 209);
-      --colors-semantic-info-50: rgb(213, 226, 250);
-      --colors-semantic-info-90: rgb(240, 247, 255);
-      --colors-link-default: rgb(25, 118, 210);
-      --colors-link-hover: rgb(35, 82, 124);
-      --radius-none: 0;
-      --radius-xs: 2px;
-      --radius-md: 8px;
-      --radius-round: 50px;
-      --radius-sm: 4px;
+    /* ═══════════════════════════════════════════════════════════
+       KITCHEN SINK — page furniture only.
+       All component styling comes from the linked foundation CSS
+       (glm-prototype-foundation.css), which is the single source of truth.
+       The old production/MDB-default toggle and --t-* alias layer have been
+       removed; this page now renders production truth directly.
+       ═══════════════════════════════════════════════════════════ */
 
-      /* ── Non-design-system variables ── */
-      --color-primary: var(--colors-link-default);
-      --color-primary-hover: var(--colors-link-default);
-
-      /* ── MDB mappings ── */
-      --mdb-body-bg: var(--colors-neutral-80);
-      --mdb-body-color: var(--colors-brand-primary-dark-blue);
-      --mdb-code-color: #d1145a;
-      --mdb-secondary-color: var(--colors-primary-shades-40);
-      --mdb-surface-color: var(--colors-brand-primary-dark-blue);
-
-      /* ── Kitchen sink theme aliases (mapped to foundant tokens) ── */
-      --t-primary: var(--colors-brand-primary-dark-blue);
-      --t-primary-h: var(--colors-state-layers-dark-hover);
-      --t-primary-bg: var(--colors-primary-shades-90);
-      --t-primary-bdr: var(--colors-primary-shades-70);
-      --t-primary-txt: var(--colors-brand-primary-dark-blue);
-
-      --t-secondary: var(--colors-primary-shades-40);
-      --t-secondary-bg: var(--colors-primary-shades-90);
-      --t-secondary-txt: var(--colors-brand-primary-dark-blue);
-
-      --t-success: var(--colors-semantic-success-0);
-      --t-success-bg: var(--colors-semantic-success-50);
-      --t-success-txt: var(--colors-brand-primary-dark-blue);
-
-      --t-danger: var(--colors-semantic-danger-500);
-      --t-danger-bg: var(--colors-semantic-danger-50);
-      --t-danger-txt: var(--colors-semantic-danger-700);
-
-      --t-warning: var(--colors-semantic-warning-0);
-      --t-warning-bg: var(--colors-semantic-warning-50);
-      --t-warning-txt: var(--colors-brand-primary-dark-blue);
-
-      --t-info: var(--colors-semantic-info-0);
-      --t-info-bg: var(--colors-semantic-info-50);
-      --t-info-txt: var(--colors-brand-primary-dark-blue);
-
-      --t-light: var(--colors-neutral-90);
-      --t-dark: var(--colors-brand-primary-dark-blue);
-
-      --t-body: var(--colors-brand-primary-dark-blue);
-      --t-body-bg: var(--colors-neutral-80);
-      --t-link: var(--colors-link-default);
-      --t-link-h: var(--colors-link-hover);
-
-      --t-bdr: var(--colors-borders-divider);
-      --t-form-bdr: var(--colors-borders-enabled);
-      --t-form-lbl: var(--colors-neutral-40);
-      --t-valid: var(--colors-semantic-success-0);
-      --t-invalid: var(--colors-semantic-danger-500);
-      --t-focus: rgba(45, 59, 74, 0.25);
-      --t-focus-bdr: var(--colors-brand-primary-dark-blue);
-      --t-surface: var(--colors-neutral-100);
-
-      --t-font: "Roboto", sans-serif;
-      --t-heading: "Roboto", sans-serif;
-
-      --t-shadow-sm: 0 .125rem .25rem rgba(0,0,0,.075);
-      --t-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
-      --t-shadow-lg: 0 1rem 3rem rgba(0,0,0,.175);
-
-      --g50: var(--colors-neutral-90);
-      --g100: var(--colors-neutral-80);
-      --g200: var(--colors-neutral-70);
-      --g300: var(--colors-neutral-60);
-      --g400: var(--colors-neutral-50);
-      --g500: var(--colors-neutral-40);
-      --g600: var(--colors-neutral-30);
-      --g700: var(--colors-neutral-20);
-      --g800: var(--colors-neutral-10);
-      --g900: var(--colors-neutral-0);
-
-      --r-xs: var(--radius-xs);
-      --r-sm: var(--radius-sm);
-      --r-md: var(--radius-md);
-      --r-rnd: var(--radius-round);
-      --r-pill: 50rem;
-
-      --layer-color: var(--colors-brand-primary-dark-blue);
-
-      /* ── Heading scale ── */
-      --t-h1-size: 1.75rem;
-      --t-h2-size: 1.25rem;
-      --t-h3-size: 1rem;
-      --t-h4-size: 0.875rem;
-      --t-h5-size: 0.75rem;
-      --t-h6-size: 0.75rem;
-      --t-h-weight: 500;
-    }
-
-    /* ═══════════════════════════════════
-       LAYER B: MDB5 DEFAULTS (out-of-box)
-       Stock MDB5 7.x values
-       ═══════════════════════════════════ */
-    [data-theme="mdb-default"] {
-      --t-primary:#1266F1; --t-primary-h:#0d5bdd; --t-primary-bg:#d3e3fd; --t-primary-bdr:#a8c7fb; --t-primary-txt:#0e52c1;
-      --t-secondary:#B23CFD; --t-secondary-bg:#f0d9fe; --t-secondary-txt:#8e30ca;
-      --t-success:#00B74A; --t-success-bg:#ccf0da; --t-success-txt:#00923b;
-      --t-danger:#F93154; --t-danger-bg:#fed6dd; --t-danger-txt:#c72743;
-      --t-warning:#FFA900; --t-warning-bg:#ffeacc; --t-warning-txt:#cc8700;
-      --t-info:#39C0ED; --t-info-bg:#d8f2fb; --t-info-txt:#2e9abe;
-      --t-light:#FBFBFB; --t-dark:#262626;
-      --t-body:rgb(79,79,79); --t-body-bg:#fff;
-      --t-link:#1266F1; --t-link-h:#0d5bdd;
-      --t-bdr:#dee2e6; --t-form-bdr:#dee2e6; --t-form-lbl:#757575;
-      --t-valid:#00B74A; --t-invalid:#F93154;
-      --t-focus:rgba(18,102,241,0.25); --t-focus-bdr:#1266F1;
-      --t-surface:#fff;
-      --t-font:"Roboto",sans-serif; --t-heading:"Roboto",sans-serif;
-      --t-shadow-sm:0 .125rem .25rem rgba(0,0,0,.075); --t-shadow:0 .5rem 1rem rgba(0,0,0,.15); --t-shadow-lg:0 1rem 3rem rgba(0,0,0,.175);
-      --g50:#fbfbfb; --g100:#f5f5f5; --g200:#eee; --g300:#e0e0e0; --g400:#bdbdbd; --g500:#9e9e9e; --g600:#757575; --g700:#616161; --g800:#4f4f4f; --g900:#262626;
-      --r-xs:4px; --r-sm:4px; --r-md:4px; --r-rnd:50px; --r-pill:50rem;
-      --layer-color:#1266F1;
-
-      /* ── Heading scale (MDB5 defaults) ── */
-      --t-h1-size: 2.5rem;
-      --t-h2-size: 2rem;
-      --t-h3-size: 1.75rem;
-      --t-h4-size: 1.5rem;
-      --t-h5-size: 1.25rem;
-      --t-h6-size: 1rem;
-      --t-h-weight: 500;
-    }
-
-    *{box-sizing:border-box}
-    body{font-family:var(--t-font);margin:0;background:var(--t-body-bg);color:var(--t-body)}
-
-    /* ── Toggle Bar ── */
-    .toggle-bar{position:fixed;top:0;left:240px;right:0;height:48px;background:#fff;border-bottom:1px solid var(--t-bdr);display:flex;align-items:center;justify-content:space-between;padding:0 28px;z-index:999;box-shadow:0 1px 3px rgba(0,0,0,.04)}
-    .toggle-bar .lbl{font-size:13px;font-weight:500;color:var(--layer-color);display:flex;align-items:center;gap:8px}
-    .toggle-bar .lbl .dot{width:9px;height:9px;border-radius:50%;background:var(--layer-color)}
-    .tg{display:flex;border:1px solid #ddd;border-radius:6px;overflow:hidden}
-    .tg button{padding:5px 14px;font-size:12px;font-weight:500;border:none;cursor:pointer;background:#fff;color:#888;transition:all .15s;font-family:inherit}
-    .tg button.on{background:var(--t-primary);color:#fff}
-    .tg button:not(.on):hover{background:#f5f5f5}
-    .override-count{font-size:11px;color:#999}
-
-    /* ── Override Callout ── */
-    .override-tag{display:none;font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;background:#E8F5E9;color:#2E7D32;margin-left:6px;vertical-align:middle;text-transform:uppercase;letter-spacing:.5px}
-    .no-override-tag{display:none;font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;background:#FFF3E0;color:#E65100;margin-left:6px;vertical-align:middle;text-transform:uppercase;letter-spacing:.5px}
-    [data-theme="production"] .override-tag{display:inline}
-    [data-theme="production"] .no-override-tag{display:inline}
-
-    /* Override detail callout box */
-    .override-detail{display:none;margin:12px 0 16px;padding:12px 16px;background:#f0faf3;border:1px solid #c8e6c9;border-radius:6px;font-size:12px;color:#2E7D32}
-    .override-detail code{background:#fff;padding:1px 5px;border-radius:3px;font-size:11px;color:#1B5E20;border:1px solid #c8e6c9}
-    .no-override-detail{display:none;margin:12px 0 16px;padding:12px 16px;background:#FFF8E1;border:1px solid #FFE082;border-radius:6px;font-size:12px;color:#E65100}
-    .no-override-detail code{background:#fff;padding:1px 5px;border-radius:3px;font-size:11px;color:#BF360C;border:1px solid #FFE082}
-    [data-theme="production"] .override-detail{display:block}
-    [data-theme="production"] .no-override-detail{display:block}
-
-    /* Production-only sections (hidden on MDB Default) */
-    .production-only{display:none}
-    [data-theme="production"] .production-only{display:block}
-
-    /* ── Sidebar ── */
+    /* Sidebar / table of contents */
     .toc{position:fixed;top:0;left:0;width:240px;height:100vh;overflow-y:auto;background:#1a1f25;color:#ccc;padding:14px 0;z-index:1001;font-size:12px}
     .toc h5{color:#fff;font-size:12px;font-weight:700;padding:0 16px;margin:0 0 2px;text-transform:uppercase;letter-spacing:1px}
     .toc .sub{padding:0 16px;font-size:10px;color:#555;margin-bottom:14px}
@@ -250,100 +28,39 @@
     .toc a:hover,.toc a.on{background:rgba(255,255,255,.05);color:#fff}
     .toc .gl{padding:7px 16px 3px;font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:#4a4a4a;font-weight:700}
 
-    /* ── Main ── */
+    /* Main column + section shell */
     .main{margin-left:240px;padding:66px 36px 28px;max-width:1140px}
-    .sec{background:var(--t-surface);border-radius:var(--r-md);padding:28px;margin-bottom:20px;box-shadow:var(--t-shadow-sm)}
-    .sec h2{font-family:var(--t-heading);font-size:var(--t-h2-size);font-weight:var(--t-h-weight);margin:0 0 4px;color:var(--t-body)}
-    .sec .sd{color:var(--g600);font-size:12px;margin-bottom:16px;border-bottom:1px solid var(--t-bdr);padding-bottom:12px}
-    .sec h3{font-size:11px;font-weight:600;color:var(--g500);margin:16px 0 8px;text-transform:uppercase;letter-spacing:.5px}
+    .sec{background:var(--colors-neutral-100);border-radius:var(--radius-md);padding:28px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+    .sec h2{font-size:var(--h2-size);font-weight:var(--h-weight);margin:0 0 4px;color:var(--colors-brand-primary-dark-blue)}
+    .sec .sd{color:var(--colors-neutral-30);font-size:12px;margin-bottom:16px;border-bottom:1px solid var(--colors-borders-divider);padding-bottom:12px}
     .cr{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start;margin-bottom:10px}
-    .sg{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
-    .sw{border-radius:var(--r-sm);overflow:hidden;border:1px solid var(--t-bdr)}
-    .swc{height:50px}
-    .swi{padding:6px 8px;font-size:10px;background:#fff}
-    .swi strong{display:block;font-size:11px;margin-bottom:1px}
-    .swi code{font-size:9px;color:var(--g600)}
-    [id]{scroll-margin-top:64px}
 
-    /* ── Themed Components ── */
-    .btn-t{padding:7px 18px;border-radius:var(--r-rnd);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;border:2px solid;transition:all .15s}
-    .btn-tp{background:var(--t-primary);border-color:var(--t-primary);color:#fff}
-    .btn-tp:hover{background:var(--t-primary-h);border-color:var(--t-primary-h)}
-    .btn-to{background:transparent;border-color:var(--t-primary);color:var(--t-primary)}
-    .btn-to:hover{background:var(--t-primary);color:#fff}
-    .btn-ts{background:var(--t-secondary);border-color:var(--t-secondary);color:#fff}
-    .btn-tsc{background:var(--t-success);border-color:var(--t-success);color:#fff}
-    .btn-td{background:var(--t-danger);border-color:var(--t-danger);color:#fff}
-    .btn-tw{background:var(--t-warning);border-color:var(--t-warning);color:#fff}
-    .btn-ti{background:var(--t-info);border-color:var(--t-info);color:#fff}
-    .btn-tg{background:transparent;border-color:transparent;color:var(--t-primary)}
-    .btn-tg:hover{background:var(--t-primary-bg)}
-    .btn-sm2{padding:4px 12px;font-size:12px}
-    .btn-lg2{padding:10px 26px;font-size:15px}
-    .btn-dis{opacity:.45;cursor:not-allowed;pointer-events:none}
-    .btn-ico{width:36px;height:36px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;border:none;background:var(--t-primary);color:#fff}
+    /* Work-in-progress badge for sections not yet rebuilt to real markup */
+    .wip-tag{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#8a5a00;background:#fff4d1;border:1px solid #f4c862;border-radius:var(--radius-sm);padding:1px 7px;margin-left:8px;vertical-align:middle}
+    .wip-note{font-size:12px;color:#8a5a00;background:#fff9e8;border:1px dashed #f4c862;border-radius:var(--radius-sm);padding:8px 12px;margin-bottom:14px}
 
-    .badge-t{display:inline-flex;align-items:center;padding:3px 9px;border-radius:var(--r-rnd);font-size:11px;font-weight:500}
-    .bp{background:var(--t-primary-bg);color:var(--t-primary-txt)}
-    .bs{background:var(--t-success-bg);color:var(--t-success-txt)}
-    .bd{background:var(--t-danger-bg);color:var(--t-danger-txt)}
-    .bw{background:var(--t-warning-bg);color:var(--t-warning-txt)}
-    .bi{background:var(--t-info-bg);color:var(--t-info-txt)}
-
-    .alert-t{padding:12px 16px;border-radius:var(--r-md);font-size:13px;margin-bottom:8px;display:flex;align-items:flex-start;gap:8px}
-    .ap{background:var(--t-primary-bg);color:var(--t-primary-txt);border-left:4px solid var(--t-primary)}
-    .as{background:var(--t-success-bg);color:var(--t-success-txt);border-left:4px solid var(--t-success)}
-    .aw{background:var(--t-warning-bg);color:var(--t-warning-txt);border-left:4px solid var(--t-warning)}
-    .ad{background:var(--t-danger-bg);color:var(--t-danger-txt);border-left:4px solid var(--t-danger)}
-    .ai{background:var(--t-info-bg);color:var(--t-info-txt);border-left:4px solid var(--t-info)}
-
-    .inp-t{width:100%;padding:9px 12px;border:1px solid var(--t-form-bdr);border-radius:var(--r-sm);font-size:13px;font-family:inherit;color:var(--t-body);background:#fff;transition:border-color .15s,box-shadow .15s}
-    .inp-t:focus{outline:none;border-color:var(--t-focus-bdr);box-shadow:0 0 0 3px var(--t-focus)}
-    .inp-t::placeholder{color:var(--t-form-lbl)}
-    .lbl-t{display:block;font-size:12px;font-weight:500;color:var(--t-form-lbl);margin-bottom:3px}
-    .sel-t{width:100%;padding:9px 12px;border:1px solid var(--t-form-bdr);border-radius:var(--r-sm);font-size:13px;font-family:inherit;color:var(--t-body);background:#fff;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%23757575' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
-
-    .card-t{background:var(--t-surface);border:1px solid var(--t-bdr);border-radius:var(--r-md);overflow:hidden}
-    .card-th{padding:10px 14px;font-weight:600;font-size:13px;border-bottom:1px solid var(--t-bdr);color:var(--t-body)}
-    .card-tb{padding:14px}
-    .card-tf{padding:8px 14px;border-top:1px solid var(--t-bdr);font-size:12px;color:var(--g500)}
-
-    .tbl-t{width:100%;border-collapse:collapse;font-size:13px}
-    .tbl-t th{padding:8px 12px;text-align:left;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--g600);background:var(--g100);border-bottom:2px solid var(--t-bdr)}
-    .tbl-t td{padding:8px 12px;border-bottom:1px solid var(--t-bdr)}
-    .tbl-t tbody tr:hover{background:var(--g50)}
-
-    .modal-t{border:1px solid var(--t-bdr);border-radius:var(--r-md);box-shadow:var(--t-shadow-lg);overflow:hidden;background:#fff}
-    .modal-th{padding:14px 18px;border-bottom:1px solid var(--t-bdr);display:flex;justify-content:space-between;align-items:center}
-    .modal-th h5{margin:0;font-family:var(--t-heading);font-size:var(--t-h5-size);font-weight:var(--t-h-weight);color:var(--t-body)}
-    .modal-tb{padding:18px;font-size:13px;color:var(--g700)}
-    .modal-tf{padding:10px 18px;border-top:1px solid var(--t-bdr);display:flex;justify-content:flex-end;gap:6px}
-
-    .prog-t{height:7px;background:var(--g200);border-radius:var(--r-rnd);overflow:hidden}
-    .prog-bar{height:100%;border-radius:var(--r-rnd)}
-
-    /* ── Color Range Strip ── */
-    .color-range{display:flex;gap:0;border-radius:var(--r-md);overflow:hidden;margin-bottom:4px}
+    /* Color range strips (colors section) */
+    .color-range{display:flex;gap:0;border-radius:var(--radius-md);overflow:hidden;margin-bottom:4px}
     .color-range-step{flex:1;height:44px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px;position:relative;cursor:default}
     .color-range-step span{font-size:8px;font-weight:600;opacity:0.9}
     .color-range-label{display:flex;gap:0;margin-bottom:8px}
-    .color-range-label span{flex:1;text-align:center;font-size:9px;color:var(--g500);font-family:'Roboto Mono',monospace}
-    .color-range-anchor{outline:2px solid var(--t-body);outline-offset:-2px}
-    .view-matrix-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;background:var(--t-surface);border:1px solid var(--t-bdr);border-radius:var(--r-sm);font-size:11px;font-weight:500;color:var(--t-body);cursor:pointer;font-family:inherit;transition:all .15s;margin-top:6px}
-    .view-matrix-btn:hover{border-color:var(--t-body);background:var(--g100)}
+    .color-range-label span{flex:1;text-align:center;font-size:9px;color:var(--colors-neutral-40);font-family:ui-monospace,monospace}
+    .color-range-anchor{outline:2px solid var(--colors-brand-primary-dark-blue);outline-offset:-2px}
+    .view-matrix-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;background:var(--colors-neutral-100);border:1px solid var(--colors-borders-divider);border-radius:var(--radius-sm);font-size:11px;font-weight:500;color:var(--colors-brand-primary-dark-blue);cursor:pointer;font-family:inherit;transition:all .15s;margin-top:6px}
+    .view-matrix-btn:hover{border-color:var(--colors-brand-primary-dark-blue);background:var(--colors-neutral-80)}
 
-    /* ── Contrast Matrix Modal ── */
+    /* Contrast matrix modal */
     .cm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:2000;align-items:center;justify-content:center}
     .cm-overlay.open{display:flex}
-    .cm-modal{background:#fff;border-radius:var(--r-md);box-shadow:var(--t-shadow-lg);width:92vw;max-width:880px;max-height:90vh;overflow:auto;position:relative}
-    .cm-modal-header{padding:16px 20px;border-bottom:1px solid var(--t-bdr);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:1}
-    .cm-modal-header h3{margin:0;font-size:16px;font-weight:700;color:var(--t-body)}
-    .cm-modal-close{background:none;border:none;font-size:20px;color:var(--g400);cursor:pointer;padding:4px 8px}
-    .cm-modal-close:hover{color:var(--t-body)}
+    .cm-modal{background:#fff;border-radius:var(--radius-md);box-shadow:0 8px 40px rgba(0,0,0,0.25);width:92vw;max-width:880px;max-height:90vh;overflow:auto;position:relative}
+    .cm-modal-header{padding:16px 20px;border-bottom:1px solid var(--colors-borders-divider);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:1}
+    .cm-modal-header h3{margin:0;font-size:16px;font-weight:700;color:var(--colors-brand-primary-dark-blue)}
+    .cm-modal-close{background:none;border:none;font-size:20px;color:var(--colors-neutral-40);cursor:pointer;padding:4px 8px}
+    .cm-modal-close:hover{color:var(--colors-brand-primary-dark-blue)}
     .cm-modal-body{padding:20px}
     .cm-filter-bar{display:flex;gap:5px;margin-bottom:14px;align-items:center}
-    .cm-filter-bar span{font-size:10px;color:var(--g500);font-weight:600}
-    .cm-filter-btn{padding:3px 9px;border-radius:5px;border:1px solid var(--t-bdr);background:#fff;color:var(--g700);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit}
+    .cm-filter-bar span{font-size:10px;color:var(--colors-neutral-40);font-weight:600}
+    .cm-filter-btn{padding:3px 9px;border-radius:5px;border:1px solid var(--colors-borders-divider);background:#fff;color:var(--colors-neutral-20);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit}
     .cm-filter-btn.active{background:#BD3B39;border-color:#BD3B39;color:#fff}
     .cm-legend{display:flex;gap:10px;margin-bottom:14px}
     .cm-legend-item{display:flex;align-items:center;gap:4px;font-size:9px;font-weight:600}
@@ -351,23 +68,23 @@
     .cm-table{border-collapse:separate;border-spacing:2px;table-layout:fixed;font-size:10px}
     .cm-table td{text-align:center;padding:0}
     .cm-th-swatch{border-radius:4px;padding:3px 2px;display:flex;flex-direction:column;align-items:center}
-    .cm-th-hex{font-size:7px;color:var(--g400);font-family:'Roboto Mono',monospace;margin-top:1px}
+    .cm-th-hex{font-size:7px;color:var(--colors-neutral-40);font-family:ui-monospace,monospace;margin-top:1px}
     .cm-cell{border-radius:4px;height:38px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;transition:opacity .12s}
     .cm-cell-label{font-size:7px;font-weight:700}
     .cm-cell-ratio{font-size:8px;font-weight:600}
-    .cm-diag{background:var(--g100);height:38px;border-radius:4px;display:flex;align-items:center;justify-content:center;color:var(--g300);font-size:12px}
-    .cm-summary{margin-top:16px;background:var(--t-surface);border-radius:8px;border:1px solid var(--t-bdr);padding:12px 14px}
-    .cm-summary-title{font-size:11px;font-weight:700;color:var(--t-body);margin-bottom:8px}
+    .cm-diag{background:var(--colors-neutral-70);height:38px;border-radius:4px;display:flex;align-items:center;justify-content:center;color:var(--colors-neutral-50);font-size:12px}
+    .cm-summary{margin-top:16px;background:var(--colors-neutral-100);border-radius:8px;border:1px solid var(--colors-borders-divider);padding:12px 14px}
+    .cm-summary-title{font-size:11px;font-weight:700;color:var(--colors-brand-primary-dark-blue);margin-bottom:8px}
     .cm-summary-row{display:flex;gap:4px;flex-wrap:wrap}
     .cm-summary-item{text-align:center;min-width:52px}
     .cm-summary-swatch{border-radius:4px;width:34px;height:22px;margin:0 auto;display:flex;align-items:center;justify-content:center}
     .cm-summary-swatch span{font-size:8px;font-weight:700}
     .cm-summary-score{font-size:10px;font-weight:700;margin-top:3px}
-    .cm-summary-label{font-size:8px;color:var(--g400)}
+    .cm-summary-label{font-size:8px;color:var(--colors-neutral-40)}
   </style>
 </head>
 <body>
-<div id="app" data-theme="production">
+<div id="app">
 
 <!-- SIDEBAR -->
 <nav class="toc">
@@ -391,63 +108,49 @@
   <a href="#offcanvas">Offcanvas</a><a href="#shadows">Shadows</a>
 </nav>
 
-<!-- TOGGLE BAR -->
-<div class="toggle-bar">
-  <div class="lbl"><span class="dot"></span><span id="ll">GLM Production</span></div>
-  <div style="display:flex;align-items:center;gap:14px">
-    <span class="override-count" id="oc"></span>
-    <div class="tg">
-      <button class="on" id="bP" onclick="st('production')">GLM Production</button>
-      <button id="bD" onclick="st('mdb-default')">MDB5 Default</button>
-    </div>
-  </div>
-</div>
-
 <!-- MAIN -->
 <div class="main">
 
 <div style="margin-bottom:24px">
-  <h1 style="font-family:var(--t-heading);font-size:var(--t-h1-size);font-weight:var(--t-h-weight);margin:0 0 4px">Foundant Component Reference</h1>
-  <p style="color:var(--g600);font-size:13px;margin:0">Toggle between <strong>GLM Production</strong> (what's actually shipping) and <strong>MDB5 Default</strong> (out-of-box). Green <span class="override-tag" style="display:inline">OVERRIDDEN</span> tags show where engineers have customized. Orange <span class="no-override-tag" style="display:inline">DEFAULT</span> tags flag areas still using MDB5 stock values — potential gaps.</p>
+  <h1 style="margin:0 0 4px">GLM Component Reference</h1>
+  <p style="color:var(--colors-neutral-30);font-size:13px;margin:0 0 8px">The source-of-truth reference for GLM components and styles. Every component shows real production markup you can lift into Razor. Styling comes from the shared foundation CSS.</p>
+  <p style="font-size:12px;margin:0;line-height:1.9"><span class="status-tag status-overridden">OVERRIDDEN</span> production customizes this via MDB remaps. <span class="status-tag status-default">DEFAULT</span> renders on stock MDB5 (a candidate to review). <span class="gap-flag">GAP</span> stock today but a Foundant treatment is drafted/needed. <span class="wip-tag">WIP</span> section not yet rebuilt to real markup.</p>
 </div>
 
 <!-- ═══ COLORS ═══ -->
 <section class="sec" id="colors">
-  <h2>Colors <span class="override-tag">OVERRIDDEN</span></h2>
-  <p class="sd">Theme palette. All six semantic colors have been overridden from MDB5 defaults.</p>
+  <h2>Colors <span class="status-tag status-overridden" title="Foundant tokens replace MDB defaults">OVERRIDDEN</span></h2>
+  <p class="sd">The Foundant token palette. All values come from <code>foundant-tokens.css</code>.</p>
 
-  <h3>Theme</h3>
-  <div class="sg">
-    <div class="sw"><div class="swc" style="background:var(--t-primary)"></div><div class="swi"><strong>Primary</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--t-secondary)"></div><div class="swi"><strong>Secondary</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--t-success)"></div><div class="swi"><strong>Success</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--t-danger)"></div><div class="swi"><strong>Danger</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--t-warning)"></div><div class="swi"><strong>Warning</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--t-info)"></div><div class="swi"><strong>Info</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--t-light);border-bottom:1px solid #e0e0e0"></div><div class="swi"><strong>Light</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--t-dark)"></div><div class="swi"><strong>Dark</strong></div></div>
-  </div>
-  <div class="override-detail">
-    Primary: MDB <code>#1266F1</code> → Foundant <code>--colors-brand-primary-dark-blue</code> (#2D3B4A) ·
-    Secondary: MDB <code>#B23CFD</code> → Foundant <code>--colors-primary-shades-40</code> (#81898F) ·
-    Success: MDB <code>#00B74A</code> → Foundant <code>--colors-semantic-success-0</code> (#67CF9D) ·
-    Danger: MDB <code>#F93154</code> → Foundant <code>--colors-semantic-danger-0</code> (#BD3B39) ·
-    Warning: MDB <code>#FFA900</code> → Foundant <code>--colors-semantic-warning-0</code> (#F4C862) ·
-    Info: MDB <code>#39C0ED</code> → Foundant <code>--colors-semantic-info-0</code> (#536E8A) ·
-    Dark: MDB <code>#262626</code> → Foundant <code>--colors-brand-primary-dark-blue</code> (#2D3B4A)
-  </div>
-  <h3>Subtle Backgrounds</h3>
-  <div class="sg">
-    <div class="sw"><div class="swc" style="background:var(--t-primary-bg)"></div><div class="swi"><strong>Primary</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--t-success-bg)"></div><div class="swi"><strong>Success</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--t-danger-bg)"></div><div class="swi"><strong>Danger</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--t-warning-bg)"></div><div class="swi"><strong>Warning</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--t-info-bg)"></div><div class="swi"><strong>Info</strong></div></div>
-  </div>
-  <div class="override-detail">All subtle backgrounds follow from theme color overrides above.</div>
+  <table class="usage">
+    <tr><th>What</th><td>The canonical color tokens. Everything in GLM references these, never raw hex.</td></tr>
+    <tr><th>Where</th><td><code>--colors-*</code> in <code>foundant-tokens.css</code>. Components consume them via <code>--mdb-*</code> remaps.</td></tr>
+    <tr><th>When</th><td>Brand primary for text/primary actions. Neutrals for surfaces, borders, muted text. Semantic colors only for state (success/danger/warning/info).</td></tr>
+    <tr><th>Why</th><td>One palette keeps the app coherent as it modernizes. Referencing tokens (not hex) means a palette change updates everywhere at once.</td></tr>
+    <tr><th>How</th><td>In CSS: <code>color: var(--colors-brand-primary-dark-blue)</code>. In markup, prefer utility classes (<code>.text-muted</code>, <code>.text-danger</code>) that already map to tokens.</td></tr>
+  </table>
 
-  <div class="production-only">
-  <h3>Danger — Full Range</h3>
+  <h3>Brand</h3>
+  <div class="sg">
+    <div class="sw"><div class="swc" style="background:var(--colors-brand-primary-dark-blue)"></div><div class="swi"><strong>Primary</strong><span>2D3B4A</span></div></div>
+    <div class="sw"><div class="swc" style="background:var(--colors-brand-secondary-light-blue)"></div><div class="swi"><strong>Secondary</strong><span>D5E2FA</span></div></div>
+    <div class="sw"><div class="swc" style="background:var(--colors-brand-orange)"></div><div class="swi"><strong>Orange</strong><span>F26B22</span></div></div>
+    <div class="sw"><div class="swc" style="background:var(--colors-brand-yellow)"></div><div class="swi"><strong>Yellow</strong><span>F6B845</span></div></div>
+  </div>
+
+  <h3>Semantic — foreground &amp; subtle</h3>
+  <div class="sg">
+    <div class="sw"><div class="swc" style="background:var(--colors-semantic-success-0)"></div><div class="swi"><strong>Success</strong><span>67CF9D</span></div></div>
+    <div class="sw"><div class="swc" style="background:var(--colors-semantic-danger-0)"></div><div class="swi"><strong>Danger</strong><span>BD3B39</span></div></div>
+    <div class="sw"><div class="swc" style="background:var(--colors-semantic-warning-0)"></div><div class="swi"><strong>Warning</strong><span>F4C862</span></div></div>
+    <div class="sw"><div class="swc" style="background:var(--colors-semantic-info-0)"></div><div class="swi"><strong>Info</strong><span>536E8A</span></div></div>
+    <div class="sw"><div class="swc" style="background:var(--colors-semantic-success-50)"></div><div class="swi"><strong>Success 50</strong><span>E1F5EB</span></div></div>
+    <div class="sw"><div class="swc" style="background:var(--colors-semantic-danger-50)"></div><div class="swi"><strong>Danger 50</strong><span>FAEAEA</span></div></div>
+    <div class="sw"><div class="swc" style="background:var(--colors-semantic-warning-50)"></div><div class="swi"><strong>Warning 50</strong><span>FFF4D1</span></div></div>
+    <div class="sw"><div class="swc" style="background:var(--colors-semantic-info-50)"></div><div class="swi"><strong>Info 50</strong><span>D5E2FA</span></div></div>
+  </div>
+
+  <h3>Danger — full validated ramp</h3>
   <div class="color-range">
     <div class="color-range-step" style="background:#FAEAEA"><span style="color:#4D1514">50</span></div>
     <div class="color-range-step" style="background:#F2BEBE"><span style="color:#4D1514">100</span></div>
@@ -460,167 +163,164 @@
     <div class="color-range-step" style="background:#6B1F1E"><span style="color:#fff">800</span></div>
     <div class="color-range-step" style="background:#4D1514"><span style="color:#fff">900</span></div>
   </div>
-  <div class="color-range-label">
-    <span>#FAEAEA</span><span>#F2BEBE</span><span>#E89090</span><span>#DD6463</span><span>#D44D4B</span><span>#BD3B39</span><span>#A33230</span><span>#882927</span><span>#6B1F1E</span><span>#4D1514</span>
-  </div>
-  <div class="override-detail">Anchor: <code>danger-500</code> = <code>#BD3B39</code> (matches <code>--colors-semantic-danger-0</code>). Full 50–900 range validated via WCAG 2.2 AA contrast matrix. Outlined step = anchor.</div>
-  <button class="view-matrix-btn" onclick="document.getElementById('dangerMatrix').classList.add('open')"><i class="fas fa-th" style="font-size:10px"></i> View contrast matrix</button>
+  <div class="color-range-label"><span>50</span><span>100</span><span>200</span><span>300</span><span>400</span><span>500</span><span>600</span><span>700</span><span>800</span><span>900</span></div>
+  <p class="sd" style="border:none;margin:6px 0 0">Anchor <code>danger-500</code> = <code>#BD3B39</code>. The only fully WCAG-validated semantic ramp.</p>
+  <button class="view-matrix-btn" onclick="document.getElementById('dangerMatrix').classList.add('open')"><i class="fa-light fa-table-cells" style="font-size:10px"></i> View contrast matrix</button>
 
-  <h3 style="margin-top:20px">Success, Warning, Info — Ranges Pending</h3>
-  <div style="font-size:11px;color:var(--g500);padding:8px 0">Full 50–900 ranges for success, warning, and info will be added as they are validated through the same WCAG AA process.</div>
-  </div>
+  <h3 style="margin-top:20px">Success / warning / info full ramps <span class="gap-flag">GAP — pending validation</span></h3>
+  <div class="gap-zone"><p class="gap-note" style="margin:0">Only the danger ramp is complete. Success, warning, and info need full 50–900 ramps through the same WCAG AA process before use beyond the 0/50 anchors above.</p></div>
 
-  <h3>Surface &amp; Body</h3>
-  <div class="override-detail">
-    Body color: MDB <code>rgb(79,79,79)</code> → Foundant <code>--colors-brand-primary-dark-blue</code> (#2D3B4A) ·
-    Body bg: MDB <code>#fff</code> → Foundant <code>--colors-neutral-80</code> (#F5F5F5) ·
-    Border color: MDB <code>#dee2e6</code> → Foundant <code>--colors-borders-divider</code> (#E0E0E0) ·
-    Link color: Foundant <code>--colors-link-default</code> (#1976D2) ·
-    Link hover: Foundant <code>--colors-link-hover</code> (#23527C)
-  </div>
-
-  <h3>Neutral Scale</h3>
+  <h3>Neutral scale</h3>
   <div class="sg">
-    <div class="sw"><div class="swc" style="background:var(--g50)"></div><div class="swi"><strong>50</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--g100)"></div><div class="swi"><strong>100</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--g200)"></div><div class="swi"><strong>200</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--g300)"></div><div class="swi"><strong>300</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--g400)"></div><div class="swi"><strong>400</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--g500)"></div><div class="swi"><strong>500</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--g600)"></div><div class="swi"><strong>600</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--g700)"></div><div class="swi"><strong>700</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--g800)"></div><div class="swi"><strong>800</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--g900)"></div><div class="swi"><strong>900</strong></div></div>
+    <div class="sw"><div class="swc" style="background:var(--colors-neutral-10)"></div><div class="swi"><strong>10</strong></div></div>
+    <div class="sw"><div class="swc" style="background:var(--colors-neutral-20)"></div><div class="swi"><strong>20</strong></div></div>
+    <div class="sw"><div class="swc" style="background:var(--colors-neutral-30)"></div><div class="swi"><strong>30</strong></div></div>
+    <div class="sw"><div class="swc" style="background:var(--colors-neutral-40)"></div><div class="swi"><strong>40</strong></div></div>
+    <div class="sw"><div class="swc" style="background:var(--colors-neutral-50)"></div><div class="swi"><strong>50</strong></div></div>
+    <div class="sw"><div class="swc" style="background:var(--colors-neutral-60)"></div><div class="swi"><strong>60</strong></div></div>
+    <div class="sw"><div class="swc" style="background:var(--colors-neutral-70)"></div><div class="swi"><strong>70</strong></div></div>
+    <div class="sw"><div class="swc" style="background:var(--colors-neutral-80)"></div><div class="swi"><strong>80</strong></div></div>
+    <div class="sw"><div class="swc" style="background:var(--colors-neutral-90)"></div><div class="swi"><strong>90</strong></div></div>
+    <div class="sw"><div class="swc" style="background:var(--colors-neutral-100);border-bottom:1px solid var(--colors-borders-divider)"></div><div class="swi"><strong>100</strong></div></div>
   </div>
 </section>
 
 <!-- ═══ TYPOGRAPHY ═══ -->
 <section class="sec" id="typography">
-  <h2>Typography <span class="override-tag">OVERRIDDEN</span></h2>
-  <p class="sd">Font family, heading scale, body text, and inline styles.</p>
+  <h2>Typography <span class="status-tag status-overridden" title="h1 + heading scale customized">OVERRIDDEN</span></h2>
+  <p class="sd">Roboto throughout. Compressed heading scale for a data-dense interface.</p>
 
-  <h3>Headings</h3>
-  <div style="margin-bottom:12px">
-    <div style="font-family:var(--t-heading);font-size:var(--t-h1-size);font-weight:var(--t-h-weight);margin:6px 0" class="heading-specimen" data-level="h1">h1. Heading</div>
-    <div style="font-family:var(--t-heading);font-size:var(--t-h2-size);font-weight:var(--t-h-weight);margin:6px 0" class="heading-specimen" data-level="h2">h2. Heading</div>
-    <div style="font-family:var(--t-heading);font-size:var(--t-h3-size);font-weight:var(--t-h-weight);margin:6px 0" class="heading-specimen" data-level="h3">h3. Heading</div>
-    <div style="font-family:var(--t-heading);font-size:var(--t-h4-size);font-weight:var(--t-h-weight);margin:6px 0" class="heading-specimen" data-level="h4">h4. Heading</div>
-    <div style="font-family:var(--t-heading);font-size:var(--t-h5-size);font-weight:var(--t-h-weight);margin:6px 0" class="heading-specimen" data-level="h5">h5. Heading</div>
-    <div style="font-family:var(--t-heading);font-size:var(--t-h6-size);font-weight:var(--t-h-weight);margin:6px 0" class="heading-specimen" data-level="h6">h6. Heading</div>
-  </div>
-  <div class="production-only">
-  <div style="overflow-x:auto;margin:12px 0 16px">
-    <table class="tbl-t" style="font-size:12px">
-      <thead>
-        <tr>
-          <th>Level</th>
-          <th>rem</th>
-          <th>px</th>
-          <th>Weight</th>
-          <th>Token</th>
-          <th>Usage</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>h1</strong></td>
-          <td><code style="font-size:11px">1.75rem</code></td>
-          <td>28px</td>
-          <td>500</td>
-          <td><code style="font-size:11px">--type-heading-h1</code></td>
-          <td>Page titles. One per page.</td>
-        </tr>
-        <tr>
-          <td><strong>h2</strong></td>
-          <td><code style="font-size:11px">1.25rem</code></td>
-          <td>20px</td>
-          <td>500</td>
-          <td><code style="font-size:11px">--type-heading-h2</code></td>
-          <td>Section headers. Card titles, panel headers.</td>
-        </tr>
-        <tr>
-          <td><strong>h3</strong></td>
-          <td><code style="font-size:11px">1rem</code></td>
-          <td>16px</td>
-          <td>500</td>
-          <td><code style="font-size:11px">--type-heading-h3</code></td>
-          <td>Subsection headers. Same size as body; relies on weight for hierarchy.</td>
-        </tr>
-        <tr>
-          <td><strong>h4</strong></td>
-          <td><code style="font-size:11px">0.875rem</code></td>
-          <td>14px</td>
-          <td>500</td>
-          <td><code style="font-size:11px">--type-heading-h4</code></td>
-          <td>Field group labels, minor sections, modal headers.</td>
-        </tr>
-        <tr>
-          <td><strong>h5</strong></td>
-          <td><code style="font-size:11px">0.75rem</code></td>
-          <td>12px</td>
-          <td>500</td>
-          <td><code style="font-size:11px">--type-heading-h5</code></td>
-          <td>Overline / category labels. Sidebar section dividers.</td>
-        </tr>
-        <tr>
-          <td><strong>h6</strong></td>
-          <td><code style="font-size:11px">0.75rem</code></td>
-          <td>12px</td>
-          <td>500</td>
-          <td><code style="font-size:11px">--type-heading-h6</code></td>
-          <td>Rarely used. Same size as h5, available for deep nesting.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="override-detail">
-    Scale compressed for data-dense SaaS context. MDB5 defaults: h1=2.5rem, h2=2rem, h3=1.75rem, h4=1.5rem, h5=1.25rem, h6=1rem (weight 500). GLM overrides sizes but keeps <code>font-weight: 500</code> (same as MDB default). Font family: <code>Roboto</code>. h1 at <code>1.75rem</code> matches current production value.
-  </div>
-  </div>
-  <h3>Body &amp; Inline</h3>
+  <table class="usage">
+    <tr><th>What</th><td>The heading scale and body text styles. One font family (Roboto), weight 500 for headings.</td></tr>
+    <tr><th>Where</th><td>Real <code>h1</code>–<code>h6</code> elements, sized by the foundation CSS. Body copy is 1rem/400.</td></tr>
+    <tr><th>When</th><td>Use the heading level that matches document structure, not visual size. Never pick a heading for its looks; if you need a small label, use <code>.section-eyebrow</code> (a non-heading), not <code>h5</code>.</td></tr>
+    <tr><th>Why</th><td>Scale is compressed vs MDB defaults for density. Weight 500 (not bold) keeps headings calm. h3 is the same size as body and relies on weight for hierarchy.</td></tr>
+    <tr><th>How</th><td>Just use the tag: <code>&lt;h2&gt;Section&lt;/h2&gt;</code>. Card titles use <code>&lt;h5 class="card-title"&gt;</code>.</td></tr>
+  </table>
+
+  <h3>Heading scale (real elements)</h3>
+  <h1>h1. Page title — 1.75rem</h1>
+  <h2>h2. Section header — 1.25rem</h2>
+  <h3>h3. Subsection — 1rem (weight carries hierarchy)</h3>
+  <h4>h4. Minor section — 0.875rem</h4>
+  <h5>h5. Small header — 0.75rem</h5>
+  <h6>h6. Smallest — 0.75rem</h6>
+  <div class="code-block">&lt;h1&gt;Page title&lt;/h1&gt;
+&lt;h2&gt;Section header&lt;/h2&gt;
+&lt;h5 class="card-title"&gt;Card title&lt;/h5&gt;</div>
+
+  <h3>Not a heading: section eyebrow</h3>
+  <p class="section-eyebrow">Program area</p>
+  <p style="margin:0 0 8px;font-size:0.85rem;color:var(--colors-neutral-30)">The eyebrow above labels the region. It is a <code>&lt;p class="section-eyebrow"&gt;</code>, never an <code>h*</code>, so it doesn't distort the document outline.</p>
+  <div class="code-block">&lt;p class="section-eyebrow"&gt;Program area&lt;/p&gt;
+&lt;h4&gt;Environmental Grants&lt;/h4&gt;</div>
+
+  <h3>Body &amp; inline</h3>
   <p style="margin:4px 0">Default body: 1rem (16px), weight 400, line-height 1.6.</p>
-  <p style="margin:4px 0"><strong>Bold</strong> · <em>Italic</em> · <small>Small</small> · <mark style="background:var(--t-warning-bg)">Highlight</mark> · <del>Deleted</del> · <u>Underline</u></p>
-  <p style="margin:4px 0"><a href="javascript:void(0)" style="color:var(--t-link)">Link default</a> · <a href="javascript:void(0)" style="color:var(--t-link);text-decoration:underline">Link underlined</a></p>
+  <p style="margin:4px 0"><strong>Bold</strong> · <em>Italic</em> · <small>Small</small> · <mark style="background:var(--colors-semantic-warning-50)">Highlight</mark> · <del>Deleted</del> · <u>Underline</u></p>
+  <p style="margin:4px 0"><a href="javascript:void(0)" class="dark-link">Link (dark-link, in-content)</a></p>
 </section>
 
 <!-- ═══ ICONS ═══ -->
 <section class="sec" id="icons">
-  <h2>Icons <span class="override-tag">OVERRIDDEN</span></h2>
-  <p class="sd">Icon library.</p>
-  <div class="override-detail">
-    <strong>Override applied:</strong> Production uses <code>Font Awesome 7 Pro</code> (multiple families: Pro, Sharp, Duotone, Slab, etc.). MDB5 ships with <code>Font Awesome 6 Free</code>. This CDN reference renders FA6 Free.
+  <h2>Icons <span class="status-tag status-overridden" title="FA Pro (light) vs MDB stock FA Free">OVERRIDDEN</span></h2>
+  <p class="sd">Font Awesome Pro. Default family <code>fa-light</code>; <code>fa-regular</code> for filled-state controls.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>Font Awesome Pro icons. GLM uses the light family by default for a clean, thin look.</td></tr>
+    <tr><th>Where</th><td><code>&lt;i class="fa-light fa-*"&gt;</code>. FA's JS upgrades it to inline SVG at runtime.</td></tr>
+    <tr><th>When</th><td>Use <code>fa-light</code> as default. Use <code>fa-regular</code> where production does (toggles, the kebab menu). Size with FA classes (<code>fa-lg</code>) and space with Bootstrap utilities (<code>me-2</code>).</td></tr>
+    <tr><th>Why</th><td>One icon family keeps weight consistent. Never mix in emoji or inline hand-drawn SVG.</td></tr>
+    <tr><th>How</th><td><code>&lt;i class="fa-light fa-plus me-2"&gt;&lt;/i&gt;Add</code></td></tr>
+  </table>
+
+  <div class="wip-note">This public reference CDN renders Font Awesome 6 Free, so icons here appear heavier than production's Pro <code>fa-light</code>. The <em>class names</em> shown are the correct production classes to lift; only the rendered weight differs.</div>
+
+  <div class="cr" style="font-size:20px;gap:16px;color:var(--colors-neutral-30)">
+    <i class="fa-light fa-house" title="house"></i><i class="fa-light fa-magnifying-glass" title="search"></i><i class="fa-light fa-circle-user" title="user"></i><i class="fa-light fa-gear" title="settings"></i><i class="fa-light fa-bell" title="bell"></i><i class="fa-light fa-envelope" title="envelope"></i><i class="fa-light fa-trash-can" title="trash"></i><i class="fa-light fa-pen-to-square" title="edit"></i><i class="fa-light fa-plus" title="plus"></i><i class="fa-light fa-check" title="check"></i><i class="fa-light fa-xmark" title="close"></i><i class="fa-light fa-download" title="download"></i><i class="fa-light fa-filter" title="filter"></i><i class="fa-light fa-arrow-up-arrow-down" title="sort"></i><i class="fa-regular fa-ellipsis-vertical" title="kebab"></i><i class="fa-light fa-chevron-down" title="chevron"></i><i class="fa-light fa-circle-info" title="info"></i><i class="fa-light fa-triangle-exclamation" title="warning"></i><i class="fa-light fa-calendar" title="calendar"></i><i class="fa-light fa-eye" title="view"></i><i class="fa-light fa-link" title="link"></i><i class="fa-light fa-arrow-up-right-from-square" title="external"></i>
   </div>
-  <div class="cr" style="font-size:20px;gap:16px;color:var(--g600)">
-    <i class="fas fa-home" title="home"></i><i class="fas fa-search" title="search"></i><i class="fas fa-user" title="user"></i><i class="fas fa-cog" title="cog"></i><i class="fas fa-bell" title="bell"></i><i class="fas fa-envelope" title="envelope"></i><i class="fas fa-trash" title="trash"></i><i class="fas fa-edit" title="edit"></i><i class="fas fa-plus" title="plus"></i><i class="fas fa-check" title="check"></i><i class="fas fa-times" title="times"></i><i class="fas fa-download" title="download"></i><i class="fas fa-filter" title="filter"></i><i class="fas fa-sort" title="sort"></i><i class="fas fa-ellipsis-v" title="ellipsis-v"></i><i class="fas fa-chevron-down" title="chevron-down"></i><i class="fas fa-info-circle" title="info-circle"></i><i class="fas fa-exclamation-triangle" title="warning"></i><i class="fas fa-calendar" title="calendar"></i><i class="fas fa-eye" title="eye"></i><i class="fas fa-link" title="link"></i><i class="fas fa-external-link-alt" title="external"></i>
-  </div>
+  <div class="code-block">&lt;i class="fa-light fa-pen-to-square"&gt;&lt;/i&gt;
+&lt;i class="fa-regular fa-ellipsis-vertical"&gt;&lt;/i&gt;</div>
 </section>
 
 <!-- ═══ GRID ═══ -->
 <section class="sec" id="grid">
-  <h2>Grid System <span class="no-override-tag">DEFAULT</span></h2>
-  <p class="sd">12-column responsive grid.</p>
-  <div class="no-override-detail"><strong>No override detected:</strong> Grid breakpoints, column counts, and gutter sizes appear to use MDB5/Bootstrap defaults.</div>
-  <div class="row g-2 mb-2"><div class="col"><div style="background:var(--t-primary);color:#fff;padding:10px;border-radius:var(--r-sm);text-align:center;font-size:12px">col</div></div><div class="col"><div style="background:var(--t-primary);color:#fff;padding:10px;border-radius:var(--r-sm);text-align:center;font-size:12px">col</div></div><div class="col"><div style="background:var(--t-primary);color:#fff;padding:10px;border-radius:var(--r-sm);text-align:center;font-size:12px">col</div></div></div>
-  <div class="row g-2"><div class="col-3"><div style="background:var(--t-primary-bg);color:var(--t-primary);padding:10px;border-radius:var(--r-sm);text-align:center;font-size:12px">3</div></div><div class="col-6"><div style="background:var(--t-primary);color:#fff;padding:10px;border-radius:var(--r-sm);text-align:center;font-size:12px">6</div></div><div class="col-3"><div style="background:var(--t-primary-bg);color:var(--t-primary);padding:10px;border-radius:var(--r-sm);text-align:center;font-size:12px">3</div></div></div>
+  <h2>Grid System <span class="status-tag status-default" title="stock Bootstrap 12-col grid">DEFAULT</span></h2>
+  <p class="sd">Stock Bootstrap/MDB 12-column responsive grid. No overrides.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>The 12-column responsive grid. Standard Bootstrap breakpoints and gutters.</td></tr>
+    <tr><th>Where</th><td><code>.row</code> + <code>.col-*</code>. Gutters via <code>.g-*</code> (record pages use <code>.g-3</code>).</td></tr>
+    <tr><th>When</th><td>Pair cards two-up on wide screens with <code>.col-12.col-xl-6</code> so they stack on narrow ones. Use <code>.col</code> for equal-width auto columns.</td></tr>
+    <tr><th>Why</th><td>No GLM override needed. Consistency comes from using the same column pattern across record pages, not from custom grid CSS.</td></tr>
+    <tr><th>How</th><td><code>&lt;div class="row g-3"&gt;&lt;div class="col-12 col-xl-6"&gt;…&lt;/div&gt;&lt;/div&gt;</code></td></tr>
+  </table>
+
+  <h3>Equal-width columns</h3>
+  <div class="row g-2 mb-2">
+    <div class="col"><div style="background:var(--colors-brand-primary-dark-blue);color:#fff;padding:10px;border-radius:var(--radius-sm);text-align:center;font-size:12px">col</div></div>
+    <div class="col"><div style="background:var(--colors-brand-primary-dark-blue);color:#fff;padding:10px;border-radius:var(--radius-sm);text-align:center;font-size:12px">col</div></div>
+    <div class="col"><div style="background:var(--colors-brand-primary-dark-blue);color:#fff;padding:10px;border-radius:var(--radius-sm);text-align:center;font-size:12px">col</div></div>
+  </div>
+
+  <h3>Explicit spans (3 / 6 / 3)</h3>
+  <div class="row g-2">
+    <div class="col-3"><div style="background:var(--colors-brand-secondary-light-blue);color:var(--colors-brand-primary-dark-blue);padding:10px;border-radius:var(--radius-sm);text-align:center;font-size:12px">3</div></div>
+    <div class="col-6"><div style="background:var(--colors-brand-primary-dark-blue);color:#fff;padding:10px;border-radius:var(--radius-sm);text-align:center;font-size:12px">6</div></div>
+    <div class="col-3"><div style="background:var(--colors-brand-secondary-light-blue);color:var(--colors-brand-primary-dark-blue);padding:10px;border-radius:var(--radius-sm);text-align:center;font-size:12px">3</div></div>
+  </div>
+
+  <h3>Record-page card pairing</h3>
+  <div class="row g-3">
+    <div class="col-12 col-xl-6"><div class="card"><div class="card-body"><h5 class="card-title mb-0">Left card</h5></div></div></div>
+    <div class="col-12 col-xl-6"><div class="card"><div class="card-body"><h5 class="card-title mb-0">Right card</h5></div></div></div>
+  </div>
+  <div class="code-block">&lt;div class="row g-3"&gt;
+  &lt;div class="col-12 col-xl-6"&gt;&lt;div class="card"&gt;…&lt;/div&gt;&lt;/div&gt;
+  &lt;div class="col-12 col-xl-6"&gt;&lt;div class="card"&gt;…&lt;/div&gt;&lt;/div&gt;
+&lt;/div&gt;</div>
 </section>
 
 <!-- ═══ SPACING ═══ -->
 <section class="sec" id="spacing">
-  <h2>Spacing &amp; Radius <span class="override-tag">OVERRIDDEN</span></h2>
-  <p class="sd">Custom radius tokens. Spacing scale is MDB5 default.</p>
-  <h3>Radius</h3>
+  <h2>Spacing &amp; Radius <span class="status-tag status-overridden" title="custom radius scale (spacing is stock)">OVERRIDDEN</span></h2>
+  <p class="sd">Bootstrap spacing utilities. Custom Foundant radius scale.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>Spacing uses Bootstrap's <code>m-*</code>/<code>p-*</code> utilities. Radius uses the Foundant <code>--radius-*</code> scale.</td></tr>
+    <tr><th>Where</th><td>Spacing: utility classes in markup. Radius: <code>--radius-*</code> tokens in CSS.</td></tr>
+    <tr><th>When</th><td>Buttons/pills use <code>round</code>. Cards and the hero use <code>card</code> (6px). Inputs and small chips use <code>sm</code> (4px). Larger surfaces use <code>md</code> (8px).</td></tr>
+    <tr><th>Why</th><td>A fixed radius scale keeps corners consistent. <code>--radius-card</code> (6px) was added to name the value production hardcodes on cards, so prototypes stop using a magic number.</td></tr>
+    <tr><th>How</th><td><code>border-radius: var(--radius-card)</code>. In markup, spacing like <code>class="mt-2 mb-3"</code>.</td></tr>
+  </table>
+
+  <h3>Radius scale</h3>
   <div class="cr" style="align-items:center">
-    <div style="width:70px;height:50px;background:var(--g200);border:1px solid var(--t-bdr);border-radius:var(--r-xs);display:flex;align-items:center;justify-content:center;font-size:10px">xs 2px</div>
-    <div style="width:70px;height:50px;background:var(--g200);border:1px solid var(--t-bdr);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:10px">sm 4px</div>
-    <div style="width:70px;height:50px;background:var(--g200);border:1px solid var(--t-bdr);border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:10px">md 8px</div>
-    <div style="width:90px;height:50px;background:var(--g200);border:1px solid var(--t-bdr);border-radius:var(--r-rnd);display:flex;align-items:center;justify-content:center;font-size:10px">round 50px</div>
+    <div style="width:70px;height:50px;background:var(--colors-neutral-70);border:1px solid var(--colors-borders-divider);border-radius:var(--radius-xs);display:flex;align-items:center;justify-content:center;font-size:10px">xs 2px</div>
+    <div style="width:70px;height:50px;background:var(--colors-neutral-70);border:1px solid var(--colors-borders-divider);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:10px">sm 4px</div>
+    <div style="width:70px;height:50px;background:var(--colors-neutral-70);border:1px solid var(--colors-borders-divider);border-radius:var(--radius-card);display:flex;align-items:center;justify-content:center;font-size:10px">card 6px</div>
+    <div style="width:70px;height:50px;background:var(--colors-neutral-70);border:1px solid var(--colors-borders-divider);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:10px">md 8px</div>
+    <div style="width:90px;height:50px;background:var(--colors-neutral-70);border:1px solid var(--colors-borders-divider);border-radius:var(--radius-round);display:flex;align-items:center;justify-content:center;font-size:10px">round 50px</div>
   </div>
-  <div class="override-detail">Custom radius tokens: <code>--radius-xs: 2px</code>, <code>--radius-sm: 4px</code>, <code>--radius-md: 8px</code>, <code>--radius-round: 50px</code>. MDB5 default uses <code>0.25rem (4px)</code> for all standard radii. The <code>8px</code> md radius is the notable divergence.</div>
+  <div class="code-block">--radius-xs: 2px;   /* hairline chips */
+--radius-sm: 4px;   /* inputs, small controls */
+--radius-card: 6px; /* cards, hero (was hardcoded) */
+--radius-md: 8px;   /* larger surfaces */
+--radius-round: 50px; /* buttons, pills */</div>
+
+  <h3>Spacing utilities</h3>
+  <div class="cr" style="align-items:flex-end">
+    <div style="background:var(--colors-brand-secondary-light-blue);padding:4px"><div style="background:var(--colors-brand-primary-dark-blue);width:40px;height:24px"></div></div>
+    <div style="background:var(--colors-brand-secondary-light-blue);padding:8px"><div style="background:var(--colors-brand-primary-dark-blue);width:40px;height:24px"></div></div>
+    <div style="background:var(--colors-brand-secondary-light-blue);padding:16px"><div style="background:var(--colors-brand-primary-dark-blue);width:40px;height:24px"></div></div>
+    <div style="background:var(--colors-brand-secondary-light-blue);padding:24px"><div style="background:var(--colors-brand-primary-dark-blue);width:40px;height:24px"></div></div>
+  </div>
+  <p class="sd" style="border:none;margin:6px 0 0">Bootstrap scale: <code>p-1</code> 4px · <code>p-2</code> 8px · <code>p-3</code> 16px · <code>p-4</code> 24px · <code>p-5</code> 48px. Same values for margins (<code>m-*</code>) and directional variants (<code>mt-</code>, <code>px-</code>, etc.).</p>
 </section>
 
 <!-- ═══ NAVBAR ═══ -->
 <section class="sec" id="navbar">
-  <h2>Navbar <span class="no-override-tag">DEFAULT</span></h2>
+  <h2>Navbar <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Top navigation bar.</p>
   <div class="no-override-detail"><strong>No structural override detected:</strong> Navbar uses MDB5 default component patterns. Colors change via the theme overrides above but no navbar-specific customizations were found.</div>
   <div style="background:var(--t-dark);border-radius:var(--r-md);padding:0 16px;display:flex;align-items:center;height:44px;gap:20px">
@@ -636,7 +336,7 @@
 
 <!-- ═══ SIDENAV ═══ -->
 <section class="sec" id="sidenav">
-  <h2>Sidenav <span class="no-override-tag">DEFAULT</span></h2>
+  <h2>Sidenav <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Vertical sidebar navigation.</p>
   <div class="no-override-detail"><strong>No structural override detected:</strong> Uses MDB5 sidenav patterns. Active state and colors are driven by theme color overrides.</div>
   <div style="width:220px;background:var(--t-surface);border:1px solid var(--t-bdr);border-radius:var(--r-md);overflow:hidden">
@@ -652,16 +352,16 @@
 
 <!-- ═══ TABS ═══ -->
 <section class="sec" id="tabs">
-  <h2>Tabs &amp; Pills <span class="no-override-tag">DEFAULT</span></h2>
+  <h2>Tabs &amp; Pills <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Horizontal navigation.</p>
   <div class="no-override-detail"><strong>No structural override detected:</strong> Tab and pill styles use MDB5 defaults. Active color changes with theme primary.</div>
-  <h3>Tabs</h3>
+  <p class="section-eyebrow">Tabs</p>
   <div style="border-bottom:2px solid var(--t-bdr);display:flex;gap:0;margin-bottom:14px">
     <a href="javascript:void(0)" style="padding:8px 18px;font-size:13px;font-weight:500;text-decoration:none;color:var(--t-primary);border-bottom:2px solid var(--t-primary);margin-bottom:-2px">Active</a>
     <a href="javascript:void(0)" style="padding:8px 18px;font-size:13px;text-decoration:none;color:var(--g500)">Tab Two</a>
     <a href="javascript:void(0)" style="padding:8px 18px;font-size:13px;text-decoration:none;color:var(--g400)">Disabled</a>
   </div>
-  <h3>Pills</h3>
+  <p class="section-eyebrow">Pills</p>
   <div style="display:flex;gap:5px">
     <a href="javascript:void(0)" style="padding:6px 14px;font-size:12px;font-weight:500;text-decoration:none;color:#fff;background:var(--t-primary);border-radius:var(--r-rnd)">Active</a>
     <a href="javascript:void(0)" style="padding:6px 14px;font-size:12px;text-decoration:none;color:var(--g600);background:var(--g200);border-radius:var(--r-rnd)">Pill</a>
@@ -670,7 +370,7 @@
 
 <!-- ═══ BREADCRUMB ═══ -->
 <section class="sec" id="breadcrumb">
-  <h2>Breadcrumb <span class="no-override-tag">DEFAULT</span></h2>
+  <h2>Breadcrumb <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Path navigation.</p>
   <div class="no-override-detail"><strong>No override detected.</strong></div>
   <nav style="font-size:13px"><a href="javascript:void(0)" style="color:var(--t-link);text-decoration:none">Home</a><span style="color:var(--g400);margin:0 6px">/</span><a href="javascript:void(0)" style="color:var(--t-link);text-decoration:none">Grants</a><span style="color:var(--g400);margin:0 6px">/</span><span style="color:var(--g500)">Application #1042</span></nav>
@@ -678,7 +378,7 @@
 
 <!-- ═══ PAGINATION ═══ -->
 <section class="sec" id="pagination">
-  <h2>Pagination <span class="no-override-tag">DEFAULT</span></h2>
+  <h2>Pagination <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Page navigation.</p>
   <div class="no-override-detail"><strong>No override detected.</strong></div>
   <div style="display:flex;gap:3px">
@@ -692,26 +392,78 @@
 
 <!-- ═══ BUTTONS ═══ -->
 <section class="sec" id="buttons">
-  <h2>Buttons <span class="override-tag">OVERRIDDEN</span></h2>
-  <p class="sd">All semantic variants, sizes, and states.</p>
-  <h3>Filled</h3>
-  <div class="cr"><button class="btn-t btn-tp">Primary</button><button class="btn-t btn-ts">Secondary</button><button class="btn-t btn-tsc">Success</button><button class="btn-t btn-td">Danger</button><button class="btn-t btn-tw">Warning</button><button class="btn-t btn-ti">Info</button></div>
-  <div class="override-detail">Button colors mapped to foundant tokens: bg → <code>--colors-brand-primary-dark-blue</code>, hover → <code>--colors-state-layers-dark-hover</code>, focus ring → <code>rgba(45,59,74,0.25)</code>. Production uses standard MDB border-radius (not pill). <code>btn-sm fw-bold</code> is the standard modifier pattern.</div>
-  <h3>Outline</h3>
-  <div class="cr"><button class="btn-t btn-to">Primary</button><button class="btn-t" style="background:transparent;border-color:var(--t-danger);color:var(--t-danger)">Danger</button><button class="btn-t" style="background:transparent;border-color:var(--g400);color:var(--g600)">Neutral</button></div>
-  <h3>Ghost / Link</h3>
-  <div class="cr"><button class="btn-t btn-tg">Ghost</button><button class="btn-t" style="background:none;border-color:transparent;color:var(--t-link);text-decoration:underline">Link</button></div>
+  <h2>Buttons <span class="status-tag status-overridden" title="--mdb-btn-* remapped to tokens">OVERRIDDEN</span></h2>
+  <p class="sd">Styled by remapping <code>--mdb-btn-*</code> variables onto Foundant tokens. No bespoke button classes.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>Standard MDB buttons. The primary action control across GLM.</td></tr>
+    <tr><th>Where</th><td><code>.btn</code> base + variant. Page-level actions, card headers, modal footers.</td></tr>
+    <tr><th>When</th><td>Primary for the main affirmative action (one per view). Outline-dark is the record-page workhorse. Danger for destructive actions. Link for low-emphasis inline actions.</td></tr>
+    <tr><th>Why</th><td>Base <code>.btn</code> sets <code>--mdb-btn-border-radius: var(--radius-round)</code>, <code>--mdb-btn-font-size: 14px</code>, <code>text-transform: initial</code>. Variants remap bg/hover/focus/active to tokens.</td></tr>
+    <tr><th>How</th><td>Add a size (<code>.btn-sm</code>) and weight (<code>.fw-bold</code>) modifier as needed. Record-page default is <code>.btn.btn-outline-dark.btn-sm.fw-bold</code>.</td></tr>
+  </table>
+
+  <h3>Ratified variants</h3>
+  <div class="cr">
+    <button class="btn btn-primary">Primary</button>
+    <button class="btn btn-dark btn-sm fw-bold shadow-none">Dark (card action)</button>
+    <button class="btn btn-outline-dark btn-sm fw-bold">Outline dark</button>
+    <button class="btn btn-outline-secondary">Outline secondary</button>
+    <button class="btn btn-danger">Danger</button>
+    <button class="btn btn-outline-danger">Outline danger</button>
+    <button class="btn btn-link">Link</button>
+  </div>
+  <div class="code-block">&lt;button class="btn btn-primary"&gt;Primary&lt;/button&gt;
+&lt;button class="btn btn-dark btn-sm fw-bold shadow-none"&gt;Dark&lt;/button&gt;
+&lt;button class="btn btn-outline-dark btn-sm fw-bold"&gt;Outline dark&lt;/button&gt;
+&lt;button class="btn btn-outline-secondary"&gt;Outline secondary&lt;/button&gt;
+&lt;button class="btn btn-danger"&gt;Danger&lt;/button&gt;
+&lt;button class="btn btn-outline-danger"&gt;Outline danger&lt;/button&gt;
+&lt;button class="btn btn-link"&gt;Link&lt;/button&gt;</div>
+
   <h3>Sizes</h3>
-  <div class="cr" style="align-items:center"><button class="btn-t btn-tp btn-sm2">Small</button><button class="btn-t btn-tp">Default</button><button class="btn-t btn-tp btn-lg2">Large</button></div>
+  <div class="cr" style="align-items:center">
+    <button class="btn btn-primary btn-sm">Small</button>
+    <button class="btn btn-primary">Default</button>
+    <button class="btn btn-primary btn-lg">Large</button>
+  </div>
+  <div class="code-block">&lt;button class="btn btn-primary btn-sm"&gt;Small&lt;/button&gt;
+&lt;button class="btn btn-primary"&gt;Default&lt;/button&gt;
+&lt;button class="btn btn-primary btn-lg"&gt;Large&lt;/button&gt;</div>
+
   <h3>States</h3>
-  <div class="cr"><button class="btn-t btn-tp">Normal</button><button class="btn-t btn-tp" style="background:var(--t-primary-h);border-color:var(--t-primary-h)">Hover</button><button class="btn-t btn-tp" style="box-shadow:0 0 0 3px var(--t-focus)">Focus</button><button class="btn-t btn-tp btn-dis">Disabled</button></div>
-  <h3>Icon Buttons</h3>
-  <div class="cr" style="align-items:center"><button class="btn-t btn-tp"><i class="fas fa-plus me-2"></i>Add</button><button class="btn-ico"><i class="fas fa-plus"></i></button><button class="btn-ico" style="background:transparent;color:var(--t-primary);border:1px solid var(--t-bdr)"><i class="fas fa-edit"></i></button><button style="background:transparent;border:none;color:var(--g500);cursor:pointer;padding:6px"><i class="fas fa-ellipsis-v"></i></button></div>
+  <div class="cr">
+    <button class="btn btn-primary">Normal</button>
+    <button class="btn btn-primary" disabled>Disabled</button>
+  </div>
+  <div class="code-block">&lt;button class="btn btn-primary"&gt;Normal&lt;/button&gt;
+&lt;button class="btn btn-primary" disabled&gt;Disabled&lt;/button&gt;</div>
+  <p class="gap-note"><span class="gap-flag">GAP — production</span> Disabled uses MDB's built-in fade (<code>opacity: 0.65</code>) via the <code>disabled</code> attribute. This foundation CSS remaps <code>--mdb-btn-disabled-bg</code> to Foundant navy so it fades the right color; <strong>production has not yet added this remap</strong>, so a disabled button in the live app currently fades MDB's default blue instead. Fix: add the disabled remaps to <code>mdb-customizations.css</code>.</p>
+
+  <h3>Icon buttons</h3>
+  <div class="cr" style="align-items:center">
+    <button class="btn btn-primary"><i class="fa-light fa-plus me-2"></i>Add</button>
+    <button class="btn btn-outline-dark btn-sm fw-bold"><i class="fa-light fa-pen-to-square me-2"></i>Edit</button>
+    <button class="kebab-btn"><i class="fa-regular fa-ellipsis-vertical"></i></button>
+  </div>
+  <div class="code-block">&lt;button class="btn btn-primary"&gt;&lt;i class="fa-light fa-plus me-2"&gt;&lt;/i&gt;Add&lt;/button&gt;
+&lt;button class="btn btn-outline-dark btn-sm fw-bold"&gt;&lt;i class="fa-light fa-pen-to-square me-2"&gt;&lt;/i&gt;Edit&lt;/button&gt;
+&lt;button class="kebab-btn"&gt;&lt;i class="fa-regular fa-ellipsis-vertical"&gt;&lt;/i&gt;&lt;/button&gt;</div>
+
+  <h3>Filled success / warning / info <span class="gap-flag">GAP — not in production</span></h3>
+  <div class="gap-zone">
+    <div class="cr">
+      <button class="btn btn-success">Success</button>
+      <button class="btn btn-warning">Warning</button>
+      <button class="btn btn-info">Info</button>
+    </div>
+    <p class="gap-note">Production defines no filled <code>.btn-success</code>, <code>.btn-warning</code>, or <code>.btn-info</code> override. These fall through to stock MDB colors and do not match Foundant. Do not lift into production until ratified. Backlog item.</p>
+  </div>
 </section>
 
 <!-- ═══ DROPDOWNS ═══ -->
 <section class="sec" id="dropdowns">
-  <h2>Dropdowns <span class="no-override-tag">DEFAULT</span></h2>
+  <h2>Dropdowns <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Contextual action menus.</p>
   <div class="no-override-detail"><strong>No structural override detected.</strong></div>
   <div style="position:relative;display:inline-block">
@@ -727,32 +479,105 @@
 
 <!-- ═══ CARDS ═══ -->
 <section class="sec" id="cards">
-  <h2>Cards <span class="no-override-tag">DEFAULT</span></h2>
-  <p class="sd">Content containers.</p>
-  <div class="no-override-detail"><strong>No structural override detected:</strong> Card borders, padding, and layout use MDB5 defaults. Colors change via theme.</div>
+  <h2>Cards <span class="status-tag status-overridden" title="header/footer borders removed">OVERRIDDEN</span></h2>
+  <p class="sd">Content containers. MDB <code>.card</code> with header/footer borders removed via customizations.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>The primary content container. Groups related fields, actions, or data on a record page.</td></tr>
+    <tr><th>Where</th><td><code>.card</code> &gt; <code>.card-body</code>. Record pages arrange them in a <code>.row.g-3</code> grid.</td></tr>
+    <tr><th>When</th><td>Use for any discrete content module. Pair two per row on wide viewports with <code>.col-12.col-xl-6</code>. Use <code>.h-100</code> so paired cards match height.</td></tr>
+    <tr><th>Why</th><td>Customizations remove <code>.card-header</code> bottom border and <code>.card-footer</code> top border for a flatter look. Card corners render at 6px (<code>--radius-card</code>).</td></tr>
+    <tr><th>How</th><td>Card header is a flex row: an <code>&lt;h5 class="card-title mb-0"&gt;</code> plus an actions cluster. Body holds the content.</td></tr>
+  </table>
+
   <div class="row g-3">
-    <div class="col-md-4"><div class="card-t"><div class="card-tb"><div style="font-family:var(--t-heading);font-weight:var(--t-h-weight);font-size:var(--t-h3-size);margin-bottom:6px">Basic Card</div><p style="font-size:12px;color:var(--g600);margin:0 0 10px">Supporting text.</p><button class="btn-t btn-tp btn-sm2">Action</button></div></div></div>
-    <div class="col-md-4"><div class="card-t"><div class="card-th">Header</div><div class="card-tb"><p style="font-size:12px;color:var(--g600);margin:0">Body content.</p></div><div class="card-tf">Updated 2 days ago</div></div></div>
-    <div class="col-md-4"><div class="card-t"><div style="height:80px;background:linear-gradient(135deg,var(--t-primary),var(--t-info));display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px"><i class="fas fa-image me-1"></i> Image</div><div class="card-tb"><div style="font-family:var(--t-heading);font-weight:var(--t-h-weight);font-size:var(--t-h3-size);margin-bottom:6px">Image Card</div><p style="font-size:12px;color:var(--g600);margin:0">With header.</p></div></div></div>
+    <div class="col-12 col-md-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title mb-0">Basic Card</h5>
+          <p class="text-muted mt-2 mb-3" style="font-size:0.85rem">Supporting text for the card body.</p>
+          <button class="btn btn-dark btn-sm fw-bold shadow-none">Action</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="card-title mb-0">Card With Header Actions</h5>
+            <button class="btn btn-outline-dark btn-sm fw-bold">Edit</button>
+          </div>
+          <p class="text-muted mb-0" style="font-size:0.85rem">Body content sits below a flex header row.</p>
+        </div>
+        <div class="card-footer text-muted" style="font-size:0.75rem">Updated 2 days ago</div>
+      </div>
+    </div>
   </div>
+  <div class="code-block">&lt;div class="row g-3"&gt;
+  &lt;div class="col-12 col-xl-6"&gt;
+    &lt;div class="card h-100"&gt;
+      &lt;div class="card-body"&gt;
+        &lt;div class="d-flex justify-content-between align-items-center mb-3"&gt;
+          &lt;h5 class="card-title mb-0"&gt;Title&lt;/h5&gt;
+          &lt;button class="btn btn-outline-dark btn-sm fw-bold"&gt;Edit&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;p class="text-muted mb-0"&gt;Body content.&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</div>
 </section>
 
 <!-- ═══ BADGES ═══ -->
 <section class="sec" id="badges">
-  <h2>Badges &amp; Chips <span class="override-tag">OVERRIDDEN</span></h2>
-  <p class="sd">Status indicators and tags.</p>
-  <h3>Subtle</h3>
-  <div class="cr"><span class="badge-t bp">Primary</span><span class="badge-t bs">Approved</span><span class="badge-t bd">Denied</span><span class="badge-t bw">Pending</span><span class="badge-t bi">In Review</span></div>
-  <div class="override-detail">All badge colors follow theme overrides. Subtle background tints (<code>*-bg-subtle</code>) customized for each semantic color. Pill shape applied.</div>
-  <h3>Solid</h3>
-  <div class="cr"><span style="padding:3px 9px;border-radius:var(--r-rnd);font-size:11px;font-weight:500;color:#fff;background:var(--t-primary)">Primary</span><span style="padding:3px 9px;border-radius:var(--r-rnd);font-size:11px;font-weight:500;color:#fff;background:var(--t-success)">Success</span><span style="padding:3px 9px;border-radius:var(--r-rnd);font-size:11px;font-weight:500;color:#fff;background:var(--t-danger)">Danger</span></div>
-  <h3>Chips</h3>
-  <div class="cr"><span style="display:inline-flex;align-items:center;padding:4px 10px;background:var(--t-primary-bg);color:var(--t-primary);border-radius:var(--r-rnd);font-size:12px;font-weight:500"><i class="fas fa-user me-1" style="font-size:9px"></i>John Doe <i class="fas fa-times ms-2" style="font-size:8px;opacity:.4;cursor:pointer"></i></span></div>
+  <h2>Badges &amp; Status <span class="status-tag status-overridden" title="--mdb-badge-* + pill badge classes">OVERRIDDEN</span></h2>
+  <p class="sd">Pill badges for status. Four semantic backgrounds; dark text on subtle tints.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>Status indicators. Communicate the state of a record (stage, approval, urgency) at a glance.</td></tr>
+    <tr><th>Where</th><td><code>.badge.rounded-pill</code> + a semantic class. In hero cards, list rows, table cells.</td></tr>
+    <tr><th>When</th><td>Use to show state, not to label fields. One badge per status dimension. Map each domain status to the semantic color that matches its meaning (see status map below).</td></tr>
+    <tr><th>Why</th><td>Base <code>.badge</code> sets text to <code>--colors-brand-primary-dark-blue</code>. The four <code>badge-*</code> classes use subtle <code>-50</code> backgrounds with dark text, always readable.</td></tr>
+    <tr><th>How</th><td>Add <code>.fw-normal</code> if the default weight is too heavy for the context.</td></tr>
+  </table>
+
+  <h3>Ratified semantic badges</h3>
+  <div class="cr">
+    <span class="badge rounded-pill badge-success">Success</span>
+    <span class="badge rounded-pill badge-warning">Warning</span>
+    <span class="badge rounded-pill badge-danger">Danger</span>
+    <span class="badge rounded-pill badge-secondary">Secondary</span>
+  </div>
+  <div class="code-block">&lt;span class="badge rounded-pill badge-success"&gt;Success&lt;/span&gt;
+&lt;span class="badge rounded-pill badge-warning"&gt;Warning&lt;/span&gt;
+&lt;span class="badge rounded-pill badge-danger"&gt;Danger&lt;/span&gt;
+&lt;span class="badge rounded-pill badge-secondary"&gt;Secondary&lt;/span&gt;</div>
+
+  <h3>Domain status map <span class="gap-flag">GAP — mapping not ratified</span></h3>
+  <div class="gap-zone">
+    <div class="cr">
+      <span class="badge rounded-pill badge-success">Approved</span>
+      <span class="badge rounded-pill badge-danger">Denied</span>
+      <span class="badge rounded-pill badge-warning">Pending</span>
+      <span class="badge rounded-pill badge-secondary">LOI Draft</span>
+      <span class="badge rounded-pill badge-danger">Overdue</span>
+    </div>
+    <p class="gap-note">GLM's real statuses (Approved, Denied, Pending, In Review, LOI Draft, Overdue, Cancelled…) need a documented status-to-semantic mapping so the same status always gets the same color. The pairings shown are illustrative, not ratified. This mapping is a design + domain decision, pending.</p>
+  </div>
+
+  <h3>Solid / white-text badges <span class="gap-flag">GAP — not in production</span></h3>
+  <div class="gap-zone">
+    <div class="cr">
+      <span class="badge rounded-pill" style="background:var(--colors-brand-primary-dark-blue);color:#fff">Primary</span>
+      <span class="badge rounded-pill" style="background:var(--colors-semantic-danger-500);color:#fff">Danger</span>
+    </div>
+    <p class="gap-note">Production has no solid, white-text badge variant. Shown inline here only. Do not lift; use the subtle semantic badges above.</p>
+  </div>
 </section>
 
 <!-- ═══ ALERTS ═══ -->
 <section class="sec" id="alerts">
-  <h2>Alerts <span class="override-tag">OVERRIDDEN</span></h2>
+  <h2>Alerts <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Contextual feedback messages.</p>
   <div class="alert-t ap"><i class="fas fa-info-circle" style="margin-top:1px"></i> Informational alert.</div>
   <div class="alert-t as"><i class="fas fa-check-circle" style="margin-top:1px"></i> Application submitted successfully.</div>
@@ -764,7 +589,7 @@
 
 <!-- ═══ TABLES ═══ -->
 <section class="sec" id="tables">
-  <h2>Tables <span class="no-override-tag">DEFAULT</span></h2>
+  <h2>Tables <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Data tables.</p>
   <div class="no-override-detail"><strong>No structural override detected:</strong> Table layout, hover states, and borders use MDB5 defaults. Your production app uses <code>ag-Grid</code> for complex tables (visible in computed styles as <code>--ag-*</code> variables), which is a separate component entirely.</div>
   <div style="overflow-x:auto">
@@ -781,7 +606,7 @@
 
 <!-- ═══ LIST GROUPS ═══ -->
 <section class="sec" id="list-groups">
-  <h2>List Groups <span class="no-override-tag">DEFAULT</span></h2>
+  <h2>List Groups <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Grouped list items.</p>
   <div class="no-override-detail"><strong>No override detected.</strong></div>
   <div style="max-width:280px;border:1px solid var(--t-bdr);border-radius:var(--r-md);overflow:hidden">
@@ -793,7 +618,7 @@
 
 <!-- ═══ ACCORDIONS ═══ -->
 <section class="sec" id="accordions">
-  <h2>Accordions <span class="no-override-tag">DEFAULT</span></h2>
+  <h2>Accordions <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Collapsible panels.</p>
   <div class="no-override-detail"><strong>No override detected.</strong></div>
   <div style="border:1px solid var(--t-bdr);border-radius:var(--r-md);overflow:hidden">
@@ -804,7 +629,7 @@
 
 <!-- ═══ TIMELINE ═══ -->
 <section class="sec" id="timeline">
-  <h2>Timeline <span class="no-override-tag">DEFAULT</span></h2>
+  <h2>Timeline <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Activity history.</p>
   <div class="no-override-detail"><strong>No override detected:</strong> MDB5 timeline pattern with color-only changes from theme.</div>
   <div style="max-width:420px;padding-left:22px;border-left:2px solid var(--t-bdr)">
@@ -816,7 +641,7 @@
 
 <!-- ═══ INPUTS ═══ -->
 <section class="sec" id="inputs">
-  <h2>Text Inputs <span class="override-tag">OVERRIDDEN</span></h2>
+  <h2>Text Inputs <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Standard top-label inputs.</p>
   <div class="row g-3" style="max-width:560px">
     <div class="col-md-6"><label class="lbl-t">Organization Name</label><input class="inp-t" placeholder="Enter name" /></div>
@@ -836,7 +661,7 @@
 
 <!-- ═══ SELECTS ═══ -->
 <section class="sec" id="selects">
-  <h2>Select <span class="no-override-tag">DEFAULT</span></h2>
+  <h2>Select <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Native dropdowns.</p>
   <div class="no-override-detail"><strong>No structural override detected.</strong></div>
   <div class="row g-3" style="max-width:560px">
@@ -847,19 +672,19 @@
 
 <!-- ═══ CHECK/RADIO/SWITCH ═══ -->
 <section class="sec" id="checkradio">
-  <h2>Checkbox, Radio &amp; Switch <span class="no-override-tag">DEFAULT</span></h2>
+  <h2>Checkbox, Radio &amp; Switch <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Selection controls.</p>
   <div class="no-override-detail"><strong>No structural override detected:</strong> Uses MDB5/Bootstrap form-check defaults. Checked color follows theme primary.</div>
   <div class="row g-4">
-    <div class="col-md-4"><h3>Checkbox</h3><div class="form-check"><input class="form-check-input" type="checkbox" checked id="c1"><label class="form-check-label" for="c1" style="font-size:13px">Checked</label></div><div class="form-check"><input class="form-check-input" type="checkbox" id="c2"><label class="form-check-label" for="c2" style="font-size:13px">Unchecked</label></div><div class="form-check"><input class="form-check-input" type="checkbox" disabled id="c3"><label class="form-check-label" for="c3" style="font-size:13px">Disabled</label></div></div>
-    <div class="col-md-4"><h3>Radio</h3><div class="form-check"><input class="form-check-input" type="radio" name="r" checked id="r1"><label class="form-check-label" for="r1" style="font-size:13px">One</label></div><div class="form-check"><input class="form-check-input" type="radio" name="r" id="r2"><label class="form-check-label" for="r2" style="font-size:13px">Two</label></div></div>
-    <div class="col-md-4"><h3>Switch</h3><div class="form-check form-switch"><input class="form-check-input" type="checkbox" checked id="s1"><label class="form-check-label" for="s1" style="font-size:13px">On</label></div><div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="s2"><label class="form-check-label" for="s2" style="font-size:13px">Off</label></div></div>
+    <div class="col-md-4"><p class="section-eyebrow">Checkbox</p><div class="form-check"><input class="form-check-input" type="checkbox" checked id="c1"><label class="form-check-label" for="c1" style="font-size:13px">Checked</label></div><div class="form-check"><input class="form-check-input" type="checkbox" id="c2"><label class="form-check-label" for="c2" style="font-size:13px">Unchecked</label></div><div class="form-check"><input class="form-check-input" type="checkbox" disabled id="c3"><label class="form-check-label" for="c3" style="font-size:13px">Disabled</label></div></div>
+    <div class="col-md-4"><p class="section-eyebrow">Radio</p><div class="form-check"><input class="form-check-input" type="radio" name="r" checked id="r1"><label class="form-check-label" for="r1" style="font-size:13px">One</label></div><div class="form-check"><input class="form-check-input" type="radio" name="r" id="r2"><label class="form-check-label" for="r2" style="font-size:13px">Two</label></div></div>
+    <div class="col-md-4"><p class="section-eyebrow">Switch</p><div class="form-check form-switch"><input class="form-check-input" type="checkbox" checked id="s1"><label class="form-check-label" for="s1" style="font-size:13px">On</label></div><div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="s2"><label class="form-check-label" for="s2" style="font-size:13px">Off</label></div></div>
   </div>
 </section>
 
 <!-- ═══ DATEPICKER ═══ -->
 <section class="sec" id="datepicker">
-  <h2>Datepicker <span class="override-tag">OVERRIDDEN</span></h2>
+  <h2>Datepicker <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Calendar selection (static).</p>
   <div style="max-width:260px"><label class="lbl-t">Date</label><div style="position:relative"><input class="inp-t" value="04/28/2026" /><i class="fas fa-calendar" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--g400);font-size:13px"></i></div></div>
   <div style="height:12px"></div>
@@ -879,7 +704,7 @@
 
 <!-- ═══ AUTOCOMPLETE ═══ -->
 <section class="sec" id="autocomplete">
-  <h2>Autocomplete <span class="no-override-tag">DEFAULT</span></h2>
+  <h2>Autocomplete <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Typeahead.</p>
   <div class="no-override-detail"><strong>No structural override detected.</strong></div>
   <div style="max-width:360px"><label class="lbl-t">Organization</label><div style="position:relative"><input class="inp-t" value="Commun" style="border-radius:var(--r-sm) var(--r-sm) 0 0" /><div style="border:1px solid var(--t-bdr);border-top:none;border-radius:0 0 var(--r-sm) var(--r-sm);box-shadow:var(--t-shadow-sm);background:#fff"><div style="padding:8px 12px;font-size:12px;background:var(--t-primary-bg);cursor:pointer"><b>Commun</b>ity Health Alliance</div><div style="padding:8px 12px;font-size:12px;cursor:pointer"><b>Commun</b>ity Foundation</div></div></div></div>
@@ -887,7 +712,7 @@
 
 <!-- ═══ STEPPER ═══ -->
 <section class="sec" id="stepper">
-  <h2>Stepper <span class="override-tag">OVERRIDDEN</span></h2>
+  <h2>Stepper <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Multi-step progress.</p>
   <div style="display:flex;align-items:center;justify-content:center">
     <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:32px;height:32px;border-radius:50%;background:var(--t-success);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px"><i class="fas fa-check" style="font-size:11px"></i></div><span style="font-size:10px;color:var(--t-success-txt);font-weight:500">Details</span></div>
@@ -903,7 +728,7 @@
 
 <!-- ═══ VALIDATION ═══ -->
 <section class="sec" id="validation">
-  <h2>Validation <span class="override-tag">OVERRIDDEN</span></h2>
+  <h2>Validation <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Valid/invalid states.</p>
   <div style="max-width:440px;display:flex;flex-direction:column;gap:14px">
     <div><label class="lbl-t">Valid</label><input class="inp-t" style="border-color:var(--t-valid)" value="Community Health Alliance" /><div style="font-size:11px;color:var(--t-valid);margin-top:3px"><i class="fas fa-check-circle me-1"></i>Looks good!</div></div>
@@ -917,7 +742,7 @@
 
 <!-- ═══ INPUT GROUPS ═══ -->
 <section class="sec" id="input-groups">
-  <h2>Input Groups <span class="no-override-tag">DEFAULT</span></h2>
+  <h2>Input Groups <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Combined inputs.</p>
   <div class="no-override-detail"><strong>No override detected.</strong></div>
   <div style="max-width:440px;display:flex;flex-direction:column;gap:10px">
@@ -928,7 +753,7 @@
 
 <!-- ═══ MODALS ═══ -->
 <section class="sec" id="modals">
-  <h2>Modals <span class="no-override-tag">DEFAULT</span></h2>
+  <h2>Modals <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Dialog overlays.</p>
   <div class="no-override-detail"><strong>No structural override detected.</strong></div>
   <div class="modal-t" style="max-width:440px">
@@ -940,7 +765,7 @@
 
 <!-- ═══ TOASTS ═══ -->
 <section class="sec" id="toasts">
-  <h2>Toasts <span class="no-override-tag">DEFAULT</span></h2>
+  <h2>Toasts <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Notifications.</p>
   <div class="no-override-detail"><strong>No structural override detected.</strong></div>
   <div style="max-width:300px;display:flex;flex-direction:column;gap:8px">
@@ -951,7 +776,7 @@
 
 <!-- ═══ TOOLTIPS ═══ -->
 <section class="sec" id="tooltips">
-  <h2>Tooltips &amp; Popovers <span class="no-override-tag">DEFAULT</span></h2>
+  <h2>Tooltips &amp; Popovers <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Contextual overlays.</p>
   <div class="no-override-detail"><strong>No override detected.</strong></div>
   <div class="cr" style="gap:28px">
@@ -962,7 +787,7 @@
 
 <!-- ═══ SPINNERS ═══ -->
 <section class="sec" id="spinners">
-  <h2>Spinners <span class="no-override-tag">DEFAULT</span></h2>
+  <h2>Spinners <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Loading indicators.</p>
   <div class="no-override-detail"><strong>No override detected.</strong></div>
   <div class="cr" style="align-items:center">
@@ -975,7 +800,7 @@
 
 <!-- ═══ PROGRESS ═══ -->
 <section class="sec" id="progress">
-  <h2>Progress Bars <span class="no-override-tag">DEFAULT</span></h2>
+  <h2>Progress Bars <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Completion indicators.</p>
   <div class="no-override-detail"><strong>No override detected.</strong></div>
   <div style="max-width:440px;display:flex;flex-direction:column;gap:10px">
@@ -986,7 +811,7 @@
 
 <!-- ═══ OFFCANVAS ═══ -->
 <section class="sec" id="offcanvas">
-  <h2>Offcanvas / Slide-over <span class="no-override-tag">DEFAULT</span></h2>
+  <h2>Offcanvas / Slide-over <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Slide-in panel.</p>
   <div class="no-override-detail"><strong>No structural override detected.</strong></div>
   <div style="width:270px;height:260px;background:#fff;border:1px solid var(--t-bdr);border-radius:0 var(--r-md) var(--r-md) 0;box-shadow:var(--t-shadow-lg)">
@@ -1002,7 +827,7 @@
 
 <!-- ═══ SHADOWS ═══ -->
 <section class="sec" id="shadows">
-  <h2>Shadows <span class="no-override-tag">DEFAULT</span></h2>
+  <h2>Shadows <span class="wip-tag">WIP — not yet rebuilt</span></h2>
   <p class="sd">Elevation levels.</p>
   <div class="no-override-detail"><strong>No override detected:</strong> Shadow values match MDB5 defaults.</div>
   <div class="cr">
@@ -1056,96 +881,111 @@
 </div><!-- /main -->
 </div><!-- /app -->
 
+
 <script>
-function st(t){
-  document.getElementById('app').setAttribute('data-theme',t);
-  document.getElementById('bP').classList.toggle('on',t==='production');
-  document.getElementById('bD').classList.toggle('on',t==='mdb-default');
-  document.getElementById('ll').textContent=t==='production'?'GLM Production':'MDB5 Default';
-  document.getElementById('oc').textContent=t==='production'?'Foundant design tokens applied · 10 overridden · 17 default':'Stock MDB5 7.x values';
-
-  // Update heading specimen labels
-  const sizes = t==='production'
-    ? {h1:'1.75rem (28px) / 500',h2:'1.25rem (20px) / 500',h3:'1rem (16px) / 500',h4:'0.875rem (14px) / 500',h5:'0.75rem (12px) / 500',h6:'0.75rem (12px) / 500'}
-    : {h1:'2.5rem (40px) / 500',h2:'2rem (32px) / 500',h3:'1.75rem (28px) / 500',h4:'1.5rem (24px) / 500',h5:'1.25rem (20px) / 500',h6:'1rem (16px) / 500'};
-  document.querySelectorAll('.heading-specimen').forEach(el => {
-    const lvl = el.dataset.level;
-    el.textContent = lvl + '. Heading (' + sizes[lvl] + ')';
+  /* TOC scroll-spy: highlight the current section link. */
+  var tocLinks = document.querySelectorAll('.toc a');
+  var sections = document.querySelectorAll('.sec[id]');
+  window.addEventListener('scroll', function () {
+    var current = '';
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].offsetTop - 72 <= window.scrollY) current = sections[i].id;
+    }
+    for (var j = 0; j < tocLinks.length; j++) {
+      tocLinks[j].classList.toggle('on', tocLinks[j].getAttribute('href') === '#' + current);
+    }
   });
-}
-const tl=document.querySelectorAll('.toc a'),ss=document.querySelectorAll('.sec[id]');
-window.addEventListener('scroll',()=>{let c='';ss.forEach(s=>{if(s.offsetTop-72<=window.scrollY)c=s.id});tl.forEach(l=>l.classList.toggle('on',l.getAttribute('href')==='#'+c))});
 
-// ── Contrast Matrix ──
-const dangerPalette=[
-  {step:50,hex:"#FAEAEA"},{step:100,hex:"#F2BEBE"},{step:200,hex:"#E89090"},
-  {step:300,hex:"#DD6463"},{step:400,hex:"#D44D4B"},{step:500,hex:"#BD3B39"},
-  {step:600,hex:"#A33230"},{step:700,hex:"#882927"},{step:800,hex:"#6B1F1E"},
-  {step:900,hex:"#4D1514"}
-];
+  /* ── Danger ramp contrast matrix (WCAG 2.2) ── */
+  var dangerPalette = [
+    { step: 50, hex: '#FAEAEA' }, { step: 100, hex: '#F2BEBE' }, { step: 200, hex: '#E89090' },
+    { step: 300, hex: '#DD6463' }, { step: 400, hex: '#D44D4B' }, { step: 500, hex: '#BD3B39' },
+    { step: 600, hex: '#A33230' }, { step: 700, hex: '#882927' }, { step: 800, hex: '#6B1F1E' },
+    { step: 900, hex: '#4D1514' }
+  ];
 
-function lum(hex){
-  const r=parseInt(hex.slice(1,3),16)/255,g=parseInt(hex.slice(3,5),16)/255,b=parseInt(hex.slice(5,7),16)/255;
-  const f=c=>c<=0.03928?c/12.92:Math.pow((c+0.055)/1.055,2.4);
-  return 0.2126*f(r)+0.7152*f(g)+0.0722*f(b);
-}
-function cr(a,b){const l1=lum(a),l2=lum(b);const[h,l]=l1>l2?[l1,l2]:[l2,l1];return(h+0.05)/(l+0.05)}
-function wcag(r){
-  if(r>=4.5)return{label:"AA Pass",bg:"#dcfce7",color:"#166534"};
-  if(r>=3)return{label:"AA Large",bg:"#fef9c3",color:"#854d0e"};
-  return{label:"Fail",bg:"#fee2e2",color:"#991b1b"};
-}
+  function lum(hex) {
+    var r = parseInt(hex.slice(1, 3), 16) / 255;
+    var g = parseInt(hex.slice(3, 5), 16) / 255;
+    var b = parseInt(hex.slice(5, 7), 16) / 255;
+    function f(c) { return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); }
+    return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+  }
+  function cr(a, b) {
+    var l1 = lum(a), l2 = lum(b);
+    var hi = l1 > l2 ? l1 : l2;
+    var lo = l1 > l2 ? l2 : l1;
+    return (hi + 0.05) / (lo + 0.05);
+  }
+  function wcag(r) {
+    if (r >= 4.5) return { label: 'AA Pass', bg: '#dcfce7', color: '#166534' };
+    if (r >= 3) return { label: 'AA Large', bg: '#fef9c3', color: '#854d0e' };
+    return { label: 'Fail', bg: '#fee2e2', color: '#991b1b' };
+  }
 
-let currentFilter="All";
+  var currentFilter = 'All';
 
-function buildMatrix(){
-  const p=dangerPalette,t=document.getElementById('matrixTable');
-  let html='<thead><tr><td style="width:62px"><div style="font-size:8px;color:#9ca3af;text-align:center;line-height:1.2">FG →<br>BG ↓</div></td>';
-  p.forEach(s=>{
-    const fg=lum(s.hex)>0.18?"#111":"#fff";
-    html+=`<td style="width:62px"><div class="cm-th-swatch" style="background:${s.hex}"><span style="font-size:8px;font-weight:700;color:${fg}">${s.step}</span></div><div class="cm-th-hex">${s.hex}</div></td>`;
-  });
-  html+='</tr></thead><tbody>';
+  function buildMatrix() {
+    var p = dangerPalette;
+    var t = document.getElementById('matrixTable');
+    if (!t) return;
+    var html = '<thead><tr><td style="width:62px"><div style="font-size:8px;color:#9ca3af;text-align:center;line-height:1.2">FG &rarr;<br>BG &darr;</div></td>';
+    for (var h = 0; h < p.length; h++) {
+      var s = p[h];
+      var thfg = lum(s.hex) > 0.18 ? '#111' : '#fff';
+      html += '<td style="width:62px"><div class="cm-th-swatch" style="background:' + s.hex + '"><span style="font-size:8px;font-weight:700;color:' + thfg + '">' + s.step + '</span></div><div class="cm-th-hex">' + s.hex + '</div></td>';
+    }
+    html += '</tr></thead><tbody>';
 
-  const passCounts=new Array(p.length).fill(0);
+    var passCounts = [];
+    for (var z = 0; z < p.length; z++) passCounts[z] = 0;
 
-  p.forEach((bg,bi)=>{
-    const fg=lum(bg.hex)>0.18?"#111":"#fff";
-    html+=`<tr><td style="padding-right:3px"><div class="cm-th-swatch" style="background:${bg.hex}"><span style="font-size:8px;font-weight:700;color:${fg}">${bg.step}</span></div><div class="cm-th-hex">${bg.hex}</div></td>`;
-    p.forEach((f,fi)=>{
-      if(fi===bi){html+=`<td><div class="cm-diag">—</div></td>`;return}
-      const ratio=cr(f.hex,bg.hex);
-      const w=wcag(ratio);
-      const show=currentFilter==="All"||w.label===currentFilter;
-      if(w.label==="AA Pass")passCounts[bi]++;
-      html+=`<td><div class="cm-cell" data-label="${w.label}" style="background:${show?w.bg:'#f9fafb'};opacity:${show?1:0.15}">`;
-      if(show){html+=`<span class="cm-cell-label" style="color:${w.color}">${w.label}</span><span class="cm-cell-ratio" style="color:${w.color}">${ratio.toFixed(2)}:1</span>`}
-      else{html+=`<span style="color:#d1d5db">·</span>`}
-      html+=`</div></td>`;
-    });
-    html+='</tr>';
-  });
-  html+='</tbody>';
-  t.innerHTML=html;
+    for (var bi = 0; bi < p.length; bi++) {
+      var bg = p[bi];
+      var rowfg = lum(bg.hex) > 0.18 ? '#111' : '#fff';
+      html += '<tr><td style="padding-right:3px"><div class="cm-th-swatch" style="background:' + bg.hex + '"><span style="font-size:8px;font-weight:700;color:' + rowfg + '">' + bg.step + '</span></div><div class="cm-th-hex">' + bg.hex + '</div></td>';
+      for (var fi = 0; fi < p.length; fi++) {
+        if (fi === bi) { html += '<td><div class="cm-diag">&mdash;</div></td>'; continue; }
+        var ratio = cr(p[fi].hex, bg.hex);
+        var w = wcag(ratio);
+        var show = currentFilter === 'All' || w.label === currentFilter;
+        if (w.label === 'AA Pass') passCounts[bi]++;
+        html += '<td><div class="cm-cell" data-label="' + w.label + '" style="background:' + (show ? w.bg : '#f9fafb') + ';opacity:' + (show ? 1 : 0.15) + '">';
+        if (show) {
+          html += '<span class="cm-cell-label" style="color:' + w.color + '">' + w.label + '</span><span class="cm-cell-ratio" style="color:' + w.color + '">' + ratio.toFixed(2) + ':1</span>';
+        } else {
+          html += '<span style="color:#d1d5db">&middot;</span>';
+        }
+        html += '</div></td>';
+      }
+      html += '</tr>';
+    }
+    html += '</tbody>';
+    t.innerHTML = html;
 
-  // Summary
-  const s=document.getElementById('matrixSummary');
-  s.innerHTML=p.map((v,i)=>{
-    const fg=lum(v.hex)>0.18?"#111":"#fff";
-    const sc=passCounts[i];
-    const clr=sc>=5?"#166534":sc>=3?"#854d0e":"#991b1b";
-    return `<div class="cm-summary-item"><div class="cm-summary-swatch" style="background:${v.hex}"><span style="color:${fg}">${v.step}</span></div><div class="cm-summary-score" style="color:${clr}">${sc}/9</div><div class="cm-summary-label">AA Pass</div></div>`;
-  }).join('');
-}
+    var sum = document.getElementById('matrixSummary');
+    if (sum) {
+      var out = '';
+      for (var k = 0; k < p.length; k++) {
+        var v = p[k];
+        var vfg = lum(v.hex) > 0.18 ? '#111' : '#fff';
+        var sc = passCounts[k];
+        var clr = sc >= 5 ? '#166534' : (sc >= 3 ? '#854d0e' : '#991b1b');
+        out += '<div class="cm-summary-item"><div class="cm-summary-swatch" style="background:' + v.hex + '"><span style="color:' + vfg + '">' + v.step + '</span></div><div class="cm-summary-score" style="color:' + clr + '">' + sc + '/9</div><div class="cm-summary-label">AA Pass</div></div>';
+      }
+      sum.innerHTML = out;
+    }
+  }
 
-function filterMatrix(f,btn){
-  currentFilter=f;
-  document.querySelectorAll('.cm-filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
+  function filterMatrix(f, btn) {
+    currentFilter = f;
+    var btns = document.querySelectorAll('.cm-filter-btn');
+    for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+    btn.classList.add('active');
+    buildMatrix();
+  }
+
   buildMatrix();
-}
-
-buildMatrix();
 </script>
 </body>
 </html>

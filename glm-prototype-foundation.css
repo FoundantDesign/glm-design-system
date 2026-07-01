@@ -1,0 +1,502 @@
+/* ============================================================================
+   GLM Prototype Foundation
+   Companion to GLM-design-contract.md v1.
+   Load AFTER mdb.min.css and the Font Awesome kit, in this file's place in the
+   contract's load order (tokens -> remaps -> component/page classes).
+
+   This file reproduces the PRODUCTION dialect so prototype markup is liftable.
+   Verbatim production values are marked RATIFIED. The few resolutions the
+   contract calls for (card radius token, single row component, Foundant AG Grid
+   theme) are marked RESOLUTION and are the draft of what production should adopt.
+   Nothing here invents a color or a component style outside that.
+   ============================================================================ */
+
+/* ---------------------------------------------------------------------------
+   1. FOUNDANT TOKENS  — RATIFIED verbatim from foundant-tokens.css
+   --------------------------------------------------------------------------- */
+:root {
+  --body-font: Roboto, sans-serif;
+
+  /* borders */
+  --colors-borders-enabled: rgb(117, 117, 117);
+  --colors-borders-divider: rgb(224, 224, 224);
+  --colors-borders-hover: rgb(45, 59, 74);
+  --colors-borders-focused: rgb(45, 59, 74);
+  --colors-borders-brand: rgb(45, 59, 74);
+  --colors-borders-pressed: rgb(45, 59, 74);
+  --colors-borders-disabled: rgb(189, 189, 189);
+  --colors-borders-danger: rgb(189, 59, 57);
+  --colors-borders-warning: rgb(244, 200, 98);
+  --colors-borders-success: rgb(103, 207, 157);
+  --colors-borders-info: rgb(83, 110, 138);
+
+  /* brand */
+  --colors-brand-primary-dark-blue: rgb(45, 59, 74);
+  --colors-brand-tertiary-white: rgb(255, 255, 255);
+  --colors-brand-orange: rgb(242, 107, 34);
+  --colors-brand-light-yellow: rgb(254, 251, 220);
+  --colors-brand-secondary-light-blue: rgb(213, 226, 250);
+  --colors-brand-yellow: rgb(246, 184, 69);
+
+  /* state layers */
+  --colors-state-layers-dark-link: rgb(57, 110, 196);
+  --colors-state-layers-dark-hover: rgb(66, 79, 92);
+  --colors-state-layers-dark-focused: rgb(66, 79, 92);
+  --colors-state-layers-dark-pressed: rgb(87, 98, 110);
+  --colors-state-layers-light-hover: rgb(234, 235, 237);
+  --colors-state-layers-light-focused: rgb(234, 235, 237);
+  --colors-state-layers-light-pressed: rgb(213, 216, 219);
+
+  /* neutral ramp */
+  --colors-neutral-0: rgb(0, 0, 0);
+  --colors-neutral-10: rgb(33, 33, 33);
+  --colors-neutral-20: rgb(66, 66, 66);
+  --colors-neutral-30: rgb(97, 97, 97);
+  --colors-neutral-40: rgb(117, 117, 117);
+  --colors-neutral-50: rgb(189, 189, 189);
+  --colors-neutral-60: rgb(224, 224, 224);
+  --colors-neutral-70: rgb(238, 238, 238);
+  --colors-neutral-80: rgb(245, 245, 245);
+  --colors-neutral-90: rgb(250, 250, 250);
+  --colors-neutral-100: rgb(255, 255, 255);
+
+  /* primary shades ramp */
+  --colors-primary-shades-0: rgb(45, 59, 74);
+  --colors-primary-shades-10: rgb(66, 79, 92);
+  --colors-primary-shades-20: rgb(87, 98, 110);
+  --colors-primary-shades-30: rgb(108, 118, 128);
+  --colors-primary-shades-40: rgb(129, 137, 146);
+  --colors-primary-shades-50: rgb(150, 157, 165);
+  --colors-primary-shades-60: rgb(171, 177, 183);
+  --colors-primary-shades-70: rgb(192, 196, 201);
+  --colors-primary-shades-80: rgb(213, 216, 219);
+  --colors-primary-shades-90: rgb(234, 235, 237);
+
+  /* semantic — 0/50 anchors */
+  --colors-semantic-success-0: rgb(103, 207, 157);
+  --colors-semantic-danger-0: rgb(189, 59, 57);
+  --colors-semantic-warning-0: rgb(244, 200, 98);
+  --colors-semantic-info-0: rgb(83, 110, 138);
+  --colors-semantic-success-50: rgb(225, 245, 235);
+  --colors-semantic-warning-50: rgb(255, 244, 209);
+  --colors-semantic-info-50: rgb(213, 226, 250);
+  --colors-semantic-info-90: rgb(240, 247, 255);
+
+  /* danger — the one complete, WCAG-validated ramp */
+  --colors-semantic-danger-50:  #FAEAEA;
+  --colors-semantic-danger-100: #F2BEBE;
+  --colors-semantic-danger-200: #E89090;
+  --colors-semantic-danger-300: #DD6463;
+  --colors-semantic-danger-400: #D44D4B;
+  --colors-semantic-danger-500: #BD3B39;
+  --colors-semantic-danger-600: #A33230;
+  --colors-semantic-danger-700: #882927;
+  --colors-semantic-danger-800: #6B1F1E;
+  --colors-semantic-danger-900: #4D1514;
+
+  /* links + radius */
+  --colors-link-default: rgb(25, 118, 210);
+  --colors-link-hover: rgb(35, 82, 124);
+  --radius-none: 0;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-round: 50px;
+
+  /* RESOLUTION (contract gap #4): a real card radius token. Production hardcodes
+     6px on cards/hero. Named here so prototypes stop hardcoding it. */
+  --radius-card: 6px;
+
+  /* Heading scale — RATIFIED from the kitchen sink (confirmed correct scale).
+     Supersedes the earlier gap: h1 is 1.75rem here, not production's stray 24px.
+     Backlog: align production's h1{font-size:24px} to 1.75rem. */
+  --h1-size: 1.75rem;
+  --h2-size: 1.25rem;
+  --h3-size: 1rem;
+  --h4-size: 0.875rem;
+  --h5-size: 0.75rem;
+  --h6-size: 0.75rem;
+  --h-weight: 500;
+}
+
+/* Apply the heading scale. Weight 500 matches MDB/production. */
+h1, .h1 { font-size: var(--h1-size); font-weight: var(--h-weight); }
+h2, .h2 { font-size: var(--h2-size); font-weight: var(--h-weight); }
+h3, .h3 { font-size: var(--h3-size); font-weight: var(--h-weight); }
+h4, .h4 { font-size: var(--h4-size); font-weight: var(--h-weight); }
+h5, .h5 { font-size: var(--h5-size); font-weight: var(--h-weight); }
+h6, .h6 { font-size: var(--h6-size); font-weight: var(--h-weight); }
+
+/* Section eyebrow — RATIFIED as a NON-HEADING label class.
+   Use on a div/span/p to label the region below it. NEVER on an h* element:
+   an eyebrow styled as a heading lies to the document outline and to screen
+   readers. Values derived from production's .nav-group-header.
+   Backlog: fix the netlify h3-as-eyebrow and reconcile .nav-group-header,
+   .ft-label, .ft-footer against this. */
+.section-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--colors-neutral-30);
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* ---------------------------------------------------------------------------
+   2. MDB REMAPS  — RATIFIED verbatim from mdb-customizations.css :root block
+   --------------------------------------------------------------------------- */
+:root {
+  --mdb-body-bg: var(--colors-neutral-80);
+  --mdb-body-color: var(--colors-brand-primary-dark-blue);
+  --mdb-secondary-color: var(--colors-primary-shades-40);
+  --mdb-surface-color: var(--colors-brand-primary-dark-blue);
+  --mdb-font-sans-serif: var(--body-font);
+  --mdb-link-color: var(--colors-link-default);
+}
+
+/* ---------------------------------------------------------------------------
+   3. COMPONENT OVERRIDES  — RATIFIED from mdb-customizations.css
+   The remap pattern: set --mdb-* vars on the base class, never new component CSS.
+   --------------------------------------------------------------------------- */
+.btn {
+  --mdb-btn-border-radius: var(--radius-round);
+  --mdb-btn-font-size: 14px;
+  text-transform: initial;
+}
+.btn:focus-visible {
+  outline: solid 2px var(--colors-brand-primary-dark-blue);
+  outline-offset: 2px;
+}
+.btn-primary {
+  --mdb-btn-bg: var(--colors-brand-primary-dark-blue);
+  --mdb-btn-hover-bg: var(--colors-state-layers-dark-hover);
+  --mdb-btn-focus-bg: var(--colors-state-layers-dark-focused);
+  --mdb-btn-active-bg: var(--colors-state-layers-dark-pressed);
+  --mdb-btn-box-shadow: none;
+  --mdb-btn-box-shadow-state: none;
+  --mdb-btn-active-shadow: none;
+  /* Disabled remap (contract backlog): without these, MDB's disabled state
+     falls back to its default blue, not Foundant navy. Fades via opacity 0.65. */
+  --mdb-btn-disabled-bg: var(--colors-brand-primary-dark-blue);
+  --mdb-btn-disabled-color: #fff;
+  --mdb-btn-disabled-border-color: var(--colors-brand-primary-dark-blue);
+}
+.btn-outline-secondary {
+  --mdb-btn-bg: var(--colors-neutral-100);
+  --mdb-btn-color: var(--colors-brand-primary-dark-blue);
+  --mdb-btn-hover-bg: var(--colors-state-layers-light-hover);
+  --mdb-btn-hover-color: var(--colors-brand-primary-dark-blue);
+  --mdb-btn-focus-bg: var(--colors-state-layers-light-hover);
+  --mdb-btn-focus-color: var(--colors-brand-primary-dark-blue);
+  --mdb-btn-active-bg: var(--colors-state-layers-light-pressed);
+  --mdb-btn-active-color: var(--colors-brand-primary-dark-blue);
+  --mdb-btn-outline-border-color: var(--colors-brand-primary-dark-blue);
+  --mdb-btn-outline-hover-border-color: var(--colors-brand-primary-dark-blue);
+}
+.btn-link {
+  --mdb-btn-color: var(--colors-brand-primary-dark-blue);
+  --mdb-btn-hover-color: var(--colors-brand-primary-dark-blue);
+  --mdb-btn-focus-color: var(--colors-brand-primary-dark-blue);
+  --mdb-btn-active-color: var(--colors-brand-primary-dark-blue);
+}
+.btn-danger {
+  --mdb-btn-bg: var(--colors-semantic-danger-500);
+  --mdb-btn-color: #fff;
+  --mdb-btn-hover-bg: var(--colors-semantic-danger-600);
+  --mdb-btn-hover-color: #fff;
+  --mdb-btn-focus-bg: var(--colors-semantic-danger-600);
+  --mdb-btn-focus-color: #fff;
+  --mdb-btn-active-bg: var(--colors-semantic-danger-700);
+  --mdb-btn-active-color: #fff;
+  --mdb-btn-box-shadow: none;
+  --mdb-btn-box-shadow-state: none;
+  --mdb-btn-active-shadow: none;
+  --mdb-btn-disabled-bg: var(--colors-semantic-danger-500);
+  --mdb-btn-disabled-color: #fff;
+  --mdb-btn-disabled-border-color: var(--colors-semantic-danger-500);
+}
+.btn-outline-danger {
+  --mdb-btn-bg: transparent;
+  --mdb-btn-color: var(--colors-semantic-danger-500);
+  --mdb-btn-hover-bg: var(--colors-semantic-danger-50);
+  --mdb-btn-hover-color: var(--colors-semantic-danger-600);
+  --mdb-btn-active-bg: var(--colors-semantic-danger-50);
+  --mdb-btn-active-color: var(--colors-semantic-danger-700);
+  --mdb-btn-outline-border-color: var(--colors-semantic-danger-500);
+  --mdb-btn-outline-hover-border-color: var(--colors-semantic-danger-600);
+  border-color: var(--mdb-btn-outline-border-color);
+}
+
+.badge { --mdb-badge-color: var(--colors-brand-primary-dark-blue); }
+.table { --mdb-table-bg: var(--colors-neutral-100); }
+.form-control, .input-group { background-color: var(--colors-neutral-100); }
+.text-muted { color: var(--colors-primary-shades-30) !important; }
+.text-danger { color: var(--colors-semantic-danger-0) !important; }
+.text-success { color: var(--colors-semantic-success-0) !important; }
+.text-info { color: var(--colors-semantic-info-0) !important; }
+.dark-link { color: var(--colors-state-layers-dark-link) !important; }
+.card-header { border-bottom: none; }
+.card-footer { border-top: none; }
+.modal-header { --mdb-modal-header-border-width: 0; }
+.modal-footer { --mdb-modal-footer-border-width: 0; }
+.modal-header .close { display: none; }
+
+h1 { font-size: 24px; }
+
+/* ---------------------------------------------------------------------------
+   4. ENTITY SUMMARY PAGE CLASSES  — RATIFIED from GLM.Summary.css (condensed
+   to the desktop essentials; full responsive collapse lives in production).
+   --------------------------------------------------------------------------- */
+.panel-layout { display: flex; flex-wrap: wrap; overflow-x: auto; height: 100%; }
+.main-content-body { flex: 1; min-width: 0; overflow-x: hidden; }
+
+.side-panel {
+  background-color: var(--colors-neutral-100);
+  width: 275px;
+  min-width: 275px;
+}
+.side-panel .list-group-item:not(.ft-label) {
+  border: 0;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  --mdb-list-group-action-hover-bg: var(--colors-neutral-70);
+}
+.side-panel .list-group-item.active {
+  background-color: var(--colors-brand-secondary-light-blue);
+  font-weight: bold;
+  color: var(--mdb-list-group-color);
+}
+.side-panel .list-group-item svg { width: 20px; }
+.side-panel .nav-group-header {
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  color: var(--colors-neutral-30); letter-spacing: 0.5px; padding: 12px 16px 4px;
+}
+.ft-label { font-size: 12px; font-weight: 400; line-height: 20px; font-variant: small-caps; }
+
+/* detail bar (header meta strip) */
+.detail-bar { display: flex; flex-wrap: wrap; gap: 0; margin-top: 0.5rem; }
+.detail-bar .detail-item { padding: 0 16px; border-left: 1px solid var(--colors-neutral-50); }
+.detail-bar .detail-item:first-child { padding-left: 0; border-left: 0; }
+.detail-bar .detail-label { display: block; font-size: 0.75rem; line-height: 1; color: var(--colors-neutral-30); }
+.detail-bar .detail-value { display: block; line-height: 1.4; word-break: break-word; }
+.detail-bar .detail-value a { color: var(--colors-state-layers-dark-link); text-decoration: none; }
+.detail-bar .detail-value a:hover { text-decoration: underline; }
+.detail-bar .detail-value.empty { color: var(--colors-neutral-40); font-style: italic; }
+
+/* stat tiles */
+.data-card-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(225px, 1fr)); gap: 16px; margin-top: 16px; }
+.data-card {
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+  gap: 5px; border: 1px solid var(--colors-borders-divider); border-radius: 10px;
+}
+.data-card-lg { min-width: 225px; padding: 20px 12px; }
+.data-card .h5 { color: var(--colors-brand-primary-dark-blue); font-size: 20px; font-weight: 700; line-height: 26px; }
+
+/* summary cards */
+.summary-card-row { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px; }
+.summary-card { flex: 1 1 320px; min-height: 150px; }
+.summary-card dl { display: grid; grid-template-columns: max-content 1fr; column-gap: 16px; row-gap: 6px; margin: 0; align-items: baseline; }
+.summary-card dt { color: var(--colors-neutral-30); font-weight: 400; }
+.summary-card dd { margin: 0; word-break: break-word; }
+.summary-card.warn { border-left: 4px solid var(--colors-borders-warning); }
+
+/* ---------------------------------------------------------------------------
+   5. CARD-INTERNAL ROW  — RESOLUTION (contract gap #5)
+   Production ships award-detail-row and fin-row as identical twins. Collapse to
+   one canonical .kv-row. Compatibility aliases keep liftability both ways until
+   production consolidates.
+   --------------------------------------------------------------------------- */
+.kv-row,
+.award-detail-row,
+.fin-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0; border-bottom: 1px solid var(--colors-borders-divider);
+  font-size: 0.85rem;
+}
+.kv-row:last-of-type,
+.award-detail-row:last-of-type,
+.fin-row:last-of-type { border-bottom: none; }
+.kv-row-label,
+.award-detail-row-label,
+.fin-label { color: var(--colors-neutral-40); }
+.kv-row-value,
+.award-detail-row-value,
+.fin-value { font-weight: 500; color: var(--colors-brand-primary-dark-blue); }
+.kv-row .badge, .fin-row .badge { font-size: 0.75rem; }
+
+/* ---------------------------------------------------------------------------
+   6. HERO CARD  — RATIFIED from the live page's inline style blocks
+   --------------------------------------------------------------------------- */
+.hero-card {
+  background: var(--colors-neutral-100);
+  border: 1px solid var(--colors-borders-divider);
+  border-radius: var(--radius-card);
+  padding: 20px 24px 12px;
+  display: flex; align-items: flex-start; gap: 32px; flex-wrap: wrap;
+}
+.hero-amount-block { display: flex; flex-direction: column; gap: 2px; }
+.hero-amount-label { font-size: 0.75rem; color: var(--colors-neutral-40); font-weight: 400; }
+.hero-amount-value { font-size: 1.5rem; font-weight: 700; color: var(--colors-brand-primary-dark-blue); }
+.hero-amount-value.is-empty { color: var(--colors-neutral-50); }
+.hero-divider { width: 1px; align-self: stretch; background: var(--colors-borders-divider); flex-shrink: 0; }
+.hero-status-badge {
+  display: inline-block; border-radius: 999px; padding: 2px 12px;
+  font-size: 0.85rem; font-weight: 500;
+  background: var(--colors-semantic-info-50); color: var(--colors-brand-primary-dark-blue); white-space: nowrap;
+}
+.hero-stage-track { display: flex; align-items: flex-start; flex: 1; min-width: 280px; }
+.hero-stage-step { display: flex; flex-direction: column; align-items: center; flex: 0 0 auto; width: 56px; }
+.hero-stage-node {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid var(--colors-borders-divider); background: var(--colors-neutral-100);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 700; color: var(--colors-neutral-40); position: relative; z-index: 1;
+}
+.hero-stage-node.is-done { background: var(--colors-semantic-success-50); border-color: var(--colors-semantic-success-0); color: var(--colors-brand-primary-dark-blue); }
+.hero-stage-node.is-active { background: var(--colors-semantic-warning-50); border-color: var(--colors-semantic-warning-0); color: var(--colors-brand-primary-dark-blue); }
+.hero-stage-label { font-size: 0.7rem; color: var(--colors-neutral-40); margin-top: 4px; text-align: center; white-space: nowrap; }
+.hero-stage-line { flex: 1; height: 1px; background: var(--colors-borders-divider); margin-top: 14px; margin-left: -10px; margin-right: -10px; }
+.hero-stage-line.is-done { background: var(--colors-semantic-success-0); }
+
+/* kebab action button used in card headers */
+.kebab-btn { background: transparent; border: none; padding: 4px 8px; border-radius: var(--radius-sm); cursor: pointer; color: var(--colors-neutral-40); }
+.kebab-btn:hover { background: var(--colors-state-layers-light-hover); }
+
+/* ---------------------------------------------------------------------------
+   7. PILL BADGES  — RATIFIED from GLM.Summary.css.
+   The status->semantic mapping (contract gap #6) is documented in the contract;
+   apply these four backgrounds via the mapping rather than inventing names.
+   --------------------------------------------------------------------------- */
+.badge-success, .badge-warning, .badge-danger, .badge-secondary {
+  display: inline-block; padding: 4px 10px; border-radius: 999px;
+  font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+}
+.badge-success { background-color: var(--colors-semantic-success-50); color: var(--colors-brand-primary-dark-blue); }
+.badge-warning { background-color: var(--colors-semantic-warning-50); color: var(--colors-brand-primary-dark-blue); }
+.badge-danger  { background-color: var(--colors-semantic-danger-50);  color: var(--colors-brand-primary-dark-blue); }
+.badge-secondary { background-color: var(--colors-neutral-70); color: var(--colors-neutral-30); }
+
+/* ---------------------------------------------------------------------------
+   8. GLOBAL TOAST  — RATIFIED from mdb-customizations.css
+   --------------------------------------------------------------------------- */
+#GlobalToast { background-color: var(--colors-semantic-success-50); border-left: 4px solid var(--colors-semantic-success-0); border-radius: 8px; }
+#GlobalToast .toast-header { background-color: transparent; border: none; color: var(--colors-brand-primary-dark-blue); padding: 12px 16px 8px 16px; }
+#GlobalToast .toast-body { background-color: transparent; padding: 0 16px 12px 16px; }
+
+/* ---------------------------------------------------------------------------
+   9. FOUNDANT AG GRID THEME  — RESOLUTION / DRAFT (contract gap #1, Section 7)
+   Production ships STOCK ALPINE (#000 text, Helvetica Neue, #2196f3 active,
+   0px radius) — themed to nothing. This block remaps the core variables onto
+   Foundant tokens so prototype grids match the rest of GLM. It is a DRAFT of the
+   real production theme and needs WCAG validation before it ships.
+   Apply by wrapping the grid in class "ag-theme-foundant" (alongside whatever
+   base AG theme class the app uses).
+   --------------------------------------------------------------------------- */
+.ag-theme-foundant {
+  --ag-font-family: var(--body-font);
+  --ag-font-size: 14px;
+  --ag-foreground-color: var(--colors-brand-primary-dark-blue);
+  --ag-background-color: var(--colors-neutral-100);
+  --ag-data-color: var(--colors-brand-primary-dark-blue);
+  --ag-header-background-color: var(--colors-neutral-90);
+  --ag-header-foreground-color: var(--colors-brand-primary-dark-blue);
+  --ag-border-color: var(--colors-borders-divider);
+  --ag-secondary-border-color: var(--colors-borders-divider);
+  --ag-row-border-color: var(--colors-borders-divider);
+  --ag-border-radius: var(--radius-sm);
+  --ag-row-hover-color: var(--colors-state-layers-light-hover);
+  --ag-selected-row-background-color: var(--colors-brand-secondary-light-blue);
+  --ag-active-color: var(--colors-state-layers-dark-link);
+  --ag-range-selection-border-color: var(--colors-state-layers-dark-link);
+  --ag-checkbox-checked-color: var(--colors-brand-primary-dark-blue);
+  --ag-disabled-foreground-color: var(--colors-neutral-50);
+  --ag-odd-row-background-color: var(--colors-neutral-90);
+  --ag-cell-horizontal-padding: 12px;
+}
+
+/* ---------------------------------------------------------------------------
+   10. KITCHEN-SINK REFERENCE AFFORDANCES
+   These are for the reference page ONLY — not part of the production dialect.
+   They render usage annotations and gap flags. Prototypes never use these.
+   --------------------------------------------------------------------------- */
+
+/* GAP flag: marks a demo that is NOT yet in production (falls through to stock
+   MDB today). Makes provisional variants impossible to mistake for ratified. */
+.gap-flag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--colors-semantic-danger-600);
+  background: var(--colors-semantic-danger-50);
+  border: 1px solid var(--colors-semantic-danger-200);
+  border-radius: var(--radius-sm);
+  padding: 1px 6px;
+  vertical-align: middle;
+}
+.gap-zone {
+  border: 1px dashed var(--colors-semantic-danger-200);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  background: repeating-linear-gradient(45deg, transparent, transparent 8px, var(--colors-semantic-danger-50) 8px, var(--colors-semantic-danger-50) 9px);
+}
+.gap-note {
+  font-size: 12px;
+  color: var(--colors-semantic-danger-700);
+  margin-top: 8px;
+}
+
+/* Copy-paste code block shown under each component demo. */
+.code-block {
+  background: var(--colors-neutral-10);
+  color: var(--colors-neutral-90);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  overflow-x: auto;
+  white-space: pre;
+  margin: 10px 0 4px;
+}
+
+/* Usage annotation table: the what/where/when/why/how standard per component. */
+.usage {
+  font-size: 13px;
+  border-collapse: collapse;
+  margin: 10px 0;
+  width: 100%;
+}
+.usage th, .usage td {
+  text-align: left;
+  vertical-align: top;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--colors-borders-divider);
+}
+.usage th {
+  width: 90px;
+  color: var(--colors-neutral-30);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+
+/* Swatch grid (colors section of the reference page). Reference-only furniture. */
+.sg{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}
+.sw{width:96px;border:1px solid var(--colors-borders-divider);border-radius:var(--radius-sm);overflow:hidden;font-size:11px}
+.swc{height:52px}
+.swi{padding:5px 7px;background:var(--colors-neutral-100)}
+.swi strong{display:block;font-weight:600;color:var(--colors-brand-primary-dark-blue)}
+.swi span{color:var(--colors-neutral-40);font-family:ui-monospace,monospace;font-size:10px}
+
+/* Override-status badges (reference page). Reflect what production CSS actually does:
+   OVERRIDDEN = customized via --mdb-* remaps/override rules in mdb-customizations.css
+   DEFAULT    = renders on stock MDB5, no Foundant customization
+   (GAP flag, defined above, marks stock-today-but-treatment-drafted, e.g. AG Grid.) */
+.status-tag{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-radius:var(--radius-sm);padding:1px 7px;margin-left:8px;vertical-align:middle}
+.status-overridden{color:#166534;background:#dcfce7;border:1px solid #86efac}
+.status-default{color:var(--colors-neutral-30);background:var(--colors-neutral-70);border:1px solid var(--colors-neutral-50)}
