@@ -32,6 +32,13 @@
     .main{margin-left:240px;padding:66px 36px 28px;max-width:1140px}
     .sec{background:var(--colors-neutral-100);border-radius:var(--radius-md);padding:28px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
     .sec h2{font-size:var(--h2-size);font-weight:var(--h-weight);margin:0 0 4px;color:var(--colors-brand-primary-dark-blue)}
+    /* Subsection spacing — page furniture only (scoped to .sec, so this never
+       reaches production markup). Previously h3 had no explicit top margin
+       and relied on whatever the prior element's bottom margin happened to be
+       (4-10px). This sets a deliberate ~3x gap; first h3 in a section is
+       exempted so it doesn't add extra space under the usage table. */
+    .sec h3{margin-top:36px}
+    .sec h3:first-of-type{margin-top:20px}
     .sec .sd{color:var(--colors-neutral-30);font-size:12px;margin-bottom:16px;border-bottom:1px solid var(--colors-borders-divider);padding-bottom:12px}
     .cr{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start;margin-bottom:10px}
 
@@ -198,22 +205,29 @@
     <tr><th>How</th><td>Just use the tag: <code>&lt;h2&gt;Section&lt;/h2&gt;</code>. Card titles use <code>&lt;h5 class="card-title"&gt;</code>.</td></tr>
   </table>
 
-  <h3>Heading scale (real elements)</h3>
-  <h1>h1. Page title — 1.75rem</h1>
-  <h2>h2. Section header — 1.25rem</h2>
-  <h3>h3. Subsection — 1rem (weight carries hierarchy)</h3>
-  <h4>h4. Minor section — 0.875rem</h4>
-  <h5>h5. Small header — 0.75rem</h5>
-  <h6>h6. Smallest — 0.75rem</h6>
-  <div class="code-block">&lt;h1&gt;Page title&lt;/h1&gt;
+  <h3>Heading scale <span class="gap-flag">GAP — disputed, pending team decision</span></h3>
+  <div class="gap-zone">
+    <table class="usage spec">
+      <tr><th>Sample</th><th>rem</th><th>px</th><th>Weight</th><th>Token</th><th>Usage</th></tr>
+      <tr><td><h1 style="margin:0">Page title</h1></td><td>1.75rem</td><td>28px</td><td>500</td><td><code>--h1-size</code></td><td>Page-level title, one per page.</td></tr>
+      <tr><td><h2 style="margin:0">Section header</h2></td><td>1.25rem</td><td>20px</td><td>500</td><td><code>--h2-size</code></td><td>Groups major page regions.</td></tr>
+      <tr><td><h3 style="margin:0">Subsection</h3></td><td>1rem</td><td>16px</td><td>500</td><td><code>--h3-size</code></td><td>Same size as body copy; weight carries the hierarchy.</td></tr>
+      <tr><td><h4 style="margin:0">Minor section</h4></td><td>0.875rem</td><td>14px</td><td>500</td><td><code>--h4-size</code></td><td>Card/panel-level grouping.</td></tr>
+      <tr><td><h5 style="margin:0">Small header</h5></td><td>0.75rem</td><td>12px</td><td>500</td><td><code>--h5-size</code></td><td>Card titles (<code>.card-title</code>).</td></tr>
+      <tr><td><h6 style="margin:0">Smallest</h6></td><td>0.75rem</td><td>12px</td><td>500</td><td><code>--h6-size</code></td><td>Rarely used; same size as h5.</td></tr>
+    </table>
+    <div class="code-block">&lt;h1&gt;Page title&lt;/h1&gt;
 &lt;h2&gt;Section header&lt;/h2&gt;
 &lt;h5 class="card-title"&gt;Card title&lt;/h5&gt;</div>
+    <p class="gap-note">This full scale is the <strong>retired v2 style-brief scale</strong>, not a production value — Section 3 of the contract already documents that only <code>h1</code> is pinned in shipped CSS (24px, plus a ratified <code>h1.OrganizationSelector</code> special case at 32px) and that <code>h2</code>–<code>h6</code> fall through to MDB defaults undocumented. This table (28px h1 shown above) contradicts that ratified 24px value and should not be treated as settled. Holding here, unedited, pending the team decision on whether to formally design and ratify a full heading scale or leave h2–h6 on MDB defaults.</p>
+  </div>
 
   <h3>Not a heading: section eyebrow</h3>
   <p class="section-eyebrow">Program area</p>
   <p style="margin:0 0 8px;font-size:0.85rem;color:var(--colors-neutral-30)">The eyebrow above labels the region. It is a <code>&lt;p class="section-eyebrow"&gt;</code>, never an <code>h*</code>, so it doesn't distort the document outline.</p>
   <div class="code-block">&lt;p class="section-eyebrow"&gt;Program area&lt;/p&gt;
 &lt;h4&gt;Environmental Grants&lt;/h4&gt;</div>
+  <p style="margin-top:6px;font-size:0.85rem;color:var(--colors-neutral-30)">Note: <code>.nav-group-header</code> (side panel section labels — see Sidenav) uses near-identical styling — 12px, 700, uppercase, letter-spaced, muted gray — under a different name and in a different file (<code>GLM.Summary.css</code> vs. this reference page's own eyebrow). Both are legitimately scoped to their own contexts today and neither is wrong, but it's the same "overline label" idea recurring under two names rather than one shared primitive. Worth a look if the token/class list is ever consolidated. Not added to the Section 9 backlog since <code>.section-eyebrow</code> is reference-page furniture, not a production class — flagging here for awareness rather than as a production gap.</p>
 
   <h3>Body &amp; inline</h3>
   <p style="margin:4px 0">Default body: 1rem (16px), weight 400, line-height 1.6.</p>
@@ -320,33 +334,270 @@
 
 <!-- ═══ NAVBAR ═══ -->
 <section class="sec" id="navbar">
-  <h2>Navbar <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Top navigation bar.</p>
-  <div class="no-override-detail"><strong>No structural override detected:</strong> Navbar uses MDB5 default component patterns. Colors change via the theme overrides above but no navbar-specific customizations were found.</div>
-  <div style="background:var(--t-dark);border-radius:var(--r-md);padding:0 16px;display:flex;align-items:center;height:44px;gap:20px">
-    <span style="color:#fff;font-weight:700;font-size:14px;font-family:var(--t-heading)">Foundant</span>
-    <a href="javascript:void(0)" style="color:rgba(255,255,255,.9);text-decoration:none;font-size:13px;font-weight:500">Dashboard</a>
-    <a href="javascript:void(0)" style="color:rgba(255,255,255,.5);text-decoration:none;font-size:13px">Grants</a>
-    <a href="javascript:void(0)" style="color:rgba(255,255,255,.5);text-decoration:none;font-size:13px">Reports</a>
-    <div style="flex:1"></div>
-    <i class="fas fa-bell" style="color:rgba(255,255,255,.4);font-size:13px"></i>
-    <div style="width:26px;height:26px;border-radius:50%;background:var(--t-primary-h);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:600">GS</div>
+  <h2>Navbar <span class="status-tag status-overridden" title="header/footer + hover remapped to tokens">OVERRIDDEN</span></h2>
+  <p class="sd">Top application header. Structure is standard MDB5 (<code>navbar</code>, <code>navbar-expand-lg</code>, <code>collapse</code>, <code>dropdown</code>) confirmed from the live Request Summary page. Reconstructed from the real markup, not guessed from CSS selectors.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>Fixed application header: brand mark, primary nav, and account/role controls. One shared shell across all three access tiers.</td></tr>
+    <tr><th>Where</th><td><code>header#MainHeader</code> &gt; <code>nav.navbar.navbar-expand-lg</code>. Production adds <code>.fixed-top</code>; omitted in this static preview so the demo doesn't cover the page, but it is present in the code block below.</td></tr>
+    <tr><th>When</th><td>The shell is the same everywhere; content is progressive by role. <strong>Super admin</strong> (shown below): left icon link + <code>#roleToggle</code> Role dropdown on the right, <code>#TopLinks</code> mega-menu, avatar dropdown. <strong>Client/admin:</strong> same shell, no Role dropdown — the external-resources icon row (<code>#externalLinks</code>) shows in its place. <strong>Applicant:</strong> simplified to a couple of left-side icon links plus just the avatar dropdown on the right; no <code>#TopLinks</code>, no Role dropdown.</td></tr>
+    <tr><th>Why</th><td>Header/footer background is an <strong>org-brandable slot</strong>, not a fixed color: Foundant ships <code>--colors-neutral-100</code> (white) by default, and individual foundations inject their own background/text color via per-tenant CSS layered on top. This demo shows the unbranded Foundant default.</td></tr>
+    <tr><th>How</th><td>Top-level nav links and dropdown toggles use real MDB <code>data-mdb-dropdown-init</code> / <code>data-mdb-collapse-init</code> attributes. No bespoke navbar classes.</td></tr>
+  </table>
+
+  <h3>Super admin (full shell)</h3>
+  <div class="cr" style="display:block;padding:0">
+    <header style="position:relative;background-color:var(--colors-neutral-100);box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 1px 5px rgba(0,0,0,.075);font-size:14px">
+      <nav class="navbar navbar-expand-lg" aria-label="Header Menu">
+        <div class="container-fluid">
+          <a class="navbar-brand p-0" href="javascript:void(0)">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:var(--radius-sm);background:var(--colors-primary-shades-90);color:var(--colors-brand-primary-dark-blue);font-weight:700;font-size:12px">FT</span>
+          </a>
+          <div class="navbar-nav">
+            <div class="nav-item">
+              <a class="nav-link" href="javascript:void(0)" aria-label="Dashboard"><i class="fa-light fa-house fa-lg"></i></a>
+            </div>
+          </div>
+          <button class="navbar-toggler p-2 collapsed" type="button" data-mdb-collapse-init="" data-mdb-target="#MainNavigationDemo" aria-controls="MainNavigationDemo" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fa-light fa-bars"></i>
+          </button>
+
+          <ul class="nav navbar-nav ms-auto order-lg-last">
+            <li id="roleToggleDemo" class="dropdown">
+              <a href="javascript:void(0)" class="dropdown-toggle" role="button" data-mdb-dropdown-init="" aria-haspopup="true" aria-expanded="false">
+                Role (Administrator) <span class="caret" aria-hidden="true"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li class="dropdown-item"><i class="fa-light fa-check text-reset me-1"></i>Administrator</li>
+                <li class="dropdown-item"><a class="ms-3" href="javascript:void(0)">Applicant</a></li>
+              </ul>
+            </li>
+          </ul>
+
+          <div class="order-lg-last align-content-end">
+            <ul class="nav navbar-nav d-flex flex-row align-items-center flex-nowrap">
+              <li class="dropdown nav-item" id="UserDropdownDemo">
+                <a href="javascript:void(0)" class="nav-link dropdown-toggle" role="button" data-mdb-dropdown-init="" aria-haspopup="true" aria-expanded="false" aria-label="User menu for Megan Dahl">
+                  <i class="fa-light fa-user fa-lg"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li class="dropdown-header dropdown-item"><i class="fa-light fa-building me-1"></i>A Chance To Grow Inc</li>
+                  <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-user me-2"></i>Edit My Profile</a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-sliders me-2"></i>Preferences</a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-building me-2"></i>Edit Organization</a></li>
+                  <li class="dropdown-divider" aria-hidden="true"></li>
+                  <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-right-from-bracket me-2"></i>Sign Out</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          <div class="collapse navbar-collapse flex-grow-0" id="MainNavigationDemo">
+            <ul id="TopLinksDemo" class="navbar-nav">
+              <li class="dropdown">
+                <a href="javascript:void(0)" class="dropdown-toggle" role="button" data-mdb-dropdown-init="" aria-haspopup="true" aria-expanded="false">
+                  Search <span class="caret" aria-hidden="true"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-file-lines me-2"></i>Requests &amp; Decisions</a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-list-check me-2"></i>Eligibility Center</a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-building me-2"></i>Organization</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+  <div class="code-block">&lt;header id="MainHeader" class="fixed-top"&gt;
+  &lt;nav class="navbar navbar-expand-lg" aria-label="Header Menu"&gt;
+    &lt;div class="container-fluid"&gt;
+      &lt;a class="navbar-brand p-0" href="..."&gt;&lt;img id="Logo" src="..." alt="..."&gt;&lt;/a&gt;
+      &lt;div class="navbar-nav"&gt;
+        &lt;div class="nav-item"&gt;&lt;a class="nav-link" href="..." aria-label="Dashboard"&gt;&lt;i class="fa-light fa-house fa-lg"&gt;&lt;/i&gt;&lt;/a&gt;&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;button class="navbar-toggler p-2 collapsed" data-mdb-collapse-init data-mdb-target="#MainNavigation" aria-controls="MainNavigation" aria-expanded="false" aria-label="Toggle navigation"&gt;
+        &lt;i class="fa-light fa-bars"&gt;&lt;/i&gt;
+      &lt;/button&gt;
+
+      &lt;!-- super admin only --&gt;
+      &lt;ul class="nav navbar-nav ms-auto order-lg-last"&gt;
+        &lt;li id="roleToggle" class="dropdown"&gt;
+          &lt;a class="dropdown-toggle" role="button" data-mdb-dropdown-init aria-haspopup="true" aria-expanded="false"&gt;Role (Administrator) &lt;span class="caret"&gt;&lt;/span&gt;&lt;/a&gt;
+          &lt;ul class="dropdown-menu"&gt;
+            &lt;li class="dropdown-item"&gt;&lt;i class="fa-light fa-check text-reset"&gt;&lt;/i&gt; Administrator&lt;/li&gt;
+            &lt;li class="dropdown-item"&gt;&lt;a class="ms-3" href="..."&gt;Applicant&lt;/a&gt;&lt;/li&gt;
+          &lt;/ul&gt;
+        &lt;/li&gt;
+      &lt;/ul&gt;
+
+      &lt;!-- client/admin only, shown when no Role dropdown --&gt;
+      &lt;div id="externalLinks" class="order-lg-last navbar-expand hideWithRoleSelector"&gt;
+        &lt;div class="navbar-nav"&gt;&lt;a class="nav-link px-2" href="..." target="_blank"&gt;&lt;i class="fa-light fa-compass fa-xl"&gt;&lt;/i&gt;&lt;/a&gt; ...&lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- all tiers --&gt;
+      &lt;div class="order-lg-last align-content-end"&gt;
+        &lt;ul class="nav navbar-nav d-flex flex-row align-items-center flex-nowrap"&gt;
+          &lt;li class="dropdown nav-item" id="UserDropdown"&gt;
+            &lt;a class="nav-link dropdown-toggle" role="button" data-mdb-dropdown-init aria-haspopup="true" aria-expanded="false" aria-label="User menu"&gt;&lt;i class="fa-light fa-user fa-lg"&gt;&lt;/i&gt;&lt;/a&gt;
+            &lt;ul class="dropdown-menu dropdown-menu-end"&gt;
+              &lt;li class="dropdown-header dropdown-item"&gt;&lt;i class="fa-light fa-building"&gt;&lt;/i&gt; Org Name&lt;/li&gt;
+              &lt;li&gt;&lt;a class="dropdown-item" href="..."&gt;&lt;i class="fa-light fa-user"&gt;&lt;/i&gt; Edit My Profile&lt;/a&gt;&lt;/li&gt;
+              &lt;li&gt;&lt;a class="dropdown-item" href="..."&gt;&lt;i class="fa-light fa-sliders"&gt;&lt;/i&gt; Preferences&lt;/a&gt;&lt;/li&gt;
+              &lt;li&gt;&lt;a class="dropdown-item" href="..."&gt;&lt;i class="fa-light fa-building"&gt;&lt;/i&gt; Edit Organization&lt;/a&gt;&lt;/li&gt;
+              &lt;li class="dropdown-divider"&gt;&lt;/li&gt;
+              &lt;li&gt;&lt;a class="dropdown-item" href="..."&gt;&lt;i class="fa-light fa-right-from-bracket"&gt;&lt;/i&gt; Sign Out&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+
+      &lt;!-- client/admin + super admin only, not applicant --&gt;
+      &lt;div class="collapse navbar-collapse flex-grow-0" id="MainNavigation"&gt;
+        &lt;ul id="TopLinks" class="navbar-nav"&gt;
+          &lt;li class="dropdown"&gt;
+            &lt;a class="dropdown-toggle" role="button" data-mdb-dropdown-init aria-haspopup="true" aria-expanded="false"&gt;Search &lt;span class="caret"&gt;&lt;/span&gt;&lt;/a&gt;
+            &lt;ul class="dropdown-menu"&gt;
+              &lt;li&gt;&lt;a class="dropdown-item" href="..."&gt;&lt;i class="fa-light fa-file-lines"&gt;&lt;/i&gt; Requests &amp;amp; Decisions&lt;/a&gt;&lt;/li&gt;
+              &lt;li&gt;&lt;a class="dropdown-item" href="..."&gt;&lt;i class="fa-light fa-list-check"&gt;&lt;/i&gt; Eligibility Center&lt;/a&gt;&lt;/li&gt;
+              &lt;li&gt;&lt;a class="dropdown-item" href="..."&gt;&lt;i class="fa-light fa-building"&gt;&lt;/i&gt; Organization&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/nav&gt;
+&lt;/header&gt;</div>
+  <p class="sd" style="border:none;margin:6px 0 0">Hover on the top-level nav links and dropdown toggles above, using the state-layer fix below rather than production's current hardcoded gray gradient.</p>
+
+  <h3>Hover treatment <span class="gap-flag">GAP — resolution proposed, not yet in production</span></h3>
+  <div class="gap-zone">
+    <p class="gap-note">Production's top-level nav-link hover (<code>.navbar-nav &gt; li &gt; a:hover</code>) is a hardcoded gray gradient (<code>#eee</code> → <code>#e4e4e4</code>) with a 5px solid <code>#222</code> border-bottom — the last hardcoded-hex hover left in the system. This prototype replaces it with <code>background-color: var(--colors-state-layers-light-hover)</code> and <code>var(--radius-sm)</code>, matching the treatment already ratified for <code>.kebab-btn</code>, so the top-level toggle matches its own dropdown submenu instead of introducing a third hover language. Confirm with engineering before treating as ratified.</p>
+    <p class="gap-note">Separately: production's dropdown toggles pair MDB5's own <code>.dropdown-toggle::after</code> arrow with a leftover Bootstrap-3 <code>&lt;span class="caret"&gt;</code>, and <code>.caret</code> has no rule anywhere in production CSS. Likely renders a duplicate indicator. Reproduced faithfully above since it's real production markup — flagging rather than silently dropping it.</p>
   </div>
 </section>
 
 <!-- ═══ SIDENAV ═══ -->
 <section class="sec" id="sidenav">
-  <h2>Sidenav <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Vertical sidebar navigation.</p>
-  <div class="no-override-detail"><strong>No structural override detected:</strong> Uses MDB5 sidenav patterns. Active state and colors are driven by theme color overrides.</div>
-  <div style="width:220px;background:var(--t-surface);border:1px solid var(--t-bdr);border-radius:var(--r-md);overflow:hidden">
-    <div style="padding:12px 14px;border-bottom:1px solid var(--t-bdr);font-weight:700;font-size:13px;font-family:var(--t-heading)"><i class="fas fa-layer-group me-2" style="color:var(--t-primary)"></i>GLM</div>
-    <div style="padding:4px 0">
-      <a href="javascript:void(0)" style="display:flex;align-items:center;padding:8px 14px;color:var(--t-primary);background:var(--t-primary-bg);text-decoration:none;font-size:12px;font-weight:500;border-left:3px solid var(--t-primary)"><i class="fas fa-tachometer-alt me-3" style="width:16px;text-align:center;font-size:12px"></i>Dashboard</a>
-      <a href="javascript:void(0)" style="display:flex;align-items:center;padding:8px 14px;color:var(--g600);text-decoration:none;font-size:12px;border-left:3px solid transparent"><i class="fas fa-file-alt me-3" style="width:16px;text-align:center;font-size:12px"></i>Applications</a>
-      <a href="javascript:void(0)" style="display:flex;align-items:center;padding:8px 14px;color:var(--g600);text-decoration:none;font-size:12px;border-left:3px solid transparent"><i class="fas fa-award me-3" style="width:16px;text-align:center;font-size:12px"></i>Awards</a>
-      <a href="javascript:void(0)" style="display:flex;align-items:center;padding:8px 14px;color:var(--g600);text-decoration:none;font-size:12px;border-left:3px solid transparent"><i class="fas fa-chart-bar me-3" style="width:16px;text-align:center;font-size:12px"></i>Reports</a>
+  <h2>Sidenav <span class="status-tag status-overridden" title="side-panel list-group remapped to tokens">OVERRIDDEN</span></h2>
+  <p class="sd">Contextual record-page navigation rail, real markup from the live Request Summary page — not a global app sidebar. Structure is Bootstrap's <code>.list-group</code>, remapped via <code>--mdb-list-group-*</code> and a handful of <code>.side-panel</code>-scoped overrides.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>The entity nav rail that sits beside record content (Request, Organization, User, Foundation Summary pages).</td></tr>
+    <tr><th>Where</th><td><code>.side-panel</code> (275px, fixed width) inside <code>.panel-layout</code>, beside <code>.main-content-body</code>. See Section 5a of the contract for the full page pattern.</td></tr>
+    <tr><th>When</th><td>Any entity Summary page with sub-pages (Comments, Documents, etc.). Not used as a persistent, page-independent app sidebar — it's scoped to the current record.</td></tr>
+    <tr><th>Why</th><td><code>.side-panel .list-group-item</code> remaps <code>--mdb-list-group-action-hover-bg</code> to <code>--colors-neutral-70</code>; the active state sets <code>--colors-brand-secondary-light-blue</code> background + bold weight directly (not a <code>--mdb-*</code> remap — see gap note below).</td></tr>
+    <tr><th>How</th><td>Below 768px, production collapses this to a horizontal scrollable tab bar with fade edges (<code>.nav-fade-left</code> / <code>.nav-fade-right</code>) rather than stacking full-width. Not reproduced live here since it's a responsive/JS behavior, but the fade markup is included in the code block for fidelity.</td></tr>
+  </table>
+
+  <h3>Record nav rail</h3>
+  <div class="cr" style="display:block;padding:0">
+    <div style="width:275px;position:relative;overflow:hidden;border:1px solid var(--colors-borders-divider)">
+      <div class="side-panel" style="width:100%;min-width:0">
+        <div class="nav-fade nav-fade-left" aria-hidden="true"></div>
+        <div class="nav-fade nav-fade-right" aria-hidden="true"></div>
+        <div class="d-flex flex-column">
+          <div class="my-3 mx-2 request-info-card-wrapper">
+            <div class="card request-info-card" style="background-color: var(--colors-neutral-70)">
+              <div class="my-3 mx-3">
+                <div class="list-group-item ft-label">
+                  <i class="fa-light fa-circle-user me-3 h6 mb-0"></i>
+                  <a href="javascript:void(0)">Aaron Rodgers</a>
+                </div>
+                <div class="list-group-item ft-label mt-1">
+                  <i class="fa-light fa-envelope me-3 h6 mb-0"></i>
+                  <a href="javascript:void(0)">test@123.com</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="d-lg-block">
+            <div class="list-group list-group-flush mt-1">
+              <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple active">
+                <i class="fa-light fa-hand-holding-seedling me-2 me-md-3"></i>Summary
+              </a>
+              <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple">
+                <i class="fa-light fa-message me-2 me-md-3"></i>Interactions
+              </a>
+              <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple">
+                <i class="fa-light fa-file-lines me-2 me-md-3"></i>Documents
+              </a>
+              <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple">
+                <i class="fa-light fa-clipboard-list-check me-2 me-md-3"></i>Follow Ups
+              </a>
+              <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple">
+                <i class="fa-light fa-circle-check me-2 me-md-3"></i>Financials &amp; Compliance
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+  <div class="code-block">&lt;div class="panel-layout"&gt;
+  &lt;div class="side-panel"&gt;
+    &lt;div class="nav-fade nav-fade-left" aria-hidden="true"&gt;&lt;/div&gt;
+    &lt;div class="nav-fade nav-fade-right" aria-hidden="true"&gt;&lt;/div&gt;
+    &lt;div class="d-flex flex-column"&gt;
+      &lt;div class="my-3 mx-2 request-info-card-wrapper"&gt;
+        &lt;div class="card request-info-card" style="background-color: var(--colors-neutral-70)"&gt;
+          &lt;div class="my-3 mx-3"&gt;
+            &lt;div class="list-group-item ft-label"&gt;
+              &lt;i class="fa-light fa-circle-user me-3 h6 mb-0"&gt;&lt;/i&gt;
+              &lt;a href="..."&gt;Aaron Rodgers&lt;/a&gt;
+            &lt;/div&gt;
+            &lt;div class="list-group-item ft-label mt-1"&gt;
+              &lt;i class="fa-light fa-envelope me-3 h6 mb-0"&gt;&lt;/i&gt;
+              &lt;a href="mailto:..."&gt;test@123.com&lt;/a&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class="d-lg-block"&gt;
+        &lt;div class="list-group list-group-flush mt-1"&gt;
+          &lt;a href="..." class="list-group-item list-group-item-action ripple active" data-page="Summary"&gt;
+            &lt;i class="fa-light fa-hand-holding-seedling me-2 me-md-3"&gt;&lt;/i&gt;Summary
+          &lt;/a&gt;
+          &lt;a href="..." class="list-group-item list-group-item-action ripple" data-page="Comments"&gt;
+            &lt;i class="fa-light fa-message me-2 me-md-3"&gt;&lt;/i&gt;Interactions
+          &lt;/a&gt;
+          &lt;!-- Documents, Follow Ups, Compliance follow the same pattern --&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="main-content-body"&gt;&lt;!-- record content --&gt;&lt;/div&gt;
+&lt;/div&gt;</div>
+
+  <h3>Grouped sections</h3>
+  <p class="sd">Not exercised on the captured Request Summary page (its nav is a flat list), but <code>.nav-group-header</code> ships in <code>GLM.Summary.css</code> for side panels that need labeled sub-sections — e.g. a longer Organization nav.</p>
+  <div class="cr" style="display:block;padding:0">
+    <div style="width:275px;border:1px solid var(--colors-borders-divider)">
+      <div class="side-panel" style="width:100%;min-width:0">
+        <div class="list-group list-group-flush mt-1">
+          <div class="nav-group-header">Organization</div>
+          <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple active"><i class="fa-light fa-building me-2 me-md-3"></i>Overview</a>
+          <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple"><i class="fa-light fa-users me-2 me-md-3"></i>Contacts</a>
+          <div class="nav-group-header">History</div>
+          <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple"><i class="fa-light fa-clock-rotate-left me-2 me-md-3"></i>Requests</a>
+          <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple"><i class="fa-light fa-award me-2 me-md-3"></i>Awards</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="code-block">&lt;div class="list-group list-group-flush mt-1"&gt;
+  &lt;div class="nav-group-header"&gt;Organization&lt;/div&gt;
+  &lt;a href="..." class="list-group-item list-group-item-action ripple active"&gt;...&lt;/a&gt;
+  &lt;a href="..." class="list-group-item list-group-item-action ripple"&gt;...&lt;/a&gt;
+  &lt;div class="nav-group-header"&gt;History&lt;/div&gt;
+  &lt;a href="..." class="list-group-item list-group-item-action ripple"&gt;...&lt;/a&gt;
+&lt;/div&gt;</div>
+
+  <h3>Info card background <span class="gap-flag">GAP — inline style, not a class rule</span></h3>
+  <div class="gap-zone">
+    <p class="gap-note"><code>.request-info-card</code> carries no CSS of its own anywhere in production — its <code>--colors-neutral-70</code> background is set with an inline <code>style</code> attribute directly in the Razor markup rather than a class rule. It works, but it means the color can drift silently wherever this markup is copy-pasted. Consider moving it into a real class rule (e.g. <code>.request-info-card { background-color: var(--colors-neutral-70); }</code>) the next time this page is touched.</p>
   </div>
 </section>
 
@@ -458,6 +709,17 @@
       <button class="btn btn-info">Info</button>
     </div>
     <p class="gap-note">Production defines no filled <code>.btn-success</code>, <code>.btn-warning</code>, or <code>.btn-info</code> override. These fall through to stock MDB colors and do not match Foundant. Do not lift into production until ratified. Backlog item.</p>
+  </div>
+
+  <h3>Ghost <span class="gap-flag">GAP — new pattern, not in production</span></h3>
+  <div class="gap-zone">
+    <div class="cr" style="align-items:center">
+      <button class="btn btn-ghost">Ghost</button>
+      <button class="btn btn-ghost btn-sm fw-bold"><i class="fa-light fa-pen-to-square me-2"></i>Edit</button>
+    </div>
+    <div class="code-block">&lt;button class="btn btn-ghost"&gt;Ghost&lt;/button&gt;
+&lt;button class="btn btn-ghost btn-sm fw-bold"&gt;&lt;i class="fa-light fa-pen-to-square me-2"&gt;&lt;/i&gt;Edit&lt;/button&gt;</div>
+    <p class="gap-note">No ghost/tertiary button exists in production; <code>.btn-link</code> is the only borderless variant that ships today (text-only, no padding, no hover fill). <code>.btn-ghost</code> is a new draft class: transparent at rest, fills with the light state-layer token on hover/focus/active. Not lifted from any production evidence — needs engineering review before it round-trips into <code>mdb-customizations.css</code>. Backlog item.</p>
   </div>
 </section>
 
@@ -986,6 +1248,34 @@
   }
 
   buildMatrix();
+
+  /* Wrap every .code-block in a closed "View code example" disclosure.
+     Reference-page furniture only — does not change the copy-paste markup itself. */
+  var codeBlocks = document.querySelectorAll('.code-block');
+  for (var ci = 0; ci < codeBlocks.length; ci++) {
+    (function (block) {
+      var wrap = document.createElement('div');
+      wrap.className = 'code-toggle-wrap';
+
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'code-toggle-btn';
+      btn.setAttribute('aria-expanded', 'false');
+      btn.innerHTML = '<i class="fa-light fa-chevron-right" aria-hidden="true"></i> View code example';
+
+      block.parentNode.insertBefore(wrap, block);
+      wrap.appendChild(btn);
+      wrap.appendChild(block);
+      block.classList.add('code-collapsed');
+
+      btn.addEventListener('click', function () {
+        var isOpen = block.classList.toggle('code-collapsed') === false;
+        btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        var icon = btn.querySelector('i');
+        icon.className = isOpen ? 'fa-light fa-chevron-down' : 'fa-light fa-chevron-right';
+      });
+    })(codeBlocks[ci]);
+  }
 </script>
 </body>
 </html>
