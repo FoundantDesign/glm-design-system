@@ -155,7 +155,9 @@
     <div class="sw"><div class="swc" style="background:var(--colors-semantic-danger-50)"></div><div class="swi"><strong>Danger 50</strong><span>FAEAEA</span></div></div>
     <div class="sw"><div class="swc" style="background:var(--colors-semantic-warning-50)"></div><div class="swi"><strong>Warning 50</strong><span>FFF4D1</span></div></div>
     <div class="sw"><div class="swc" style="background:var(--colors-semantic-info-50)"></div><div class="swi"><strong>Info 50</strong><span>D5E2FA</span></div></div>
+    <div class="sw"><div class="swc" style="background:var(--colors-semantic-info-90)"></div><div class="swi"><strong>Info 90</strong><span>F0F7FF</span></div></div>
   </div>
+  <p class="sd" style="border:none;margin:6px 0 0"><code>info-90</code> exists in <code>foundant-tokens.css</code> but has no <code>success</code>/<code>warning</code> equivalent — info is uniquely asymmetric. Now in real use (Alerts, Section 6f) since <code>info-50</code> alone read too saturated next to its siblings.</p>
 
   <h3>Danger — full validated ramp</h3>
   <div class="color-range">
@@ -174,8 +176,61 @@
   <p class="sd" style="border:none;margin:6px 0 0">Anchor <code>danger-500</code> = <code>#BD3B39</code>. The only fully WCAG-validated semantic ramp.</p>
   <button class="view-matrix-btn" onclick="document.getElementById('dangerMatrix').classList.add('open')"><i class="fa-light fa-table-cells" style="font-size:10px"></i> View contrast matrix</button>
 
-  <h3 style="margin-top:20px">Success / warning / info full ramps <span class="gap-flag">GAP — pending validation</span></h3>
-  <div class="gap-zone"><p class="gap-note" style="margin:0">Only the danger ramp is complete. Success, warning, and info need full 50–900 ramps through the same WCAG AA process before use beyond the 0/50 anchors above.</p></div>
+  <h3 style="margin-top:20px">Success / warning / info full ramps <span class="gap-flag">PROPOSED — pending team review</span></h3>
+  <div class="gap-zone">
+    <p class="gap-note" style="margin:0 0 12px">Full 50–900 ramps, built with the same S/L curve methodology as the danger ramp above. Existing <code>-0</code>/<code>-50</code> anchors are untouched — nothing already shipped changes. Not yet in <code>foundant-tokens.css</code>; needs engineering sign-off before ratifying. See contract backlog #4.</p>
+
+    <p class="section-eyebrow" style="margin-top:4px">Success</p>
+    <div class="color-range">
+      <div class="color-range-step" style="background:#E1F5EB"><span style="color:#20794E">50</span></div>
+      <div class="color-range-step" style="background:#C7ECDA"><span style="color:#20794E">100</span></div>
+      <div class="color-range-step" style="background:#AAE3C8"><span style="color:#20794E">200</span></div>
+      <div class="color-range-step" style="background:#8DDAB5"><span style="color:#20794E">300</span></div>
+      <div class="color-range-step" style="background:#7CD5AB"><span style="color:#20794E">400</span></div>
+      <div class="color-range-step color-range-anchor" style="background:#67CF9D"><span style="color:#20794E">500</span></div>
+      <div class="color-range-step" style="background:#4CC88C"><span style="color:#fff">600</span></div>
+      <div class="color-range-step" style="background:#37B87A"><span style="color:#fff">700</span></div>
+      <div class="color-range-step" style="background:#2E9C67"><span style="color:#fff">800</span></div>
+      <div class="color-range-step" style="background:#20794E"><span style="color:#fff">900</span></div>
+    </div>
+    <div class="color-range-label"><span>50</span><span>100</span><span>200</span><span>300</span><span>400</span><span>500</span><span>600</span><span>700</span><span>800</span><span>900</span></div>
+    <p class="sd" style="border:none;margin:6px 0 0">Anchor <code>success-500</code> = existing <code>success-0</code>, unchanged. <code>-900</code> (<code>#20794E</code>) clears AA at 4.73:1 on <code>success-50</code> — usable as colored text.</p>
+    <button class="view-matrix-btn" onclick="document.getElementById('successMatrix').classList.add('open')"><i class="fa-light fa-table-cells" style="font-size:10px"></i> View contrast matrix</button>
+
+    <p class="section-eyebrow" style="margin-top:20px">Warning</p>
+    <div class="color-range">
+      <div class="color-range-step" style="background:#FFF4D1"><span style="color:#7A5E1F">50</span></div>
+      <div class="color-range-step" style="background:#FEE9B7"><span style="color:#7A5E1F">100</span></div>
+      <div class="color-range-step" style="background:#FCDF9D"><span style="color:#7A5E1F">200</span></div>
+      <div class="color-range-step" style="background:#F9D583"><span style="color:#7A5E1F">300</span></div>
+      <div class="color-range-step" style="background:#F7D074"><span style="color:#7A5E1F">400</span></div>
+      <div class="color-range-step color-range-anchor" style="background:#F4C862"><span style="color:#7A5E1F">500</span></div>
+      <div class="color-range-step" style="background:#F3BD41"><span style="color:#7A5E1F">600</span></div>
+      <div class="color-range-step" style="background:#F1B21E"><span style="color:#5c4416">700</span></div>
+      <div class="color-range-step" style="background:#DD9E0C"><span style="color:#fff">800</span></div>
+      <div class="color-range-step" style="background:#B98408"><span style="color:#fff">900</span></div>
+    </div>
+    <div class="color-range-label"><span>50</span><span>100</span><span>200</span><span>300</span><span>400</span><span>500</span><span>600</span><span>700</span><span>800</span><span>900</span></div>
+    <p class="sd" style="border:none;margin:6px 0 0">Even <code>-900</code> (<code>#B98408</code>) only reaches 3.00:1 on <code>warning-50</code> — never clears AA. Pushing darker doesn't help: by <code>L≈30%</code> the color reads as brown/olive, not gold. Keep warning text on <code>--colors-brand-primary-dark-blue</code>, same as today.</p>
+    <button class="view-matrix-btn" onclick="document.getElementById('warningMatrix').classList.add('open')"><i class="fa-light fa-table-cells" style="font-size:10px"></i> View contrast matrix</button>
+
+    <p class="section-eyebrow" style="margin-top:20px">Info</p>
+    <div class="color-range">
+      <div class="color-range-step" style="background:#D5E2FA"><span style="color:#19242F">50</span></div>
+      <div class="color-range-step" style="background:#ACCCEF"><span style="color:#19242F">100</span></div>
+      <div class="color-range-step" style="background:#86B0DB"><span style="color:#fff">200</span></div>
+      <div class="color-range-step" style="background:#6893C1"><span style="color:#fff">300</span></div>
+      <div class="color-range-step" style="background:#5983AE"><span style="color:#fff">400</span></div>
+      <div class="color-range-step color-range-anchor" style="background:#536E8A"><span style="color:#fff">500</span></div>
+      <div class="color-range-step" style="background:#455D75"><span style="color:#fff">600</span></div>
+      <div class="color-range-step" style="background:#374B5F"><span style="color:#fff">700</span></div>
+      <div class="color-range-step" style="background:#293848"><span style="color:#fff">800</span></div>
+      <div class="color-range-step" style="background:#19242F"><span style="color:#fff">900</span></div>
+    </div>
+    <div class="color-range-label"><span>50</span><span>100</span><span>200</span><span>300</span><span>400</span><span>500</span><span>600</span><span>700</span><span>800</span><span>900</span></div>
+    <p class="sd" style="border:none;margin:6px 0 0">Anchor <code>info-500</code> = existing <code>info-0</code>, unchanged. Clears AA earliest of the three — <code>-600</code> (<code>#455D75</code>) reaches 5.23:1 on <code>info-50</code>.</p>
+    <button class="view-matrix-btn" onclick="document.getElementById('infoMatrix').classList.add('open')"><i class="fa-light fa-table-cells" style="font-size:10px"></i> View contrast matrix</button>
+  </div>
 
   <h3>Neutral scale</h3>
   <div class="sg">
@@ -603,19 +658,70 @@
 
 <!-- ═══ TABS ═══ -->
 <section class="sec" id="tabs">
-  <h2>Tabs &amp; Pills <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Horizontal navigation.</p>
-  <div class="no-override-detail"><strong>No structural override detected:</strong> Tab and pill styles use MDB5 defaults. Active color changes with theme primary.</div>
-  <p class="section-eyebrow">Tabs</p>
-  <div style="border-bottom:2px solid var(--t-bdr);display:flex;gap:0;margin-bottom:14px">
-    <a href="javascript:void(0)" style="padding:8px 18px;font-size:13px;font-weight:500;text-decoration:none;color:var(--t-primary);border-bottom:2px solid var(--t-primary);margin-bottom:-2px">Active</a>
-    <a href="javascript:void(0)" style="padding:8px 18px;font-size:13px;text-decoration:none;color:var(--g500)">Tab Two</a>
-    <a href="javascript:void(0)" style="padding:8px 18px;font-size:13px;text-decoration:none;color:var(--g400)">Disabled</a>
-  </div>
-  <p class="section-eyebrow">Pills</p>
-  <div style="display:flex;gap:5px">
-    <a href="javascript:void(0)" style="padding:6px 14px;font-size:12px;font-weight:500;text-decoration:none;color:#fff;background:var(--t-primary);border-radius:var(--r-rnd)">Active</a>
-    <a href="javascript:void(0)" style="padding:6px 14px;font-size:12px;text-decoration:none;color:var(--g600);background:var(--g200);border-radius:var(--r-rnd)">Pill</a>
+  <h2>Tabs &amp; Pills <span class="gap-flag">GAP — stock MDB today, Foundant treatment drafted here</span></h2>
+  <p class="sd">Horizontal navigation within a page. No <code>.nav-tabs</code>/<code>.nav-pills</code> override exists anywhere in production — these currently ship as pure stock MDB defaults.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>In-page section switching: <code>.nav-tabs</code> for a bordered tab strip, <code>.nav-pills</code> for a rounded pill switcher.</td></tr>
+    <tr><th>Where</th><td>Real MDB <code>.nav.nav-tabs</code> / <code>.nav.nav-pills</code> + <code>.nav-link</code>, paired with <code>.tab-content</code>/<code>.tab-pane</code>.</td></tr>
+    <tr><th>When</th><td>Tabs for peer content within one record/page (e.g. Details / History / Documents). Not a substitute for the Sidenav's cross-page navigation.</td></tr>
+    <tr><th>Why</th><td>Matches the state-layer + primary-dark-blue convention already ratified for <code>.kebab-btn</code> and the navbar hover fix, rather than inventing a new hover language.</td></tr>
+    <tr><th>How</th><td>Remaps <code>--mdb-nav-tabs-*</code> / <code>--mdb-nav-pills-*</code>. No hardcoded hex.</td></tr>
+  </table>
+
+  <div class="gap-zone">
+    <h3>Tabs</h3>
+    <div class="cr" style="display:block">
+      <ul class="nav nav-tabs">
+        <li class="nav-item"><a class="nav-link active" href="javascript:void(0)">Details</a></li>
+        <li class="nav-item"><a class="nav-link" href="javascript:void(0)">History</a></li>
+        <li class="nav-item"><a class="nav-link disabled" href="javascript:void(0)" aria-disabled="true">Documents</a></li>
+      </ul>
+    </div>
+    <h3>Pills</h3>
+    <div class="cr" style="display:block">
+      <ul class="nav nav-pills">
+        <li class="nav-item"><a class="nav-link active" href="javascript:void(0)">Active</a></li>
+        <li class="nav-item"><a class="nav-link" href="javascript:void(0)">Pill</a></li>
+      </ul>
+    </div>
+    <div class="code-block">.nav-tabs {
+  --mdb-nav-tabs-border-color: var(--colors-borders-divider);
+  --mdb-nav-tabs-link-active-color: var(--colors-brand-primary-dark-blue);
+  --mdb-nav-tabs-link-active-border-color: transparent transparent var(--colors-brand-primary-dark-blue);
+  border-bottom-color: var(--colors-borders-divider);
+}
+.nav-tabs .nav-link {
+  --mdb-nav-link-color: var(--colors-neutral-40);
+  color: var(--colors-neutral-40);
+  font-weight: 500;
+  border-radius: 0;
+  text-transform: none;
+}
+.nav-tabs .nav-link:hover {
+  background-color: var(--colors-state-layers-light-hover);
+  border-color: transparent;
+  color: var(--colors-brand-primary-dark-blue);
+}
+.nav-tabs .nav-link.active {
+  color: var(--colors-brand-primary-dark-blue);
+  font-weight: 700;
+  border-bottom: 2px solid var(--colors-brand-primary-dark-blue);
+}
+.nav-pills .nav-link {
+  --mdb-nav-pills-link-active-bg: var(--colors-brand-primary-dark-blue);
+  border-radius: var(--radius-round);
+  color: var(--colors-neutral-40);
+  font-weight: 500;
+  text-transform: none;
+}
+.nav-pills .nav-link:hover { background-color: var(--colors-state-layers-light-hover); color: var(--colors-brand-primary-dark-blue); }
+.nav-pills .nav-link.active {
+  background-color: var(--colors-brand-primary-dark-blue);
+  color: var(--colors-neutral-100);
+  font-weight: 700;
+}</div>
+    <p class="gap-note">Draft, not lifted from production evidence — no <code>.nav-tabs</code>/<code>.nav-pills</code> customization exists today. Hardened with the same fix confirmed for Alerts: direct <code>color</code>/<code>background-color</code>/<code>border-bottom-color</code> properties alongside the <code>--mdb-nav-tabs-*</code>/<code>--mdb-nav-pills-*</code> custom properties, since MDB's stock nav components may paint those properties directly rather than solely through variable indirection. Also overrides MDB's stock Material-style uppercase tab-label text-transform, which production doesn't want. Needs engineering review before it round-trips into <code>mdb-customizations.css</code>. Backlog item.</p>
   </div>
 </section>
 
@@ -792,37 +898,44 @@
 
 <!-- ═══ BADGES ═══ -->
 <section class="sec" id="badges">
-  <h2>Badges &amp; Status <span class="status-tag status-overridden" title="--mdb-badge-* + pill badge classes">OVERRIDDEN</span></h2>
-  <p class="sd">Pill badges for status. Four semantic backgrounds; dark text on subtle tints.</p>
+  <h2>Badges &amp; Status <span class="status-tag status-overridden" title="--mdb-badge-* + semantic badge classes">OVERRIDDEN</span></h2>
+  <p class="sd">Rectangular badges for status. Four semantic backgrounds; dark text on subtle tints, saturated border for contrast.</p>
 
   <table class="usage">
     <tr><th>What</th><td>Status indicators. Communicate the state of a record (stage, approval, urgency) at a glance.</td></tr>
-    <tr><th>Where</th><td><code>.badge.rounded-pill</code> + a semantic class. In hero cards, list rows, table cells.</td></tr>
+    <tr><th>Where</th><td><code>.badge</code> + a semantic class (no <code>.rounded-pill</code> — see shape note below). In hero cards, list rows, table cells.</td></tr>
     <tr><th>When</th><td>Use to show state, not to label fields. One badge per status dimension. Map each domain status to the semantic color that matches its meaning (see status map below).</td></tr>
-    <tr><th>Why</th><td>Base <code>.badge</code> sets text to <code>--colors-brand-primary-dark-blue</code>. The four <code>badge-*</code> classes use subtle <code>-50</code> backgrounds with dark text, always readable.</td></tr>
+    <tr><th>Why</th><td>Base <code>.badge</code> sets text to <code>--colors-brand-primary-dark-blue</code>. The four <code>badge-*</code> classes use subtle <code>-50</code> backgrounds with dark text and a saturated border, always readable.</td></tr>
     <tr><th>How</th><td>Add <code>.fw-normal</code> if the default weight is too heavy for the context.</td></tr>
   </table>
 
-  <h3>Ratified semantic badges</h3>
-  <div class="cr">
-    <span class="badge rounded-pill badge-success">Success</span>
-    <span class="badge rounded-pill badge-warning">Warning</span>
-    <span class="badge rounded-pill badge-danger">Danger</span>
-    <span class="badge rounded-pill badge-secondary">Secondary</span>
+  <h3>Semantic badges <span class="gap-flag">GAP — intentional prototype departure, see note</span></h3>
+  <div class="gap-zone">
+    <div class="cr">
+      <span class="badge badge-success">Success</span>
+      <span class="badge badge-warning">Warning</span>
+      <span class="badge badge-danger">Danger</span>
+      <span class="badge badge-secondary">Secondary</span>
+    </div>
+    <div class="code-block">.badge-success, .badge-warning, .badge-danger, .badge-secondary {
+  display: inline-block; padding: 4px 10px; border-radius: var(--radius-sm);
+  font-size: 12px; font-weight: 600;
+}
+.badge-success { background-color: var(--colors-semantic-success-50); color: var(--colors-brand-primary-dark-blue); border: 1px solid var(--colors-semantic-success-0); }
+.badge-warning { background-color: var(--colors-semantic-warning-50); color: var(--colors-brand-primary-dark-blue); border: 1px solid var(--colors-semantic-warning-0); }
+.badge-danger  { background-color: var(--colors-semantic-danger-50);  color: var(--colors-brand-primary-dark-blue); border: 1px solid var(--colors-semantic-danger-200); }
+.badge-secondary { background-color: var(--colors-neutral-70); color: var(--colors-neutral-30); border: 1px solid var(--colors-neutral-40); }</div>
+    <p class="gap-note">Production badges are genuinely pill-shaped and uppercase — confirmed ratified in <code>GLM.Summary.css</code>, not a stock-MDB leftover like Alerts/Tabs. This is a deliberate departure: rectangular (<code>--radius-sm</code>) since pills read too similar to pill buttons, uppercase/letter-spacing removed, and a saturated border added per variant for contrast against white. Text stays uniform navy for now — colored text per variant is a separate, still-open decision (see Colors section proposed ramps). Needs engineering review before it round-trips into <code>GLM.Summary.css</code>.</p>
   </div>
-  <div class="code-block">&lt;span class="badge rounded-pill badge-success"&gt;Success&lt;/span&gt;
-&lt;span class="badge rounded-pill badge-warning"&gt;Warning&lt;/span&gt;
-&lt;span class="badge rounded-pill badge-danger"&gt;Danger&lt;/span&gt;
-&lt;span class="badge rounded-pill badge-secondary"&gt;Secondary&lt;/span&gt;</div>
 
   <h3>Domain status map <span class="gap-flag">GAP — mapping not ratified</span></h3>
   <div class="gap-zone">
     <div class="cr">
-      <span class="badge rounded-pill badge-success">Approved</span>
-      <span class="badge rounded-pill badge-danger">Denied</span>
-      <span class="badge rounded-pill badge-warning">Pending</span>
-      <span class="badge rounded-pill badge-secondary">LOI Draft</span>
-      <span class="badge rounded-pill badge-danger">Overdue</span>
+      <span class="badge badge-success">Approved</span>
+      <span class="badge badge-danger">Denied</span>
+      <span class="badge badge-warning">Pending</span>
+      <span class="badge badge-secondary">LOI Draft</span>
+      <span class="badge badge-danger">Overdue</span>
     </div>
     <p class="gap-note">GLM's real statuses (Approved, Denied, Pending, In Review, LOI Draft, Overdue, Cancelled…) need a documented status-to-semantic mapping so the same status always gets the same color. The pairings shown are illustrative, not ratified. This mapping is a design + domain decision, pending.</p>
   </div>
@@ -830,8 +943,8 @@
   <h3>Solid / white-text badges <span class="gap-flag">GAP — not in production</span></h3>
   <div class="gap-zone">
     <div class="cr">
-      <span class="badge rounded-pill" style="background:var(--colors-brand-primary-dark-blue);color:#fff">Primary</span>
-      <span class="badge rounded-pill" style="background:var(--colors-semantic-danger-500);color:#fff">Danger</span>
+      <span class="badge" style="background:var(--colors-brand-primary-dark-blue);color:#fff;border-radius:var(--radius-sm)">Primary</span>
+      <span class="badge" style="background:var(--colors-semantic-danger-500);color:#fff;border-radius:var(--radius-sm)">Danger</span>
     </div>
     <p class="gap-note">Production has no solid, white-text badge variant. Shown inline here only. Do not lift; use the subtle semantic badges above.</p>
   </div>
@@ -839,14 +952,58 @@
 
 <!-- ═══ ALERTS ═══ -->
 <section class="sec" id="alerts">
-  <h2>Alerts <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Contextual feedback messages.</p>
-  <div class="alert-t ap"><i class="fas fa-info-circle" style="margin-top:1px"></i> Informational alert.</div>
-  <div class="alert-t as"><i class="fas fa-check-circle" style="margin-top:1px"></i> Application submitted successfully.</div>
-  <div class="alert-t aw"><i class="fas fa-exclamation-triangle" style="margin-top:1px"></i> Past review deadline.</div>
-  <div class="alert-t ad"><i class="fas fa-times-circle" style="margin-top:1px"></i> Error processing payment.</div>
-  <div class="alert-t ai"><i class="fas fa-info-circle" style="margin-top:1px"></i> New grant cycle opens Jan 15.</div>
-  <div class="override-detail">Alert colors follow theme overrides. Background tints and text emphasis colors are all customized from MDB5 defaults.</div>
+  <h2>Alerts <span class="gap-flag">GAP — stock MDB today, Foundant treatment drafted here</span></h2>
+  <p class="sd">Contextual feedback messages. No <code>.alert</code> override exists anywhere in production — these currently ship as pure stock MDB defaults, which is why they read as generic/off-brand today.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>Inline contextual feedback: success, warning, danger, info.</td></tr>
+    <tr><th>Where</th><td>Real MDB <code>.alert.alert-*</code>, optionally <code>.alert-dismissible</code> with a stock <code>.btn-close</code>.</td></tr>
+    <tr><th>When</th><td>Page-level or form-level feedback that isn't tied to a single field (field errors use <code>.invalid-feedback</code>, not this).</td></tr>
+    <tr><th>Why</th><td>Mirrors the badge convention already ratified: a <code>-50</code> tint background with <code>--colors-brand-primary-dark-blue</code> text, since only the danger ramp is WCAG-validated past <code>-50</code> today (contract backlog #4).</td></tr>
+    <tr><th>How</th><td>Remaps <code>--mdb-alert-bg</code>, <code>-color</code>, <code>-border-color</code> per variant. No hardcoded hex.</td></tr>
+  </table>
+
+  <div class="gap-zone">
+    <div class="cr" style="flex-direction:column;align-items:stretch;gap:10px">
+      <div class="alert alert-success d-flex align-items-center" role="alert"><i class="fa-light fa-circle-check me-2"></i><strong class="me-1">Success:</strong>Application submitted successfully.</div>
+      <div class="alert alert-warning d-flex align-items-center" role="alert"><i class="fa-light fa-triangle-exclamation me-2"></i><strong class="me-1">Warning:</strong>Past review deadline.</div>
+      <div class="alert alert-danger d-flex align-items-center" role="alert"><i class="fa-light fa-circle-exclamation me-2"></i><strong class="me-1">Danger:</strong>Error processing payment.</div>
+      <div class="alert alert-info d-flex align-items-center alert-dismissible" role="alert"><i class="fa-light fa-circle-info me-2"></i><strong class="me-1">Info:</strong>New grant cycle opens Jan 15.<button type="button" class="btn-close" aria-label="Close"></button></div>
+    </div>
+    <div class="code-block">.alert-success {
+  --mdb-alert-bg: var(--colors-semantic-success-50);
+  --mdb-alert-color: var(--colors-brand-primary-dark-blue);
+  --mdb-alert-border-color: var(--colors-semantic-success-0);
+  background-color: var(--colors-semantic-success-50);
+  color: var(--colors-brand-primary-dark-blue);
+  border: 1px solid var(--colors-semantic-success-0);
+}
+.alert-warning {
+  --mdb-alert-bg: var(--colors-semantic-warning-50);
+  --mdb-alert-color: var(--colors-brand-primary-dark-blue);
+  --mdb-alert-border-color: var(--colors-semantic-warning-0);
+  background-color: var(--colors-semantic-warning-50);
+  color: var(--colors-brand-primary-dark-blue);
+  border: 1px solid var(--colors-semantic-warning-0);
+}
+.alert-danger {
+  --mdb-alert-bg: var(--colors-semantic-danger-50);
+  --mdb-alert-color: var(--colors-brand-primary-dark-blue);
+  --mdb-alert-border-color: var(--colors-semantic-danger-200);
+  background-color: var(--colors-semantic-danger-50);
+  color: var(--colors-brand-primary-dark-blue);
+  border: 1px solid var(--colors-semantic-danger-200);
+}
+.alert-info {
+  --mdb-alert-bg: var(--colors-semantic-info-90);
+  --mdb-alert-color: var(--colors-brand-primary-dark-blue);
+  --mdb-alert-border-color: var(--colors-semantic-info-50);
+  background-color: var(--colors-semantic-info-90);
+  color: var(--colors-brand-primary-dark-blue);
+  border: 1px solid var(--colors-semantic-info-50);
+}</div>
+    <p class="gap-note">Draft, not lifted from production evidence — no <code>.alert</code> customization exists today. Sets <code>background-color</code>/<code>color</code> directly in addition to the <code>--mdb-alert-*</code> custom properties, for the reason already established: MDB's stock <code>.alert-info</code> renders <code>#e5f4f8</code>/<code>#3b7e94</code> (its own built-in subtle-info colors) regardless of the custom-property override. Border uses the full <code>border: 1px solid ...</code> shorthand rather than only <code>border-color</code>, since MDB's base <code>.alert</code> may not itself set a visible border-width — same defensive pattern as the color fix. Needs engineering review before it round-trips into <code>mdb-customizations.css</code>. Backlog item. <code>alert-info</code> uses <code>-90</code>/<code>-50</code> rather than <code>-50</code>/<code>-0</code> like its siblings — <code>info-50</code> is noticeably more saturated than <code>success-50</code>/<code>warning-50</code> and duplicates <code>--colors-brand-secondary-light-blue</code> (the sidenav active-state color); <code>-90</code> matches the paleness of the other three.</p>
+  </div>
 </section>
 
 <!-- ═══ TABLES ═══ -->
@@ -1112,10 +1269,10 @@
 
       <div class="cm-filter-bar">
         <span>Show:</span>
-        <button class="cm-filter-btn active" onclick="filterMatrix('All',this)">All</button>
-        <button class="cm-filter-btn" onclick="filterMatrix('AA Pass',this)">AA Pass</button>
-        <button class="cm-filter-btn" onclick="filterMatrix('AA Large',this)">AA Large</button>
-        <button class="cm-filter-btn" onclick="filterMatrix('Fail',this)">Fail</button>
+        <button class="cm-filter-btn active" onclick="filterMatrix('All',this,'danger')">All</button>
+        <button class="cm-filter-btn" onclick="filterMatrix('AA Pass',this,'danger')">AA Pass</button>
+        <button class="cm-filter-btn" onclick="filterMatrix('AA Large',this,'danger')">AA Large</button>
+        <button class="cm-filter-btn" onclick="filterMatrix('Fail',this,'danger')">Fail</button>
       </div>
 
       <div class="cm-legend">
@@ -1125,14 +1282,104 @@
       </div>
 
       <div style="overflow-x:auto">
-        <table class="cm-table" id="matrixTable"></table>
+        <table class="cm-table" id="dangerMatrixTable"></table>
       </div>
 
       <div class="cm-summary">
         <div class="cm-summary-title">AA Pass count per background</div>
-        <div class="cm-summary-row" id="matrixSummary"></div>
+        <div class="cm-summary-row" id="dangerMatrixSummary"></div>
       </div>
 
+      <p style="font-size:9px;color:#9ca3af;margin:12px 0 0">Columns = foreground · Rows = background</p>
+    </div>
+  </div>
+</div>
+
+<div class="cm-overlay" id="successMatrix" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="cm-modal">
+    <div class="cm-modal-header">
+      <h3>Success Color Contrast Matrix <span class="gap-flag" style="margin-left:6px">PROPOSED</span></h3>
+      <button class="cm-modal-close" onclick="document.getElementById('successMatrix').classList.remove('open')">&times;</button>
+    </div>
+    <div class="cm-modal-body">
+      <p style="font-size:11px;color:#6b7280;margin:0 0 12px">Every foreground × background pairing · WCAG 2.2 AA · pending team review</p>
+      <div class="cm-filter-bar">
+        <span>Show:</span>
+        <button class="cm-filter-btn active" onclick="filterMatrix('All',this,'success')">All</button>
+        <button class="cm-filter-btn" onclick="filterMatrix('AA Pass',this,'success')">AA Pass</button>
+        <button class="cm-filter-btn" onclick="filterMatrix('AA Large',this,'success')">AA Large</button>
+        <button class="cm-filter-btn" onclick="filterMatrix('Fail',this,'success')">Fail</button>
+      </div>
+      <div class="cm-legend">
+        <div class="cm-legend-item"><div class="cm-legend-dot" style="background:#dcfce7;border:1px solid #16653433"></div><span style="color:#166534">AA Pass ≥4.5:1</span></div>
+        <div class="cm-legend-item"><div class="cm-legend-dot" style="background:#fef9c3;border:1px solid #854d0e33"></div><span style="color:#854d0e">AA Large ≥3:1</span></div>
+        <div class="cm-legend-item"><div class="cm-legend-dot" style="background:#fee2e2;border:1px solid #991b1b33"></div><span style="color:#991b1b">Fail &lt;3:1</span></div>
+      </div>
+      <div style="overflow-x:auto"><table class="cm-table" id="successMatrixTable"></table></div>
+      <div class="cm-summary">
+        <div class="cm-summary-title">AA Pass count per background</div>
+        <div class="cm-summary-row" id="successMatrixSummary"></div>
+      </div>
+      <p style="font-size:9px;color:#9ca3af;margin:12px 0 0">Columns = foreground · Rows = background</p>
+    </div>
+  </div>
+</div>
+
+<div class="cm-overlay" id="warningMatrix" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="cm-modal">
+    <div class="cm-modal-header">
+      <h3>Warning Color Contrast Matrix <span class="gap-flag" style="margin-left:6px">PROPOSED</span></h3>
+      <button class="cm-modal-close" onclick="document.getElementById('warningMatrix').classList.remove('open')">&times;</button>
+    </div>
+    <div class="cm-modal-body">
+      <p style="font-size:11px;color:#6b7280;margin:0 0 12px">Every foreground × background pairing · WCAG 2.2 AA · pending team review</p>
+      <div class="cm-filter-bar">
+        <span>Show:</span>
+        <button class="cm-filter-btn active" onclick="filterMatrix('All',this,'warning')">All</button>
+        <button class="cm-filter-btn" onclick="filterMatrix('AA Pass',this,'warning')">AA Pass</button>
+        <button class="cm-filter-btn" onclick="filterMatrix('AA Large',this,'warning')">AA Large</button>
+        <button class="cm-filter-btn" onclick="filterMatrix('Fail',this,'warning')">Fail</button>
+      </div>
+      <div class="cm-legend">
+        <div class="cm-legend-item"><div class="cm-legend-dot" style="background:#dcfce7;border:1px solid #16653433"></div><span style="color:#166534">AA Pass ≥4.5:1</span></div>
+        <div class="cm-legend-item"><div class="cm-legend-dot" style="background:#fef9c3;border:1px solid #854d0e33"></div><span style="color:#854d0e">AA Large ≥3:1</span></div>
+        <div class="cm-legend-item"><div class="cm-legend-dot" style="background:#fee2e2;border:1px solid #991b1b33"></div><span style="color:#991b1b">Fail &lt;3:1</span></div>
+      </div>
+      <div style="overflow-x:auto"><table class="cm-table" id="warningMatrixTable"></table></div>
+      <div class="cm-summary">
+        <div class="cm-summary-title">AA Pass count per background</div>
+        <div class="cm-summary-row" id="warningMatrixSummary"></div>
+      </div>
+      <p style="font-size:9px;color:#9ca3af;margin:12px 0 0">Columns = foreground · Rows = background · warning never reaches AA Pass without leaving the amber hue family — see note in Colors section</p>
+    </div>
+  </div>
+</div>
+
+<div class="cm-overlay" id="infoMatrix" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="cm-modal">
+    <div class="cm-modal-header">
+      <h3>Info Color Contrast Matrix <span class="gap-flag" style="margin-left:6px">PROPOSED</span></h3>
+      <button class="cm-modal-close" onclick="document.getElementById('infoMatrix').classList.remove('open')">&times;</button>
+    </div>
+    <div class="cm-modal-body">
+      <p style="font-size:11px;color:#6b7280;margin:0 0 12px">Every foreground × background pairing · WCAG 2.2 AA · pending team review</p>
+      <div class="cm-filter-bar">
+        <span>Show:</span>
+        <button class="cm-filter-btn active" onclick="filterMatrix('All',this,'info')">All</button>
+        <button class="cm-filter-btn" onclick="filterMatrix('AA Pass',this,'info')">AA Pass</button>
+        <button class="cm-filter-btn" onclick="filterMatrix('AA Large',this,'info')">AA Large</button>
+        <button class="cm-filter-btn" onclick="filterMatrix('Fail',this,'info')">Fail</button>
+      </div>
+      <div class="cm-legend">
+        <div class="cm-legend-item"><div class="cm-legend-dot" style="background:#dcfce7;border:1px solid #16653433"></div><span style="color:#166534">AA Pass ≥4.5:1</span></div>
+        <div class="cm-legend-item"><div class="cm-legend-dot" style="background:#fef9c3;border:1px solid #854d0e33"></div><span style="color:#854d0e">AA Large ≥3:1</span></div>
+        <div class="cm-legend-item"><div class="cm-legend-dot" style="background:#fee2e2;border:1px solid #991b1b33"></div><span style="color:#991b1b">Fail &lt;3:1</span></div>
+      </div>
+      <div style="overflow-x:auto"><table class="cm-table" id="infoMatrixTable"></table></div>
+      <div class="cm-summary">
+        <div class="cm-summary-title">AA Pass count per background</div>
+        <div class="cm-summary-row" id="infoMatrixSummary"></div>
+      </div>
       <p style="font-size:9px;color:#9ca3af;margin:12px 0 0">Columns = foreground · Rows = background</p>
     </div>
   </div>
@@ -1165,6 +1412,24 @@
     { step: 600, hex: '#A33230' }, { step: 700, hex: '#882927' }, { step: 800, hex: '#6B1F1E' },
     { step: 900, hex: '#4D1514' }
   ];
+  var successPalette = [
+    { step: 50, hex: '#E1F5EB' }, { step: 100, hex: '#C7ECDA' }, { step: 200, hex: '#AAE3C8' },
+    { step: 300, hex: '#8DDAB5' }, { step: 400, hex: '#7CD5AB' }, { step: 500, hex: '#67CF9D' },
+    { step: 600, hex: '#4CC88C' }, { step: 700, hex: '#37B87A' }, { step: 800, hex: '#2E9C67' },
+    { step: 900, hex: '#20794E' }
+  ];
+  var warningPalette = [
+    { step: 50, hex: '#FFF4D1' }, { step: 100, hex: '#FEE9B7' }, { step: 200, hex: '#FCDF9D' },
+    { step: 300, hex: '#F9D583' }, { step: 400, hex: '#F7D074' }, { step: 500, hex: '#F4C862' },
+    { step: 600, hex: '#F3BD41' }, { step: 700, hex: '#F1B21E' }, { step: 800, hex: '#DD9E0C' },
+    { step: 900, hex: '#B98408' }
+  ];
+  var infoPalette = [
+    { step: 50, hex: '#D5E2FA' }, { step: 100, hex: '#ACCCEF' }, { step: 200, hex: '#86B0DB' },
+    { step: 300, hex: '#6893C1' }, { step: 400, hex: '#5983AE' }, { step: 500, hex: '#536E8A' },
+    { step: 600, hex: '#455D75' }, { step: 700, hex: '#374B5F' }, { step: 800, hex: '#293848' },
+    { step: 900, hex: '#19242F' }
+  ];
 
   function lum(hex) {
     var r = parseInt(hex.slice(1, 3), 16) / 255;
@@ -1185,12 +1450,15 @@
     return { label: 'Fail', bg: '#fee2e2', color: '#991b1b' };
   }
 
-  var currentFilter = 'All';
+  var matrixFilters = { danger: 'All', success: 'All', warning: 'All', info: 'All' };
+  var palettesByName = { danger: dangerPalette, success: successPalette, warning: warningPalette, info: infoPalette };
 
-  function buildMatrix() {
-    var p = dangerPalette;
-    var t = document.getElementById('matrixTable');
+  function buildMatrix(name) {
+    name = name || 'danger';
+    var p = palettesByName[name];
+    var t = document.getElementById(name + 'MatrixTable');
     if (!t) return;
+    var currentFilter = matrixFilters[name];
     var html = '<thead><tr><td style="width:62px"><div style="font-size:8px;color:#9ca3af;text-align:center;line-height:1.2">FG &rarr;<br>BG &darr;</div></td>';
     for (var h = 0; h < p.length; h++) {
       var s = p[h];
@@ -1225,7 +1493,7 @@
     html += '</tbody>';
     t.innerHTML = html;
 
-    var sum = document.getElementById('matrixSummary');
+    var sum = document.getElementById(name + 'MatrixSummary');
     if (sum) {
       var out = '';
       for (var k = 0; k < p.length; k++) {
@@ -1239,15 +1507,20 @@
     }
   }
 
-  function filterMatrix(f, btn) {
-    currentFilter = f;
-    var btns = document.querySelectorAll('.cm-filter-btn');
+  function filterMatrix(f, btn, name) {
+    name = name || 'danger';
+    matrixFilters[name] = f;
+    var bar = btn.parentNode;
+    var btns = bar.querySelectorAll('.cm-filter-btn');
     for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
     btn.classList.add('active');
-    buildMatrix();
+    buildMatrix(name);
   }
 
-  buildMatrix();
+  buildMatrix('danger');
+  buildMatrix('success');
+  buildMatrix('warning');
+  buildMatrix('info');
 
   /* Wrap every .code-block in a closed "View code example" disclosure.
      Reference-page furniture only — does not change the copy-paste markup itself. */

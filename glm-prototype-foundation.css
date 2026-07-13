@@ -94,6 +94,43 @@
   --colors-semantic-danger-800: #6B1F1E;
   --colors-semantic-danger-900: #4D1514;
 
+  /* PROPOSED — pending team review, NOT in foundant-tokens.css yet (contract
+     backlog #4). Existing -0/-50 anchors are untouched; -100 through -900 are
+     new, built with the same S/L curve methodology as the danger ramp above.
+     Contrast figures are against that same ramp's own -50, matching how danger
+     was validated. success-900 and info-600+ clear AA (4.5:1) for colored text;
+     warning cannot clear AA without leaving the amber hue family (reads as
+     brown/olive by the time it's dark enough) — keep warning text on navy. */
+  --colors-semantic-success-100: #C7ECDA; /* 1.12:1 on success-50 */
+  --colors-semantic-success-200: #AAE3C8; /* 1.27:1 */
+  --colors-semantic-success-300: #8DDAB5; /* 1.44:1 */
+  --colors-semantic-success-400: #7CD5AB; /* 1.54:1 */
+  --colors-semantic-success-500: #67CF9D; /* 1.68:1 — same as success-0 */
+  --colors-semantic-success-600: #4CC88C; /* 1.86:1 */
+  --colors-semantic-success-700: #37B87A; /* 2.22:1 */
+  --colors-semantic-success-800: #2E9C67; /* 3.04:1 */
+  --colors-semantic-success-900: #20794E; /* 4.73:1 — AA text on success-50 */
+
+  --colors-semantic-warning-100: #FEE9B7; /* 1.09:1 on warning-50 */
+  --colors-semantic-warning-200: #FCDF9D; /* 1.18:1 */
+  --colors-semantic-warning-300: #F9D583; /* 1.29:1 */
+  --colors-semantic-warning-400: #F7D074; /* 1.34:1 */
+  --colors-semantic-warning-500: #F4C862; /* 1.44:1 — same as warning-0 */
+  --colors-semantic-warning-600: #F3BD41; /* 1.57:1 */
+  --colors-semantic-warning-700: #F1B21E; /* 1.72:1 */
+  --colors-semantic-warning-800: #DD9E0C; /* 2.13:1 */
+  --colors-semantic-warning-900: #B98408; /* 3.00:1 — never clears AA, see note above */
+
+  --colors-semantic-info-100: #ACCCEF; /* 1.27:1 on info-50 */
+  --colors-semantic-info-200: #86B0DB; /* 1.74:1 */
+  --colors-semantic-info-300: #6893C1; /* 2.46:1 */
+  --colors-semantic-info-400: #5983AE; /* 3.05:1 */
+  --colors-semantic-info-500: #536E8A; /* 4.06:1 — same as info-0, just under AA */
+  --colors-semantic-info-600: #455D75; /* 5.23:1 — AA text on info-50 */
+  --colors-semantic-info-700: #374B5F; /* 6.89:1 */
+  --colors-semantic-info-800: #293848; /* 9.17:1 */
+  --colors-semantic-info-900: #19242F; /* 12.05:1 */
+
   /* links + radius */
   --colors-link-default: rgb(25, 118, 210);
   --colors-link-hover: rgb(35, 82, 124);
@@ -152,7 +189,7 @@ h6, .h6 { font-size: var(--h6-size); font-weight: var(--h-weight); }
   --mdb-secondary-color: var(--colors-primary-shades-40);
   --mdb-surface-color: var(--colors-brand-primary-dark-blue);
   --mdb-font-sans-serif: var(--body-font);
-  --mdb-link-color: var(--colors-link-default);
+  --mdb-link-color-rgb: var(--colors-brand-primary-dark-blue);
 }
 
 /* ---------------------------------------------------------------------------
@@ -435,18 +472,107 @@ header .navbar-nav a.nav-link:active {
 }
 
 /* ---------------------------------------------------------------------------
-   7. PILL BADGES  — RATIFIED from GLM.Summary.css.
+   7. PILL BADGES  — originally RATIFIED pill/uppercase from GLM.Summary.css.
+   GAP — intentional prototype departure, flagged not silent: shape changed to
+   rectangular (--radius-sm) since pill badges read too similar to pill buttons,
+   uppercase/letter-spacing removed per team request, and a saturated border
+   added per variant for contrast against white. Needs engineering review
+   before it round-trips into GLM.Summary.css. See contract backlog.
    The status->semantic mapping (contract gap #6) is documented in the contract;
    apply these four backgrounds via the mapping rather than inventing names.
    --------------------------------------------------------------------------- */
 .badge-success, .badge-warning, .badge-danger, .badge-secondary {
-  display: inline-block; padding: 4px 10px; border-radius: 999px;
-  font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+  display: inline-block; padding: 4px 10px; border-radius: var(--radius-sm);
+  font-size: 12px; font-weight: 600;
 }
-.badge-success { background-color: var(--colors-semantic-success-50); color: var(--colors-brand-primary-dark-blue); }
-.badge-warning { background-color: var(--colors-semantic-warning-50); color: var(--colors-brand-primary-dark-blue); }
-.badge-danger  { background-color: var(--colors-semantic-danger-50);  color: var(--colors-brand-primary-dark-blue); }
-.badge-secondary { background-color: var(--colors-neutral-70); color: var(--colors-neutral-30); }
+.badge-success { background-color: var(--colors-semantic-success-50); color: var(--colors-brand-primary-dark-blue); border: 1px solid var(--colors-semantic-success-0); }
+.badge-warning { background-color: var(--colors-semantic-warning-50); color: var(--colors-brand-primary-dark-blue); border: 1px solid var(--colors-semantic-warning-0); }
+.badge-danger  { background-color: var(--colors-semantic-danger-50);  color: var(--colors-brand-primary-dark-blue); border: 1px solid var(--colors-semantic-danger-200); }
+.badge-secondary { background-color: var(--colors-neutral-70); color: var(--colors-neutral-30); border: 1px solid var(--colors-neutral-40); }
+
+/* ---------------------------------------------------------------------------
+   7b. ALERTS  — GAP, DRAFT. No .alert override exists anywhere in production;
+   these ship as pure stock MDB defaults today. Mirrors the badge convention
+   already ratified above (-50 tint background, primary-dark-blue text) since
+   only the danger ramp is WCAG-validated past -50 (contract backlog #4).
+   Needs engineering review before it round-trips into mdb-customizations.css.
+   --------------------------------------------------------------------------- */
+.alert-success {
+  --mdb-alert-bg: var(--colors-semantic-success-50);
+  --mdb-alert-color: var(--colors-brand-primary-dark-blue);
+  --mdb-alert-border-color: var(--colors-semantic-success-0);
+  background-color: var(--colors-semantic-success-50);
+  color: var(--colors-brand-primary-dark-blue);
+  border: 1px solid var(--colors-semantic-success-0);
+}
+.alert-warning {
+  --mdb-alert-bg: var(--colors-semantic-warning-50);
+  --mdb-alert-color: var(--colors-brand-primary-dark-blue);
+  --mdb-alert-border-color: var(--colors-semantic-warning-0);
+  background-color: var(--colors-semantic-warning-50);
+  color: var(--colors-brand-primary-dark-blue);
+  border: 1px solid var(--colors-semantic-warning-0);
+}
+.alert-danger {
+  --mdb-alert-bg: var(--colors-semantic-danger-50);
+  --mdb-alert-color: var(--colors-brand-primary-dark-blue);
+  --mdb-alert-border-color: var(--colors-semantic-danger-200);
+  background-color: var(--colors-semantic-danger-50);
+  color: var(--colors-brand-primary-dark-blue);
+  border: 1px solid var(--colors-semantic-danger-200);
+}
+.alert-info {
+  --mdb-alert-bg: var(--colors-semantic-info-90);
+  --mdb-alert-color: var(--colors-brand-primary-dark-blue);
+  --mdb-alert-border-color: var(--colors-semantic-info-50);
+  background-color: var(--colors-semantic-info-90);
+  color: var(--colors-brand-primary-dark-blue);
+  border: 1px solid var(--colors-semantic-info-50);
+}
+
+/* ---------------------------------------------------------------------------
+   7c. TABS  — GAP, DRAFT. No .nav-tabs override exists anywhere in production;
+   ships as pure stock MDB defaults today. Active/hover treatment matches the
+   state-layer + primary-dark-blue convention already ratified for .kebab-btn
+   and the navbar hover fix. Needs engineering review before it round-trips
+   into mdb-customizations.css.
+   --------------------------------------------------------------------------- */
+.nav-tabs {
+  --mdb-nav-tabs-border-color: var(--colors-borders-divider);
+  --mdb-nav-tabs-link-active-color: var(--colors-brand-primary-dark-blue);
+  --mdb-nav-tabs-link-active-border-color: transparent transparent var(--colors-brand-primary-dark-blue);
+  border-bottom-color: var(--colors-borders-divider);
+}
+.nav-tabs .nav-link {
+  --mdb-nav-link-color: var(--colors-neutral-40);
+  color: var(--colors-neutral-40);
+  font-weight: 500;
+  border-radius: 0;
+  text-transform: none;
+}
+.nav-tabs .nav-link:hover {
+  background-color: var(--colors-state-layers-light-hover);
+  border-color: transparent;
+  color: var(--colors-brand-primary-dark-blue);
+}
+.nav-tabs .nav-link.active {
+  color: var(--colors-brand-primary-dark-blue);
+  font-weight: 700;
+  border-bottom: 2px solid var(--colors-brand-primary-dark-blue);
+}
+.nav-pills .nav-link {
+  --mdb-nav-pills-link-active-bg: var(--colors-brand-primary-dark-blue);
+  border-radius: var(--radius-round);
+  color: var(--colors-neutral-40);
+  font-weight: 500;
+  text-transform: none;
+}
+.nav-pills .nav-link:hover { background-color: var(--colors-state-layers-light-hover); color: var(--colors-brand-primary-dark-blue); }
+.nav-pills .nav-link.active {
+  background-color: var(--colors-brand-primary-dark-blue);
+  color: var(--colors-neutral-100);
+  font-weight: 700;
+}
 
 /* ---------------------------------------------------------------------------
    8. GLOBAL TOAST  — RATIFIED from mdb-customizations.css
