@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLM Homepage · PI-28 Single Version</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --font-body: Roboto, sans-serif;
+  --app-bg: #F5F5F5;
+  --surface: #FFFFFF;
+  --primary: #2D3B4A;
+  --primary-hover: #424F5C;
+  --outline-hover: #EAEAED;
+  --border-color: #E0E0E0;
+  --radius: 6px;
+  --form-radius: 4px;
+  --pill: 999px;
+  --sidebar-active: #D5E2FA;
+  --sidebar-hover: #F5F5F5;
+  --link: #1B76D2;
+  --gap: 16px;
+  --nav-height: 55px;
+  --success-bg: #E1F5EB; --success-fg: #2A8C5D;
+  --danger-bg:  #FCDDDD; --danger-fg:  #BD3B39;
+  --warning-bg: #FFF4D1; --warning-fg: #C47F1A;
+  --info-bg:    #D5E2FA; --info-fg:    #536E8A;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); font-size: 14px; background: var(--app-bg); color: var(--primary); min-height: 100vh; }
+h1 { font-weight: 500; font-size: 1.75rem; color: var(--primary); }
+h2 { font-weight: 500; font-size: 1.25rem; color: var(--primary); }
+h3 { font-weight: 500; font-size: 1rem; color: var(--primary); }
+a  { color: var(--link); text-decoration: none; }
+
+/* ── Navbar ── */
+.ft-navbar {
+  background: var(--surface); border-bottom: 1px solid var(--border-color);
+  height: var(--nav-height); padding: 0 20px;
+  display: flex; align-items: center; gap: 18px;
+  position: sticky; top: 0; z-index: 200;
+}
+.ft-navbar__logo {
+  width: 36px; height: 36px; background: var(--primary); border-radius: var(--radius);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 11px; color: #fff; flex-shrink: 0;
+}
+.ft-navbar__item {
+  font-weight: 500; font-size: 0.78rem; color: var(--primary);
+  text-transform: uppercase; background: none; border: none; cursor: pointer;
+  white-space: nowrap; display: flex; align-items: center; gap: 3px;
+}
+/* Workload hub trigger lives in the nav; the slide-out is reachable from every page */
+.ft-navbar__hub {
+  font-weight: 500; font-size: 0.78rem; color: var(--primary);
+  text-transform: uppercase; background: none; cursor: pointer;
+  white-space: nowrap; display: flex; align-items: center; gap: 5px;
+  padding: 5px 10px; border-radius: var(--form-radius);
+  border: 1px solid var(--border-color);
+}
+.ft-navbar__hub:hover { background: var(--sidebar-hover); }
+.ft-navbar__hub i { font-size: 13px; }
+.ft-navbar__hub .hub-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--danger-fg); }
+.ft-navbar__search {
+  flex: 1; max-width: 380px; border: 1px solid var(--border-color);
+  border-radius: var(--form-radius); padding: 5px 12px;
+  display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: #bbb;
+}
+.ft-navbar__spacer { flex: 1; }
+.ft-navbar__role {
+  font-weight: 500; font-size: 0.78rem; color: var(--primary);
+  background: none; border: none; cursor: pointer;
+  display: flex; align-items: center; gap: 3px; white-space: nowrap;
+}
+.ft-navbar__utils { display: flex; align-items: center; gap: 14px; }
+.ft-navbar__utils i { font-size: 16px; cursor: pointer; color: var(--primary); }
+
+/* ── Main (full width, no sidebar) ── */
+.ft-main { max-width: 1180px; margin: 0 auto; }
+.ft-content { padding: 8px 24px 40px; }
+
+/* ── Page header: greeting + actions ── */
+.ft-page-head {
+  padding: 20px 24px 6px; display: flex; align-items: flex-start;
+  justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  max-width: 1180px; margin: 0 auto;
+}
+.ft-greeting-sub { font-size: 0.82rem; color: #888; margin-top: 4px; }
+.ft-greeting-sub strong { color: var(--primary); font-weight: 500; }
+.ft-page-head__actions { display: flex; gap: 8px; align-items: center; }
+
+.customize-hint {
+  display: none; align-items: center; gap: 8px;
+  margin: 0 0 var(--gap); padding: 9px 14px;
+  background: #EEF4FC; border: 1px solid #C9DDF6;
+  border-radius: var(--radius); font-size: 0.78rem; color: var(--info-fg);
+}
+body.customizing .customize-hint { display: flex; }
+
+/* ── Bento ── */
+.ft-bento {
+  background: var(--surface); border: 1px solid var(--border-color);
+  border-radius: var(--radius); padding: 16px; position: relative;
+}
+.ft-bento__header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 12px; }
+.ft-bento__title { font-size: 1.1rem; font-weight: 500; }
+.ft-bento__actions { display: flex; gap: 10px; align-items: center; }
+.ft-bento__link { font-size: 0.75rem; color: var(--link); cursor: pointer; white-space: nowrap; }
+.ft-bento__updated { font-size: 0.72rem; color: #aaa; white-space: nowrap; }
+
+/* remove/handle chrome shown only in customize mode */
+.bento-chrome { display: none; position: absolute; top: -28px; right: 0; gap: 4px; z-index: 6; }
+body.customizing .bento-chrome { display: flex; }
+body.customizing .customizable { outline: 1px dashed #9BBEE8; outline-offset: 2px; }
+.bento-chrome__btn {
+  width: 22px; height: 22px; border-radius: 4px; border: 1px solid var(--border-color);
+  background: var(--surface); color: #888; cursor: pointer; font-size: 11px;
+  display: flex; align-items: center; justify-content: center;
+}
+.bento-chrome__btn:hover { color: var(--danger-fg); border-color: var(--danger-fg); }
+.bento-chrome__btn.handle { cursor: grab; }
+
+/* ── Buttons ── */
+.btn-ft-filled, .btn-ft-outline {
+  border-radius: var(--pill); font-family: var(--font-body); font-weight: 500;
+  cursor: pointer; border: 2px solid var(--primary);
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.72rem; padding: 4px 13px 3px;
+}
+.btn-ft-filled { background: var(--primary); color: #fff; }
+.btn-ft-filled:hover { background: var(--primary-hover); }
+.btn-ft-outline { background: transparent; color: var(--primary); }
+.btn-ft-outline:hover { background: var(--outline-hover); }
+
+/* ── Badge ── */
+.ft-badge {
+  display: inline-block; border-radius: var(--pill); font-size: 0.68rem;
+  font-weight: 500; padding: 2px 9px; white-space: nowrap;
+}
+.ft-badge--success { background: var(--success-bg); color: var(--success-fg); }
+.ft-badge--danger  { background: var(--danger-bg); color: var(--danger-fg); }
+.ft-badge--warning { background: var(--warning-bg); color: var(--warning-fg); }
+.ft-badge--info    { background: var(--info-bg); color: var(--info-fg); }
+.ft-badge--neutral { background: #F0F0F0; color: #777; }
+
+/* ── Foundation impact stat block ── */
+.impact-grid { display: grid; grid-template-columns: 1fr 1fr; margin-top: 4px; }
+.impact-cell { padding: 20px 20px; }
+.impact-cell:nth-child(odd)  { border-right: 1px solid var(--border-color); padding-left: 0; }
+.impact-cell:nth-child(even) { padding-right: 0; }
+.impact-cell:nth-child(1), .impact-cell:nth-child(2) { border-bottom: 1px solid var(--border-color); }
+.impact-cell__label { font-size: 0.78rem; color: #888; margin-bottom: 8px; }
+.impact-cell__value { font-size: 2rem; font-weight: 500; color: var(--primary); line-height: 1.1; }
+.impact-cell--accent .impact-cell__value { color: #185FA5; }
+
+/* ── Chart container: FIXED height so layout never reflows on paint ── */
+.chart-box { position: relative; width: 100%; }
+.chart-box--md { height: 240px; }
+.chart-box--sm { height: 200px; }
+.chart-box--lg { height: 300px; }
+
+/* ── Foundation pulse ── */
+.pulse-stats { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--border-color); border-radius: var(--radius); overflow: hidden; margin: 4px 0 14px; }
+.pulse-stat { padding: 14px 16px; border-right: 1px solid var(--border-color); }
+.pulse-stat:last-child { border-right: none; }
+.pulse-stat__value { font-size: 1.6rem; font-weight: 500; color: var(--primary); line-height: 1.1; }
+.pulse-stat__value--up { color: var(--success-fg); }
+.pulse-stat__label { font-size: 0.72rem; color: #888; margin-top: 4px; }
+.pulse-narrative { font-size: 0.84rem; color: #555; line-height: 1.5; }
+.pulse-narrative strong { color: var(--primary); font-weight: 700; }
+
+/* ── Needs your attention (nudge rows) ── */
+.nudge-row { display: flex; align-items: flex-start; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--border-color); }
+.nudge-row:last-child { border-bottom: none; padding-bottom: 0; }
+.nudge-icon {
+  width: 30px; height: 30px; border-radius: var(--form-radius);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px; font-size: 13px;
+}
+.nudge-icon--danger  { background: var(--danger-bg); color: var(--danger-fg); }
+.nudge-icon--warning { background: var(--warning-bg); color: var(--warning-fg); }
+.nudge-icon--info    { background: var(--info-bg); color: var(--info-fg); }
+.nudge-icon--success { background: var(--success-bg); color: var(--success-fg); }
+.nudge-body { flex: 1; }
+.nudge-body__sentence { font-size: 0.84rem; color: var(--primary); line-height: 1.45; }
+.nudge-body__sentence strong { font-weight: 700; }
+.nudge-body__action { font-size: 0.76rem; color: var(--link); margin-top: 3px; cursor: pointer; display: inline-block; }
+.nudge-body__action:hover { text-decoration: underline; }
+
+/* ── Workload bento (PRESERVED): four stage cards with sub-status rows ── */
+.wl-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap); }
+.wl-card { border: 1px solid var(--border-color); border-radius: var(--radius); padding: 14px 16px; display: flex; flex-direction: column; min-width: 0; }
+.wl-card__head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.wl-card__icon { font-size: 15px; flex-shrink: 0; }
+.wl-card__icon--neutral,
+.wl-card__icon--amber,
+.wl-card__icon--green,
+.wl-card__icon--red { color: var(--primary); }
+.wl-card__title { font-size: 1.05rem; font-weight: 500; color: var(--primary); }
+.wl-card__open { margin-left: auto; font-size: 0.74rem; color: #888; white-space: nowrap; flex-shrink: 0; }
+.wl-card__open--alert { color: var(--danger-fg); font-weight: 500; }
+.wl-sub { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid var(--border-color); font-size: 0.82rem; cursor: pointer; gap: 8px; }
+.wl-sub:last-child { border-bottom: none; }
+.wl-sub__name { color: var(--link); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wl-sub:hover .wl-sub__name { text-decoration: underline; }
+.wl-sub__name--muted { color: #9aa5b1; cursor: default; }
+.wl-sub:hover .wl-sub__name--muted { text-decoration: none; }
+.wl-sub__count { background: var(--primary); color: #fff; border-radius: var(--pill); font-size: 0.64rem; font-weight: 700; padding: 1px 9px; min-width: 26px; text-align: center; flex-shrink: 0; }
+.wl-sub__count--alert { background: var(--danger-fg); }
+.wl-sub__count--zero  { background: #E4E4E4; color: #9aa5b1; }
+
+/* ── Filter by process (restored control from today's page) ── */
+.wl-filter { position: relative; }
+.wl-filter__btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-body); font-size: 0.72rem; color: var(--primary);
+  background: var(--surface); border: 1px solid var(--border-color);
+  border-radius: var(--pill); padding: 4px 12px; cursor: pointer;
+}
+.wl-filter__btn:hover { background: var(--sidebar-hover); }
+.wl-filter__btn i.fa-filter { color: #6B7785; }
+.wl-filter__menu {
+  display: none; position: absolute; right: 0; top: 120%;
+  background: var(--surface); border: 1px solid var(--border-color);
+  border-radius: var(--radius); box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  min-width: 210px; z-index: 30; padding: 4px;
+}
+.wl-filter.open .wl-filter__menu { display: block; }
+.wl-filter__opt { padding: 8px 10px; font-size: 0.8rem; border-radius: 4px; cursor: pointer; color: var(--primary); }
+.wl-filter__opt:hover { background: var(--sidebar-hover); }
+
+/* ── Active-work rollup: stage counts + clickable numbers ── */
+.proc-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+.proc-table th { font-size: 0.6rem; font-weight: 500; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; padding: 0 6px 8px; text-align: center; border-bottom: 1px solid var(--border-color); }
+.proc-table th:first-child { text-align: left; padding-left: 0; }
+.proc-table td { padding: 9px 6px; border-bottom: 1px solid var(--border-color); text-align: center; }
+.proc-table tr:last-child td { border-bottom: none; }
+.proc-table td:first-child { text-align: left; padding-left: 0; font-weight: 500; max-width: 220px; }
+.proc-chip { display: inline-flex; align-items: center; justify-content: center; min-width: 30px; padding: 2px 7px; border-radius: 3px; font-size: 0.7rem; font-weight: 500; cursor: pointer; }
+.proc-chip--n { background: #F0F0F0; color: #666; }
+.proc-chip--n:hover { background: var(--info-bg); color: var(--info-fg); }
+.proc-chip--alert { background: var(--danger-bg); color: var(--danger-fg); }
+.proc-chip--empty { color: #CCC; cursor: default; }
+.proc-more { text-align: center; font-size: 0.76rem; color: var(--link); padding-top: 10px; cursor: pointer; }
+.proc-more:hover { text-decoration: underline; }
+
+/* ── My Q (assigned to you) ── */
+.myq-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border-color); }
+.myq-row:last-child { border-bottom: none; padding-bottom: 0; }
+.myq-body { flex: 1; min-width: 0; }
+.myq-name { font-size: 0.84rem; font-weight: 500; color: var(--primary); }
+.myq-meta { font-size: 0.72rem; color: #888; margin-top: 1px; }
+.myq-assign {
+  display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
+  font-size: 0.72rem; color: var(--primary); cursor: pointer;
+  border: 1px solid var(--border-color); border-radius: var(--pill); padding: 3px 10px;
+}
+.myq-assign:hover { background: var(--sidebar-hover); }
+.myq-assign .avatar { width: 18px; height: 18px; border-radius: 50%; background: var(--info-bg); color: var(--info-fg); font-size: 0.6rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
+.myq-assign--empty { color: #888; border-style: dashed; }
+
+/* ── Generic quick-link list (workload shortcuts, payments) ── */
+.qlist__row { display: flex; align-items: center; gap: 11px; padding: 10px 0; border-bottom: 1px solid var(--border-color); cursor: pointer; }
+.qlist__row:last-child { border-bottom: none; padding-bottom: 0; }
+.qlist__row i { width: 18px; text-align: center; color: #9aa5b1; font-size: 14px; }
+.qlist__name { flex: 1; font-size: 0.84rem; color: var(--primary); }
+.qlist__row:hover .qlist__name { text-decoration: underline; }
+.qlist__count { background: var(--primary); color: #fff; border-radius: var(--pill); font-size: 0.62rem; font-weight: 700; padding: 1px 8px; min-width: 26px; text-align: center; }
+.qlist__count--alert { background: var(--danger-fg); }
+.qlist__amt { font-size: 0.82rem; font-weight: 500; color: var(--primary); }
+
+/* ── Map placeholder ── */
+.map-concept { display: grid; grid-template-columns: 1.5fr 1fr; gap: 16px; align-items: stretch; }
+.map-canvas { position: relative; height: 220px; border-radius: var(--radius); border: 1px solid var(--border-color); background: linear-gradient(135deg,#EAF1F8,#F4F7FB); overflow: hidden; }
+.map-pin { position: absolute; transform: translate(-50%,-100%); display: flex; flex-direction: column; align-items: center; }
+.map-pin i { color: var(--link); font-size: 17px; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.2)); }
+.map-pin span { font-size: 0.6rem; color: var(--primary); background: rgba(255,255,255,0.85); border-radius: 3px; padding: 0 4px; margin-top: 2px; white-space: nowrap; }
+.map-legend { display: flex; flex-direction: column; justify-content: center; }
+.map-legend__row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-color); font-size: 0.8rem; }
+.map-legend__row:last-child { border-bottom: none; }
+.map-legend__amt { font-weight: 500; }
+
+/* ── Grids ── */
+.g21 { display: grid; grid-template-columns: 2fr 1fr; gap: var(--gap); align-items: stretch; }
+.g2  { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); align-items: stretch; }
+
+/* ── Customizable single-column stack ── */
+/* ── Customizable row/slot grid ── */
+.custom-stack { display: flex; flex-direction: column; gap: var(--gap); margin-bottom: var(--gap); }
+.home-row { position: relative; display: flex; gap: var(--gap); align-items: stretch; }
+.home-row > .home-slot { min-width: 0; }
+.home-row[data-cols="1"] > .home-slot { flex: 1 1 100%; }
+.home-row[data-cols="2"] > .home-slot { flex: 1 1 0; }
+.home-row[data-cols="2"][data-ratio="33"] > .home-slot[data-slot="0"] { flex: 0 0 calc(33.333% - var(--gap)/2); }
+.home-row[data-cols="2"][data-ratio="67"] > .home-slot[data-slot="0"] { flex: 0 0 calc(66.667% - var(--gap)/2); }
+.home-row[data-cols="3"] > .home-slot { flex: 1 1 0; }
+.home-slot { display: flex; flex-direction: column; }
+.home-slot.ft-bento { transition: box-shadow 0.12s; }
+
+/* row toolbar (customize only) */
+.row-toolbar { display: none; }
+body.customizing .home-row:not(.fixed-row) { padding-top: 34px; }
+body.customizing .row-toolbar {
+  display: flex; align-items: center; gap: 8px;
+  position: absolute; top: 0; left: 0; height: 28px; z-index: 6;
+}
+.row-grip { cursor: grab; color: #9aa5b1; font-size: 13px; padding: 2px 4px; }
+.row-grip:hover { color: var(--primary); }
+.row-toolbar__label { font-size: 0.68rem; color: #9aa5b1; }
+.row-colctl { display: inline-flex; border: 1px solid var(--border-color); border-radius: var(--form-radius); overflow: hidden; background: var(--surface); }
+.row-colctl button { border: none; background: var(--surface); color: #777; cursor: pointer; font-family: var(--font-body); font-size: 0.7rem; padding: 3px 10px; border-right: 1px solid var(--border-color); }
+.row-colctl button:last-child { border-right: none; }
+.row-colctl button:hover { background: var(--sidebar-hover); }
+.row-colctl button.active { background: var(--primary); color: #fff; }
+
+/* row reorder cues */
+.home-row.dragging { opacity: 0.4; }
+.home-row.drop-before { box-shadow: 0 -3px 0 0 var(--link); }
+.home-row.drop-after  { box-shadow: 0 3px 0 0 var(--link); }
+
+/* ratio divider (2-col, customize only) */
+.row-divider { display: none; }
+body.customizing .home-row[data-cols="2"] .row-divider {
+  display: flex; align-items: center; justify-content: center;
+  position: absolute; top: 34px; bottom: 0; width: 16px; transform: translateX(-50%);
+  cursor: col-resize; z-index: 5;
+}
+.home-row[data-cols="2"][data-ratio="50"] .row-divider { left: 50%; }
+.home-row[data-cols="2"][data-ratio="33"] .row-divider { left: 33.333%; }
+.home-row[data-cols="2"][data-ratio="67"] .row-divider { left: 66.667%; }
+.row-divider::before { content: ''; width: 4px; height: 40px; border-radius: 2px; background: var(--link); opacity: 0.5; }
+.row-divider:hover::before, .row-divider.active::before { opacity: 1; }
+
+/* empty slot */
+.home-slot--empty { border: 2px dashed #C9DDF6; border-radius: var(--radius); background: #FBFDFF; align-items: center; justify-content: center; min-height: 130px; cursor: pointer; }
+.home-slot--empty:hover { background: #EEF4FC; }
+.home-slot--empty .slot-add { color: var(--info-fg); font-size: 0.85rem; font-weight: 500; }
+body:not(.customizing) .home-slot--empty { border-color: transparent; background: transparent; cursor: default; }
+body:not(.customizing) .home-slot--empty .slot-add { display: none; }
+
+/* add-a-bento tiles (customize only, top and bottom) */
+.add-bento-tile {
+  border: 2px dashed #C9DDF6; border-radius: var(--radius);
+  padding: 18px; text-align: center; color: var(--info-fg); cursor: pointer;
+  font-size: 0.85rem; font-weight: 500; background: #FBFDFF; display: none;
+}
+body.customizing .add-bento-tile { display: block; }
+.add-bento-tile:hover { background: #EEF4FC; }
+.add-bento-tile i { margin-right: 6px; }
+
+/* ── Slide-out panels (workload hub + add-bento menu share this chrome) ── */
+.hub-overlay { position: fixed; inset: 0; background: rgba(45,59,74,0.35); z-index: 500; opacity: 0; pointer-events: none; transition: opacity 0.18s; }
+.hub-overlay.open { opacity: 1; pointer-events: auto; }
+.hub-panel { position: fixed; top: 0; right: 0; height: 100vh; width: 380px; background: var(--surface); z-index: 600; box-shadow: -4px 0 24px rgba(0,0,0,0.16); transform: translateX(100%); transition: transform 0.22s ease; display: flex; flex-direction: column; }
+.hub-panel.open { transform: translateX(0); }
+.hub-panel__head { padding: 16px 18px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.hub-panel__head h2 { display: flex; align-items: center; gap: 8px; }
+.hub-panel__head h2 i { font-size: 0.8em; }
+.hub-panel__close { background: none; border: none; font-size: 18px; color: #888; cursor: pointer; }
+.hub-panel__body { padding: 8px 0; overflow-y: auto; flex: 1; }
+.hub-section-label { font-size: 1rem; font-weight: 500; color: var(--primary); padding: 14px 18px 4px; }
+.hub-section-label i { margin-right: 8px; font-size: 0.8em; color: var(--primary); }
+
+/* Fast custom tooltip for the Add bento menu (rendered on body, fixed, no delay) */
+.ft-tip {
+  position: fixed; z-index: 1000; display: none; max-width: 240px;
+  padding: 6px 10px; background: var(--primary); color: #fff;
+  font-size: 0.78rem; line-height: 1.35; border-radius: var(--form-radius);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.22); pointer-events: none;
+  opacity: 0; transition: opacity 0.06s ease;
+}
+.ft-tip.show { opacity: 1; }
+.hub-row { display: flex; align-items: center; gap: 11px; padding: 10px 18px; cursor: pointer; border-bottom: 1px solid #F2F2F2; }
+.hub-row:hover { background: var(--sidebar-hover); }
+.hub-row i { width: 18px; text-align: center; color: #9aa5b1; font-size: 14px; }
+.hub-row__name { flex: 1; font-size: 0.85rem; color: var(--primary); }
+.hub-row__sub { font-size: 0.7rem; color: #999; }
+.hub-row__count { background: var(--primary); color: #fff; border-radius: var(--pill); font-size: 0.62rem; font-weight: 700; padding: 1px 8px; min-width: 26px; text-align: center; }
+.hub-row__count--alert { background: var(--danger-fg); }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ NAVBAR ══════════════════ -->
+<nav class="ft-navbar">
+  <div class="ft-navbar__logo">FT</div>
+  <button class="ft-navbar__item">SEARCH <i class="fa-regular fa-chevron-down fa-xs"></i></button>
+  <button class="ft-navbar__item">TOOLS <i class="fa-regular fa-chevron-down fa-xs"></i></button>
+  <button class="ft-navbar__item">COMMUNICATIONS <i class="fa-regular fa-chevron-down fa-xs"></i></button>
+  <button class="ft-navbar__item">REPORTING <i class="fa-regular fa-chevron-down fa-xs"></i></button>
+  <div class="ft-navbar__search">
+    <i class="fa-regular fa-magnifying-glass" style="color:#bbb;font-size:13px"></i> search
+  </div>
+  <div class="ft-navbar__spacer"></div>
+  <!-- Workload hub trigger: workload reachable from ANY page, not just home -->
+  <button class="ft-navbar__hub" onclick="openHub()">
+    WORKLOAD <span class="hub-dot"></span>
+  </button>
+  <button class="ft-navbar__role">ROLE (ADMINISTRATOR) <i class="fa-regular fa-chevron-down fa-xs"></i></button>
+  <div class="ft-navbar__utils">
+    <i class="fa-regular fa-compass"></i>
+    <i class="fa-regular fa-lightbulb"></i>
+    <i class="fa-regular fa-gear"></i>
+    <i class="fa-regular fa-circle-user"></i>
+  </div>
+</nav>
+
+<!-- ══════════════════ SLIDE-OUT WORKLOAD HUB ══════════════════ -->
+<div class="hub-overlay" id="hub-overlay" onclick="closeHub()"></div>
+<aside class="hub-panel" id="hub-panel">
+  <div class="hub-panel__head">
+    <h2>Workload</h2>
+    <button class="hub-panel__close" onclick="closeHub()"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="hub-panel__body">
+    <h3 class="hub-section-label">Assigned to you</h3>
+    <div class="hub-row"><i class="fa-regular fa-user-check"></i><span class="hub-row__name">Your evaluations</span><span class="hub-row__count hub-row__count--alert">14</span></div>
+    <div class="hub-row"><i class="fa-regular fa-list-check"></i><span class="hub-row__name">Your follow-ups</span><span class="hub-row__count hub-row__count--alert">5</span></div>
+
+    <h3 class="hub-section-label">Workload grids</h3>
+    <div class="hub-row"><i class="fa-regular fa-file-lines"></i><span class="hub-row__name">LOI</span><span class="hub-row__count">7</span></div>
+    <div class="hub-row"><i class="fa-regular fa-file-contract"></i><span class="hub-row__name">Application</span><span class="hub-row__count">47</span></div>
+    <div class="hub-row"><i class="fa-regular fa-star-half-stroke"></i><span class="hub-row__name">Evaluation</span><span class="hub-row__count">22</span></div>
+    <div class="hub-row"><i class="fa-regular fa-gavel"></i><span class="hub-row__name">Approval / Decision</span><span class="hub-row__count">9</span></div>
+    <div class="hub-row"><i class="fa-regular fa-arrow-rotate-right"></i><span class="hub-row__name">Follow-up</span><span class="hub-row__count hub-row__count--alert">33</span></div>
+    <div class="hub-row"><i class="fa-regular fa-money-check-dollar"></i><span class="hub-row__name">Payment tracking</span><span class="hub-row__count">12</span></div>
+
+    <h3 class="hub-section-label">Search</h3>
+    <div class="hub-row"><i class="fa-regular fa-building"></i><span class="hub-row__name">Organizations</span></div>
+    <div class="hub-row"><i class="fa-regular fa-user"></i><span class="hub-row__name">Requests and decisions</span></div>
+  </div>
+</aside>
+
+<!-- ══════════════════ ADD-BENTO SLIDE-OUT MENU ══════════════════ -->
+<div class="hub-overlay" id="menu-overlay" onclick="closeBentoMenu()"></div>
+<aside class="hub-panel" id="menu-panel">
+  <div class="hub-panel__head">
+    <h2>Add a bento</h2>
+    <button class="hub-panel__close" onclick="closeBentoMenu()"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="hub-panel__body">
+    <h3 class="hub-section-label">Daily work</h3>
+    <div class="hub-row" tabindex="0" role="button" onclick="addModule('attention')" data-tip="The most time-sensitive items that need action now"><i class="fa-regular fa-bell"></i><span class="hub-row__name">Needs your attention</span></div>
+    <div class="hub-row" tabindex="0" role="button" onclick="addModule('myq')" data-tip="Follow-ups assigned to you, with quick assign to a teammate"><i class="fa-regular fa-user-check"></i><span class="hub-row__name">My Q <span class="hub-row__sub">(assigned to you)</span></span></div>
+    <div class="hub-row" tabindex="0" role="button" onclick="addModule('yourevals')" data-tip="Evaluations assigned to you across active cycles"><i class="fa-solid fa-star-half-stroke"></i><span class="hub-row__name">Your evaluations</span></div>
+    <div class="hub-row" tabindex="0" role="button" onclick="addModule('yourfu')" data-tip="Follow-ups you own, with due dates and status"><i class="fa-solid fa-arrow-rotate-right"></i><span class="hub-row__name">Your follow-ups</span></div>
+    <div class="hub-row" tabindex="0" role="button" onclick="addModule('active')" data-tip="Counts by stage for each active process"><i class="fa-regular fa-diagram-project"></i><span class="hub-row__name">Active work by process</span></div>
+    <div class="hub-row" tabindex="0" role="button" onclick="addModule('workshort')" data-tip="Quick links into each workload grid"><i class="fa-regular fa-layer-group"></i><span class="hub-row__name">Workload shortcuts</span></div>
+    <div class="hub-row" tabindex="0" role="button" onclick="addModule('payments')" data-tip="Scheduled payments due in the coming weeks"><i class="fa-regular fa-money-check-dollar"></i><span class="hub-row__name">Upcoming payments</span></div>
+
+    <h3 class="hub-section-label">Foundation Impact</h3>
+    <div class="hub-row" tabindex="0" role="button" onclick="addModule('impact')" data-tip="Headline totals for awarded, active grants, and submissions"><i class="fa-regular fa-hand-holding-dollar"></i><span class="hub-row__name">Foundation impact numbers</span></div>
+    <div class="hub-row" tabindex="0" role="button" onclick="addModule('pulse')" data-tip="A written summary of how this cycle is trending"><i class="fa-solid fa-wave-square"></i><span class="hub-row__name">Foundation pulse</span></div>
+
+    <h3 class="hub-section-label">Metrics</h3>
+    <div class="hub-row" tabindex="0" role="button" onclick="addModule('award')" data-tip="Total awarded per year over the last ten years"><i class="fa-solid fa-chart-column"></i><span class="hub-row__name">Amount Awarded</span></div>
+    <div class="hub-row" tabindex="0" role="button" onclick="addModule('recipients')" data-tip="Top ten grantees by amount in the last year"><i class="fa-solid fa-chart-bar"></i><span class="hub-row__name">Recipients</span></div>
+    <div class="hub-row" tabindex="0" role="button" onclick="addModule('instMonthly')" data-tip="Scheduled installment totals by month"><i class="fa-solid fa-chart-column"></i><span class="hub-row__name">Upcoming installments (monthly)</span></div>
+    <div class="hub-row" tabindex="0" role="button" onclick="addModule('instYearly')" data-tip="Scheduled installment totals by year"><i class="fa-solid fa-chart-column"></i><span class="hub-row__name">Upcoming installments (yearly)</span></div>
+    <div class="hub-row" tabindex="0" role="button" onclick="addModule('paymentsChart')" data-tip="Payments issued over the last twelve months"><i class="fa-solid fa-chart-column"></i><span class="hub-row__name">Payments</span></div>
+    <div class="hub-row" tabindex="0" role="button" onclick="addModule('decisions')" data-tip="Approval and denial rate over the last year"><i class="fa-solid fa-chart-pie"></i><span class="hub-row__name">Decisions</span></div>
+    <div class="hub-row" tabindex="0" role="button" onclick="addModule('overdueFu')" data-tip="Overdue follow-ups by month"><i class="fa-solid fa-chart-column"></i><span class="hub-row__name">Overdue follow-ups</span></div>
+    <div class="hub-row" tabindex="0" role="button" onclick="addModule('upcomingFu')" data-tip="Follow-ups coming due by month"><i class="fa-solid fa-chart-column"></i><span class="hub-row__name">Upcoming follow-ups</span></div>
+    <div class="hub-row" tabindex="0" role="button" onclick="addModule('subs')" data-tip="Eligibilities and applications submitted over time"><i class="fa-solid fa-chart-line"></i><span class="hub-row__name">Applicant submissions</span></div>
+    <div class="hub-row" tabindex="0" role="button" onclick="addModule('uniqueApplicants')" data-tip="Distinct applicants per year"><i class="fa-solid fa-chart-column"></i><span class="hub-row__name">Unique applicants</span></div>
+    <div class="hub-row" tabindex="0" role="button" onclick="addModule('focus')" data-tip="Share of funding across program areas"><i class="fa-solid fa-chart-pie"></i><span class="hub-row__name">Funding by focus area</span></div>
+    <div class="hub-row" tabindex="0" role="button" onclick="addModule('map')" data-tip="Where funding is going, by geography"><i class="fa-solid fa-map-location-dot"></i><span class="hub-row__name">Funding by location (map)</span></div>
+  </div>
+</aside>
+
+<!-- ══════════════════ HOMEPAGE ══════════════════ -->
+<div class="ft-page-head">
+  <div class="ft-page-head__left">
+    <h1 class="ft-greeting"></h1>
+    <div class="ft-greeting-sub">Cedar Ridge Foundation has moved <strong>$1.91M</strong> into the community this year.</div>
+  </div>
+  <div class="ft-page-head__actions">
+    <button class="btn-ft-outline" onclick="addBentoNewRow('bottom')"><i class="fa-solid fa-plus"></i> Add bento</button>
+    <button class="btn-ft-outline" id="customize-btn" onclick="toggleCustomizing()"><i class="fa-regular fa-table-cells-large"></i> <span id="customize-lbl">Customize</span></button>
+  </div>
+</div>
+
+<div class="ft-main">
+  <div class="ft-content">
+    <div class="customize-hint">
+      <i class="fa-regular fa-table-cells-large"></i>
+      <span>Add rows with Add a bento. Set a row to 1, 2, or 3 columns, and drag the divider on a 2-column row to change the split. Drag the grip to reorder rows. (Layout is a concept and is not saved.)</span>
+    </div>
+    <!-- Row/slot grid. Row 1 is the fixed Workload row; the rest is customizable. -->
+    <div class="custom-stack" id="home-stack"></div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════ Greeting (time-of-day, affirming, no jokes) ══════════════════ */
+function getGreeting(){var h=new Date().getHours();if(h>=5&&h<12)return'Good morning';if(h>=12&&h<17)return'Good afternoon';return'Good evening';}
+function setGreetings(){var g=getGreeting();var els=document.querySelectorAll('.ft-greeting');for(var i=0;i<els.length;i++)els[i].textContent=g;}
+
+/* ══════════════════ Workload bento (single source of truth) ══════════════════ */
+var WL_CARDS=[
+  {title:'LOI', icon:'fa-file-lines', tone:'neutral', open:7,
+   subs:[{name:'LOI Draft',count:6},{name:'LOI Submitted',count:0},{name:'LOI Complete',count:1},{name:'Evaluations Assigned',count:0},{name:'Evaluations Closed',count:1}]},
+  {title:'Application', icon:'fa-table-cells', tone:'amber', open:47,
+   subs:[{name:'Application Draft',count:26},{name:'Application Submitted',count:14},{name:'Application Complete',count:7},{name:'Evaluations Assigned',count:9},{name:'Evaluations Closed',count:5}]},
+  {title:'Decision', icon:'fa-table-cells', tone:'green', open:9,
+   subs:[{name:'Approval Draft',count:1},{name:'Approved',count:7},{name:'Denial Draft',count:1},{name:'Denied',count:0}]},
+  {title:'Follow Up', icon:'fa-table-cells', tone:'red', open:33, openAlert:true,
+   subs:[{name:'Follow Up Draft',count:21,alert:true},{name:'Follow Up Submitted',count:7},{name:'Follow Up Complete',count:5}]}
+];
+function procFilterHTML(){
+  var opts='<div class="wl-filter__opt" onclick="setProcFilter(this,\'All processes\')">All processes</div>';
+  for(var i=0;i<PROCESSES.length;i++){opts+='<div class="wl-filter__opt" onclick="setProcFilter(this,\''+PROCESSES[i].name+'\')">'+PROCESSES[i].name+'</div>';}
+  return '<div class="wl-filter">'+
+    '<button class="wl-filter__btn" onclick="toggleProcFilter(this)"><i class="fa-solid fa-filter"></i> <span class="wl-filter__label">All processes</span> <i class="fa-solid fa-chevron-down fa-2xs"></i></button>'+
+    '<div class="wl-filter__menu">'+opts+'</div></div>';
+}
+function wlBentoHTML(withChrome){
+  var chrome=withChrome?chromeHTML():'';
+  var cards='';
+  for(var i=0;i<WL_CARDS.length;i++){
+    var c=WL_CARDS[i];
+    var subs='';
+    for(var j=0;j<c.subs.length;j++){
+      var s=c.subs[j];
+      var isZero=(s.count===0);
+      var nameCls=isZero?'wl-sub__name wl-sub__name--muted':'wl-sub__name';
+      var cntCls=s.alert?'wl-sub__count--alert':(isZero?'wl-sub__count--zero':'');
+      subs+='<div class="wl-sub"><span class="'+nameCls+'">'+s.name+'</span><span class="wl-sub__count '+cntCls+'">'+s.count+'</span></div>';
+    }
+    cards+='<div class="wl-card">'+
+      '<div class="wl-card__head">'+
+        '<i class="fa-solid '+c.icon+' wl-card__icon wl-card__icon--'+c.tone+'"></i>'+
+        '<span class="wl-card__title">'+c.title+'</span>'+
+        '<span class="wl-card__open'+(c.openAlert?' wl-card__open--alert':'')+'">'+c.open+' open</span>'+
+      '</div>'+subs+'</div>';
+  }
+  return chrome+
+    '<div class="ft-bento__header"><h2 class="ft-bento__title">Workload</h2>'+
+      '<div class="ft-bento__actions">'+procFilterHTML()+'<span class="ft-bento__link">View all &rsaquo;</span></div>'+
+    '</div>'+
+    '<div class="wl-cards">'+cards+'</div>';
+}
+/* Filter by process: concept control. Selecting updates the label only. */
+function toggleProcFilter(btn){var f=btn.closest('.wl-filter');f.classList.toggle('open');}
+function setProcFilter(opt,name){
+  var f=opt.closest('.wl-filter');
+  f.querySelector('.wl-filter__label').textContent=name;
+  f.classList.remove('open');
+}
+document.addEventListener('click',function(e){
+  if(e.target.closest('.wl-filter'))return;
+  var open=document.querySelectorAll('.wl-filter.open');
+  for(var i=0;i<open.length;i++)open[i].classList.remove('open');
+});
+
+/* ══════════════════ Active-work rollup (clickable stage counts) ══════════════════ */
+var PROCESSES=[
+  {name:'2026 General Operating',loi:3,app:18,eval:9,dec:2,fu:11},
+  {name:'Spring Arts Initiative',loi:2,app:14,eval:13,dec:1,fu:8},
+  {name:'Youth Scholarship',loi:2,app:15,eval:0,dec:6,fu:14}
+];
+function procBentoHTML(){
+  var head='<div class="ft-bento__header"><h2 class="ft-bento__title">Active work</h2><span class="ft-bento__link">By process &rsaquo;</span></div>';
+  var t='<table class="proc-table"><thead><tr><th>Process</th><th>LOI</th><th>Application</th><th>Evaluations</th><th>Decisions</th><th>Follow Up</th></tr></thead><tbody>';
+  function chip(v,alert){if(v===0)return'<span class="proc-chip proc-chip--empty">&ndash;</span>';return'<span class="proc-chip '+(alert?'proc-chip--alert':'proc-chip--n')+'">'+v+'</span>';}
+  for(var i=0;i<PROCESSES.length && i<3;i++){
+    var p=PROCESSES[i];
+    t+='<tr><td>'+p.name+'</td><td>'+chip(p.loi)+'</td><td>'+chip(p.app)+'</td><td>'+chip(p.eval)+'</td><td>'+chip(p.dec)+'</td><td>'+chip(p.fu,p.fu>=10)+'</td></tr>';
+  }
+  t+='</tbody></table>';
+  return head+t+'<div class="proc-more">View all processes &rsaquo;</div>';
+}
+
+/* ══════════════════ Other module bodies ══════════════════ */
+function attentionHTML(){
+  return '<div class="ft-bento__header"><h2 class="ft-bento__title">4 things need your attention before end of week.</h2><span class="ft-bento__updated">Updated just now</span></div>'+
+    '<div class="nudge-row"><div class="nudge-icon nudge-icon--danger"><i class="fa-solid fa-file-circle-xmark"></i></div><div class="nudge-body"><div class="nudge-body__sentence"><strong>2 follow-up reports are more than 56 days overdue.</strong> Urban Greenways and Eastside Youth Coalition haven\'t submitted required progress reports.</div><span class="nudge-body__action">Review overdue items</span></div></div>'+
+    '<div class="nudge-row"><div class="nudge-icon nudge-icon--warning"><i class="fa-solid fa-clock"></i></div><div class="nudge-body"><div class="nudge-body__sentence"><strong>3 processes have decisions due in the next 14 days</strong> with no Approval Draft started yet.</div><span class="nudge-body__action">View pending decisions</span></div></div>'+
+    '<div class="nudge-row"><div class="nudge-icon nudge-icon--info"><i class="fa-solid fa-building"></i></div><div class="nudge-body"><div class="nudge-body__sentence"><strong>9 grantee organizations haven\'t had an interaction logged in 90+ days,</strong> including 3 with active awards.</div><span class="nudge-body__action">See organizations</span></div></div>'+
+    '<div class="nudge-row"><div class="nudge-icon nudge-icon--success"><i class="fa-solid fa-money-check-dollar"></i></div><div class="nudge-body"><div class="nudge-body__sentence"><strong>$47,500 in installment payments</strong> are scheduled in the next 30 days. Riverdale Community Health is the largest at $22,000.</div><span class="nudge-body__action">View installment schedule</span></div></div>';
+}
+/* My Q: assign a single follow-up to yourself or a teammate (not the whole request). */
+function myqHTML(){
+  function row(name,meta,who,initials,empty){
+    var assign=empty
+      ? '<span class="myq-assign myq-assign--empty"><i class="fa-regular fa-user-plus"></i> Assign</span>'
+      : '<span class="myq-assign"><span class="avatar">'+initials+'</span> '+who+' <i class="fa-solid fa-chevron-down fa-2xs"></i></span>';
+    return '<div class="myq-row"><div class="myq-body"><div class="myq-name">'+name+'</div><div class="myq-meta">'+meta+'</div></div>'+assign+'</div>';
+  }
+  return '<div class="ft-bento__header"><h2 class="ft-bento__title">My Q</h2><span class="ft-bento__link">View all &rsaquo;</span></div>'+
+    row('Q1 Progress Report follow-up','Urban Greenways · due in 3 days','You','ME',false)+
+    row('Budget revision follow-up','Riverside Youth · overdue 6 days','Sam O.','SO',false)+
+    row('Site visit summary follow-up','Delta Arts Collective · due in 8 days',null,null,true)+
+    row('Final narrative follow-up','Cedar Scholars · due in 12 days',null,null,true);
+}
+function workshortHTML(){
+  function row(icon,name,count,alert){
+    var badge=(count!==null&&count!==undefined)?'<span class="qlist__count'+(alert?' qlist__count--alert':'')+'">'+count+'</span>':'';
+    return '<div class="qlist__row"><i class="fa-regular '+icon+'"></i><span class="qlist__name">'+name+'</span>'+badge+'</div>';
+  }
+  return '<div class="ft-bento__header"><h2 class="ft-bento__title">Workload shortcuts</h2><span class="ft-bento__link">Open workload &rsaquo;</span></div>'+
+    row('fa-file-lines','LOI',7)+
+    row('fa-file-contract','Application',47)+
+    row('fa-star-half-stroke','Evaluation',22)+
+    row('fa-gavel','Approval / Decision',9)+
+    row('fa-arrow-rotate-right','Follow-up',33,true)+
+    row('fa-money-check-dollar','Payment tracking',12);
+}
+function paymentsHTML(){
+  function row(entity,due,amt,status,tone){
+    return '<div class="qlist__row"><i class="fa-regular fa-money-check-dollar"></i>'+
+      '<span class="qlist__name">'+entity+'<div class="myq-meta">Due '+due+'</div></span>'+
+      '<span class="ft-badge ft-badge--'+tone+'">'+status+'</span>'+
+      '<span class="qlist__amt">'+amt+'</span></div>';
+  }
+  return '<div class="ft-bento__header"><h2 class="ft-bento__title">Upcoming payments</h2><span class="ft-bento__link">Open payment tracking &rsaquo;</span></div>'+
+    row('Urban Greenways Initiative','Feb 3','$45,000','Scheduled','info')+
+    row('Riverside Youth Collective','Feb 10','$32,000','Pending','warning')+
+    row('Delta Arts Collective','Feb 14','$18,000','Scheduled','info')+
+    row('Cedar Scholars Fund','Feb 22','$55,000','Cleared','success');
+}
+function impactHTML(){
+  return '<div class="ft-bento__header"><h2 class="ft-bento__title">Foundation impact</h2></div>'+
+    '<div class="impact-grid">'+
+      '<div class="impact-cell"><div class="impact-cell__label">Awarded since founding</div><div class="impact-cell__value">$5.84M</div></div>'+
+      '<div class="impact-cell impact-cell--accent"><div class="impact-cell__label">Awarded this year</div><div class="impact-cell__value">$1.91M</div></div>'+
+      '<div class="impact-cell"><div class="impact-cell__label">Total grants awarded</div><div class="impact-cell__value">117</div></div>'+
+      '<div class="impact-cell"><div class="impact-cell__label">Grants this year</div><div class="impact-cell__value">70</div></div>'+
+    '</div>';
+}
+function mapHTML(){
+  function pin(l,t,label){return '<div class="map-pin" style="left:'+l+'%;top:'+t+'%"><i class="fa-solid fa-location-dot"></i><span>'+label+'</span></div>';}
+  function leg(name,amt){return '<div class="map-legend__row"><span>'+name+'</span><span class="map-legend__amt">'+amt+'</span></div>';}
+  return '<div class="ft-bento__header"><h2 class="ft-bento__title">Funding by location</h2><span class="ft-bento__link">Open Metrics &rsaquo;</span></div>'+
+    '<div class="map-concept">'+
+      '<div class="map-canvas">'+
+        pin(18,52,'CA $1.2M')+pin(46,74,'TX $520k')+pin(60,44,'IL $310k')+pin(82,36,'NY $840k')+pin(38,30,'MN $180k')+
+      '</div>'+
+      '<div class="map-legend">'+
+        leg('California','$1.2M')+leg('New York','$840k')+leg('Texas','$520k')+leg('Illinois','$310k')+leg('All other states','$440k')+
+      '</div>'+
+    '</div>';
+}
+function yourEvalsHTML(){
+  function row(name,meta,badge,tone){
+    var b=badge?'<span class="ft-badge ft-badge--'+tone+'">'+badge+'</span>':'';
+    return '<div class="qlist__row"><i class="fa-solid fa-star-half-stroke"></i><span class="qlist__name">'+name+'<div class="myq-meta">'+meta+'</div></span>'+b+'</div>';
+  }
+  return '<div class="ft-bento__header"><h2 class="ft-bento__title">Your evaluations</h2><span class="ft-bento__link">Open your evaluations &rsaquo;</span></div>'+
+    row('Urban Greenways Initiative','Spring Arts cycle · due in 3 days','Due soon','warning')+
+    row('Riverside Youth Collective','Spring Arts cycle · due in 5 days','','')+
+    row('Delta Arts Collective','2026 General Operating · due in 8 days','','')+
+    row('Cedar Scholars Fund','Youth Scholarship · overdue 2 days','Overdue','danger');
+}
+function yourFollowupsHTML(){
+  function row(name,meta,badge,tone){
+    var b=badge?'<span class="ft-badge ft-badge--'+tone+'">'+badge+'</span>':'';
+    return '<div class="qlist__row"><i class="fa-solid fa-arrow-rotate-right"></i><span class="qlist__name">'+name+'<div class="myq-meta">'+meta+'</div></span>'+b+'</div>';
+  }
+  return '<div class="ft-bento__header"><h2 class="ft-bento__title">Your follow-ups</h2><span class="ft-bento__link">Open your follow-ups &rsaquo;</span></div>'+
+    row('Q1 Progress Report','Urban Greenways · overdue 6 days','Overdue','danger')+
+    row('Budget revision','Riverside Youth · due in 2 days','Due soon','warning')+
+    row('Site visit summary','Delta Arts Collective · due in 9 days','Upcoming','info')+
+    row('Final narrative report','Cedar Scholars Fund · due in 12 days','Upcoming','info');
+}
+function pulseHTML(){
+  return '<div class="ft-bento__header"><h2 class="ft-bento__title">Cedar Ridge is tracking ahead of last year. Awards are up 23% and your spring cycle is moving faster through Application than it did in 2024.</h2><span class="ft-bento__updated">Updated just now</span></div>'+
+    '<div class="pulse-stats">'+
+      '<div class="pulse-stat"><div class="pulse-stat__value pulse-stat__value--up">+23%</div><div class="pulse-stat__label">Awards vs. last year</div></div>'+
+      '<div class="pulse-stat"><div class="pulse-stat__value">$4.8M</div><div class="pulse-stat__label">Awarded FY2025</div></div>'+
+      '<div class="pulse-stat"><div class="pulse-stat__value">112</div><div class="pulse-stat__label">Active grants</div></div>'+
+      '<div class="pulse-stat"><div class="pulse-stat__value">318</div><div class="pulse-stat__label">Submissions YTD</div></div>'+
+    '</div>'+
+    '<p class="pulse-narrative"><strong>47 applications</strong> moved from Submitted to Evaluations Assigned in under 8 days this cycle, compared to 14 days last spring. <strong>$47,500</strong> in installments is scheduled to go out in the next 30 days across 6 grantees. Interactions logged across organizations are up <strong>31%</strong> over the last 90 days.</p>';
+}
+function chartHead(t){return '<div class="ft-bento__header"><h2 class="ft-bento__title">'+t+'</h2><span class="ft-bento__link">Open Metrics &rsaquo;</span></div>';}
+
+/* ══════════════════ Charts (fixed-height boxes so paint never reflows) ══════════════════ */
+var C=window.Chart;
+if(C){C.defaults.font.family='Roboto, sans-serif';C.defaults.font.size=11;C.defaults.color='#888';}
+var NAVY='#2D3B4A',GRID='#EEEEEE',BLUE='#378ADD',BLUE_SOFT='#AED4F5',PINK_FG='#BD3B39',PINK_SOFT='#F8C9D4';
+var centerText={id:'centerText',afterDraw:function(chart){var cfg=chart.config.options.plugins.centerText;if(!cfg)return;var ctx=chart.ctx;var x=(chart.chartArea.left+chart.chartArea.right)/2;var y=(chart.chartArea.top+chart.chartArea.bottom)/2;ctx.save();ctx.font='700 22px Roboto, sans-serif';ctx.fillStyle='#185FA5';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(cfg.text,x,y);ctx.restore();}};
+var money=function(v){if(Math.abs(v)>=1000000)return'$'+(v/1000000).toFixed(1)+'M';if(Math.abs(v)>=1000)return'$'+Math.round(v/1000)+'k';return'$'+v;};
+function renderAward(id){if(!C)return;var el=document.getElementById(id);if(!el)return;new C(el,{type:'bar',data:{labels:['2017','2018','2019','2020','2021','2022','2023','2024','2025','2026'],datasets:[{data:[1600000,4700000,550000,1550000,0,0,0,300000,150000,100000],backgroundColor:BLUE_SOFT,borderColor:BLUE,borderWidth:1,maxBarThickness:34}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return money(c.parsed.y);}}}},scales:{x:{grid:{display:false}},y:{grid:{color:GRID},border:{display:false},ticks:{callback:money}}}}});}
+function renderFocus(id){if(!C)return;var el=document.getElementById(id);if(!el)return;new C(el,{type:'doughnut',data:{labels:['Education','Environment','Arts & Culture','Youth','Health'],datasets:[{data:[34,26,18,14,8],backgroundColor:['#042C53','#1D9E75','#378ADD','#EF9F27','#B4B2A9'],borderColor:'#fff',borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:9,font:{size:10},padding:8}},tooltip:{callbacks:{label:function(c){return c.label+': '+c.parsed+'%';}}}}}});}
+function renderSubs(id){if(!C)return;var el=document.getElementById(id);if(!el)return;new C(el,{type:'line',data:{labels:['Aug 25','Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26','Apr 26','May 26','Jun 26','Jul 26'],datasets:[{label:'Applications',data:[0,0,0,0,2,3,2,0,4,0,0,3],borderColor:BLUE,backgroundColor:'rgba(55,138,221,0.12)',fill:false,tension:0.35,pointRadius:3,pointBackgroundColor:BLUE},{label:'Eligibilities',data:[0,0,0,0,0,0,0,0,0,0,1,0],borderColor:'#F4C862',backgroundColor:'rgba(244,200,98,0.12)',fill:false,tension:0.35,pointRadius:3,pointBackgroundColor:'#F4C862'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{boxWidth:9,font:{size:10}}}},scales:{x:{grid:{display:false}},y:{grid:{color:GRID},border:{display:false},beginAtZero:true,ticks:{precision:0}}}}});}
+function barChart(id,labels,data,fill,border,moneyY){if(!C)return;var el=document.getElementById(id);if(!el)return;new C(el,{type:'bar',data:{labels:labels,datasets:[{data:data,backgroundColor:fill,borderColor:border,borderWidth:1,maxBarThickness:38}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return moneyY?money(c.parsed.y):c.parsed.y;}}}},scales:{x:{grid:{display:false}},y:{grid:{color:GRID},border:{display:false},beginAtZero:true,ticks:moneyY?{callback:money}:{precision:0}}}}});}
+function renderRecipients(id){if(!C)return;var el=document.getElementById(id);if(!el)return;new C(el,{type:'bar',data:{labels:['Arc of the US','Boys & Girls Clubs of America','American Heart Association, Inc.','Americare Farms, Inc.','International Association of Fire Fighters','Make-A-Wish Foundation of America','Covenant House','American Junior Golf Association','Americares','Access College Foundation'],datasets:[{data:[19500,19000,18500,18000,9000,8500,2500,2200,1200,1000],backgroundColor:BLUE_SOFT,borderColor:BLUE,borderWidth:1}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return money(c.parsed.x);}}}},scales:{x:{grid:{color:GRID},border:{display:false},ticks:{callback:money}},y:{grid:{display:false},ticks:{font:{size:9}}}}}});}
+function renderInstMonthly(id){barChart(id,['Jul 26','Aug 26','Sep 26','Oct 26','Nov 26','Dec 26','Jan 27','Feb 27','Mar 27','Apr 27','May 27','Jun 27'],[0,0,0,5000,0,20000,0,0,0,0,39000,0],BLUE_SOFT,BLUE,true);}
+function renderInstYearly(id){barChart(id,['2026','2027','2028','2029','2030'],[25000,40000,0,0,0],BLUE_SOFT,BLUE,true);}
+function renderPaymentsChart(id){barChart(id,['Aug 25','Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26','Apr 26','May 26','Jun 26','Jul 26'],[0,0,0,0,0,0,0,0,0,0,1000,3000],BLUE_SOFT,BLUE,true);}
+function renderOverdueFu(id){barChart(id,['Feb 26','Mar 26','Apr 26','May 26','Jun 26','Jul 26'],[0,1,0,1,18,0],PINK_SOFT,PINK_FG,false);}
+function renderUpcomingFu(id){barChart(id,['Aug 26','Sep 26','Oct 26','Nov 26','Dec 26','Jan 27'],[1,2,3,4,5,3],BLUE_SOFT,BLUE,false);}
+function renderUniqueApplicants(id){barChart(id,['2022','2023','2024','2025','2026'],[6,2,17,6,9],BLUE_SOFT,BLUE,false);}
+function renderDecisions(id){if(!C)return;var el=document.getElementById(id);if(!el)return;new C(el,{type:'doughnut',data:{labels:['Approval','Denial'],datasets:[{data:[11,1],backgroundColor:[BLUE_SOFT,PINK_SOFT],borderColor:[BLUE,PINK_FG],borderWidth:1}]},options:{cutout:'70%',responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:9,font:{size:10},padding:8}},centerText:{text:'92%'},tooltip:{callbacks:{label:function(c){return c.label+': '+c.parsed;}}}}},plugins:[centerText]});}
+
+/* ==== Module registry ==== */
+function chromeHTML(){return '<div class="bento-chrome"><button class="bento-chrome__btn" title="Remove" onclick="removeSlotBtn(this)"><i class="fa-solid fa-xmark"></i></button></div>';}
+var CID=0;
+function chartModule(title,size,renderer){return {chart:renderer,_t:title,_s:size,build:function(id){return chromeHTML()+chartHead(this._t)+'<div class="chart-box chart-box--'+this._s+'"><canvas id="'+id+'"></canvas></div>';}};}
+var MODULES={
+  workload:{fixed:true,build:function(){return wlBentoHTML(false);}},
+  attention:{build:function(){return chromeHTML()+attentionHTML();}},
+  active:{build:function(){return chromeHTML()+procBentoHTML();}},
+  myq:{build:function(){return chromeHTML()+myqHTML();}},
+  workshort:{build:function(){return chromeHTML()+workshortHTML();}},
+  payments:{build:function(){return chromeHTML()+paymentsHTML();}},
+  impact:{build:function(){return chromeHTML()+impactHTML();}},
+  map:{build:function(){return chromeHTML()+mapHTML();}},
+  yourevals:{build:function(){return chromeHTML()+yourEvalsHTML();}},
+  yourfu:{build:function(){return chromeHTML()+yourFollowupsHTML();}},
+  pulse:{build:function(){return chromeHTML()+pulseHTML();}},
+  award:chartModule('Amount Awarded','md',renderAward),
+  recipients:chartModule('Recipients','lg',renderRecipients),
+  instMonthly:chartModule('Upcoming installments (monthly)','md',renderInstMonthly),
+  instYearly:chartModule('Upcoming installments (yearly)','md',renderInstYearly),
+  paymentsChart:chartModule('Payments','md',renderPaymentsChart),
+  decisions:chartModule('Decisions','sm',renderDecisions),
+  overdueFu:chartModule('Overdue follow-ups','md',renderOverdueFu),
+  upcomingFu:chartModule('Upcoming follow-ups','md',renderUpcomingFu),
+  uniqueApplicants:chartModule('Unique applicants','md',renderUniqueApplicants),
+  focus:chartModule('Funding by focus area','sm',renderFocus),
+  subs:chartModule('Applicant submissions','md',renderSubs)
+};
+
+/* ==== Layout model ==== */
+var ROWSEQ=0, pendingCharts=[], addTarget={mode:'bottom'};
+function newRow(cols,slots,fixed,ratio){return {id:++ROWSEQ,cols:cols||1,ratio:ratio||'50',slots:slots||[null],fixed:!!fixed};}
+var layout=[ newRow(1,['workload'],true) ];
+function rowById(id){for(var i=0;i<layout.length;i++){if(layout[i].id===id)return layout[i];}return null;}
+function indexOfRow(id){for(var i=0;i<layout.length;i++){if(layout[i].id===id)return i;}return -1;}
+function allNull(a){for(var i=0;i<a.length;i++){if(a[i])return false;}return true;}
+
+/* ==== Render ==== */
+function colBtn(n,cur){return '<button type="button" data-n="'+n+'"'+(n===cur?' class="active"':'')+'>'+n+'</button>';}
+function slotEl(key,idx){
+  var el=document.createElement('div');
+  el.className='home-slot'; el.setAttribute('data-slot',idx);
+  if(key){
+    el.className+=' ft-bento';
+    var m=MODULES[key];
+    if(m.chart){var cid='c'+(++CID);el.innerHTML=m.build(cid);pendingCharts.push({key:key,id:cid});}
+    else{el.innerHTML=m.build();}
+  }else{
+    el.className+=' home-slot--empty';
+    el.innerHTML='<span class="slot-add"><i class="fa-solid fa-plus"></i> Add a bento</span>';
+  }
+  return el;
+}
+function buildRow(row){
+  var el=document.createElement('div');
+  el.className='home-row'+(row.fixed?' fixed-row':'');
+  el.setAttribute('data-row-id',row.id);
+  el.setAttribute('data-cols',row.cols);
+  el.setAttribute('data-ratio',row.ratio);
+  if(!row.fixed){
+    var tb=document.createElement('div');
+    tb.className='row-toolbar';
+    tb.innerHTML='<span class="row-grip" title="Drag to reorder row"><i class="fa-solid fa-grip-vertical"></i></span>'+
+      '<span class="row-toolbar__label">Columns</span>'+
+      '<span class="row-colctl">'+colBtn(1,row.cols)+colBtn(2,row.cols)+colBtn(3,row.cols)+'</span>';
+    el.appendChild(tb);
+    var dv=document.createElement('div'); dv.className='row-divider'; el.appendChild(dv);
+  }
+  for(var sIdx=0;sIdx<row.cols;sIdx++){ el.appendChild(slotEl(row.slots[sIdx]||null,sIdx)); }
+  return el;
+}
+function makeAddTile(where){
+  var t=document.createElement('div'); t.className='add-bento-tile';
+  t.setAttribute('data-add-where',where);
+  t.innerHTML='<i class="fa-solid fa-plus"></i> Add a bento';
+  return t;
+}
+function renderLayout(){
+  var host=document.getElementById('home-stack');
+  host.innerHTML=''; pendingCharts=[];
+  for(var i=0;i<layout.length;i++){ host.appendChild(buildRow(layout[i])); }
+  host.appendChild(makeAddTile('bottom'));
+  for(var j=0;j<pendingCharts.length;j++){ MODULES[pendingCharts[j].key].chart(pendingCharts[j].id); }
+}
+
+/* ==== Layout edits ==== */
+function setRowCols(rowId,n){
+  var row=rowById(rowId); if(!row||row.fixed)return;
+  if(n>row.cols){while(row.slots.length<n)row.slots.push(null);}
+  else if(n<row.cols){row.slots=row.slots.slice(0,n);}
+  row.cols=n; if(n!==2)row.ratio='50';
+  renderLayout();
+}
+function removeSlotBtn(btn){
+  var slot=btn.closest('.home-slot'), rowEl=btn.closest('.home-row');
+  var rowId=+rowEl.getAttribute('data-row-id'), idx=+slot.getAttribute('data-slot');
+  var row=rowById(rowId); if(!row||row.fixed)return;
+  row.slots[idx]=null;
+  if(row.cols===1 && allNull(row.slots)) layout=layout.filter(function(r){return r.id!==rowId;});
+  renderLayout();
+}
+function openMenuFor(target){addTarget=target;openBentoMenu();}
+function addBentoNewRow(where){setCustomizing(true);openMenuFor({mode:where==='top'?'top':'bottom'});}
+function addBentoSlot(rowId,idx){openMenuFor({mode:'slot',rowId:rowId,slotIndex:idx});}
+function addModule(key){
+  if(addTarget.mode==='slot'){var row=rowById(addTarget.rowId);if(row)row.slots[addTarget.slotIndex]=key;}
+  else if(addTarget.mode==='top'){layout.splice(1,0,newRow(1,[key]));}
+  else{layout.push(newRow(1,[key]));}
+  addTarget={mode:'bottom'}; closeBentoMenu(); renderLayout();
+}
+
+/* ==== Slide-out panels ==== */
+function openHub(){document.getElementById('hub-panel').classList.add('open');document.getElementById('hub-overlay').classList.add('open');}
+function closeHub(){document.getElementById('hub-panel').classList.remove('open');document.getElementById('hub-overlay').classList.remove('open');}
+function openBentoMenu(){document.getElementById('menu-panel').classList.add('open');document.getElementById('menu-overlay').classList.add('open');}
+function closeBentoMenu(){document.getElementById('menu-panel').classList.remove('open');document.getElementById('menu-overlay').classList.remove('open');}
+
+/* ==== Customize mode ==== */
+function setCustomizing(on){document.body.classList.toggle('customizing',on);var lbl=document.getElementById('customize-lbl');if(lbl)lbl.textContent=on?'Done':'Customize';}
+function toggleCustomizing(){setCustomizing(!document.body.classList.contains('customizing'));}
+
+/* ==== Row reorder (vertical, non-fixed) ==== */
+var rowDrag=null;
+function clearRowCues(){var e=document.querySelectorAll('.home-row.drop-before,.home-row.drop-after');for(var i=0;i<e.length;i++){e[i].classList.remove('drop-before');e[i].classList.remove('drop-after');}}
+function startRowDrag(e,rowEl){
+  if(!document.body.classList.contains('customizing')||rowEl.classList.contains('fixed-row'))return;
+  e.preventDefault();
+  rowDrag={el:rowEl,id:+rowEl.getAttribute('data-row-id')};
+  rowEl.classList.add('dragging');
+  document.addEventListener('pointermove',onRowMove);
+  document.addEventListener('pointerup',onRowUp);
+}
+function onRowMove(e){
+  if(!rowDrag)return; e.preventDefault(); clearRowCues();
+  var rows=document.querySelectorAll('.home-row:not(.fixed-row)');
+  for(var i=0;i<rows.length;i++){var srow=rows[i]; if(srow===rowDrag.el)continue;
+    var r=srow.getBoundingClientRect();
+    if(e.clientY>=r.top&&e.clientY<=r.bottom){srow.classList.add((e.clientY-r.top)>r.height/2?'drop-after':'drop-before');}
+  }
+}
+function onRowUp(){
+  if(!rowDrag)return;
+  var target=document.querySelector('.home-row.drop-before,.home-row.drop-after');
+  if(target){
+    var tid=+target.getAttribute('data-row-id'), after=target.classList.contains('drop-after');
+    var fromIdx=indexOfRow(rowDrag.id), row=layout[fromIdx];
+    layout.splice(fromIdx,1);
+    var tIdx=indexOfRow(tid), at=after?tIdx+1:tIdx; if(at<1)at=1;
+    layout.splice(at,0,row);
+  }
+  rowDrag.el.classList.remove('dragging'); clearRowCues(); rowDrag=null;
+  document.removeEventListener('pointermove',onRowMove);
+  document.removeEventListener('pointerup',onRowUp);
+  renderLayout();
+}
+
+/* ==== Ratio drag (2-col divider, snaps 33/50/67) ==== */
+var ratioDrag=null;
+function startRatioDrag(e,rowEl){
+  if(!document.body.classList.contains('customizing')||rowEl.getAttribute('data-cols')!=='2')return;
+  e.preventDefault();
+  ratioDrag={el:rowEl,id:+rowEl.getAttribute('data-row-id'),ratio:null};
+  var dv=rowEl.querySelector('.row-divider'); if(dv)dv.classList.add('active');
+  document.addEventListener('pointermove',onRatioMove);
+  document.addEventListener('pointerup',onRatioUp);
+}
+function onRatioMove(e){
+  if(!ratioDrag)return; e.preventDefault();
+  var r=ratioDrag.el.getBoundingClientRect(), frac=(e.clientX-r.left)/r.width;
+  var ratio=frac<0.42?'33':(frac>0.58?'67':'50');
+  ratioDrag.el.setAttribute('data-ratio',ratio); ratioDrag.ratio=ratio;
+}
+function onRatioUp(){
+  if(!ratioDrag)return;
+  var row=rowById(ratioDrag.id); if(row&&ratioDrag.ratio)row.ratio=ratioDrag.ratio;
+  var dv=ratioDrag.el.querySelector('.row-divider'); if(dv)dv.classList.remove('active');
+  ratioDrag=null;
+  document.removeEventListener('pointermove',onRatioMove);
+  document.removeEventListener('pointerup',onRatioUp);
+}
+
+/* ==== Init ==== */
+function initEngine(){
+  var host=document.getElementById('home-stack');
+  host.addEventListener('click',function(e){
+    var colb=e.target.closest('.row-colctl button');
+    if(colb){var re=colb.closest('.home-row');setRowCols(+re.getAttribute('data-row-id'),+colb.getAttribute('data-n'));return;}
+    var tile=e.target.closest('.add-bento-tile');
+    if(tile){addBentoNewRow(tile.getAttribute('data-add-where'));return;}
+    var empty=e.target.closest('.home-slot--empty');
+    if(empty && document.body.classList.contains('customizing')){
+      var r2=empty.closest('.home-row');
+      addBentoSlot(+r2.getAttribute('data-row-id'),+empty.getAttribute('data-slot')); return;
+    }
+  });
+  host.addEventListener('pointerdown',function(e){
+    var grip=e.target.closest('.row-grip'); if(grip){startRowDrag(e,grip.closest('.home-row'));return;}
+    var dv=e.target.closest('.row-divider'); if(dv){startRatioDrag(e,dv.closest('.home-row'));return;}
+  });
+  renderLayout();
+}
+setGreetings();
+initEngine();
+
+/* ══════════════════ Fast hover tooltips (Add bento menu) ══════════════════ */
+(function(){
+  var tip=null;
+  function ensureTip(){if(!tip){tip=document.createElement('div');tip.className='ft-tip';document.body.appendChild(tip);}return tip;}
+  function showTip(row){
+    var t=ensureTip();
+    t.textContent=row.getAttribute('data-tip');
+    t.style.display='block';
+    var r=row.getBoundingClientRect();
+    var left=r.left - t.offsetWidth - 12;
+    if(left<8)left=8;
+    var top=r.top + r.height/2 - t.offsetHeight/2;
+    if(top<8)top=8;
+    t.style.left=left+'px';
+    t.style.top=top+'px';
+    t.classList.add('show');
+  }
+  function hideTip(){if(tip){tip.classList.remove('show');tip.style.display='none';}}
+  var menu=document.getElementById('menu-panel');
+  if(menu){
+    menu.addEventListener('mouseover',function(e){var row=e.target.closest('.hub-row[data-tip]');if(row)showTip(row);});
+    menu.addEventListener('mouseout',function(e){var row=e.target.closest('.hub-row[data-tip]');if(row)hideTip();});
+    menu.addEventListener('focusin',function(e){var row=e.target.closest('.hub-row[data-tip]');if(row)showTip(row);});
+    menu.addEventListener('focusout',function(e){var row=e.target.closest('.hub-row[data-tip]');if(row)hideTip();});
+    menu.addEventListener('keydown',function(e){
+      var row=e.target.closest('.hub-row[data-tip]');
+      if(row&&(e.key==='Enter'||e.key===' ')){e.preventDefault();hideTip();row.click();}
+    });
+  }
+})();
+</script>
+</body>
+</html>
