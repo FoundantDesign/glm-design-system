@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Foundant Component Reference — MDB5 Pro Kitchen Sink</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.min.css" rel="stylesheet" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/67a3468e65.js" crossorigin="anonymous"></script>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
   <!-- Authoritative GLM tokens, MDB remaps, real component classes, heading scale, .section-eyebrow.
        This is the same file prototypes load, so the reference cannot drift from what prototypes render. -->
@@ -159,7 +159,43 @@
   </div>
   <p class="sd" style="border:none;margin:6px 0 0"><code>info-90</code> exists in <code>foundant-tokens.css</code> but has no <code>success</code>/<code>warning</code> equivalent — info is uniquely asymmetric. Now in real use (Alerts, Section 6f) since <code>info-50</code> alone read too saturated next to its siblings.</p>
 
-  <h3>Danger — full validated ramp</h3>
+  <h3>Primary — full ramp <span class="status-tag status-overridden" title="Already real, already shipped">OVERRIDDEN</span></h3>
+  <div class="color-range">
+    <div class="color-range-step" style="background:var(--colors-primary-shades-0)"><span style="color:#fff">0</span></div>
+    <div class="color-range-step" style="background:var(--colors-primary-shades-10)"><span style="color:#fff">10</span></div>
+    <div class="color-range-step" style="background:var(--colors-primary-shades-20)"><span style="color:#fff">20</span></div>
+    <div class="color-range-step color-range-anchor" style="background:var(--colors-primary-shades-30)"><span style="color:#fff">30</span></div>
+    <div class="color-range-step" style="background:var(--colors-primary-shades-40)"><span style="color:#2D3B4A">40</span></div>
+    <div class="color-range-step" style="background:var(--colors-primary-shades-50)"><span style="color:#2D3B4A">50</span></div>
+    <div class="color-range-step" style="background:var(--colors-primary-shades-60)"><span style="color:#2D3B4A">60</span></div>
+    <div class="color-range-step" style="background:var(--colors-primary-shades-70)"><span style="color:#2D3B4A">70</span></div>
+    <div class="color-range-step" style="background:var(--colors-primary-shades-80)"><span style="color:#2D3B4A">80</span></div>
+    <div class="color-range-step" style="background:var(--colors-primary-shades-90)"><span style="color:#2D3B4A">90</span></div>
+  </div>
+  <div class="color-range-label"><span>0</span><span>10</span><span>20</span><span>30</span><span>40</span><span>50</span><span>60</span><span>70</span><span>80</span><span>90</span></div>
+  <p class="sd" style="border:none;margin:6px 0 0">Already real and already shipped — <code>--colors-primary-shades-0</code> through <code>-90</code> exist in <code>foundant-tokens.css</code> today, and <code>-30</code> is already live in production (<code>.text-muted</code>). This isn't the same numbering as danger's 50–900: step <code>N</code> here is a straight <code>N%</code> linear blend of the base color toward white (<code>0</code> = <code>--colors-brand-primary-dark-blue</code> itself, <code>90</code> = a 90%-white tint). Real usage today pairs a light step as a background with dark navy as text — e.g. the navbar brand badge uses <code>primary-shades-90</code> background with <code>--colors-brand-primary-dark-blue</code> text (Navbar section). This ramp was simply never surfaced in the kitchen sink before now; nothing about it is new or proposed.</p>
+  <button class="view-matrix-btn" onclick="document.getElementById('primaryMatrix').classList.add('open')"><i class="fa-light fa-table-cells" style="font-size:10px"></i> View contrast matrix</button>
+
+  <h3 style="margin-top:20px">Secondary — full ramp <span class="gap-flag">PROPOSED — new, pending team review</span></h3>
+  <div class="gap-zone">
+    <div class="color-range">
+      <div class="color-range-step color-range-anchor" style="background:#D5E2FA"><span style="color:#2D3B4A">0</span></div>
+      <div class="color-range-step" style="background:#D9E5FB"><span style="color:#2D3B4A">10</span></div>
+      <div class="color-range-step" style="background:#DDE8FB"><span style="color:#2D3B4A">20</span></div>
+      <div class="color-range-step" style="background:#E2EBFC"><span style="color:#2D3B4A">30</span></div>
+      <div class="color-range-step" style="background:#E6EEFC"><span style="color:#2D3B4A">40</span></div>
+      <div class="color-range-step" style="background:#EAF1FD"><span style="color:#2D3B4A">50</span></div>
+      <div class="color-range-step" style="background:#EEF3FD"><span style="color:#2D3B4A">60</span></div>
+      <div class="color-range-step" style="background:#F2F6FE"><span style="color:#2D3B4A">70</span></div>
+      <div class="color-range-step" style="background:#F7F9FE"><span style="color:#2D3B4A">80</span></div>
+      <div class="color-range-step" style="background:#FBFCFF"><span style="color:#2D3B4A">90</span></div>
+    </div>
+    <div class="color-range-label"><span>0</span><span>10</span><span>20</span><span>30</span><span>40</span><span>50</span><span>60</span><span>70</span><span>80</span><span>90</span></div>
+    <p class="gap-note">New, generated to match primary's methodology exactly: reverse-engineered primary's real ramp and confirmed it's a clean linear blend toward white at <code>N%</code> per step (verified across all three channels, not assumed). Applied that identical formula to <code>--colors-brand-secondary-light-blue</code> (<code>#D5E2FA</code>) as the step-0 anchor. <strong>Important caveat:</strong> because the secondary base is already very light, this ramp's whole range sits between <code>#D5E2FA</code> and <code>#FBFCFF</code> — a narrow band. A contrast matrix between these steps will show mostly Fail, which is an accurate reflection of a light base color, not a math error. There's also no dark "step 0 equivalent" to use as label/text color the way primary's own darkest step works for its light end — labels here borrow <code>--colors-brand-primary-dark-blue</code> directly, matching how secondary is actually paired with text in production today. Not yet in <code>foundant-tokens.css</code>. Needs engineering sign-off before ratifying — same status as the success/warning/info ramps below.</p>
+    <button class="view-matrix-btn" onclick="document.getElementById('secondaryMatrix').classList.add('open')"><i class="fa-light fa-table-cells" style="font-size:10px"></i> View contrast matrix</button>
+  </div>
+
+  <h3 style="margin-top:20px">Danger — full validated ramp</h3>
   <div class="color-range">
     <div class="color-range-step" style="background:#FAEAEA"><span style="color:#4D1514">50</span></div>
     <div class="color-range-step" style="background:#F2BEBE"><span style="color:#4D1514">100</span></div>
@@ -233,18 +269,21 @@
   </div>
 
   <h3>Neutral scale</h3>
-  <div class="sg">
-    <div class="sw"><div class="swc" style="background:var(--colors-neutral-10)"></div><div class="swi"><strong>10</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--colors-neutral-20)"></div><div class="swi"><strong>20</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--colors-neutral-30)"></div><div class="swi"><strong>30</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--colors-neutral-40)"></div><div class="swi"><strong>40</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--colors-neutral-50)"></div><div class="swi"><strong>50</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--colors-neutral-60)"></div><div class="swi"><strong>60</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--colors-neutral-70)"></div><div class="swi"><strong>70</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--colors-neutral-80)"></div><div class="swi"><strong>80</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--colors-neutral-90)"></div><div class="swi"><strong>90</strong></div></div>
-    <div class="sw"><div class="swc" style="background:var(--colors-neutral-100);border-bottom:1px solid var(--colors-borders-divider)"></div><div class="swi"><strong>100</strong></div></div>
+  <div class="color-range">
+    <div class="color-range-step" style="background:var(--colors-neutral-0)"><span style="color:#fff">0</span></div>
+    <div class="color-range-step" style="background:var(--colors-neutral-10)"><span style="color:#fff">10</span></div>
+    <div class="color-range-step" style="background:var(--colors-neutral-20)"><span style="color:#fff">20</span></div>
+    <div class="color-range-step" style="background:var(--colors-neutral-30)"><span style="color:#fff">30</span></div>
+    <div class="color-range-step" style="background:var(--colors-neutral-40)"><span style="color:#fff">40</span></div>
+    <div class="color-range-step" style="background:var(--colors-neutral-50)"><span style="color:#212121">50</span></div>
+    <div class="color-range-step" style="background:var(--colors-neutral-60)"><span style="color:#212121">60</span></div>
+    <div class="color-range-step" style="background:var(--colors-neutral-70)"><span style="color:#212121">70</span></div>
+    <div class="color-range-step" style="background:var(--colors-neutral-80)"><span style="color:#212121">80</span></div>
+    <div class="color-range-step" style="background:var(--colors-neutral-90)"><span style="color:#212121">90</span></div>
+    <div class="color-range-step" style="background:var(--colors-neutral-100);border:1px solid var(--colors-borders-divider)"><span style="color:#212121">100</span></div>
   </div>
+  <div class="color-range-label"><span>0</span><span>10</span><span>20</span><span>30</span><span>40</span><span>50</span><span>60</span><span>70</span><span>80</span><span>90</span><span>100</span></div>
+  <p class="sd" style="border:none;margin:6px 0 0">Eleven stops, <code>--colors-neutral-0</code> (black) through <code>-100</code> (white). Common usage: <code>30</code> muted/secondary text, <code>40</code> secondary icons + empty-state text, <code>50</code> disabled borders, <code>60</code> dividers, <code>70</code> hover backgrounds, <code>80</code> app background, <code>90</code> subtle backgrounds, <code>100</code> surface.</p>
 </section>
 
 <!-- ═══ TYPOGRAPHY ═══ -->
@@ -281,7 +320,17 @@
   <p class="section-eyebrow">Program area</p>
   <p style="margin:0 0 8px;font-size:0.85rem;color:var(--colors-neutral-30)">The eyebrow above labels the region. It is a <code>&lt;p class="section-eyebrow"&gt;</code>, never an <code>h*</code>, so it doesn't distort the document outline.</p>
   <div class="code-block">&lt;p class="section-eyebrow"&gt;Program area&lt;/p&gt;
-&lt;h4&gt;Environmental Grants&lt;/h4&gt;</div>
+&lt;h4&gt;Environmental Grants&lt;/h4&gt;
+
+.section-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--colors-neutral-30);
+  margin-bottom: 6px;
+  display: block;
+}</div>
   <p style="margin-top:6px;font-size:0.85rem;color:var(--colors-neutral-30)">Note: <code>.nav-group-header</code> (side panel section labels — see Sidenav) uses near-identical styling — 12px, 700, uppercase, letter-spaced, muted gray — under a different name and in a different file (<code>GLM.Summary.css</code> vs. this reference page's own eyebrow). Both are legitimately scoped to their own contexts today and neither is wrong, but it's the same "overline label" idea recurring under two names rather than one shared primitive. Worth a look if the token/class list is ever consolidated. Not added to the Section 9 backlog since <code>.section-eyebrow</code> is reference-page furniture, not a production class — flagging here for awareness rather than as a production gap.</p>
 
   <h3>Body &amp; inline</h3>
@@ -303,13 +352,81 @@
     <tr><th>How</th><td><code>&lt;i class="fa-light fa-plus me-2"&gt;&lt;/i&gt;Add</code></td></tr>
   </table>
 
-  <div class="wip-note">This public reference CDN renders Font Awesome 6 Free, so icons here appear heavier than production's Pro <code>fa-light</code>. The <em>class names</em> shown are the correct production classes to lift; only the rendered weight differs.</div>
-
   <div class="cr" style="font-size:20px;gap:16px;color:var(--colors-neutral-30)">
     <i class="fa-light fa-house" title="house"></i><i class="fa-light fa-magnifying-glass" title="search"></i><i class="fa-light fa-circle-user" title="user"></i><i class="fa-light fa-gear" title="settings"></i><i class="fa-light fa-bell" title="bell"></i><i class="fa-light fa-envelope" title="envelope"></i><i class="fa-light fa-trash-can" title="trash"></i><i class="fa-light fa-pen-to-square" title="edit"></i><i class="fa-light fa-plus" title="plus"></i><i class="fa-light fa-check" title="check"></i><i class="fa-light fa-xmark" title="close"></i><i class="fa-light fa-download" title="download"></i><i class="fa-light fa-filter" title="filter"></i><i class="fa-light fa-arrow-up-arrow-down" title="sort"></i><i class="fa-regular fa-ellipsis-vertical" title="kebab"></i><i class="fa-light fa-chevron-down" title="chevron"></i><i class="fa-light fa-circle-info" title="info"></i><i class="fa-light fa-triangle-exclamation" title="warning"></i><i class="fa-light fa-calendar" title="calendar"></i><i class="fa-light fa-eye" title="view"></i><i class="fa-light fa-link" title="link"></i><i class="fa-light fa-arrow-up-right-from-square" title="external"></i>
   </div>
   <div class="code-block">&lt;i class="fa-light fa-pen-to-square"&gt;&lt;/i&gt;
-&lt;i class="fa-regular fa-ellipsis-vertical"&gt;&lt;/i&gt;</div>
+&lt;i class="fa-regular fa-ellipsis-vertical"&gt;&lt;/i&gt;
+
+&lt;!-- No CSS remap applies to icons — rendering comes from the licensed
+     Font Awesome Pro Kit script, not a stylesheet override. --&gt;
+&lt;script src="https://kit.fontawesome.com/67a3468e65.js" crossorigin="anonymous"&gt;&lt;/script&gt;</div>
+
+  <h3 style="margin-top:24px">Icon usage reference <span class="status-tag status-overridden" title="Every row confirmed in real production markup">CONFIRMED</span></h3>
+  <p class="sd" style="border:none;margin:6px 0 12px">Every icon actually in use in production today, with what it means and where — pulled from the real HTML (Font Awesome's Kit JS leaves the original <code>&lt;i class="..."&gt;</code> as an HTML comment right next to the SVG it renders, which is how this was extracted; not a guess or a recollection). <strong>Check this before picking a new icon</strong> — reuse an existing meaning rather than introducing a second icon for the same concept, and avoid reusing an icon that already carries a different meaning elsewhere.</p>
+
+  <table class="usage" style="margin-bottom:16px">
+    <tr><th>Global nav</th><td>
+      <code>fa-house</code> home · <code>fa-bars</code> mobile nav toggle · <code>fa-magnifying-glass</code> header search · <code>fa-compass</code> "Idea Lab" external link · <code>fa-lightbulb-on</code> release notes · <code>fa-gift</code> "Additional Resources" · <code>fa-grid</code> app switcher · <code>fa-gear</code> settings/admin menu trigger
+    </td></tr>
+    <tr><th>User/account menu</th><td>
+      <code>fa-user</code> "Edit My Profile" · <code>fa-sliders</code> "Preferences" · <code>fa-building</code> "Edit Organization" / org context · <code>fa-right-from-bracket</code> "Sign Out" · <code>fa-circle-user</code> user avatar / contact card
+    </td></tr>
+    <tr><th>Left nav (tools menu)</th><td>
+      <code>fa-file-lines</code> Requests &amp; Decisions / Documents · <code>fa-tasks</code> Eligibility Center · <code>fa-step-forward</code> Process Manager · <code>fa-dollar-sign</code> Payment Tracking · <code>fa-chart-pie</code> Budgeting / Data Visualization · <code>fa-folder-open</code> Shared Documents · <code>fa-sitemap</code> My Organization Chart · <code>fa-cloud-upload</code> Import Data · <code>fa-envelope</code> Email Templates · <code>fa-paperclip</code> Email Attachments · <code>fa-envelope-open</code> Email History · <code>fa-file-word</code> Merge Templates · <code>fa-message</code> Key Interactions / Comments · <code>fa-chart-bar</code> Reports &amp; Data Sets · <code>fa-fish</code> Data Grouper <em>(unusual pick, real and live — not a recommendation to reuse the metaphor elsewhere)</em>
+    </td></tr>
+    <tr><th>Record nav rail</th><td>
+      <code>fa-hand-holding-seedling</code> Summary tab · <code>fa-message</code> Interactions tab · <code>fa-file-lines</code> Documents tab · <code>fa-clipboard-list-check</code> Follow Ups tab · <code>fa-circle-check</code> Financials &amp; Compliance tab
+    </td></tr>
+    <tr><th>Row actions (recurring pair)</th><td>
+      <code>fa-arrow-up-right-from-square</code> + <code>fa-file-pdf</code> always appear together as "View" + PDF-download on evaluation/decision rows — a real, repeated two-icon action pattern, confirmed across multiple rows in the same page. Treat this pairing as a unit, not two independent icon choices.
+    </td></tr>
+    <tr><th>Stage / progress indicators</th><td>
+      <code>fa-check</code> marks a completed stage step in the hero application-stage tracker (<code>.hero-stage-line.is-done</code>) — this is a real, separate progress-indicator pattern from the MDB Stepper documented in Forms (Section 6m); the two don't share markup.
+    </td></tr>
+    <tr><th>Menu affordance / misc</th><td>
+      <code>fa-ellipsis-vertical</code> (regular) kebab menu trigger · <code>fa-toggle-large-on</code> (regular) decorative toggle indicator near a record header
+    </td></tr>
+    <tr><th>Validation / semantic color</th><td>
+      <code>fa-circle-check</code> → <code>--colors-semantic-success-0</code> (ratified, <code>.form-group .fa-circle-check</code>) · <code>fa-circle-exclamation</code> → <code>--colors-semantic-danger-0</code> (ratified) · <code>fa-triangle-exclamation</code> → <code>--colors-semantic-warning-0</code> (ratified) · <code>fa-trash-can:hover</code> → <code>--colors-semantic-danger-0</code> (ratified, delete-intent hover cue)
+    </td></tr>
+  </table>
+  <p class="gap-note" style="border-left-color:var(--colors-semantic-warning-0);background:var(--colors-semantic-warning-50);color:var(--colors-brand-primary-dark-blue)">This reference is built from one production page sample (the Event Request record view) — real and accurate for what it covers, but not exhaustive of every page in the app. Treat gaps as "not yet confirmed," not "doesn't exist." Update this table as more pages get checked, the same way new evidence has updated other sections in this document.</p>
+
+  <h3 style="margin-top:24px">Icon button — standardized <span class="gap-flag">GAP — real values, but currently applied via inline style everywhere, not a class rule</span></h3>
+  <p class="sd" style="border:none;margin:6px 0 12px">Every icon-only clickable button in production today (the record-detail kebab menu, and any others styled the same way) uses the class name <code>kebab-btn</code> — but there is no <code>.kebab-btn</code> rule anywhere in <code>mdb-customizations.css</code> or <code>mdb_min.css</code>. The class is a JS/dropdown hook only; every actual instance repeats the identical look via a copy-pasted inline <code>style=""</code> attribute. That's the standardization gap: the values are real and consistent, but nothing enforces that consistency — a future instance could easily drift.</p>
+
+  <div class="gap-zone">
+    <div class="cr" style="align-items:center;gap:16px">
+      <button class="icon-btn"><i class="fa-regular fa-ellipsis-vertical"></i></button>
+      <button class="icon-btn"><i class="fa-light fa-pen-to-square"></i></button>
+      <button class="icon-btn"><i class="fa-light fa-trash-can"></i></button>
+      <button class="icon-btn" disabled><i class="fa-light fa-download"></i></button>
+    </div>
+    <div class="code-block">&lt;button type="button" class="icon-btn"&gt;
+  &lt;i class="fa-regular fa-ellipsis-vertical"&gt;&lt;/i&gt;
+&lt;/button&gt;
+
+/* Confirmed real values — this is exactly what the inline style on the
+   production kebab button already says, just promoted to an actual class
+   rule instead of being copy-pasted per instance. Nothing invented here. */
+.icon-btn {
+  background: none;
+  border: 1px solid var(--colors-borders-divider);
+  border-radius: 4px;
+  padding: 0px 5px;
+  cursor: pointer;
+  color: var(--colors-brand-primary-dark-blue);
+}
+.icon-btn:hover {
+  background: var(--colors-state-layers-light-hover);
+}
+.icon-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}</div>
+    <p class="gap-note">The rule body is not a proposal in the usual sense — every property is lifted directly from the real, repeated inline style on production's kebab button. What's proposed is the <em>act of formalizing it</em>: give it one real CSS class so every future icon-only button (delete, edit, download, whatever) references the same rule instead of a fifth copy-pasted inline style. Hover/disabled states aren't present in the one confirmed instance, so those two rules are genuinely new and flagged as such — everything else is a direct lift. Needs engineering review before it round-trips into <code>mdb-customizations.css</code>, since it would mean replacing inline styles at every existing call site.</p>
+  </div>
 </section>
 
 <!-- ═══ GRID ═══ -->
@@ -358,9 +475,9 @@
   <table class="usage">
     <tr><th>What</th><td>Spacing uses Bootstrap's <code>m-*</code>/<code>p-*</code> utilities. Radius uses the Foundant <code>--radius-*</code> scale.</td></tr>
     <tr><th>Where</th><td>Spacing: utility classes in markup. Radius: <code>--radius-*</code> tokens in CSS.</td></tr>
-    <tr><th>When</th><td>Buttons/pills use <code>round</code>. Cards and the hero use <code>card</code> (6px). Inputs and small chips use <code>sm</code> (4px). Larger surfaces use <code>md</code> (8px).</td></tr>
-    <tr><th>Why</th><td>A fixed radius scale keeps corners consistent. <code>--radius-card</code> (6px) was added to name the value production hardcodes on cards, so prototypes stop using a magic number.</td></tr>
-    <tr><th>How</th><td><code>border-radius: var(--radius-card)</code>. In markup, spacing like <code>class="mt-2 mb-3"</code>.</td></tr>
+    <tr><th>When</th><td>Buttons/pills use <code>round</code>. The hero uses <code>card</code> (6px) — this token is <em>not</em> applied to generic <code>.card</code>, which renders on stock MDB's 8px (<code>md</code>) instead; see the Cards section. Inputs and small chips use <code>sm</code> (4px). Larger surfaces use <code>md</code> (8px).</td></tr>
+    <tr><th>Why</th><td>A fixed radius scale keeps corners consistent. <code>--radius-card</code> (6px) was added to name the value production hardcodes on the hero card specifically — it was never wired up to generic <code>.card</code>, which is a separate, still-open gap (cards and the hero visually don't match on radius today).</td></tr>
+    <tr><th>How</th><td><code>border-radius: var(--radius-card)</code> for the hero. In markup, spacing like <code>class="mt-2 mb-3"</code>.</td></tr>
   </table>
 
   <h3>Radius scale</h3>
@@ -373,7 +490,7 @@
   </div>
   <div class="code-block">--radius-xs: 2px;   /* hairline chips */
 --radius-sm: 4px;   /* inputs, small controls */
---radius-card: 6px; /* cards, hero (was hardcoded) */
+--radius-card: 6px; /* hero only — NOT wired to generic .card, see note below */
 --radius-md: 8px;   /* larger surfaces */
 --radius-round: 50px; /* buttons, pills */</div>
 
@@ -524,7 +641,20 @@
       &lt;/div&gt;
     &lt;/div&gt;
   &lt;/nav&gt;
-&lt;/header&gt;</div>
+&lt;/header&gt;
+
+header, footer {
+  background-color: var(--colors-neutral-100);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 5px rgba(0, 0, 0, 0.075);
+  font-size: 14px;
+}
+.navbar-nav > li > a,
+.navbar-nav a.nav-link {
+  padding: 15px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+}</div>
   <p class="sd" style="border:none;margin:6px 0 0">Hover on the top-level nav links and dropdown toggles above, using the state-layer fix below rather than production's current hardcoded gray gradient.</p>
 
   <h3>Hover treatment <span class="gap-flag">GAP — resolution proposed, not yet in production</span></h3>
@@ -624,7 +754,28 @@
     &lt;/div&gt;
   &lt;/div&gt;
   &lt;div class="main-content-body"&gt;&lt;!-- record content --&gt;&lt;/div&gt;
-&lt;/div&gt;</div>
+&lt;/div&gt;
+
+.panel-layout { display: flex; flex-wrap: wrap; overflow-x: auto; height: 100%; }
+.main-content-body { flex: 1; min-width: 0; overflow-x: hidden; }
+.side-panel {
+  background-color: var(--colors-neutral-100);
+  width: 275px;
+  min-width: 275px;
+}
+.side-panel .list-group-item:not(.ft-label) {
+  border: 0;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  --mdb-list-group-action-hover-bg: var(--colors-neutral-70);
+}
+.side-panel .list-group-item.active {
+  background-color: var(--colors-brand-secondary-light-blue);
+  font-weight: bold;
+  color: var(--mdb-list-group-color);
+}
+.ft-label { font-size: 12px; font-weight: 400; line-height: 20px; font-variant: small-caps; }</div>
 
   <h3>Grouped sections</h3>
   <p class="sd">Not exercised on the captured Request Summary page (its nav is a flat list), but <code>.nav-group-header</code> ships in <code>GLM.Summary.css</code> for side panels that need labeled sub-sections — e.g. a longer Organization nav.</p>
@@ -648,8 +799,12 @@
   &lt;a href="..." class="list-group-item list-group-item-action ripple"&gt;...&lt;/a&gt;
   &lt;div class="nav-group-header"&gt;History&lt;/div&gt;
   &lt;a href="..." class="list-group-item list-group-item-action ripple"&gt;...&lt;/a&gt;
-&lt;/div&gt;</div>
+&lt;/div&gt;
 
+.side-panel .nav-group-header {
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  color: var(--colors-neutral-30); letter-spacing: 0.5px; padding: 12px 16px 4px;
+}</div>
   <h3>Info card background <span class="gap-flag">GAP — inline style, not a class rule</span></h3>
   <div class="gap-zone">
     <p class="gap-note"><code>.request-info-card</code> carries no CSS of its own anywhere in production — its <code>--colors-neutral-70</code> background is set with an inline <code>style</code> attribute directly in the Razor markup rather than a class rule. It works, but it means the color can drift silently wherever this markup is copy-pasted. Consider moving it into a real class rule (e.g. <code>.request-info-card { background-color: var(--colors-neutral-70); }</code>) the next time this page is touched.</p>
@@ -776,7 +931,59 @@
 &lt;button class="btn btn-outline-secondary"&gt;Outline secondary&lt;/button&gt;
 &lt;button class="btn btn-danger"&gt;Danger&lt;/button&gt;
 &lt;button class="btn btn-outline-danger"&gt;Outline danger&lt;/button&gt;
-&lt;button class="btn btn-link"&gt;Link&lt;/button&gt;</div>
+&lt;button class="btn btn-link"&gt;Link&lt;/button&gt;
+
+.btn {
+  --mdb-btn-border-radius: var(--radius-round);
+  --mdb-btn-font-size: 14px;
+  text-transform: initial;
+}
+.btn:focus-visible {
+  outline: solid 2px var(--colors-brand-primary-dark-blue);
+  outline-offset: 2px;
+}
+.btn-primary {
+  --mdb-btn-bg: var(--colors-brand-primary-dark-blue);
+  --mdb-btn-hover-bg: var(--colors-state-layers-dark-hover);
+  --mdb-btn-focus-bg: var(--colors-state-layers-dark-focused);
+  --mdb-btn-active-bg: var(--colors-state-layers-dark-pressed);
+  --mdb-btn-box-shadow: none;
+  --mdb-btn-disabled-bg: var(--colors-brand-primary-dark-blue);
+  --mdb-btn-disabled-color: #fff;
+  --mdb-btn-disabled-border-color: var(--colors-brand-primary-dark-blue);
+}
+.btn-outline-secondary {
+  --mdb-btn-bg: var(--colors-neutral-100);
+  --mdb-btn-color: var(--colors-brand-primary-dark-blue);
+  --mdb-btn-hover-bg: var(--colors-state-layers-light-hover);
+  --mdb-btn-hover-color: var(--colors-brand-primary-dark-blue);
+  --mdb-btn-outline-border-color: var(--colors-brand-primary-dark-blue);
+}
+.btn-link {
+  --mdb-btn-color: var(--colors-brand-primary-dark-blue);
+  --mdb-btn-hover-color: var(--colors-brand-primary-dark-blue);
+  --mdb-btn-active-color: var(--colors-brand-primary-dark-blue);
+}
+.btn-danger {
+  --mdb-btn-bg: var(--colors-semantic-danger-500);
+  --mdb-btn-color: #fff;
+  --mdb-btn-hover-bg: var(--colors-semantic-danger-600);
+  --mdb-btn-active-bg: var(--colors-semantic-danger-700);
+  --mdb-btn-disabled-bg: var(--colors-semantic-danger-500);
+}
+.btn-outline-danger {
+  --mdb-btn-bg: transparent;
+  --mdb-btn-color: var(--colors-semantic-danger-500);
+  --mdb-btn-hover-bg: var(--colors-semantic-danger-50);
+  --mdb-btn-outline-border-color: var(--colors-semantic-danger-500);
+}
+
+/* .btn-outline-dark and .btn-dark have NO Foundant remap anywhere —
+   confirmed via mdb-customizations.css and this foundation file. They render
+   on MDB's stock --mdb-dark (#332d2d), which happens to read as a plausible
+   dark neutral, not because it's token-driven. Flagging so this doesn't get
+   assumed to be ratified just because the usage table calls it "the
+   record-page workhorse." */</div>
 
   <h3>Sizes</h3>
   <div class="cr" style="align-items:center">
@@ -786,7 +993,11 @@
   </div>
   <div class="code-block">&lt;button class="btn btn-primary btn-sm"&gt;Small&lt;/button&gt;
 &lt;button class="btn btn-primary"&gt;Default&lt;/button&gt;
-&lt;button class="btn btn-primary btn-lg"&gt;Large&lt;/button&gt;</div>
+&lt;button class="btn btn-primary btn-lg"&gt;Large&lt;/button&gt;
+
+/* .btn-sm / .btn-lg are stock MDB size utilities (padding + font-size only).
+   No Foundant override exists or is needed here — color/shape come from
+   the .btn-primary rule shown in "Ratified variants" above. */</div>
 
   <h3>States</h3>
   <div class="cr">
@@ -794,18 +1005,45 @@
     <button class="btn btn-primary" disabled>Disabled</button>
   </div>
   <div class="code-block">&lt;button class="btn btn-primary"&gt;Normal&lt;/button&gt;
-&lt;button class="btn btn-primary" disabled&gt;Disabled&lt;/button&gt;</div>
+&lt;button class="btn btn-primary" disabled&gt;Disabled&lt;/button&gt;
+
+/* Disabled-state remap, part of the .btn-primary rule shown in
+   "Ratified variants" above — without these, MDB's disabled state falls
+   back to its own default blue, not Foundant navy. */
+.btn-primary {
+  --mdb-btn-disabled-bg: var(--colors-brand-primary-dark-blue);
+  --mdb-btn-disabled-color: #fff;
+  --mdb-btn-disabled-border-color: var(--colors-brand-primary-dark-blue);
+}</div>
   <p class="sd" style="border:none;margin:6px 0 0">Disabled uses MDB's built-in fade (<code>opacity: 0.65</code>) via the <code>disabled</code> attribute. The disabled background is remapped to the Foundant color so it fades correctly.</p>
 
-  <h3>Icon buttons</h3>
+  <h3>Icon usage in buttons <span class="status-tag status-overridden" title="Ratified rule, evidence-backed">RATIFIED</span></h3>
+  <p class="sd" style="border:none;margin:0 0 8px">Checked every real <code>.btn</code> in the production sample: 19 total, 1 with an icon — and that one (<code>.kebab-btn</code>) is icon-<em>only</em>, not a text+icon combo. Every button that has a label is text-only. That's the rule now, not an aspiration: <strong>default to text-only</strong>, with one deliberate, curated exception below. <code>.kebab-btn</code> stays its own separate pattern — icon-only, never paired with a label.</p>
   <div class="cr" style="align-items:center">
-    <button class="btn btn-primary"><i class="fa-light fa-plus me-2"></i>Add</button>
-    <button class="btn btn-outline-dark btn-sm fw-bold"><i class="fa-light fa-pen-to-square me-2"></i>Edit</button>
+    <button class="btn btn-primary"><i class="fa-light fa-plus me-2"></i>New</button>
+    <button class="btn btn-outline-dark btn-sm fw-bold">Edit</button>
     <button class="kebab-btn"><i class="fa-regular fa-ellipsis-vertical"></i></button>
   </div>
-  <div class="code-block">&lt;button class="btn btn-primary"&gt;&lt;i class="fa-light fa-plus me-2"&gt;&lt;/i&gt;Add&lt;/button&gt;
-&lt;button class="btn btn-outline-dark btn-sm fw-bold"&gt;&lt;i class="fa-light fa-pen-to-square me-2"&gt;&lt;/i&gt;Edit&lt;/button&gt;
-&lt;button class="kebab-btn"&gt;&lt;i class="fa-regular fa-ellipsis-vertical"&gt;&lt;/i&gt;&lt;/button&gt;</div>
+  <div class="code-block">&lt;!-- The one sanctioned exception: primary "create new" actions --&gt;
+&lt;button class="btn btn-primary"&gt;&lt;i class="fa-light fa-plus me-2"&gt;&lt;/i&gt;New&lt;/button&gt;
+
+&lt;!-- Everything else: text-only, no exceptions --&gt;
+&lt;button class="btn btn-outline-dark btn-sm fw-bold"&gt;Edit&lt;/button&gt;
+
+&lt;!-- Icon-only stays its own separate pattern, never combined with a label --&gt;
+&lt;button class="kebab-btn"&gt;&lt;i class="fa-regular fa-ellipsis-vertical"&gt;&lt;/i&gt;&lt;/button&gt;
+
+.kebab-btn {
+  background: none; border: 1px solid var(--colors-borders-divider);
+  border-radius: 4px; padding: 0px 5px; cursor: pointer;
+  color: var(--colors-brand-primary-dark-blue);
+}
+.kebab-btn:hover { background: var(--colors-state-layers-light-hover); }
+
+/* These are the real, confirmed inline-style values from production —
+   see the Icons section for the full standardization writeup (.icon-btn). */</div>
+  <p class="ratified-note">Ratified decision, not a draft. <strong>Exception list:</strong> primary "create new" actions only (<code>+ New</code>, <code>+ Add</code>) — the <code>+</code> is a near-universal affordance and these buttons recur often enough across list/table views to benefit from a scan-target. <strong>Everything else is text-only</strong>: Edit, Save, Cancel, Delete, Confirm, Submit, Download — no icon, no exceptions. This replaces the previous draft, which paired an icon with "Edit" — not a creation action, and not backed by any production evidence. Modals follow this too — confirmed (Section on Modals) footer buttons are already text-only in the real example checked.</p>
+
 
   <h3>Filled success / warning / info <span class="gap-flag">GAP — not in production</span></h3>
   <div class="gap-zone">
@@ -815,17 +1053,6 @@
       <button class="btn btn-info">Info</button>
     </div>
     <p class="gap-note">Production defines no filled <code>.btn-success</code>, <code>.btn-warning</code>, or <code>.btn-info</code> override. These fall through to stock MDB colors and do not match Foundant. Do not lift into production until ratified. Backlog item.</p>
-  </div>
-
-  <h3>Ghost <span class="gap-flag">GAP — new pattern, not in production</span></h3>
-  <div class="gap-zone">
-    <div class="cr" style="align-items:center">
-      <button class="btn btn-ghost">Ghost</button>
-      <button class="btn btn-ghost btn-sm fw-bold"><i class="fa-light fa-pen-to-square me-2"></i>Edit</button>
-    </div>
-    <div class="code-block">&lt;button class="btn btn-ghost"&gt;Ghost&lt;/button&gt;
-&lt;button class="btn btn-ghost btn-sm fw-bold"&gt;&lt;i class="fa-light fa-pen-to-square me-2"&gt;&lt;/i&gt;Edit&lt;/button&gt;</div>
-    <p class="gap-note">No ghost/tertiary button exists in production; <code>.btn-link</code> is the only borderless variant that ships today (text-only, no padding, no hover fill). <code>.btn-ghost</code> is a new draft class: transparent at rest, fills with the light state-layer token on hover/focus/active. Not lifted from any production evidence — needs engineering review before it round-trips into <code>mdb-customizations.css</code>. Backlog item.</p>
   </div>
 </section>
 
@@ -854,7 +1081,7 @@
     <tr><th>What</th><td>The primary content container. Groups related fields, actions, or data on a record page.</td></tr>
     <tr><th>Where</th><td><code>.card</code> &gt; <code>.card-body</code>. Record pages arrange them in a <code>.row.g-3</code> grid.</td></tr>
     <tr><th>When</th><td>Use for any discrete content module. Pair two per row on wide viewports with <code>.col-12.col-xl-6</code>. Use <code>.h-100</code> so paired cards match height.</td></tr>
-    <tr><th>Why</th><td>Customizations remove <code>.card-header</code> bottom border and <code>.card-footer</code> top border for a flatter look. Card corners render at 6px (<code>--radius-card</code>).</td></tr>
+    <tr><th>Why</th><td>Customizations remove <code>.card-header</code> bottom border and <code>.card-footer</code> top border for a flatter look. Card corners are stock MDB (<code>--mdb-card-border-radius: 0.5rem</code>, 8px) — <code>--radius-card</code> (6px) applies only to <code>.hero-card</code>, a separate page-specific class, not generic <code>.card</code>. Corrected here; the usage table previously claimed cards used <code>--radius-card</code>, which isn't true.</td></tr>
     <tr><th>How</th><td>Card header is a flex row: an <code>&lt;h5 class="card-title mb-0"&gt;</code> plus an actions cluster. Body holds the content.</td></tr>
   </table>
 
@@ -893,7 +1120,13 @@
       &lt;/div&gt;
     &lt;/div&gt;
   &lt;/div&gt;
-&lt;/div&gt;</div>
+&lt;/div&gt;
+
+.card-header { border-bottom: none; }
+.card-footer { border-top: none; }
+/* Radius, shadow, and everything else on .card itself is stock MDB —
+   no Foundant override exists. --radius-card (6px) is a separate token
+   used only by .hero-card, not this generic component. */</div>
 </section>
 
 <!-- ═══ BADGES ═══ -->
@@ -1060,126 +1293,574 @@
 
 <!-- ═══ INPUTS ═══ -->
 <section class="sec" id="inputs">
-  <h2>Text Inputs <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Standard top-label inputs.</p>
-  <div class="row g-3" style="max-width:560px">
-    <div class="col-md-6"><label class="lbl-t">Organization Name</label><input class="inp-t" placeholder="Enter name" /></div>
-    <div class="col-md-6"><label class="lbl-t">Email</label><input class="inp-t" type="email" placeholder="name@example.com" /></div>
-    <div class="col-12"><label class="lbl-t">Description</label><textarea class="inp-t" rows="2" placeholder="Enter details..." style="resize:vertical"></textarea></div>
-    <div class="col-md-6"><label class="lbl-t">With Helper</label><input class="inp-t" /><div style="font-size:11px;color:var(--g500);margin-top:3px">Helper text below input.</div></div>
-    <div class="col-md-6"><label class="lbl-t">Disabled</label><input class="inp-t" value="Cannot edit" disabled style="background:var(--g200);cursor:not-allowed" /></div>
-  </div>
-  <div class="override-detail">
-    Form border: MDB <code>#dee2e6</code> → Foundant <code>--colors-borders-enabled</code> (#757575) ·
-    Focus border: MDB <code>#1266F1</code> → Foundant <code>--colors-brand-primary-dark-blue</code> (#2D3B4A) ·
-    Focus ring: Foundant <code>rgba(45,59,74,0.25)</code> ·
-    Valid: Foundant <code>--colors-semantic-success-0</code> (#67CF9D) ·
-    Invalid: Foundant <code>--colors-semantic-danger-0</code> (#BD3B39)
+  <h2>Text Inputs <span class="gap-flag">GAP — background confirmed in production, border/focus/label remap proposed here</span></h2>
+  <p class="sd">Plain top-label field: label above input. GLM does not use MDB's notched floating-outline pattern (<code>.form-outline</code>/<code>.form-notch</code>) for standard form fields.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>Standard <code>.form-control</code> paired with a real <code>.form-label</code>. <code>.form-text</code> for helper copy below a field.</td></tr>
+    <tr><th>Where</th><td>Any create/edit form field: application forms, org profile, settings.</td></tr>
+    <tr><th>When</th><td>Default text/email/number/textarea entry. Use the <code>disabled</code> attribute for read-only fields — no custom disabled styling exists, this is stock MDB.</td></tr>
+    <tr><th>Why</th><td><code>.form-control</code> background is the only production remap confirmed today (<code>--colors-neutral-100</code>). Border, focus, and label treatment are proposed here since <code>mdb-customizations.css</code> doesn't wire them up yet.</td></tr>
+    <tr><th>How</th><td>Direct <code>border-color</code>/<code>box-shadow</code> properties, not <code>--mdb-*</code> variables. Confirmed against <code>mdb_min.css</code>: the base border does use a variable (<code>--mdb-border-color</code>), but it's shared across many unrelated components, so remapping it globally is riskier than scoping the override to <code>.form-control</code>/<code>.form-select</code> directly. The focus state settles the question either way — MDB's own winning focus rule is a hardcoded hex (<code>border-color:#3b71ca</code>), not a variable, at the same specificity as this override, confirming the direct-property approach.</td></tr>
+  </table>
+
+  <div class="gap-zone">
+    <div class="cr" style="display:block">
+      <div class="row g-3" style="max-width:560px">
+        <div class="col-md-6">
+          <label class="form-label mb-1 fw-normal" for="ti-org">Organization Name</label>
+          <input type="text" class="form-control" id="ti-org" placeholder="Enter name">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label mb-1 fw-normal" for="ti-email">Email</label>
+          <input type="email" class="form-control" id="ti-email" placeholder="name@example.com">
+        </div>
+        <div class="col-12">
+          <label class="form-label mb-1 fw-normal" for="ti-desc">Description</label>
+          <textarea class="form-control" id="ti-desc" rows="2" placeholder="Enter details..." style="resize:vertical"></textarea>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label mb-1 fw-normal" for="ti-helper">With Helper Text</label>
+          <input type="text" class="form-control" id="ti-helper">
+          <div class="form-text">Helper text below the input.</div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label mb-1 fw-normal" for="ti-disabled">Disabled</label>
+          <input type="text" class="form-control" id="ti-disabled" value="Cannot edit" disabled>
+        </div>
+      </div>
+    </div>
+    <div class="code-block">&lt;div class="mb-3"&gt;
+  &lt;label class="form-label mb-1 fw-normal" for="orgName"&gt;Organization Name&lt;/label&gt;
+  &lt;input type="text" class="form-control" id="orgName" placeholder="Enter name"&gt;
+&lt;/div&gt;
+
+.form-control {
+  border-color: var(--colors-borders-enabled);
+  border-radius: var(--radius-sm);
+}
+.form-control:focus {
+  border-color: var(--colors-borders-focused);
+  box-shadow: 0 0 0 0.25rem rgba(45, 59, 74, 0.25);
+}
+.form-label {
+  color: var(--colors-neutral-30);
+  font-weight: 400;
+  font-size: 0.75rem;
+  margin-bottom: 4px;
+}</div>
+    <p class="gap-note">Border/focus/label treatment is a proposed remap, not yet lifted from production evidence — <code>mdb-customizations.css</code> only confirms <code>.form-control</code> background (<code>--colors-neutral-100</code>). Border colors use the dedicated <code>--colors-borders-enabled</code>/<code>--colors-borders-focused</code> tokens rather than <code>--colors-brand-primary-dark-blue</code> directly, since <code>foundant-tokens.css</code> defines them as the more semantically correct target. Confirmed against <code>mdb_min.css</code>: MDB's own winning focus rule is a hardcoded hex (<code>border-color:#3b71ca</code>), not a variable, at the same specificity as this override, so the direct-property approach here is evidence-backed rather than a guess. Label color is deliberately lighter than body text, not matched to it: <code>mdb-customizations.css</code> sets <code>--mdb-body-color</code> to <code>--colors-brand-primary-dark-blue</code> globally, so unstyled text (including what's typed into the field) already renders navy by inheritance. Production already uses this exact light-label/dark-value hierarchy in two real places — <code>.detail-label</code> + <code>.detail-value</code>, and <code>.summary-card dt</code> + <code>dd</code> — where the label gets an explicit gray and the value inherits navy; this label follows that same pattern. Font-weight and margin are intentionally left out of the CSS rule and applied as <code>fw-normal</code>/<code>mb-1</code> utility classes in markup instead, per the already-ratified "spacing uses Bootstrap <code>m-*</code>/<code>p-*</code> utilities" convention. <code>font-size: 0.75rem</code> has no token to reference — <code>foundant-tokens.css</code> defines zero font-size tokens today (backlog #7), and production's own <code>.detail-label</code> hardcodes this same raw value with no token either, so this matches evidence rather than inventing a token unilaterally. This was sent to engineering directly as the answer to their own <code>.form-label</code> question — pending their confirmation. Disabled state is stock MDB, no override exists. Backlog item — needs engineering review before it round-trips into <code>mdb-customizations.css</code>.</p>
   </div>
 </section>
 
 <!-- ═══ SELECTS ═══ -->
 <section class="sec" id="selects">
-  <h2>Select <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Native dropdowns.</p>
-  <div class="no-override-detail"><strong>No structural override detected.</strong></div>
-  <div class="row g-3" style="max-width:560px">
-    <div class="col-md-6"><label class="lbl-t">Category</label><select class="sel-t"><option>Choose...</option><option>Education</option><option>Health</option></select></div>
-    <div class="col-md-6"><label class="lbl-t">Status</label><select class="sel-t"><option>All</option><option>Active</option><option>Closed</option></select></div>
+  <h2>Select <span class="gap-flag">GAP — no evidence of its own; extends the Text Inputs proposal for visual consistency</span></h2>
+  <p class="sd">Native <code>&lt;select&gt;</code>, styled to match <code>.form-control</code> so the field family reads as one system.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>Standard <code>.form-select</code> paired with a real <code>.form-label</code>.</td></tr>
+    <tr><th>Where</th><td>Any create/edit form field with a fixed set of options: category, status, org type.</td></tr>
+    <tr><th>When</th><td>Use for single-choice selection from a short, known list. Prefer Autocomplete for long or searchable lists.</td></tr>
+    <tr><th>Why</th><td>No production evidence exists for <code>.form-select</code> at all — it isn't customized anywhere, and the one production HTML sample in this project has no <code>&lt;select&gt;</code> elements to check. Rather than leave it on stock MDB while <code>.form-control</code> gets a proposed remap next to it, this extends the same Text Inputs proposal (Section 6h) so a form doesn't visibly mix two border/focus treatments in the same row.</td></tr>
+    <tr><th>How</th><td>Same <code>border-color</code>/<code>border-radius</code>/focus rule, now applied to both <code>.form-control</code> and <code>.form-select</code> together.</td></tr>
+  </table>
+
+  <div class="gap-zone">
+    <div class="cr" style="display:block">
+      <div class="row g-3" style="max-width:560px">
+        <div class="col-md-6">
+          <label class="form-label mb-1 fw-normal" for="sel-category">Category</label>
+          <select class="form-select" id="sel-category">
+            <option selected>Choose...</option>
+            <option>Education</option>
+            <option>Health</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label mb-1 fw-normal" for="sel-status">Status</label>
+          <select class="form-select" id="sel-status">
+            <option>All</option>
+            <option selected>Active</option>
+            <option>Closed</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="code-block">&lt;div class="mb-3"&gt;
+  &lt;label class="form-label mb-1 fw-normal" for="category"&gt;Category&lt;/label&gt;
+  &lt;select class="form-select" id="category"&gt;
+    &lt;option selected&gt;Choose...&lt;/option&gt;
+    &lt;option&gt;Education&lt;/option&gt;
+  &lt;/select&gt;
+&lt;/div&gt;
+
+.form-control, .form-select {
+  border-color: var(--colors-borders-enabled);
+  border-radius: var(--radius-sm);
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--colors-borders-focused);
+  box-shadow: 0 0 0 0.25rem rgba(45, 59, 74, 0.25);
+}</div>
+    <p class="gap-note">No production evidence exists for <code>.form-select</code> — this section has no confirmed baseline of its own, unlike Text Inputs (which at least has a confirmed background remap). This is a design decision to keep the field family visually unified, not a lifted or independently-verified value. If engineering has customized <code>.form-select</code> somewhere outside this project's file set, that evidence should override this draft. Needs engineering review before it round-trips into <code>mdb-customizations.css</code>.</p>
   </div>
 </section>
 
 <!-- ═══ CHECK/RADIO/SWITCH ═══ -->
 <section class="sec" id="checkradio">
-  <h2>Checkbox, Radio &amp; Switch <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Selection controls.</p>
-  <div class="no-override-detail"><strong>No structural override detected:</strong> Uses MDB5/Bootstrap form-check defaults. Checked color follows theme primary.</div>
-  <div class="row g-4">
-    <div class="col-md-4"><p class="section-eyebrow">Checkbox</p><div class="form-check"><input class="form-check-input" type="checkbox" checked id="c1"><label class="form-check-label" for="c1" style="font-size:13px">Checked</label></div><div class="form-check"><input class="form-check-input" type="checkbox" id="c2"><label class="form-check-label" for="c2" style="font-size:13px">Unchecked</label></div><div class="form-check"><input class="form-check-input" type="checkbox" disabled id="c3"><label class="form-check-label" for="c3" style="font-size:13px">Disabled</label></div></div>
-    <div class="col-md-4"><p class="section-eyebrow">Radio</p><div class="form-check"><input class="form-check-input" type="radio" name="r" checked id="r1"><label class="form-check-label" for="r1" style="font-size:13px">One</label></div><div class="form-check"><input class="form-check-input" type="radio" name="r" id="r2"><label class="form-check-label" for="r2" style="font-size:13px">Two</label></div></div>
-    <div class="col-md-4"><p class="section-eyebrow">Switch</p><div class="form-check form-switch"><input class="form-check-input" type="checkbox" checked id="s1"><label class="form-check-label" for="s1" style="font-size:13px">On</label></div><div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="s2"><label class="form-check-label" for="s2" style="font-size:13px">Off</label></div></div>
+  <h2>Checkbox, Radio &amp; Switch <span class="gap-flag">GAP — stock MDB checked/focus color, Foundant treatment proposed here</span></h2>
+  <p class="sd">Selection controls. Markup was already real MDB (<code>.form-check</code>/<code>.form-check-input</code>/<code>.form-switch</code>) — the correction here is the color, not the structure.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>Standard <code>.form-check</code> for checkbox and radio, <code>.form-check.form-switch</code> for switch.</td></tr>
+    <tr><th>Where</th><td>Any multi-select list, single-choice radio group, or on/off toggle in a form.</td></tr>
+    <tr><th>When</th><td>Checkbox for independent multi-select. Radio for mutually-exclusive single choice. Switch for an immediate on/off setting, not a form submission choice.</td></tr>
+    <tr><th>Why</th><td>No <code>.form-check-input</code> override exists anywhere in production, so checked/focus state currently renders MDB's stock default blue — not the brand navy used everywhere else. The previous kitchen sink draft claimed "checked color follows theme primary," which isn't supported by any evidence found; that claim is corrected here, not carried forward.</td></tr>
+    <tr><th>How</th><td>Remaps <code>:checked</code> and <code>:focus</code> states to Foundant tokens. No hardcoded hex.</td></tr>
+  </table>
+
+  <div class="gap-zone">
+    <div class="cr" style="display:block">
+      <div class="row g-4">
+        <div class="col-md-4"><p class="section-eyebrow">Checkbox</p><div class="form-check"><input class="form-check-input" type="checkbox" checked id="c1"><label class="form-check-label" for="c1">Checked</label></div><div class="form-check"><input class="form-check-input" type="checkbox" id="c2"><label class="form-check-label" for="c2">Unchecked</label></div><div class="form-check"><input class="form-check-input" type="checkbox" disabled id="c3"><label class="form-check-label" for="c3">Disabled</label></div></div>
+        <div class="col-md-4"><p class="section-eyebrow">Radio</p><div class="form-check"><input class="form-check-input" type="radio" name="cr-r" checked id="r1"><label class="form-check-label" for="r1">One</label></div><div class="form-check"><input class="form-check-input" type="radio" name="cr-r" id="r2"><label class="form-check-label" for="r2">Two</label></div></div>
+        <div class="col-md-4"><p class="section-eyebrow">Switch</p><div class="form-check form-switch"><input class="form-check-input" type="checkbox" checked id="s1"><label class="form-check-label" for="s1">On</label></div><div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="s2"><label class="form-check-label" for="s2">Off</label></div></div>
+      </div>
+    </div>
+    <div class="code-block">&lt;div class="form-check"&gt;
+  &lt;input class="form-check-input" type="checkbox" checked id="c1"&gt;
+  &lt;label class="form-check-label" for="c1"&gt;Checked&lt;/label&gt;
+&lt;/div&gt;
+
+.form-check-input {
+  border-width: 1px;
+}
+.form-check-input:checked {
+  border-color: var(--colors-brand-primary-dark-blue);
+}
+.form-check-input[type=checkbox]:checked {
+  background-color: var(--colors-brand-primary-dark-blue);
+}
+.form-check-input[type=radio]:checked:after {
+  border-color: var(--colors-brand-primary-dark-blue);
+  background-color: var(--colors-brand-primary-dark-blue);
+}
+.form-check-input:focus {
+  border-color: var(--colors-borders-focused);
+  box-shadow: 0 0 0 0.25rem rgba(45, 59, 74, 0.25);
+}
+.form-switch .form-check-input:checked[type=checkbox]:after {
+  background-color: var(--colors-brand-primary-dark-blue);
+}
+.form-switch .form-check-input:checked:focus:before {
+  box-shadow: 3px -1px 0px 13px var(--colors-brand-primary-dark-blue);
+}</div>
+    <p class="gap-note">Standalone proposal — unlike Select (Section 6h), there's no sibling remap to extend here; this is the first customization proposed for this component family. A first attempt at this fix was wrong on two counts, both about specificity, not load order, confirmed by checking <code>mdb_min.css</code> directly: <strong>checkbox's</strong> real checked-state rule is <code>.form-check-input[type=checkbox]:checked</code> — the attribute selector makes it more specific than a plain <code>.form-check-input:checked</code> rule, so MDB's blue won outright regardless of which stylesheet loaded last. <strong>Radio's</strong> visible dot isn't the base element's background at all — it's a <code>::after</code> pseudo-element, untouched by any rule on the base element. Both are now matched at the correct selector. <strong>Switch</strong> was already correct from an earlier pass — MDB colors the knob via <code>::after</code> at higher specificity, not the track. <strong>Border width</strong> is 2px in MDB's own Material-style checkbox rule (<code>border: .125rem solid</code>); overridden to 1px here at equal specificity. An earlier version of this fix guessed <code>accent-color</code> as the mechanism — confirmed via <code>mdb_min.css</code> that MDB doesn't use it anywhere, so that guess was removed rather than left in as dead code. Disabled state is stock MDB, no override exists. Needs engineering review before it round-trips into <code>mdb-customizations.css</code>.</p>
   </div>
 </section>
 
 <!-- ═══ DATEPICKER ═══ -->
 <section class="sec" id="datepicker">
-  <h2>Datepicker <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Calendar selection (static).</p>
-  <div style="max-width:260px"><label class="lbl-t">Date</label><div style="position:relative"><input class="inp-t" value="04/28/2026" /><i class="fas fa-calendar" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--g400);font-size:13px"></i></div></div>
-  <div style="height:12px"></div>
-  <div style="width:260px;border:1px solid var(--t-bdr);border-radius:var(--r-md);overflow:hidden">
-    <div style="background:var(--t-primary);color:#fff;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600"><i class="fas fa-chevron-left" style="cursor:pointer;font-size:11px"></i>April 2026<i class="fas fa-chevron-right" style="cursor:pointer;font-size:11px"></i></div>
-    <div style="display:grid;grid-template-columns:repeat(7,1fr);text-align:center;padding:6px;font-size:12px">
-      <div style="padding:5px;color:var(--g400);font-size:10px;font-weight:600">Su</div><div style="padding:5px;color:var(--g400);font-size:10px;font-weight:600">Mo</div><div style="padding:5px;color:var(--g400);font-size:10px;font-weight:600">Tu</div><div style="padding:5px;color:var(--g400);font-size:10px;font-weight:600">We</div><div style="padding:5px;color:var(--g400);font-size:10px;font-weight:600">Th</div><div style="padding:5px;color:var(--g400);font-size:10px;font-weight:600">Fr</div><div style="padding:5px;color:var(--g400);font-size:10px;font-weight:600">Sa</div>
-      <div style="padding:5px;color:var(--g300)">29</div><div style="padding:5px;color:var(--g300)">30</div><div style="padding:5px;color:var(--g300)">31</div><div style="padding:5px">1</div><div style="padding:5px">2</div><div style="padding:5px">3</div><div style="padding:5px">4</div>
-      <div style="padding:5px">5</div><div style="padding:5px">6</div><div style="padding:5px">7</div><div style="padding:5px">8</div><div style="padding:5px">9</div><div style="padding:5px">10</div><div style="padding:5px">11</div>
-      <div style="padding:5px">12</div><div style="padding:5px">13</div><div style="padding:5px">14</div><div style="padding:5px">15</div><div style="padding:5px">16</div><div style="padding:5px">17</div><div style="padding:5px">18</div>
-      <div style="padding:5px">19</div><div style="padding:5px">20</div><div style="padding:5px">21</div><div style="padding:5px">22</div><div style="padding:5px">23</div><div style="padding:5px">24</div><div style="padding:5px">25</div>
-      <div style="padding:5px">26</div><div style="padding:5px">27</div><div style="padding:5px;background:var(--t-primary);color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;margin:auto">28</div><div style="padding:5px">29</div><div style="padding:5px">30</div><div style="padding:5px;color:var(--g300)">1</div><div style="padding:5px;color:var(--g300)">2</div>
-    </div>
+  <h2>Datepicker <span class="wip-tag">WIP — decision made, real markup still needed</span></h2>
+  <p class="sd">Calendar selection. <strong>Direction confirmed:</strong> style production's actual library (<code>bootstrap-datepicker.js</code>), not MDB5's native Datepicker component — see note below.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>A calendar dropdown attached to a date-entry field.</td></tr>
+    <tr><th>Where</th><td>Any date field across GLM — award dates, deadlines, reporting periods.</td></tr>
+    <tr><th>Why</th><td>Production loads <code>bootstrap-datepicker.js</code> (the older eternicode jQuery plugin) today, confirmed via the production HTML's script tags. Zero CSS customization of it exists anywhere. MDB5 Pro (confirmed in <code>mdb_min.css</code>) ships its own, entirely different native Datepicker component — but the decision is to theme what's actually live, and log the native component as a future option rather than migrate now.</td></tr>
+    <tr><th>How</th><td>Not yet documented — see gap-note.</td></tr>
+  </table>
+
+  <div class="gap-zone">
+    <p class="gap-note"><strong>Blocked on real markup, not on the decision.</strong> "Bootstrap-datepicker" has been forked and modified enough across versions that its exact rendered class structure (<code>.day</code>/<code>.today</code>/<code>.active</code> in the classic eternicode version, but possibly different in whatever fork/version this build actually uses) can't be safely assumed from memory — guessing here risks the same problem as the fake calendar this replaces, just with different wrong details. Needed before this section can be built for real: a screenshot of the datepicker actually open somewhere in the app, or better, the DOM/rendered HTML of it open (Inspect Element while it's showing). Once that's in hand, this gets rebuilt against real markup like Text Inputs and Checkbox/Radio/Switch were.</p>
+    <p class="ratified-note">Direction is ratified, though: <strong>style bootstrap-datepicker as it exists in production today.</strong> A move to MDB5's native Datepicker component (real, confirmed available — <code>.datepicker-cell</code>, <code>.datepicker-header</code>, <code>.datepicker-main</code>, etc. in <code>mdb_min.css</code>) is logged as a future option, not a current plan. If that migration happens later, this section gets rebuilt against the native component instead — it would be a different rebuild, not an extension of this one, since the two libraries share no markup or class names.</p>
   </div>
-  <div class="override-detail">Datepicker header bg uses <code>--colors-brand-primary-dark-blue</code> (#2D3B4A). Toggle focus and cell-in-range colors follow primary token.</div>
 </section>
 
 <!-- ═══ AUTOCOMPLETE ═══ -->
 <section class="sec" id="autocomplete">
-  <h2>Autocomplete <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Typeahead.</p>
-  <div class="no-override-detail"><strong>No structural override detected.</strong></div>
-  <div style="max-width:360px"><label class="lbl-t">Organization</label><div style="position:relative"><input class="inp-t" value="Commun" style="border-radius:var(--r-sm) var(--r-sm) 0 0" /><div style="border:1px solid var(--t-bdr);border-top:none;border-radius:0 0 var(--r-sm) var(--r-sm);box-shadow:var(--t-shadow-sm);background:#fff"><div style="padding:8px 12px;font-size:12px;background:var(--t-primary-bg);cursor:pointer"><b>Commun</b>ity Health Alliance</div><div style="padding:8px 12px;font-size:12px;cursor:pointer"><b>Commun</b>ity Foundation</div></div></div></div>
+  <h2>Autocomplete <span class="gap-flag">GAP — real component confirmed in use, item/label color proposed here</span></h2>
+  <p class="sd">MDB5's native Autocomplete — genuinely in production (unlike Datepicker), confirmed via real markup and two scoped overrides.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>Real MDB <code>.autocomplete</code> component: a <code>.form-control</code> wrapped in <code>.autocomplete</code>, with results rendered into <code>.autocomplete-dropdown-container</code> &gt; <code>.autocomplete-dropdown</code> &gt; <code>.autocomplete-items-list</code> of <code>.autocomplete-item</code>s.</td></tr>
+    <tr><th>Where</th><td>Confirmed live today on the header search box (production HTML: <code>id="HeaderSearchBox" class="form-control ... autocomplete-input"</code>). Also has a dedicated org-search instance — <code>#autocomplete-dropdown-organizationSearch</code> — confirmed by a real, ID-scoped override in <code>mdb-customizations.css</code>.</td></tr>
+    <tr><th>When</th><td>Use for any typeahead search-and-select field, like finding an organization or a contact by name.</td></tr>
+    <tr><th>Why</th><td>Two real overrides exist: <code>.autocomplete-loader{display:none}</code> hides the built-in spinner globally, and the org-search instance specifically removes the dropdown's shadow. Everything else — item hover color, label color — is stock MDB blue today. Proposed here using established Foundant tokens, not yet confirmed as production's direction.</td></tr>
+    <tr><th>How</th><td>The header search box (a navbar-specific context) uses MDB's notched floating-outline structure (<code>.form-notch</code>) — but that's <em>not</em> the pattern for this demo. A standard form-context autocomplete, like searching for an organization inside a normal form, follows the ratified plain top-label pattern (Text Inputs, Section 6h), same as every other field.</td></tr>
+  </table>
+
+  <div class="gap-zone">
+    <div class="cr" style="display:block">
+      <div class="autocomplete" style="max-width:360px">
+        <label class="form-label mb-1 fw-normal" for="organizationSearch">Organization</label>
+        <input type="text" class="form-control" id="organizationSearch" placeholder="Search organizations..." autocomplete="off" value="Commun">
+        <div class="autocomplete-dropdown-container" style="position:relative;z-index:5">
+          <div class="autocomplete-dropdown" style="opacity:1;transform:none;border-radius:var(--radius-sm);border:1px solid var(--colors-borders-divider)">
+            <ul class="autocomplete-items-list" style="margin:0;padding:4px 0">
+              <li class="autocomplete-item active" style="list-style:none;padding:8px 14px;cursor:pointer;font-size:14px"><strong>Commun</strong>ity Health Alliance</li>
+              <li class="autocomplete-item" style="list-style:none;padding:8px 14px;cursor:pointer;font-size:14px"><strong>Commun</strong>ity Foundation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="code-block">&lt;div class="autocomplete"&gt;
+  &lt;label class="form-label mb-1 fw-normal" for="organizationSearch"&gt;Organization&lt;/label&gt;
+  &lt;input type="text" class="form-control" id="organizationSearch"
+         placeholder="Search organizations..." autocomplete="off"&gt;
+  &lt;!-- MDB's JS renders this on input; shown here expanded for reference --&gt;
+  &lt;div class="autocomplete-dropdown-container"&gt;
+    &lt;div class="autocomplete-dropdown"&gt;
+      &lt;ul class="autocomplete-items-list"&gt;
+        &lt;li class="autocomplete-item active"&gt;Community Health Alliance&lt;/li&gt;
+        &lt;li class="autocomplete-item"&gt;Community Foundation&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+/* RATIFIED — confirmed real overrides in mdb-customizations.css */
+.autocomplete-loader { display: none; }
+#autocomplete-dropdown-organizationSearch .autocomplete-dropdown {
+  --mdb-autocomplete-dropdown-box-shadow: none;
+}
+
+/* GAP — proposed here, not yet confirmed as production's direction.
+   Item hover/active and label color are stock MDB blue (#3b71ca) today. */
+.autocomplete-item.active,
+.autocomplete-item:hover {
+  --mdb-autocomplete-item-hover-background-color: var(--colors-state-layers-light-hover);
+}
+.autocomplete-label {
+  --mdb-autocomplete-label-color: var(--colors-brand-primary-dark-blue);
+}
+
+/* GAP — separate, previously-flagged leftover (Section 6j, Input Groups):
+   autocomplete nested in an input-group hardcodes a blue focus border with
+   !important. Matched at the same specificity + !important to override it. */
+.input-group > .autocomplete > .form-control:focus {
+  border-left: 1px solid var(--colors-borders-focused) !important;
+}</div>
+    <p class="gap-note">The <code>#autocomplete-dropdown-organizationSearch</code> ID match is real, confirmed evidence — not a guess at a plausible ID. The rest (item hover, label color, the input-group focus-border fix) is proposed, using tokens already established elsewhere rather than inventing new values. Needs engineering review before it round-trips into <code>mdb-customizations.css</code>.</p>
+  </div>
 </section>
 
 <!-- ═══ STEPPER ═══ -->
 <section class="sec" id="stepper">
-  <h2>Stepper <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Multi-step progress.</p>
-  <div style="display:flex;align-items:center;justify-content:center">
-    <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:32px;height:32px;border-radius:50%;background:var(--t-success);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px"><i class="fas fa-check" style="font-size:11px"></i></div><span style="font-size:10px;color:var(--t-success-txt);font-weight:500">Details</span></div>
-    <div style="flex:1;height:2px;background:var(--t-success);max-width:80px"></div>
-    <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:32px;height:32px;border-radius:50%;background:var(--t-primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500">2</div><span style="font-size:10px;color:var(--t-primary);font-weight:500">Budget</span></div>
-    <div style="flex:1;height:2px;background:var(--g300);max-width:80px"></div>
-    <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:32px;height:32px;border-radius:50%;background:var(--g300);color:var(--g500);display:flex;align-items:center;justify-content:center;font-size:13px">3</div><span style="font-size:10px;color:var(--g500)">Review</span></div>
-    <div style="flex:1;height:2px;background:var(--g300);max-width:80px"></div>
-    <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:32px;height:32px;border-radius:50%;background:var(--g300);color:var(--g500);display:flex;align-items:center;justify-content:center;font-size:13px">4</div><span style="font-size:10px;color:var(--g500)">Submit</span></div>
+  <h2>Stepper <span class="gap-flag">GAP — real MDB component, structurally different from the old draft, no evidence of production use</span></h2>
+  <p class="sd">MDB5's native Stepper — confirmed real in <code>mdb_min.css</code>, but it's <strong>vertical-only</strong>. There's no <code>.stepper-horizontal</code> class anywhere; the previous draft's horizontal icon-row didn't match the real component's structure, not just its colors.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>Each step is its own expanding section: a clickable <code>.stepper-head</code> (icon + label) followed by a <code>.stepper-content</code> area that shows only for the active step.</td></tr>
+    <tr><th>Where</th><td>No evidence GLM uses this anywhere today — no reference in <code>mdb-customizations.css</code>, <code>GLM.Summary.css</code>, or the production HTML sample. This documents the correct native component to reach for <em>if</em> a multi-step flow gets built, not a confirmed existing pattern.</td></tr>
+    <tr><th>When</th><td>Multi-step forms where each step needs real content space (e.g. a grant application: Details → Budget → Review → Submit), not a short progress indicator alone.</td></tr>
+    <tr><th>Why</th><td>State classes (<code>.stepper-completed</code>, <code>.stepper-active</code>, <code>.stepper-invalid</code>, <code>.stepper-disabled</code>) drive icon color via MDB's own <code>-bg-subtle</code>/<code>-text-emphasis</code> tokens — stock MDB primary/success/danger, not Foundant. There's also a separate <code>.stepper-mobile</code> variant (a condensed horizontal progress-bar look for small screens) — that's the closest thing to "horizontal" MDB ships, and it's a responsive fallback, not a general layout choice.</td></tr>
+    <tr><th>How</th><td>Step state is a class on <code>.stepper-step</code> itself (<code>.stepper-completed</code>, <code>.stepper-active</code>), not on the icon directly.</td></tr>
+  </table>
+
+  <div class="gap-zone">
+    <div class="cr" style="display:block">
+      <ul class="stepper" style="max-width:420px;list-style:none;margin:0;padding:0">
+        <li class="stepper-step stepper-completed">
+          <a class="stepper-head" style="display:flex;align-items:center;gap:12px;text-decoration:none;cursor:pointer;padding:8px 0">
+            <span class="stepper-head-icon" style="display:flex;align-items:center;justify-content:center;width:31px;height:31px;border-radius:50%;background:var(--colors-semantic-success-50);color:var(--colors-semantic-success-700,var(--colors-brand-primary-dark-blue));font-size:14px"><i class="fa-light fa-check"></i></span>
+            <span class="stepper-head-text" style="font-weight:500;color:var(--colors-brand-primary-dark-blue)">Details</span>
+          </a>
+        </li>
+        <li class="stepper-step stepper-active">
+          <a class="stepper-head" style="display:flex;align-items:center;gap:12px;text-decoration:none;cursor:pointer;padding:8px 0">
+            <span class="stepper-head-icon" style="display:flex;align-items:center;justify-content:center;width:31px;height:31px;border-radius:50%;background:var(--colors-brand-secondary-light-blue);color:var(--colors-brand-primary-dark-blue);font-size:14px;font-weight:500">2</span>
+            <span class="stepper-head-text" style="font-weight:500;color:var(--colors-brand-primary-dark-blue)">Budget</span>
+          </a>
+          <div class="stepper-content" style="padding:4px 0 20px 43px;font-size:13px;color:var(--colors-neutral-30)">Step content renders here while this step is active.</div>
+        </li>
+        <li class="stepper-step">
+          <a class="stepper-head" style="display:flex;align-items:center;gap:12px;text-decoration:none;cursor:pointer;padding:8px 0">
+            <span class="stepper-head-icon" style="display:flex;align-items:center;justify-content:center;width:31px;height:31px;border-radius:50%;background:var(--colors-neutral-70);color:var(--colors-neutral-40);font-size:14px">3</span>
+            <span class="stepper-head-text" style="color:var(--colors-neutral-40)">Review</span>
+          </a>
+        </li>
+        <li class="stepper-step">
+          <a class="stepper-head" style="display:flex;align-items:center;gap:12px;text-decoration:none;cursor:pointer;padding:8px 0">
+            <span class="stepper-head-icon" style="display:flex;align-items:center;justify-content:center;width:31px;height:31px;border-radius:50%;background:var(--colors-neutral-70);color:var(--colors-neutral-40);font-size:14px">4</span>
+            <span class="stepper-head-text" style="color:var(--colors-neutral-40)">Submit</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="code-block">&lt;ul class="stepper"&gt;
+  &lt;li class="stepper-step stepper-completed"&gt;
+    &lt;a class="stepper-head"&gt;
+      &lt;span class="stepper-head-icon"&gt;&lt;i class="fa-light fa-check"&gt;&lt;/i&gt;&lt;/span&gt;
+      &lt;span class="stepper-head-text"&gt;Details&lt;/span&gt;
+    &lt;/a&gt;
+  &lt;/li&gt;
+  &lt;li class="stepper-step stepper-active"&gt;
+    &lt;a class="stepper-head"&gt;
+      &lt;span class="stepper-head-icon"&gt;2&lt;/span&gt;
+      &lt;span class="stepper-head-text"&gt;Budget&lt;/span&gt;
+    &lt;/a&gt;
+    &lt;div class="stepper-content"&gt;Step content renders here.&lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li class="stepper-step"&gt;
+    &lt;a class="stepper-head"&gt;
+      &lt;span class="stepper-head-icon"&gt;3&lt;/span&gt;
+      &lt;span class="stepper-head-text"&gt;Review&lt;/span&gt;
+    &lt;/a&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+/* GAP — proposed, not confirmed as production's direction. MDB's own
+   defaults use --mdb-stepper-completed-head-icon-bg: var(--mdb-success-bg-subtle)
+   etc. (stock, not Foundant). Remapped to established tokens instead. */
+.stepper-completed .stepper-head-icon {
+  background-color: var(--colors-semantic-success-50);
+  color: var(--colors-semantic-success-700, var(--colors-brand-primary-dark-blue));
+}
+.stepper-active .stepper-head-icon {
+  background-color: var(--colors-brand-secondary-light-blue);
+  color: var(--colors-brand-primary-dark-blue);
+}
+.stepper-invalid .stepper-head-icon {
+  background-color: var(--colors-semantic-danger-50);
+  color: var(--colors-semantic-danger-700);
+}
+.stepper-disabled .stepper-head-icon {
+  background-color: var(--colors-neutral-70);
+  color: var(--colors-neutral-40);
+}</div>
+    <p class="gap-note">Genuinely no evidence this component is used in GLM today — this section documents MDB5's real, available Stepper as the correct thing to reach for, flagged clearly as unconfirmed rather than presented as an existing pattern. The prior draft's horizontal layout has no equivalent in MDB5's shipped CSS at all; <code>.stepper-mobile</code> is the closest real variant, and it's a small-screen progress-bar fallback, not a horizontal desktop option. <code>--colors-semantic-success-700</code> isn't a ratified token yet (danger has the full 50–900 ramp; success is still proposed — Section 2c), so it's used with a fallback to <code>--colors-brand-primary-dark-blue</code>. <code>--colors-semantic-danger-700</code> is real and ratified, used directly. Needs team decision on whether to build this at all, then engineering review before any of it round-trips into <code>mdb-customizations.css</code>.</p>
   </div>
-  <div class="override-detail">Stepper mobile bg: <code>#fbfbfb</code> (matches light override). Step indicator colors follow theme primary/success overrides.</div>
 </section>
 
 <!-- ═══ VALIDATION ═══ -->
 <section class="sec" id="validation">
-  <h2>Validation <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Valid/invalid states.</p>
-  <div style="max-width:440px;display:flex;flex-direction:column;gap:14px">
-    <div><label class="lbl-t">Valid</label><input class="inp-t" style="border-color:var(--t-valid)" value="Community Health Alliance" /><div style="font-size:11px;color:var(--t-valid);margin-top:3px"><i class="fas fa-check-circle me-1"></i>Looks good!</div></div>
-    <div><label class="lbl-t">Invalid</label><input class="inp-t" style="border-color:var(--t-invalid)" placeholder="Required" /><div style="font-size:11px;color:var(--t-invalid);margin-top:3px"><i class="fas fa-times-circle me-1"></i>Required field.</div></div>
+  <h2>Validation <span class="status-tag status-overridden" title="Confirmed live in production">CONFIRMED</span> <span class="gap-flag">+ PROPOSED modernization below</span></h2>
+  <p class="sd">Two things here: what's actually live in production today (confirmed by engineering, not guessed), and a proposed modern replacement — the team is planning to modernize form completion, not just port it as-is, so this is an open design conversation, not a settled decision.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>Today: legacy ASP.NET MVC unobtrusive-validation classes, <code>.field-validation-error</code> (per-field) and <code>.validation-summary-errors</code> (bottom-of-form list). Proposed: Bootstrap's real <code>is-invalid</code>/<code>.invalid-feedback</code> per field, plus a summary box built from the already-proposed <code>.alert-danger</code> (Alerts section) rather than a bespoke box.</td></tr>
+    <tr><th>Where</th><td>Confirmed live and field-level + bottom summary together, per engineering: <em>"I would just go into an application and look at it — it's field level and bottom summary."</em></td></tr>
+    <tr><th>When</th><td>Per-field message when a single input fails; bottom summary when a form submission has multiple failures the person needs to see at a glance.</td></tr>
+    <tr><th>Why</th><td>Today's version hardcodes <code>border: 2px solid #cd0a0a</code> and <code>color: #000000 !important</code> — not tokenized at all, confirmed directly in <code>mdb-customizations.css</code>. The team is open to changing this rather than preserving it, so the proposal below isn't a "fix the colors" pass — it's a genuinely different, more modern pattern.</td></tr>
+    <tr><th>How</th><td>The proposal reuses <code>.form-group .fa-circle-check</code> / <code>.fa-circle-exclamation</code> — real, already-tokenized icon classes confirmed in production today — rather than inventing new iconography for validation.</td></tr>
+  </table>
+
+  <h3>Current — confirmed live</h3>
+  <div class="cr" style="display:block">
+    <div style="max-width:440px;display:flex;flex-direction:column;gap:4px">
+      <label class="form-label mb-1 fw-normal" for="val-current">Organization Name</label>
+      <input type="text" class="form-control" id="val-current" placeholder="Required">
+      <span class="field-validation-error">This field is required.</span>
+    </div>
+    <div style="max-width:440px;margin-top:16px">
+      <div class="validation-summary-errors">
+        <ul>
+          <li>Organization Name is required.</li>
+          <li>Award Amount must be greater than zero.</li>
+        </ul>
+      </div>
+    </div>
   </div>
-  <div class="override-detail">
-    Valid: MDB <code>#00B74A</code> → Foundant <code>--colors-semantic-success-0</code> (#67CF9D) ·
-    Invalid: MDB <code>#F93154</code> → Foundant <code>--colors-semantic-danger-0</code> (#BD3B39)
+  <div class="code-block">&lt;div class="form-group"&gt;
+  &lt;label class="form-label" for="orgName"&gt;Organization Name&lt;/label&gt;
+  &lt;input type="text" class="form-control" id="orgName"&gt;
+  &lt;span class="field-validation-error"&gt;This field is required.&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;div class="validation-summary-errors"&gt;
+  &lt;ul&gt;
+    &lt;li&gt;Organization Name is required.&lt;/li&gt;
+    &lt;li&gt;Award Amount must be greater than zero.&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+
+/* RATIFIED — confirmed real, live today (mdb-customizations.css).
+   Both classes share this exact box styling. Neither is tokenized. */
+.field-validation-error,
+.validation-summary-errors {
+  border-radius: 4px;
+  color: #000000 !important;
+  display: block;
+  line-height: 1.5em;
+  margin-top: 15px;
+  padding: 5px 7px 4px;
+  border: 2px solid #cd0a0a;
+}
+.validation-summary-errors ul {
+  margin-bottom: 0;
+  list-style-type: none;
+  padding-left: 16px;
+}</div>
+  <p class="ratified-note">Confirmed live, not inferred from CSS alone: this is what actually renders today, field-level and bottom-summary both. Hardcoded hex, not tokenized — that's accurately reflected here, not smoothed over.</p>
+
+  <h3 style="margin-top:24px">Proposed — modernized <span class="gap-flag">GAP — open for discussion, not decided</span></h3>
+  <div class="gap-zone">
+    <div class="cr" style="display:block">
+      <div style="max-width:440px;display:flex;flex-direction:column;gap:4px">
+        <label class="form-label mb-1 fw-normal" for="val-proposed">Organization Name</label>
+        <input type="text" class="form-control is-invalid" id="val-proposed" placeholder="Required">
+        <div class="invalid-feedback" style="display:block"><i class="fa-light fa-circle-exclamation me-1"></i>This field is required.</div>
+      </div>
+      <div style="max-width:440px;margin-top:16px" class="alert alert-danger">
+        <strong><i class="fa-light fa-circle-exclamation me-2"></i>Please fix the following:</strong>
+        <ul class="mb-0 mt-1">
+          <li>Organization Name is required.</li>
+          <li>Award Amount must be greater than zero.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="code-block">&lt;div class="mb-3"&gt;
+  &lt;label class="form-label mb-1 fw-normal" for="orgName"&gt;Organization Name&lt;/label&gt;
+  &lt;input type="text" class="form-control is-invalid" id="orgName"&gt;
+  &lt;div class="invalid-feedback"&gt;
+    &lt;i class="fa-light fa-circle-exclamation me-1"&gt;&lt;/i&gt;This field is required.
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="alert alert-danger"&gt;
+  &lt;strong&gt;&lt;i class="fa-light fa-circle-exclamation me-2"&gt;&lt;/i&gt;Please fix the following:&lt;/strong&gt;
+  &lt;ul class="mb-0 mt-1"&gt;
+    &lt;li&gt;Organization Name is required.&lt;/li&gt;
+    &lt;li&gt;Award Amount must be greater than zero.&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+
+/* Per-field: real Bootstrap classes, remapped to Foundant tokens
+   instead of MDB's stock red/green. */
+.form-control.is-invalid {
+  --mdb-form-control-border-color: var(--colors-semantic-danger-0);
+  border-color: var(--colors-semantic-danger-0);
+}
+.invalid-feedback {
+  color: var(--colors-semantic-danger-0);
+  font-size: 12px;
+}
+/* Summary: reuses .alert-danger exactly as proposed in the Alerts section —
+   not a separate invention. */</div>
+    <p class="gap-note">This is a proposal, not a decision — engineering said the team is planning to modernize form completion rather than just port the legacy system forward, so this is offered as a starting point for that conversation. It reuses two things already established elsewhere rather than inventing new patterns: the summary box is exactly <code>.alert-danger</code> (Alerts section, itself still GAP/proposed), and the icons are the real <code>fa-circle-exclamation</code>/<code>fa-circle-check</code> classes already live in production for validation today (<code>.form-group .fa-circle-exclamation</code>, <code>.form-group .fa-circle-check</code>), just not currently paired with a modern message treatment. Needs actual team discussion, then engineering review, before any of it round-trips into <code>mdb-customizations.css</code>.</p>
   </div>
 </section>
 
 <!-- ═══ INPUT GROUPS ═══ -->
 <section class="sec" id="input-groups">
-  <h2>Input Groups <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Combined inputs.</p>
-  <div class="no-override-detail"><strong>No override detected.</strong></div>
-  <div style="max-width:440px;display:flex;flex-direction:column;gap:10px">
-    <div style="display:flex"><span style="padding:9px 12px;background:var(--g100);border:1px solid var(--t-form-bdr);border-right:none;border-radius:var(--r-sm) 0 0 var(--r-sm);color:var(--g600);font-size:13px">$</span><input class="inp-t" style="border-radius:0 var(--r-sm) var(--r-sm) 0" placeholder="Amount" /></div>
-    <div style="display:flex"><input class="inp-t" style="border-radius:var(--r-sm) 0 0 var(--r-sm);border-right:none" placeholder="Search..." /><button class="btn-t btn-tp" style="border-radius:0 var(--r-sm) var(--r-sm) 0;padding:9px 14px"><i class="fas fa-search"></i></button></div>
+  <h2>Input Groups <span class="gap-flag">GAP — real overrides exist, plus a newly-found focus-color bug</span></h2>
+  <p class="sd">Combined inputs: a prefix/suffix addon or a trailing button attached to a <code>.form-control</code>.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>Standard Bootstrap <code>.input-group</code> — <code>.input-group-text</code> for a static prefix/suffix, or a <code>.btn</code> attached directly for an action.</td></tr>
+    <tr><th>Where</th><td>Amount fields with a currency prefix, search boxes with a trailing icon-only button.</td></tr>
+    <tr><th>When</th><td>Use when a field needs a fixed label or action fused to its edge. Prefer a plain <code>.form-control</code> + <code>.form-label</code> (Text Inputs) when nothing needs to attach.</td></tr>
+    <tr><th>Why</th><td>Real production overrides exist for radius-joining and sizing, confirmed against <code>mdb-customizations.css</code> and <code>mdb_min.css</code>. But building this surfaced a real bug: MDB's own <code>.input-group > .form-control:focus</code> selector is more specific than the plain <code>.form-control:focus</code> rule proposed in Text Inputs, so that earlier fix's navy focus color never actually reaches an input sitting inside an input-group — it still shows MDB's hardcoded blue there. Fixed below.</td></tr>
+    <tr><th>How</th><td>Icon-only trailing buttons (like the search button here) are the sanctioned icon pattern — no text, matching the ratified icon-usage rule (Buttons section).</td></tr>
+  </table>
+
+  <div class="gap-zone">
+    <div class="cr" style="display:block">
+      <div class="input-group mb-3" style="max-width:280px">
+        <span class="input-group-text">$</span>
+        <input type="text" class="form-control" placeholder="Amount">
+      </div>
+      <div class="input-group" style="max-width:280px">
+        <input type="text" class="form-control" placeholder="Search...">
+        <button class="btn btn-outline-secondary" type="button"><i class="fa-light fa-magnifying-glass"></i></button>
+      </div>
+    </div>
+    <div class="code-block">&lt;div class="input-group mb-3"&gt;
+  &lt;span class="input-group-text"&gt;$&lt;/span&gt;
+  &lt;input type="text" class="form-control" placeholder="Amount"&gt;
+&lt;/div&gt;
+
+&lt;div class="input-group"&gt;
+  &lt;input type="text" class="form-control" placeholder="Search..."&gt;
+  &lt;button class="btn btn-outline-secondary" type="button"&gt;
+    &lt;i class="fa-light fa-magnifying-glass"&gt;&lt;/i&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+
+/* RATIFIED — confirmed in mdb-customizations.css */
+.input-group > :not(:first-child) > .form-control {
+  margin-left: calc(var(--mdb-border-width) * -1);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.input-group > div > .form-control {
+  min-height: calc(2.08rem + 2px);
+  height: calc(2.08rem + 2px);
+  padding-top: .27rem;
+  padding-bottom: .27rem;
+  transition: all .2s linear;
+}
+
+/* GAP, newly found here: MDB's own .input-group > .form-control:focus is more
+   specific than the plain .form-control:focus rule from Text Inputs, so that
+   rule's navy focus color never reaches an input inside an input-group.
+   Matched at the same specificity to fix it, using the inset-ring style MDB
+   itself uses in this context rather than the standalone ring style. */
+.input-group > .form-control:focus {
+  border-color: var(--colors-borders-focused);
+  box-shadow: inset 0 0 0 1px var(--colors-borders-focused);
+}</div>
+    <p class="gap-note">Radius-joining and sizing rules are confirmed real production overrides. The focus-color fix is new — found while building this section, not previously flagged. There's also a known, separate leftover in production: <code>.input-group > .autocomplete > .form-control:focus</code> hardcodes <code>border-left: 1px solid #3b71ca !important</code>, specific to autocomplete-in-input-group (see Autocomplete section once built). Needs engineering review before either round-trips into <code>mdb-customizations.css</code>.</p>
   </div>
 </section>
 
 <!-- ═══ MODALS ═══ -->
 <section class="sec" id="modals">
-  <h2>Modals <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Dialog overlays.</p>
-  <div class="no-override-detail"><strong>No structural override detected.</strong></div>
-  <div class="modal-t" style="max-width:440px">
-    <div class="modal-th"><h5>Confirm Award</h5><button style="background:none;border:none;font-size:18px;color:var(--g400);cursor:pointer">&times;</button></div>
-    <div class="modal-tb">Approve <strong>$75,000</strong> to Community Health Alliance?</div>
-    <div class="modal-tf"><button class="btn-t btn-to btn-sm2">Cancel</button><button class="btn-t btn-tp btn-sm2">Confirm</button></div>
+  <h2>Modals <span class="status-tag status-default" title="Confirmed stock MDB, no overrides exist">DEFAULT</span></h2>
+  <p class="sd">Dialog overlays. Confirmed against a real modal in production (the Collaborate dialog) — full markup, DevTools computed styles, and a screenshot all checked together.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>Standard MDB <code>.modal</code> — <code>.modal-dialog</code> &gt; <code>.modal-content</code> &gt; <code>.modal-header</code>/<code>.modal-body</code>/<code>.modal-footer</code>, dismissed via <code>.btn-close</code> and <code>data-mdb-dismiss="modal"</code>.</td></tr>
+    <tr><th>Where</th><td>Confirmed via a real modal's outerHTML plus DevTools Styles panel: every rule on <code>.modal-content</code>, <code>.modal-header</code>, <code>.modal-footer</code>, and <code>.btn-close</code> traces to <code>mdb.min.css</code> — none to <code>mdb-customizations.css</code>. Modals are entirely stock MDB today, not a gap needing a proposal.</td></tr>
+    <tr><th>When</th><td>Confirmations, focused single-task forms (like inviting a collaborator), anything that needs to interrupt the page without navigating away.</td></tr>
+    <tr><th>Why</th><td>Nothing to remap — there's no divergence from stock MDB to document. The one thing worth noting: the real modal checked here adds <code>.border-bottom</code> back onto its <code>.modal-header</code> as a utility class. The global default is borderless, but individual modals can opt back into a divider — that's a per-instance markup choice, not a CSS override.</td></tr>
+    <tr><th>How</th><td>Footer buttons are text-only ("Close"/"Invite" in the real example) — already matches the ratified icon-usage rule (Buttons section) without needing correction.</td></tr>
+  </table>
+
+  <div class="cr" style="display:block">
+    <div class="modal-content" style="position:relative;max-width:440px;box-shadow:var(--mdb-modal-box-shadow, 0 2px 15px -3px rgba(0,0,0,0.07))">
+      <div class="modal-header border-bottom py-2 px-3">
+        <div class="modal-title h5 w-100">Confirm Award</div>
+        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Approve <strong>$75,000</strong> to Community Health Alliance?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary fw-bold btn-sm" data-mdb-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary btn-sm">Confirm</button>
+      </div>
+    </div>
   </div>
+  <div class="code-block">&lt;div class="modal-content"&gt;
+  &lt;div class="modal-header border-bottom py-2 px-3"&gt;
+    &lt;div class="modal-title h5 w-100" id="confirmModalTitle"&gt;Confirm Award&lt;/div&gt;
+    &lt;button type="button" class="btn-close" data-mdb-ripple-init
+            data-mdb-dismiss="modal" aria-label="Close"&gt;&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class="modal-body"&gt;
+    Approve &lt;strong&gt;$75,000&lt;/strong&gt; to Community Health Alliance?
+  &lt;/div&gt;
+  &lt;div class="modal-footer"&gt;
+    &lt;button type="button" class="btn btn-outline-secondary fw-bold btn-sm"
+            data-mdb-dismiss="modal"&gt;Cancel&lt;/button&gt;
+    &lt;button type="button" class="btn btn-primary btn-sm"&gt;Confirm&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+/* No CSS block here — confirmed stock MDB, nothing to remap. */</div>
+  <p class="ratified-note">Confirmed, not assumed: real modal markup plus its DevTools Styles panel were checked together. Every <code>.modal-content</code>/<code>.modal-header</code>/<code>.modal-footer</code>/<code>.btn-close</code> rule traces to <code>mdb.min.css</code> — none to <code>mdb-customizations.css</code>. <code>.border-bottom</code> on the header is a per-instance utility-class choice (the global header default is borderless), not a component-level override — some modals add the divider back, some don't. Footer buttons are already text-only, matching the ratified icon-usage rule without needing a fix. The one internal form field seen (a form-select for permissions) already matches the ratified Selects pattern (Section 6h) — no new findings there either.</p>
+
+  <h3 style="margin-top:20px">Validation inside a modal <span class="status-tag status-overridden" title="Reuses already-established patterns">CONSISTENT</span></h3>
+  <div class="cr" style="display:block">
+    <div class="alert alert-danger" style="max-width:440px" role="alert">
+      Please fix the errors above before inviting this person.
+    </div>
+  </div>
+  <p class="sd" style="border:none;margin:6px 0 0">The real Collaborate modal includes a hidden <code>#collaborateError</code> <code>div</code> using <code>class="alert alert-danger"</code>, shown only on failure. This is the exact same class already proposed in the Alerts section (6b) and reused again in the Validation modernization proposal (6n) — one consistent pattern across all three, not three separate inventions.</p>
 </section>
 
 <!-- ═══ TOASTS ═══ -->
@@ -1291,6 +1972,81 @@
       </div>
 
       <p style="font-size:9px;color:#9ca3af;margin:12px 0 0">Columns = foreground · Rows = background</p>
+    </div>
+  </div>
+</div>
+
+<div class="cm-overlay" id="primaryMatrix" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="cm-modal">
+    <div class="cm-modal-header">
+      <h3>Primary Color Contrast Matrix</h3>
+      <button class="cm-modal-close" onclick="document.getElementById('primaryMatrix').classList.remove('open')">&times;</button>
+    </div>
+    <div class="cm-modal-body">
+      <p style="font-size:11px;color:#6b7280;margin:0 0 12px">Every foreground × background pairing · WCAG 2.2 AA · already-shipped ramp (<code>--colors-primary-shades-0/90</code>)</p>
+
+      <div class="cm-filter-bar">
+        <span>Show:</span>
+        <button class="cm-filter-btn active" onclick="filterMatrix('All',this,'primary')">All</button>
+        <button class="cm-filter-btn" onclick="filterMatrix('AA Pass',this,'primary')">AA Pass</button>
+        <button class="cm-filter-btn" onclick="filterMatrix('AA Large',this,'primary')">AA Large</button>
+        <button class="cm-filter-btn" onclick="filterMatrix('Fail',this,'primary')">Fail</button>
+      </div>
+
+      <div class="cm-legend">
+        <div class="cm-legend-item"><div class="cm-legend-dot" style="background:#dcfce7;border:1px solid #16653433"></div><span style="color:#166534">AA Pass ≥4.5:1</span></div>
+        <div class="cm-legend-item"><div class="cm-legend-dot" style="background:#fef9c3;border:1px solid #854d0e33"></div><span style="color:#854d0e">AA Large ≥3:1</span></div>
+        <div class="cm-legend-item"><div class="cm-legend-dot" style="background:#fee2e2;border:1px solid #991b1b33"></div><span style="color:#991b1b">Fail &lt;3:1</span></div>
+      </div>
+
+      <div style="overflow-x:auto">
+        <table class="cm-table" id="primaryMatrixTable"></table>
+      </div>
+
+      <div class="cm-summary">
+        <div class="cm-summary-title">AA Pass count per background</div>
+        <div class="cm-summary-row" id="primaryMatrixSummary"></div>
+      </div>
+
+      <p style="font-size:9px;color:#9ca3af;margin:12px 0 0">Columns = foreground · Rows = background</p>
+    </div>
+  </div>
+</div>
+
+<div class="cm-overlay" id="secondaryMatrix" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="cm-modal">
+    <div class="cm-modal-header">
+      <h3>Secondary Color Contrast Matrix</h3>
+      <button class="cm-modal-close" onclick="document.getElementById('secondaryMatrix').classList.remove('open')">&times;</button>
+    </div>
+    <div class="cm-modal-body">
+      <p style="font-size:11px;color:#6b7280;margin:0 0 12px">Every foreground × background pairing · WCAG 2.2 AA · new, proposed ramp</p>
+
+      <div class="cm-filter-bar">
+        <span>Show:</span>
+        <button class="cm-filter-btn active" onclick="filterMatrix('All',this,'secondary')">All</button>
+        <button class="cm-filter-btn" onclick="filterMatrix('AA Pass',this,'secondary')">AA Pass</button>
+        <button class="cm-filter-btn" onclick="filterMatrix('AA Large',this,'secondary')">AA Large</button>
+        <button class="cm-filter-btn" onclick="filterMatrix('Fail',this,'secondary')">Fail</button>
+      </div>
+
+      <div class="cm-legend">
+        <div class="cm-legend-item"><div class="cm-legend-dot" style="background:#dcfce7;border:1px solid #16653433"></div><span style="color:#166534">AA Pass ≥4.5:1</span></div>
+        <div class="cm-legend-item"><div class="cm-legend-dot" style="background:#fef9c3;border:1px solid #854d0e33"></div><span style="color:#854d0e">AA Large ≥3:1</span></div>
+        <div class="cm-legend-item"><div class="cm-legend-dot" style="background:#fee2e2;border:1px solid #991b1b33"></div><span style="color:#991b1b">Fail &lt;3:1</span></div>
+      </div>
+
+      <div style="overflow-x:auto">
+        <table class="cm-table" id="secondaryMatrixTable"></table>
+      </div>
+
+      <div class="cm-summary">
+        <div class="cm-summary-title">AA Pass count per background</div>
+        <div class="cm-summary-row" id="secondaryMatrixSummary"></div>
+      </div>
+
+      <p style="font-size:9px;color:#9ca3af;margin:12px 0 0">Columns = foreground · Rows = background</p>
+      <p style="font-size:10px;color:#991b1b;margin:6px 0 0">Expect mostly Fail here — the whole ramp sits in a narrow, very light band by design (see the gap-note on the Colors page). This isn't a bug in the matrix.</p>
     </div>
   </div>
 </div>
@@ -1412,6 +2168,18 @@
     { step: 600, hex: '#A33230' }, { step: 700, hex: '#882927' }, { step: 800, hex: '#6B1F1E' },
     { step: 900, hex: '#4D1514' }
   ];
+  var primaryPalette = [
+    { step: 0, hex: '#2D3B4A' }, { step: 10, hex: '#424F5C' }, { step: 20, hex: '#57626E' },
+    { step: 30, hex: '#6C7680' }, { step: 40, hex: '#818992' }, { step: 50, hex: '#969DA5' },
+    { step: 60, hex: '#ABB1B7' }, { step: 70, hex: '#C0C4C9' }, { step: 80, hex: '#D5D8DB' },
+    { step: 90, hex: '#EAEBED' }
+  ];
+  var secondaryPalette = [
+    { step: 0, hex: '#D5E2FA' }, { step: 10, hex: '#D9E5FB' }, { step: 20, hex: '#DDE8FB' },
+    { step: 30, hex: '#E2EBFC' }, { step: 40, hex: '#E6EEFC' }, { step: 50, hex: '#EAF1FD' },
+    { step: 60, hex: '#EEF3FD' }, { step: 70, hex: '#F2F6FE' }, { step: 80, hex: '#F7F9FE' },
+    { step: 90, hex: '#FBFCFF' }
+  ];
   var successPalette = [
     { step: 50, hex: '#E1F5EB' }, { step: 100, hex: '#C7ECDA' }, { step: 200, hex: '#AAE3C8' },
     { step: 300, hex: '#8DDAB5' }, { step: 400, hex: '#7CD5AB' }, { step: 500, hex: '#67CF9D' },
@@ -1450,8 +2218,8 @@
     return { label: 'Fail', bg: '#fee2e2', color: '#991b1b' };
   }
 
-  var matrixFilters = { danger: 'All', success: 'All', warning: 'All', info: 'All' };
-  var palettesByName = { danger: dangerPalette, success: successPalette, warning: warningPalette, info: infoPalette };
+  var matrixFilters = { danger: 'All', primary: 'All', secondary: 'All', success: 'All', warning: 'All', info: 'All' };
+  var palettesByName = { danger: dangerPalette, primary: primaryPalette, secondary: secondaryPalette, success: successPalette, warning: warningPalette, info: infoPalette };
 
   function buildMatrix(name) {
     name = name || 'danger';
@@ -1518,6 +2286,8 @@
   }
 
   buildMatrix('danger');
+  buildMatrix('primary');
+  buildMatrix('secondary');
   buildMatrix('success');
   buildMatrix('warning');
   buildMatrix('info');
