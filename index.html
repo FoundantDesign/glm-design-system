@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Foundant Component Reference — MDB5 Pro Kitchen Sink</title>
+  <title>GLM Frontend Component Kitchen Sink</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.min.css" rel="stylesheet" />
   <script src="https://kit.fontawesome.com/67a3468e65.js" crossorigin="anonymous"></script>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
@@ -119,7 +119,7 @@
 <div class="main">
 
 <div style="margin-bottom:24px">
-  <h1 style="margin:0 0 4px">GLM Component Reference</h1>
+  <h1 style="margin:0 0 4px">GLM Frontend Component Kitchen Sink</h1>
   <p style="color:var(--colors-neutral-30);font-size:13px;margin:0 0 8px">The source-of-truth reference for GLM components and styles. Every component shows real production markup you can lift into Razor. Styling comes from the shared foundation CSS.</p>
   <p style="font-size:12px;margin:0;line-height:1.9"><span class="status-tag status-overridden">OVERRIDDEN</span> production customizes this via MDB remaps. <span class="status-tag status-default">DEFAULT</span> renders on stock MDB5 (a candidate to review). <span class="gap-flag">GAP</span> stock today but a Foundant treatment is drafted/needed. <span class="wip-tag">WIP</span> section not yet rebuilt to real markup.</p>
 </div>
@@ -393,39 +393,55 @@
   </table>
   <p class="gap-note" style="border-left-color:var(--colors-semantic-warning-0);background:var(--colors-semantic-warning-50);color:var(--colors-brand-primary-dark-blue)">This reference is built from one production page sample (the Event Request record view) — real and accurate for what it covers, but not exhaustive of every page in the app. Treat gaps as "not yet confirmed," not "doesn't exist." Update this table as more pages get checked, the same way new evidence has updated other sections in this document.</p>
 
-  <h3 style="margin-top:24px">Icon button — standardized <span class="gap-flag">GAP — real values, but currently applied via inline style everywhere, not a class rule</span></h3>
-  <p class="sd" style="border:none;margin:6px 0 12px">Every icon-only clickable button in production today (the record-detail kebab menu, and any others styled the same way) uses the class name <code>kebab-btn</code> — but there is no <code>.kebab-btn</code> rule anywhere in <code>mdb-customizations.css</code> or <code>mdb_min.css</code>. The class is a JS/dropdown hook only; every actual instance repeats the identical look via a copy-pasted inline <code>style=""</code> attribute. That's the standardization gap: the values are real and consistent, but nothing enforces that consistency — a future instance could easily drift.</p>
+  <h3 style="margin-top:24px">Icon button — standardized <span class="gap-flag">GAP — real color values, sizing/no-border is a direct design decision for WCAG 2.2 AA compliance</span></h3>
+  <p class="sd" style="border:none;margin:6px 0 12px">Every icon-only clickable button in production today (the record-detail kebab menu, and any others styled the same way) uses the class name <code>kebab-btn</code> — but there is no <code>.kebab-btn</code> rule anywhere in <code>mdb-customizations.css</code> or <code>mdb_min.css</code>. The class is a JS/dropdown hook only; every actual instance repeats the identical look via a copy-pasted inline <code>style=""</code> attribute, with no explicit size at all — width and height fall out incidentally from padding plus whatever font-size happens to be inherited. That's two separate problems: no enforced consistency, and no guaranteed target size.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>One <code>.icon-btn</code> class for any icon-only clickable control — row-menu triggers, delete, edit, download, anywhere an icon alone is the whole button.</td></tr>
+    <tr><th>Where</th><td>24×24px, one size, everywhere — including dense contexts like table rows, where the earlier 32px draft read too heavy.</td></tr>
+    <tr><th>When</th><td>Use <code>.icon-btn</code> for any new icon-only action. Don't reach for a bare <code>&lt;i&gt;</code> wrapped in a plain <code>&lt;button&gt;</code> or <code>&lt;a&gt;</code> with ad hoc inline sizing — that's exactly the drift this consolidates.</td></tr>
+    <tr><th>Why</th><td><strong>WCAG 2.2 SC 2.5.8, Target Size (Minimum), Level AA:</strong> pointer targets must be at least 24×24 CSS pixels, with narrow exceptions (inline text, essential presentation, an equivalent control elsewhere, adequate spacing) that don't apply to a standalone icon button. 24×24 is the exact floor — not a comfort margin above it, so there's no smaller "sm" variant to accidentally reach for. No border: 2.5.8 governs the tappable <em>area</em>, not visual styling — hover and focus-visible states carry the affordance instead.</td></tr>
+    <tr><th>How</th><td><strong>Every icon-only button needs a real <code>aria-label</code>.</strong> There's no visible text for a screen reader to announce, so without one the control has no accessible name at all — this is WCAG 1.1.1 (Non-text Content) and 4.1.2 (Name, Role, Value), both Level A. <code>title</code> alone is not sufficient; it's inconsistently exposed to assistive tech.</td></tr>
+  </table>
 
   <div class="gap-zone">
     <div class="cr" style="align-items:center;gap:16px">
-      <button class="icon-btn"><i class="fa-regular fa-ellipsis-vertical"></i></button>
-      <button class="icon-btn"><i class="fa-light fa-pen-to-square"></i></button>
-      <button class="icon-btn"><i class="fa-light fa-trash-can"></i></button>
-      <button class="icon-btn" disabled><i class="fa-light fa-download"></i></button>
+      <button type="button" class="icon-btn" aria-label="More actions"><i class="fa-regular fa-ellipsis-vertical"></i></button>
+      <button type="button" class="icon-btn" aria-label="Edit"><i class="fa-light fa-pen-to-square"></i></button>
+      <button type="button" class="icon-btn" aria-label="Delete"><i class="fa-light fa-trash-can"></i></button>
+      <button type="button" class="icon-btn" aria-label="Download" disabled><i class="fa-light fa-download"></i></button>
     </div>
-    <div class="code-block">&lt;button type="button" class="icon-btn"&gt;
+    <div class="code-block">&lt;button type="button" class="icon-btn" aria-label="More actions"&gt;
   &lt;i class="fa-regular fa-ellipsis-vertical"&gt;&lt;/i&gt;
 &lt;/button&gt;
 
-/* Confirmed real values — this is exactly what the inline style on the
-   production kebab button already says, just promoted to an actual class
-   rule instead of being copy-pasted per instance. Nothing invented here. */
 .icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
   background: none;
-  border: 1px solid var(--colors-borders-divider);
+  border: none;
   border-radius: 4px;
-  padding: 0px 5px;
+  padding: 0;
   cursor: pointer;
   color: var(--colors-brand-primary-dark-blue);
+  font-size: 14px;
+  line-height: 1;
 }
 .icon-btn:hover {
   background: var(--colors-state-layers-light-hover);
+}
+.icon-btn:focus-visible {
+  outline: solid 2px var(--colors-brand-primary-dark-blue);
+  outline-offset: 2px;
 }
 .icon-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }</div>
-    <p class="gap-note">The rule body is not a proposal in the usual sense — every property is lifted directly from the real, repeated inline style on production's kebab button. What's proposed is the <em>act of formalizing it</em>: give it one real CSS class so every future icon-only button (delete, edit, download, whatever) references the same rule instead of a fifth copy-pasted inline style. Hover/disabled states aren't present in the one confirmed instance, so those two rules are genuinely new and flagged as such — everything else is a direct lift. Needs engineering review before it round-trips into <code>mdb-customizations.css</code>, since it would mean replacing inline styles at every existing call site.</p>
+    <p class="gap-note">Icon color is the same real value found on production's kebab button. <strong>Sizing and border are direct design decisions, corrected twice now:</strong> the first pass had no explicit width/height at all (incidental sizing, a real WCAG risk); the second pass fixed that with a 32×32 default plus a 24×24 "dense-context" variant, but 32px read too heavy in practice — table rows in particular — so the default is now 24×24 everywhere, exactly the WCAG floor, with no smaller variant needed since there's nothing left to shrink from. The border from production's real kebab-btn instance was also removed on direct instruction: WCAG 2.5.8 requires the tappable area to be 24×24, not a visible border — that was never a compliance requirement, just what one real instance happened to look like. Hover and focus-visible carry the visual affordance at rest and on keyboard focus instead. <code>aria-label</code> is not optional; every example above includes one. Needs engineering review before it round-trips into <code>mdb-customizations.css</code>, since it would mean replacing inline styles (and removing the border) at every existing call site.</p>
   </div>
 </section>
 
@@ -949,7 +965,7 @@ header, footer {
   --mdb-btn-active-bg: var(--colors-state-layers-dark-pressed);
   --mdb-btn-box-shadow: none;
   --mdb-btn-disabled-bg: var(--colors-brand-primary-dark-blue);
-  --mdb-btn-disabled-color: #fff;
+  --mdb-btn-disabled-color: var(--colors-neutral-100);
   --mdb-btn-disabled-border-color: var(--colors-brand-primary-dark-blue);
 }
 .btn-outline-secondary {
@@ -966,7 +982,7 @@ header, footer {
 }
 .btn-danger {
   --mdb-btn-bg: var(--colors-semantic-danger-500);
-  --mdb-btn-color: #fff;
+  --mdb-btn-color: var(--colors-neutral-100);
   --mdb-btn-hover-bg: var(--colors-semantic-danger-600);
   --mdb-btn-active-bg: var(--colors-semantic-danger-700);
   --mdb-btn-disabled-bg: var(--colors-semantic-danger-500);
@@ -1012,7 +1028,7 @@ header, footer {
    back to its own default blue, not Foundant navy. */
 .btn-primary {
   --mdb-btn-disabled-bg: var(--colors-brand-primary-dark-blue);
-  --mdb-btn-disabled-color: #fff;
+  --mdb-btn-disabled-color: var(--colors-neutral-100);
   --mdb-btn-disabled-border-color: var(--colors-brand-primary-dark-blue);
 }</div>
   <p class="sd" style="border:none;margin:6px 0 0">Disabled uses MDB's built-in fade (<code>opacity: 0.65</code>) via the <code>disabled</code> attribute. The disabled background is remapped to the Foundant color so it fades correctly.</p>
@@ -1021,28 +1037,19 @@ header, footer {
   <p class="sd" style="border:none;margin:0 0 8px">Checked every real <code>.btn</code> in the production sample: 19 total, 1 with an icon — and that one (<code>.kebab-btn</code>) is icon-<em>only</em>, not a text+icon combo. Every button that has a label is text-only. That's the rule now, not an aspiration: <strong>default to text-only</strong>, with one deliberate, curated exception below. <code>.kebab-btn</code> stays its own separate pattern — icon-only, never paired with a label.</p>
   <div class="cr" style="align-items:center">
     <button class="btn btn-primary"><i class="fa-light fa-plus me-2"></i>New</button>
-    <button class="btn btn-outline-dark btn-sm fw-bold">Edit</button>
-    <button class="kebab-btn"><i class="fa-regular fa-ellipsis-vertical"></i></button>
+    <button type="button" class="kebab-btn" aria-label="More actions"><i class="fa-regular fa-ellipsis-vertical"></i></button>
   </div>
   <div class="code-block">&lt;!-- The one sanctioned exception: primary "create new" actions --&gt;
 &lt;button class="btn btn-primary"&gt;&lt;i class="fa-light fa-plus me-2"&gt;&lt;/i&gt;New&lt;/button&gt;
 
-&lt;!-- Everything else: text-only, no exceptions --&gt;
-&lt;button class="btn btn-outline-dark btn-sm fw-bold"&gt;Edit&lt;/button&gt;
-
 &lt;!-- Icon-only stays its own separate pattern, never combined with a label --&gt;
-&lt;button class="kebab-btn"&gt;&lt;i class="fa-regular fa-ellipsis-vertical"&gt;&lt;/i&gt;&lt;/button&gt;
+&lt;button type="button" class="kebab-btn" aria-label="More actions"&gt;&lt;i class="fa-regular fa-ellipsis-vertical"&gt;&lt;/i&gt;&lt;/button&gt;
 
-.kebab-btn {
-  background: none; border: 1px solid var(--colors-borders-divider);
-  border-radius: 4px; padding: 0px 5px; cursor: pointer;
-  color: var(--colors-brand-primary-dark-blue);
-}
-.kebab-btn:hover { background: var(--colors-state-layers-light-hover); }
-
-/* These are the real, confirmed inline-style values from production —
-   see the Icons section for the full standardization writeup (.icon-btn). */</div>
-  <p class="ratified-note">Ratified decision, not a draft. <strong>Exception list:</strong> primary "create new" actions only (<code>+ New</code>, <code>+ Add</code>) — the <code>+</code> is a near-universal affordance and these buttons recur often enough across list/table views to benefit from a scan-target. <strong>Everything else is text-only</strong>: Edit, Save, Cancel, Delete, Confirm, Submit, Download — no icon, no exceptions. This replaces the previous draft, which paired an icon with "Edit" — not a creation action, and not backed by any production evidence. Modals follow this too — confirmed (Section on Modals) footer buttons are already text-only in the real example checked.</p>
+/* Full rule (explicit 24x24 sizing, no border, focus-visible, WCAG 2.2 AA)
+   lives in the Icons section under "Icon button — standardized" — not
+   repeated here to avoid two copies drifting apart. */</div>
+  <p class="ratified-note">Ratified decision, not a draft. <strong>Exception list:</strong> primary "create new" actions only (<code>+ New</code>, <code>+ Add</code>) — the <code>+</code> is a near-universal affordance and these buttons recur often enough across list/table views to benefit from a scan-target. <strong>Everything else is text-only</strong>: Edit, Save, Cancel, Delete, Confirm, Submit, Download — no icon, no exceptions. Modals follow this too — confirmed (Section on Modals) footer buttons are already text-only in the real example checked.</p>
+  <p class="gap-note" style="border-left-color:var(--colors-semantic-warning-0);background:var(--colors-semantic-warning-50);color:var(--colors-brand-primary-dark-blue)"><strong>Frequency rule, decision not evidence:</strong> an icon+text button should appear <strong>at most once per page</strong> — it's reserved for a single primary action, not a general-purpose style. Only use the <code>+</code> when the action is genuinely additive (creating something new); don't reach for it as decoration on an already-text-only button. Icon-<em>only</em> buttons (<code>.icon-btn</code>/<code>.kebab-btn</code>) can be used far more liberally — they're compact enough not to compete for attention the way an icon+text combo does, so repeating them across a page (row menus, table actions) doesn't create the same visual noise.</p>
 
 
   <h3>Filled success / warning / info <span class="gap-flag">GAP — not in production</span></h3>
@@ -1082,14 +1089,14 @@ header, footer {
     <tr><th>Where</th><td><code>.card</code> &gt; <code>.card-body</code>. Record pages arrange them in a <code>.row.g-3</code> grid.</td></tr>
     <tr><th>When</th><td>Use for any discrete content module. Pair two per row on wide viewports with <code>.col-12.col-xl-6</code>. Use <code>.h-100</code> so paired cards match height.</td></tr>
     <tr><th>Why</th><td>Customizations remove <code>.card-header</code> bottom border and <code>.card-footer</code> top border for a flatter look. Card corners are stock MDB (<code>--mdb-card-border-radius: 0.5rem</code>, 8px) — <code>--radius-card</code> (6px) applies only to <code>.hero-card</code>, a separate page-specific class, not generic <code>.card</code>. Corrected here; the usage table previously claimed cards used <code>--radius-card</code>, which isn't true.</td></tr>
-    <tr><th>How</th><td>Card header is a flex row: an <code>&lt;h5 class="card-title mb-0"&gt;</code> plus an actions cluster. Body holds the content.</td></tr>
+    <tr><th>How</th><td>Card header is a flex row: a real <code>&lt;h2 class="card-title mb-0"&gt;</code> plus an actions cluster. Body holds the content.</td></tr>
   </table>
 
   <div class="row g-3">
     <div class="col-12 col-md-6">
       <div class="card h-100">
         <div class="card-body">
-          <h5 class="card-title mb-0">Basic Card</h5>
+          <h2 class="card-title mb-0">Basic Card</h2>
           <p class="text-muted mt-2 mb-3" style="font-size:0.85rem">Supporting text for the card body.</p>
           <button class="btn btn-dark btn-sm fw-bold shadow-none">Action</button>
         </div>
@@ -1099,7 +1106,7 @@ header, footer {
       <div class="card h-100">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="card-title mb-0">Card With Header Actions</h5>
+            <h2 class="card-title mb-0">Card With Header Actions</h2>
             <button class="btn btn-outline-dark btn-sm fw-bold">Edit</button>
           </div>
           <p class="text-muted mb-0" style="font-size:0.85rem">Body content sits below a flex header row.</p>
@@ -1113,7 +1120,7 @@ header, footer {
     &lt;div class="card h-100"&gt;
       &lt;div class="card-body"&gt;
         &lt;div class="d-flex justify-content-between align-items-center mb-3"&gt;
-          &lt;h5 class="card-title mb-0"&gt;Title&lt;/h5&gt;
+          &lt;h2 class="card-title mb-0"&gt;Title&lt;/h2&gt;
           &lt;button class="btn btn-outline-dark btn-sm fw-bold"&gt;Edit&lt;/button&gt;
         &lt;/div&gt;
         &lt;p class="text-muted mb-0"&gt;Body content.&lt;/p&gt;
@@ -1122,11 +1129,16 @@ header, footer {
   &lt;/div&gt;
 &lt;/div&gt;
 
+/* h2, .h2 already covers this. .card-title itself sets no font-size in
+   MDB (only margin-bottom and color) — a real <h2> tag renders at exactly
+   the ratified H2 size with nothing to override. */
+
 .card-header { border-bottom: none; }
 .card-footer { border-top: none; }
 /* Radius, shadow, and everything else on .card itself is stock MDB —
    no Foundant override exists. --radius-card (6px) is a separate token
    used only by .hero-card, not this generic component. */</div>
+  <p class="gap-note" style="border-left-color:var(--colors-brand-primary-dark-blue);background:var(--colors-brand-secondary-light-blue);color:var(--colors-brand-primary-dark-blue)"><strong>Decision, not evidence:</strong> card titles here previously used <code>&lt;h5 class="card-title"&gt;</code>, matching the common Bootstrap convention. Changed to real <code>&lt;h2&gt;</code> per a direct instruction that Cards and Modals should both use real <code>&lt;h2&gt;</code> for their headings, unsized down from whatever the ratified H2 rule computes to — see Modals for the matching change and the same note.</p>
 </section>
 
 <!-- ═══ BADGES ═══ -->
@@ -1439,7 +1451,13 @@ header, footer {
 .form-check-input:checked {
   border-color: var(--colors-brand-primary-dark-blue);
 }
+.form-check-input:checked:focus {
+  border-color: var(--colors-brand-primary-dark-blue);
+}
 .form-check-input[type=checkbox]:checked {
+  background-color: var(--colors-brand-primary-dark-blue);
+}
+.form-check-input[type=checkbox]:checked:focus {
   background-color: var(--colors-brand-primary-dark-blue);
 }
 .form-check-input[type=radio]:checked:after {
@@ -1456,7 +1474,7 @@ header, footer {
 .form-switch .form-check-input:checked:focus:before {
   box-shadow: 3px -1px 0px 13px var(--colors-brand-primary-dark-blue);
 }</div>
-    <p class="gap-note">Standalone proposal — unlike Select (Section 6h), there's no sibling remap to extend here; this is the first customization proposed for this component family. A first attempt at this fix was wrong on two counts, both about specificity, not load order, confirmed by checking <code>mdb_min.css</code> directly: <strong>checkbox's</strong> real checked-state rule is <code>.form-check-input[type=checkbox]:checked</code> — the attribute selector makes it more specific than a plain <code>.form-check-input:checked</code> rule, so MDB's blue won outright regardless of which stylesheet loaded last. <strong>Radio's</strong> visible dot isn't the base element's background at all — it's a <code>::after</code> pseudo-element, untouched by any rule on the base element. Both are now matched at the correct selector. <strong>Switch</strong> was already correct from an earlier pass — MDB colors the knob via <code>::after</code> at higher specificity, not the track. <strong>Border width</strong> is 2px in MDB's own Material-style checkbox rule (<code>border: .125rem solid</code>); overridden to 1px here at equal specificity. An earlier version of this fix guessed <code>accent-color</code> as the mechanism — confirmed via <code>mdb_min.css</code> that MDB doesn't use it anywhere, so that guess was removed rather than left in as dead code. Disabled state is stock MDB, no override exists. Needs engineering review before it round-trips into <code>mdb-customizations.css</code>.</p>
+    <p class="gap-note">Standalone proposal — unlike Select (Section 6h), there's no sibling remap to extend here; this is the first customization proposed for this component family. A first attempt at this fix was wrong on two counts, both about specificity, not load order, confirmed by checking <code>mdb_min.css</code> directly: <strong>checkbox's</strong> real checked-state rule is <code>.form-check-input[type=checkbox]:checked</code> — the attribute selector makes it more specific than a plain <code>.form-check-input:checked</code> rule. <strong>Radio's</strong> visible dot is a <code>::after</code> pseudo-element, untouched by any rule on the base element. Both were matched at the correct selector. <strong>Retested after deploying — found two more of the same pattern, this time on focus specifically:</strong> MDB has separate, more specific rules for the checked+focus combination (<code>.form-check-input:checked:focus</code> for radio's ring border, <code>.form-check-input[type=checkbox]:checked:focus</code> for checkbox's fill) that the plain <code>:checked</code> fixes above didn't reach — and clicking a control focuses it automatically, so this was visible immediately on click, not an edge case. Both now matched. <strong>Switch's</strong> knob and ripple were already correct from the specificity pass. <strong>Border width</strong> is 2px in MDB's own Material-style checkbox rule (<code>border: .125rem solid</code>); overridden to 1px at equal specificity. An earlier version of this fix guessed <code>accent-color</code> as the mechanism — confirmed via <code>mdb_min.css</code> that MDB doesn't use it anywhere, so that guess was removed. Disabled state is stock MDB, no override exists. Needs engineering review before it round-trips into <code>mdb-customizations.css</code>.</p>
   </div>
 </section>
 
@@ -1821,38 +1839,64 @@ header, footer {
   </table>
 
   <div class="cr" style="display:block">
-    <div class="modal-content" style="position:relative;max-width:440px;box-shadow:var(--mdb-modal-box-shadow, 0 2px 15px -3px rgba(0,0,0,0.07))">
-      <div class="modal-header border-bottom py-2 px-3">
-        <div class="modal-title h5 w-100">Confirm Award</div>
-        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Approve <strong>$75,000</strong> to Community Health Alliance?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary fw-bold btn-sm" data-mdb-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary btn-sm">Confirm</button>
+    <button type="button" class="btn btn-primary btn-sm" onclick="openDemoModal('confirmAwardModal')">Pop the modal</button>
+    <p class="sd" style="border:none;margin:8px 0 0;font-size:12px">Real click-to-open interaction, not a static preview — this is MDB's actual <code>.modal</code>/<code>.modal-backdrop</code> markup, toggled with a small helper script since this reference page doesn't load MDB's JS bundle. The scrim, the fade, the centering — all real CSS, not simulated.</p>
+  </div>
+
+  <div class="modal fade" id="confirmAwardModal" tabindex="-1" role="dialog" aria-labelledby="confirmAwardModalTitle" aria-hidden="true" style="display:none">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header border-bottom py-2 px-3">
+          <h2 class="modal-title" id="confirmAwardModalTitle">Confirm Award</h2>
+          <button type="button" class="btn-close" data-mdb-ripple-init onclick="closeDemoModal('confirmAwardModal')" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Approve <strong>$75,000</strong> to Community Health Alliance?
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-outline-secondary fw-bold btn-sm" onclick="closeDemoModal('confirmAwardModal')">Cancel</button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="closeDemoModal('confirmAwardModal')">Confirm</button>
+        </div>
       </div>
     </div>
   </div>
-  <div class="code-block">&lt;div class="modal-content"&gt;
-  &lt;div class="modal-header border-bottom py-2 px-3"&gt;
-    &lt;div class="modal-title h5 w-100" id="confirmModalTitle"&gt;Confirm Award&lt;/div&gt;
-    &lt;button type="button" class="btn-close" data-mdb-ripple-init
-            data-mdb-dismiss="modal" aria-label="Close"&gt;&lt;/button&gt;
-  &lt;/div&gt;
-  &lt;div class="modal-body"&gt;
-    Approve &lt;strong&gt;$75,000&lt;/strong&gt; to Community Health Alliance?
-  &lt;/div&gt;
-  &lt;div class="modal-footer"&gt;
-    &lt;button type="button" class="btn btn-outline-secondary fw-bold btn-sm"
-            data-mdb-dismiss="modal"&gt;Cancel&lt;/button&gt;
-    &lt;button type="button" class="btn btn-primary btn-sm"&gt;Confirm&lt;/button&gt;
+  <div class="modal-backdrop fade" id="demoModalBackdrop" style="display:none" onclick="closeDemoModal('confirmAwardModal')"></div>
+
+  <div class="code-block">&lt;!-- Real production markup — data-mdb-dismiss="modal" works when MDB's JS
+       bundle is loaded, which it is in production. This reference page uses
+       a small onclick helper instead purely so the demo above is clickable
+       here; the markup you'd actually ship is this one, not the demo's. --&gt;
+&lt;div class="modal fade" id="confirmAwardModal" tabindex="-1" aria-hidden="true"&gt;
+  &lt;div class="modal-dialog"&gt;
+    &lt;div class="modal-content"&gt;
+      &lt;div class="modal-header border-bottom py-2 px-3"&gt;
+        &lt;h2 class="modal-title"&gt;Confirm Award&lt;/h2&gt;
+        &lt;button type="button" class="btn-close" data-mdb-ripple-init
+                data-mdb-dismiss="modal" aria-label="Close"&gt;&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div class="modal-body"&gt;
+        Approve &lt;strong&gt;$75,000&lt;/strong&gt; to Community Health Alliance?
+      &lt;/div&gt;
+      &lt;!-- justify-content-between splits the footer: Cancel left,
+           primary action right — this is what the real Collaborate modal
+           does, not a new pattern. flex-body is also in the real markup
+           but has no CSS definition anywhere (mdb.min.css or
+           mdb-customizations.css) — kept for fidelity, does nothing. --&gt;
+      &lt;div class="modal-footer flex-body justify-content-between"&gt;
+        &lt;button type="button" class="btn btn-outline-secondary fw-bold btn-sm"
+                data-mdb-dismiss="modal"&gt;Cancel&lt;/button&gt;
+        &lt;button type="button" class="btn btn-primary btn-sm"&gt;Confirm&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;
 
-/* No CSS block here — confirmed stock MDB, nothing to remap. */</div>
-  <p class="ratified-note">Confirmed, not assumed: real modal markup plus its DevTools Styles panel were checked together. Every <code>.modal-content</code>/<code>.modal-header</code>/<code>.modal-footer</code>/<code>.btn-close</code> rule traces to <code>mdb.min.css</code> — none to <code>mdb-customizations.css</code>. <code>.border-bottom</code> on the header is a per-instance utility-class choice (the global header default is borderless), not a component-level override — some modals add the divider back, some don't. Footer buttons are already text-only, matching the ratified icon-usage rule without needing a fix. The one internal form field seen (a form-select for permissions) already matches the ratified Selects pattern (Section 6h) — no new findings there either.</p>
+/* h2, .h2 already covers this — no separate modal-title font-size rule
+   exists or is needed. .modal-title itself sets no font-size in MDB
+   (only margin-bottom and line-height), so using a real <h2> tag renders
+   at exactly the ratified H2 size with nothing to override. */</div>
+  <p class="ratified-note">Confirmed, not assumed: real modal markup plus its DevTools Styles panel were checked together. Every <code>.modal-content</code>/<code>.modal-header</code>/<code>.modal-footer</code>/<code>.btn-close</code> rule traces to <code>mdb.min.css</code> — none to <code>mdb-customizations.css</code>. <code>.border-bottom</code> on the header is a per-instance utility-class choice (the global header default is borderless), not a component-level override — some modals add the divider back, some don't. <strong>Footer layout:</strong> the real Collaborate modal uses <code>class="modal-footer flex-body justify-content-between"</code> — <code>justify-content-between</code> splits Cancel to the left and the primary action to the right, overriding the stock <code>justify-content: flex-end</code> that would otherwise cluster both buttons on the right. <code>flex-body</code> is also in the real markup but isn't defined anywhere in <code>mdb.min.css</code> or <code>mdb-customizations.css</code> — kept in the code sample for fidelity, but it does nothing. Footer buttons are already text-only, matching the ratified icon-usage rule without needing a fix. The one internal form field seen (a form-select for permissions) already matches the ratified Selects pattern (Section 6h) — no new findings there either.</p>
+  <p class="gap-note" style="border-left-color:var(--colors-brand-primary-dark-blue);background:var(--colors-brand-secondary-light-blue);color:var(--colors-brand-primary-dark-blue)"><strong>Decision, not evidence:</strong> the real Collaborate modal actually uses <code>&lt;div class="modal-title h5 w-100"&gt;</code> — confirmed, not a guess. This kitchen sink now specifies <code>&lt;h2 class="modal-title"&gt;</code> instead, per a direct instruction that Cards and Modals should both use real <code>&lt;h2&gt;</code> for their headings, unsized down from whatever the ratified H2 rule computes to. This is the kitchen sink leading a change, not documenting one that already shipped — production still renders <code>h5</code> today. See Cards (this section) for the matching change.</p>
 
   <h3 style="margin-top:20px">Validation inside a modal <span class="status-tag status-overridden" title="Reuses already-established patterns">CONSISTENT</span></h3>
   <div class="cr" style="display:block">
@@ -2141,7 +2185,7 @@ header, footer {
   </div>
 </div>
 
-<div style="padding:28px 0;text-align:center;color:var(--g400);font-size:11px;border-top:1px solid var(--t-bdr);margin-top:12px">Foundant Component Reference · GLM Production vs MDB5 Default</div>
+<div style="padding:28px 0;text-align:center;color:var(--g400);font-size:11px;border-top:1px solid var(--t-bdr);margin-top:12px">GLM Frontend Component Kitchen Sink · GLM Production vs MDB5 Default</div>
 
 </div><!-- /main -->
 </div><!-- /app -->
@@ -2160,6 +2204,37 @@ header, footer {
       tocLinks[j].classList.toggle('on', tocLinks[j].getAttribute('href') === '#' + current);
     }
   });
+
+  /* ── Modal demo: real .modal/.modal-backdrop classes, toggled by hand
+     since this reference page doesn't load MDB's JS bundle. Production
+     markup uses data-mdb-dismiss="modal" instead of these onclick calls —
+     see the code-block in the Modals section. */
+  function openDemoModal(id) {
+    var modal = document.getElementById(id);
+    var backdrop = document.getElementById('demoModalBackdrop');
+    backdrop.style.display = 'block';
+    modal.style.display = 'block';
+    modal.setAttribute('aria-hidden', 'false');
+    modal.setAttribute('aria-modal', 'true');
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(function () {
+      backdrop.classList.add('show');
+      modal.classList.add('show');
+    });
+  }
+  function closeDemoModal(id) {
+    var modal = document.getElementById(id);
+    var backdrop = document.getElementById('demoModalBackdrop');
+    modal.classList.remove('show');
+    backdrop.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    modal.removeAttribute('aria-modal');
+    document.body.style.overflow = '';
+    setTimeout(function () {
+      modal.style.display = 'none';
+      backdrop.style.display = 'none';
+    }, 300);
+  }
 
   /* ── Danger ramp contrast matrix (WCAG 2.2) ── */
   var dangerPalette = [

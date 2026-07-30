@@ -216,7 +216,7 @@ h6, .h6 { font-size: var(--h6-size); font-weight: var(--h-weight); }
   /* Disabled remap (contract backlog): without these, MDB's disabled state
      falls back to its default blue, not Foundant navy. Fades via opacity 0.65. */
   --mdb-btn-disabled-bg: var(--colors-brand-primary-dark-blue);
-  --mdb-btn-disabled-color: #fff;
+  --mdb-btn-disabled-color: var(--colors-neutral-100);
   --mdb-btn-disabled-border-color: var(--colors-brand-primary-dark-blue);
 }
 .btn-outline-secondary {
@@ -239,18 +239,18 @@ h6, .h6 { font-size: var(--h6-size); font-weight: var(--h-weight); }
 }
 .btn-danger {
   --mdb-btn-bg: var(--colors-semantic-danger-500);
-  --mdb-btn-color: #fff;
+  --mdb-btn-color: var(--colors-neutral-100);
   --mdb-btn-hover-bg: var(--colors-semantic-danger-600);
-  --mdb-btn-hover-color: #fff;
+  --mdb-btn-hover-color: var(--colors-neutral-100);
   --mdb-btn-focus-bg: var(--colors-semantic-danger-600);
-  --mdb-btn-focus-color: #fff;
+  --mdb-btn-focus-color: var(--colors-neutral-100);
   --mdb-btn-active-bg: var(--colors-semantic-danger-700);
-  --mdb-btn-active-color: #fff;
+  --mdb-btn-active-color: var(--colors-neutral-100);
   --mdb-btn-box-shadow: none;
   --mdb-btn-box-shadow-state: none;
   --mdb-btn-active-shadow: none;
   --mdb-btn-disabled-bg: var(--colors-semantic-danger-500);
-  --mdb-btn-disabled-color: #fff;
+  --mdb-btn-disabled-color: var(--colors-neutral-100);
   --mdb-btn-disabled-border-color: var(--colors-semantic-danger-500);
 }
 .btn-outline-danger {
@@ -520,27 +520,49 @@ h1 { font-size: 24px; }
 .hero-stage-line { flex: 1; height: 1px; background: var(--colors-borders-divider); margin-top: 14px; margin-left: -10px; margin-right: -10px; }
 .hero-stage-line.is-done { background: var(--colors-semantic-success-0); }
 
-/* kebab action button used in card headers.
-   CORRECTED — the values below were originally a guess (no border, radius-sm,
-   neutral-40 text). Confirmed against real production markup: .kebab-btn has
-   NO actual CSS rule anywhere in mdb-customizations.css or mdb_min.css — every
-   real instance repeats these exact values via inline style="" instead. These
-   are that real, repeated inline style, promoted to an actual class rule.
-   .icon-btn is the same rule under a more general name, proposed for any
-   future icon-only button (not just dropdown/kebab triggers) so new instances
-   reference one real class instead of a sixth copy-pasted inline style. */
-.kebab-btn, .icon-btn {
+/* Icon button — standardized, WCAG 2.2 AA target-size compliant.
+   SUPERSEDES two earlier versions of this rule.
+   v1 had no explicit width/height — sizing was purely incidental, driven
+   by padding plus whatever font-size/line-height happened to be inherited
+   from context. WCAG 2.2 SC 2.5.8 (Target Size Minimum, AA) requires at
+   least 24x24 CSS pixels for pointer targets, with narrow exceptions
+   (inline text, essential presentation, equivalent control elsewhere,
+   adequate spacing) that don't apply here.
+   v2 fixed that with explicit 32x32 sizing plus a 24x24 .icon-btn-sm
+   variant for dense contexts. Corrected again, on direct instruction:
+   32px reads too heavy in dense UI (table rows in particular), so the
+   default is now exactly 24x24 — the real WCAG floor, not a comfort
+   margin above it. Since there's no longer a larger default to shrink
+   down from, .icon-btn-sm is gone; one size only.
+   Also removed the border. WCAG 2.5.8 governs the tappable AREA, not
+   visual styling — a border was never a compliance requirement, just
+   what production's one real kebab-btn instance happened to use. Removed
+   on direct instruction; hover and focus-visible states still make the
+   control's presence and boundary clear without a border at rest.
+   .kebab-btn is kept as an alias — same rule, real production class name. */
+.icon-btn, .kebab-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
   background: none;
-  border: 1px solid var(--colors-borders-divider);
+  border: none;
   border-radius: 4px;
-  padding: 0px 5px;
+  padding: 0;
   cursor: pointer;
   color: var(--colors-brand-primary-dark-blue);
+  font-size: 14px;
+  line-height: 1;
 }
-.kebab-btn:hover, .icon-btn:hover {
+.icon-btn:hover, .kebab-btn:hover {
   background: var(--colors-state-layers-light-hover);
 }
-.icon-btn:disabled {
+.icon-btn:focus-visible, .kebab-btn:focus-visible {
+  outline: solid 2px var(--colors-brand-primary-dark-blue);
+  outline-offset: 2px;
+}
+.icon-btn:disabled, .kebab-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -760,6 +782,14 @@ header .navbar-nav a.nav-link:active {
      with border: .125rem solid — that's exactly 2px. Overridden to 1px below
      per design direction, at equal specificity, later-loaded wins.
 
+   Retested after deploying — found two more of the same specificity pattern,
+   this time on the FOCUS state specifically: MDB has separate, more specific
+   rules for the checked+focus combination that a plain :checked rule doesn't
+   reach, since clicking a control focuses it automatically:
+   .form-check-input:checked:focus{border-color:#3b71ca} (radio's ring) and
+   .form-check-input[type=checkbox]:checked:focus{background-color:#3b71ca}
+   (checkbox's fill). Both now matched at the same specificity.
+
    An earlier version of this rule added `accent-color` as a guessed fix —
    confirmed via mdb_min.css that MDB doesn't use accent-color anywhere, so
    that guess was removed rather than left in as dead/misleading code.
@@ -771,7 +801,13 @@ header .navbar-nav a.nav-link:active {
 .form-check-input:checked {
   border-color: var(--colors-brand-primary-dark-blue);
 }
+.form-check-input:checked:focus {
+  border-color: var(--colors-brand-primary-dark-blue);
+}
 .form-check-input[type=checkbox]:checked {
+  background-color: var(--colors-brand-primary-dark-blue);
+}
+.form-check-input[type=checkbox]:checked:focus {
   background-color: var(--colors-brand-primary-dark-blue);
 }
 .form-check-input[type=radio]:checked:after {
