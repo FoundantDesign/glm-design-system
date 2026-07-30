@@ -100,6 +100,12 @@ a  { color: var(--link); text-decoration: none; }
 }
 body.customizing .customize-hint { display: flex; }
 
+/* ── Workload grid click-through page ── */
+#grid-page .ft-content { padding-top: 24px; }
+.grid-back { font-size: 0.8rem; color: var(--link); cursor: pointer; margin-bottom: 12px; display: inline-block; }
+.grid-back:hover { text-decoration: underline; }
+.grid-blank { min-height: 520px; }
+
 /* ── Bento ── */
 .ft-bento {
   background: var(--surface); border: 1px solid var(--border-color);
@@ -417,20 +423,20 @@ body.customizing .add-bento-tile { display: block; }
   </div>
   <div class="hub-panel__body">
     <h3 class="hub-section-label">Assigned to you</h3>
-    <div class="hub-row"><i class="fa-regular fa-user-check"></i><span class="hub-row__name">Your evaluations</span><span class="hub-row__count hub-row__count--alert">14</span></div>
-    <div class="hub-row"><i class="fa-regular fa-list-check"></i><span class="hub-row__name">Your follow-ups</span><span class="hub-row__count hub-row__count--alert">5</span></div>
+    <div class="hub-row" data-grid="Your evaluations"><i class="fa-regular fa-user-check"></i><span class="hub-row__name">Your evaluations</span><span class="hub-row__count hub-row__count--alert">14</span></div>
+    <div class="hub-row" data-grid="Your follow-ups"><i class="fa-regular fa-list-check"></i><span class="hub-row__name">Your follow-ups</span><span class="hub-row__count hub-row__count--alert">5</span></div>
 
     <h3 class="hub-section-label">Workload grids</h3>
-    <div class="hub-row"><i class="fa-regular fa-file-lines"></i><span class="hub-row__name">LOI</span><span class="hub-row__count">7</span></div>
-    <div class="hub-row"><i class="fa-regular fa-file-contract"></i><span class="hub-row__name">Application</span><span class="hub-row__count">47</span></div>
-    <div class="hub-row"><i class="fa-regular fa-star-half-stroke"></i><span class="hub-row__name">Evaluation</span><span class="hub-row__count">22</span></div>
-    <div class="hub-row"><i class="fa-regular fa-gavel"></i><span class="hub-row__name">Approval / Decision</span><span class="hub-row__count">9</span></div>
-    <div class="hub-row"><i class="fa-regular fa-arrow-rotate-right"></i><span class="hub-row__name">Follow-up</span><span class="hub-row__count hub-row__count--alert">33</span></div>
-    <div class="hub-row"><i class="fa-regular fa-money-check-dollar"></i><span class="hub-row__name">Payment tracking</span><span class="hub-row__count">12</span></div>
+    <div class="hub-row" data-grid="LOI"><i class="fa-regular fa-file-lines"></i><span class="hub-row__name">LOI</span><span class="hub-row__count">7</span></div>
+    <div class="hub-row" data-grid="Application"><i class="fa-regular fa-file-contract"></i><span class="hub-row__name">Application</span><span class="hub-row__count">47</span></div>
+    <div class="hub-row" data-grid="Evaluation"><i class="fa-regular fa-star-half-stroke"></i><span class="hub-row__name">Evaluation</span><span class="hub-row__count">22</span></div>
+    <div class="hub-row" data-grid="Approval / Decision"><i class="fa-regular fa-gavel"></i><span class="hub-row__name">Approval / Decision</span><span class="hub-row__count">9</span></div>
+    <div class="hub-row" data-grid="Follow-up"><i class="fa-regular fa-arrow-rotate-right"></i><span class="hub-row__name">Follow-up</span><span class="hub-row__count hub-row__count--alert">33</span></div>
+    <div class="hub-row" data-grid="Payment tracking"><i class="fa-regular fa-money-check-dollar"></i><span class="hub-row__name">Payment tracking</span><span class="hub-row__count">12</span></div>
 
     <h3 class="hub-section-label">Search</h3>
-    <div class="hub-row"><i class="fa-regular fa-building"></i><span class="hub-row__name">Organizations</span></div>
-    <div class="hub-row"><i class="fa-regular fa-user"></i><span class="hub-row__name">Requests and decisions</span></div>
+    <div class="hub-row" data-grid="Organizations"><i class="fa-regular fa-building"></i><span class="hub-row__name">Organizations</span></div>
+    <div class="hub-row" data-grid="Requests and decisions"><i class="fa-regular fa-user"></i><span class="hub-row__name">Requests and decisions</span></div>
   </div>
 </aside>
 
@@ -472,6 +478,7 @@ body.customizing .add-bento-tile { display: block; }
 </aside>
 
 <!-- ══════════════════ HOMEPAGE ══════════════════ -->
+<div id="home-page">
 <div class="ft-page-head">
   <div class="ft-page-head__left">
     <h1 class="ft-greeting"></h1>
@@ -493,6 +500,19 @@ body.customizing .add-bento-tile { display: block; }
     <div class="custom-stack" id="home-stack"></div>
   </div>
 </div>
+</div>
+
+<!-- ══════════════════ WORKLOAD GRID PAGE (click-through target) ══════════════════ -->
+<div id="grid-page" style="display:none">
+  <div class="ft-main">
+    <div class="ft-content">
+      <div class="grid-back" onclick="closeGrid()">&lsaquo; Back to homepage</div>
+      <div class="ft-bento grid-blank">
+        <div class="ft-bento__header"><h2 class="ft-bento__title" id="grid-title"></h2></div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 /* ══════════════════ Greeting (time-of-day, affirming, no jokes) ══════════════════ */
@@ -510,45 +530,68 @@ var WL_CARDS=[
   {title:'Follow Up', icon:'fa-table-cells', tone:'red', open:33, openAlert:true,
    subs:[{name:'Follow Up Draft',count:21,alert:true},{name:'Follow Up Submitted',count:7},{name:'Follow Up Complete',count:5}]}
 ];
+var wlProcess='All processes';
+/* Fake per-process data: scale the base counts by a per-process factor */
+function wlDataFor(proc){
+  if(proc==='All processes')return WL_CARDS;
+  var f = proc==='2026 General Operating'?0.55 : (proc==='Spring Arts Initiative'?0.32 : 0.42);
+  var out=[];
+  for(var i=0;i<WL_CARDS.length;i++){
+    var c=WL_CARDS[i], subs=[], open=0;
+    for(var j=0;j<c.subs.length;j++){
+      var n=Math.round(c.subs[j].count*f); open+=n;
+      subs.push({name:c.subs[j].name,count:n,alert:c.subs[j].alert&&n>0});
+    }
+    out.push({title:c.title,icon:c.icon,tone:c.tone,open:open,openAlert:c.openAlert&&open>0,subs:subs});
+  }
+  return out;
+}
 function procFilterHTML(){
   var opts='<div class="wl-filter__opt" onclick="setProcFilter(this,\'All processes\')">All processes</div>';
   for(var i=0;i<PROCESSES.length;i++){opts+='<div class="wl-filter__opt" onclick="setProcFilter(this,\''+PROCESSES[i].name+'\')">'+PROCESSES[i].name+'</div>';}
   return '<div class="wl-filter">'+
-    '<button class="wl-filter__btn" onclick="toggleProcFilter(this)"><i class="fa-solid fa-filter"></i> <span class="wl-filter__label">All processes</span> <i class="fa-solid fa-chevron-down fa-2xs"></i></button>'+
+    '<button class="wl-filter__btn" onclick="toggleProcFilter(this)"><i class="fa-solid fa-filter"></i> <span class="wl-filter__label">'+wlProcess+'</span> <i class="fa-solid fa-chevron-down fa-2xs"></i></button>'+
     '<div class="wl-filter__menu">'+opts+'</div></div>';
 }
-function wlBentoHTML(withChrome){
-  var chrome=withChrome?chromeHTML():'';
-  var cards='';
-  for(var i=0;i<WL_CARDS.length;i++){
-    var c=WL_CARDS[i];
-    var subs='';
+function wlCardsHTML(cards){
+  var out='';
+  for(var i=0;i<cards.length;i++){
+    var c=cards[i], subs='';
     for(var j=0;j<c.subs.length;j++){
-      var s=c.subs[j];
-      var isZero=(s.count===0);
-      var nameCls=isZero?'wl-sub__name wl-sub__name--muted':'wl-sub__name';
+      var s=c.subs[j], isZero=(s.count===0);
       var cntCls=s.alert?'wl-sub__count--alert':(isZero?'wl-sub__count--zero':'');
-      subs+='<div class="wl-sub"><span class="'+nameCls+'">'+s.name+'</span><span class="wl-sub__count '+cntCls+'">'+s.count+'</span></div>';
+      if(isZero){
+        subs+='<div class="wl-sub"><span class="wl-sub__name wl-sub__name--muted">'+s.name+'</span><span class="wl-sub__count '+cntCls+'">'+s.count+'</span></div>';
+      }else{
+        subs+='<div class="wl-sub grid-link" data-grid="'+s.name+'"><span class="wl-sub__name">'+s.name+'</span><span class="wl-sub__count '+cntCls+'">'+s.count+'</span></div>';
+      }
     }
-    cards+='<div class="wl-card">'+
+    out+='<div class="wl-card">'+
       '<div class="wl-card__head">'+
         '<i class="fa-solid '+c.icon+' wl-card__icon wl-card__icon--'+c.tone+'"></i>'+
         '<span class="wl-card__title">'+c.title+'</span>'+
         '<span class="wl-card__open'+(c.openAlert?' wl-card__open--alert':'')+'">'+c.open+' open</span>'+
       '</div>'+subs+'</div>';
   }
+  return out;
+}
+function wlBentoHTML(withChrome){
+  var chrome=withChrome?chromeHTML():'';
   return chrome+
     '<div class="ft-bento__header"><h2 class="ft-bento__title">Workload</h2>'+
-      '<div class="ft-bento__actions">'+procFilterHTML()+'<span class="ft-bento__link">View all &rsaquo;</span></div>'+
+      '<div class="ft-bento__actions">'+procFilterHTML()+'<span class="ft-bento__link grid-link" data-grid="Workload">View all &rsaquo;</span></div>'+
     '</div>'+
-    '<div class="wl-cards">'+cards+'</div>';
+    '<div class="wl-cards">'+wlCardsHTML(wlDataFor(wlProcess))+'</div>';
 }
-/* Filter by process: concept control. Selecting updates the label only. */
+/* Filter by process: fakes filtering by re-rendering the cards with scaled data */
 function toggleProcFilter(btn){var f=btn.closest('.wl-filter');f.classList.toggle('open');}
 function setProcFilter(opt,name){
+  wlProcess=name;
   var f=opt.closest('.wl-filter');
   f.querySelector('.wl-filter__label').textContent=name;
   f.classList.remove('open');
+  var host=document.querySelector('.wl-cards');
+  if(host)host.innerHTML=wlCardsHTML(wlDataFor(name));
 }
 document.addEventListener('click',function(e){
   if(e.target.closest('.wl-filter'))return;
@@ -599,9 +642,9 @@ function myqHTML(){
 function workshortHTML(){
   function row(icon,name,count,alert){
     var badge=(count!==null&&count!==undefined)?'<span class="qlist__count'+(alert?' qlist__count--alert':'')+'">'+count+'</span>':'';
-    return '<div class="qlist__row"><i class="fa-regular '+icon+'"></i><span class="qlist__name">'+name+'</span>'+badge+'</div>';
+    return '<div class="qlist__row grid-link" data-grid="'+name+'"><i class="fa-regular '+icon+'"></i><span class="qlist__name">'+name+'</span>'+badge+'</div>';
   }
-  return '<div class="ft-bento__header"><h2 class="ft-bento__title">Workload shortcuts</h2><span class="ft-bento__link">Open workload &rsaquo;</span></div>'+
+  return '<div class="ft-bento__header"><h2 class="ft-bento__title">Workload shortcuts</h2><span class="ft-bento__link grid-link" data-grid="Workload">Open workload &rsaquo;</span></div>'+
     row('fa-file-lines','LOI',7)+
     row('fa-file-contract','Application',47)+
     row('fa-star-half-stroke','Evaluation',22)+
@@ -813,6 +856,23 @@ function openHub(){document.getElementById('hub-panel').classList.add('open');do
 function closeHub(){document.getElementById('hub-panel').classList.remove('open');document.getElementById('hub-overlay').classList.remove('open');}
 function openBentoMenu(){document.getElementById('menu-panel').classList.add('open');document.getElementById('menu-overlay').classList.add('open');}
 function closeBentoMenu(){document.getElementById('menu-panel').classList.remove('open');document.getElementById('menu-overlay').classList.remove('open');}
+
+/* ══════════════════ Workload grid click-through ══════════════════ */
+function openGrid(name){
+  document.getElementById('grid-title').textContent=name;
+  document.getElementById('home-page').style.display='none';
+  document.getElementById('grid-page').style.display='';
+  closeHub(); closeBentoMenu();
+  window.scrollTo(0,0);
+}
+function closeGrid(){
+  document.getElementById('grid-page').style.display='none';
+  document.getElementById('home-page').style.display='';
+}
+document.addEventListener('click',function(e){
+  var g=e.target.closest('[data-grid]');
+  if(g){ openGrid(g.getAttribute('data-grid')); }
+});
 
 /* ==== Customize mode ==== */
 function setCustomizing(on){document.body.classList.toggle('customizing',on);var lbl=document.getElementById('customize-lbl');if(lbl)lbl.textContent=on?'Done':'Customize';}
