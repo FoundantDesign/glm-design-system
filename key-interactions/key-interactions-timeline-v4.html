@@ -3,68 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Key Interactions Timeline, Prototype v4 (Engineering Handoff)</title>
+<title>Key Interactions Timeline, Option 2 (Sidebar Filters)</title>
 <!--
   ═══════════════════════════════════════════════════════════════════════
-  KEY INTERACTIONS TIMELINE, PROTOTYPE v4 (ENGINEERING HANDOFF)
+  KEY INTERACTIONS TIMELINE, OPTION 2 (SIDEBAR FILTERS)
   ═══════════════════════════════════════════════════════════════════════
 
-  LOCKED DECISIONS IN THIS VERSION:
-  - Milestone visualization (Sammie's swimlane direction, tested as
-    Version B) is shelved. Shipping the vertical timeline only: list,
-    filters, search, date range, and the Undated tab.
-  - Org-level and request-level scope both remain supported. The same
-    component renders on the Organization record page (all interactions)
-    and the Request record page (that request's interactions only). The
-    Scope control in the floating dev panel simulates switching between
-    those two page contexts for review; it is not a customer-facing
-    setting and should not be built as a toggle.
-  - Gap label prominence (Prominent vs Subtle) is removed. It only ever
-    lived as a dev panel toggle pending CSM and sales input that never
-    came; the timeline now always uses the prominent treatment.
-  - Scannability (4 of 4 usability finding: filtering is a fallback
-    when the unfiltered list can't be scanned fast enough): financial
-    milestones (award, payment, installment) get a background tint
-    plus a darker-green border (--success-dark, #37B87A, sourced from
-    the live GLM design system site rather than the local brief, which
-    doesn't have this stop yet). Title typography and icon color are
-    identical across every card regardless of type; the tint and
-    border alone carry the signal. An earlier version of this used a
-    left accent stripe instead of a border; that was replaced after
-    feedback. A compact density mode was also compared and not chosen;
-    it remains in key-interactions-scan-and-filter-explorations.html
-    for reference.
-  - Filter legibility at rest (4 of 4 usability finding): after
-    comparing a sticky summary, a sticky full toolbar, and a floating
-    badge, the inline active-filters summary from the previous round
-    stays as shipped. Sticky toolbar cost too much vertical space, and
-    a floating badge is a new UI pattern that would need its own user
-    testing rather than shipping on the back of this round's findings.
-    A deeper redesign of the filtering interactions themselves is
-    planned as a separate, later phase and is not part of this build.
+  THIS IS A TEAM-REVIEW COMPARISON, NOT THE ENGINEERING BUILD. It is an
+  alternative layout to key-interactions-timeline-v4.html (Option 1),
+  built from a marker sketch, for Gabe to share with the team before
+  deciding whether to lock a direction or take it into user testing.
+  This is a bigger interaction change than the polish rounds that came
+  before it, restructuring where filtering lives and how type filters
+  are grouped, so it is treated as its own decision rather than folded
+  straight into the engineering file.
 
-  USABILITY FINDINGS ADDRESSED IN THIS PASS (fixed ahead of new design
-  feedback, since these came out of the completed Userlytics study):
-  - Filter state illegibility: added one active-filters summary above
-    the timeline that lists every active filter (type, search, date
-    range) as removable chips, with a clear-all action. Individual
-    pills and the date range control still work the same way; this adds
-    a single legible place to see, and undo, whatever is currently
-    filtering the view.
-  - Cards universally expected clickable: every card now opens a detail
-    modal with the full, untruncated interaction content on click.
+  WHAT'S DIFFERENT FROM OPTION 1:
+  - All filtering controls (search, Dated/Undated, type filters, date
+    range, and the active-filters chip summary) move into one bordered
+    Filter bento, sticky in a right-hand column, so they stay visible
+    at any scroll position without the vertical cost a sticky top
+    toolbar had in an earlier comparison.
+  - The timeline now starts directly under the record header, since the
+    top control bar that used to sit there is gone. An earlier pass of
+    this file added a Latest/Pinned view toggle here, based on a
+    misread of the sketch; pinning is a per-card action (the pin icon
+    on each card already), and only one card can be pinned at a time
+    system-wide, so there is no page-level Pinned view. That toggle has
+    been removed.
+  - Type filtering is regrouped from one flat row of 10 pills into a
+    single Event Type multi-select dropdown. An earlier pass split this
+    into two dropdowns, Team Generated and System Generated, on the
+    existing system true/false flag; that split was combined back into
+    one list after feedback. Nothing new in the data model either way,
+    just different groupings of what already filters today.
+  - Dated/Undated moved into the Filter bento as well, since it behaves
+    more like a filter than a primary content switch now that the top
+    bar is gone.
 
-  OPEN ITEM, NOT ADDRESSED IN THIS BUILD:
-  - Evaluations and evaluator notes came up as a taxonomy gap in
-    testing. The current 10 interaction types have no home for this
-    content. This needs a data model decision before it can be
-    designed, so it is flagged here rather than guessed at.
+  WHAT'S UNCHANGED FROM OPTION 1: seeded data, record header, sidebar,
+  card design and milestone tint, the detail slide-out, and the
+  floating dev panel's Scope control.
 
-  DEV PANEL CONTROLS (for internal review, not shipped):
-  - Scope: Org / Request
-
-  SEEDED DATA: about 100 events over about 4 years (Feb 2022 to Apr
-  2026), 10 types. Unchanged from v3.
+  SEEDED DATA: unchanged from v4, about 100 events, 4 years, 10 types.
 -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css">
@@ -221,12 +202,89 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
 .btn-ft-sm { font-size: 0.75rem; padding: 4px 14px 3px; }
 
 /* =========================================
+   TWO COLUMN LAYOUT (Option 2 only)
+   ========================================= */
+.ki-layout-split { display: flex; gap: var(--gap); }
+.ki-main-col { flex: 1; min-width: 0; }
+.ki-filter-col { width: 300px; flex-shrink: 0; }
+.ki-col-title {
+  font-family: var(--font-heading); font-weight: 500; font-size: 1.1rem;
+  color: var(--primary); margin-bottom: 14px;
+}
+.ki-filter-bento {
+  background: var(--surface); border: var(--border); border-radius: var(--radius);
+  padding: 16px; position: sticky; top: calc(var(--nav-height) + 16px);
+}
+.ki-filter-group { margin-top: 16px; }
+.ki-filter-group:first-of-type { margin-top: 0; }
+.ki-filter-group__label {
+  font-family: var(--font-body); font-weight: 400;
+  font-size: 0.8rem; color: var(--neutral-30);
+  margin-bottom: 6px; display: block;
+}
+.ki-filter-bento .ki-search-wrap { width: 100%; }
+.ki-filter-bento .ki-viewswitch { width: 100%; }
+.ki-filter-bento .ki-viewswitch button { flex: 1; justify-content: center; }
+.ki-filter-bento .ki-scoped {
+  flex-direction: column; align-items: stretch; gap: 8px;
+  margin-bottom: 0;
+}
+.ki-filter-bento .ki-scoped > span { font-size: 0.75rem; color: var(--neutral-30); }
+.ki-filter-bento .ki-scoped > button { align-self: flex-start; }
+
+/* PINNED SLOT: the single system-wide pinned interaction, shown above
+   the timeline. Reuses cardHtml() for identical card styling; the
+   pinned item still also appears in its normal chronological spot in
+   the timeline below, this is a shortcut to it, not a replacement. */
+.ki-pinned-slot { margin-bottom: var(--gap); }
+.ki-pinned-badge {
+  border: 1px solid var(--success-dark);
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 4px 2px 10px;
+}
+.ki-pinned-badge__unpin {
+  background: transparent; border: none; padding: 2px; margin: 0; line-height: 0;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--primary); opacity: 0.6; border-radius: 50%;
+}
+.ki-pinned-badge__unpin:hover { opacity: 1; background: rgba(0,0,0,0.08); }
+
+/* TYPE DROPDOWN (Event Type multi-select) */
+.ki-type-dropdown { position: relative; }
+.ki-type-dropdown__trigger {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  border: 1px solid var(--primary); border-radius: var(--form-radius);
+  background: var(--surface); color: var(--primary);
+  font-family: var(--font-body); font-weight: 400; font-size: 0.85rem;
+  padding: 6px 10px; cursor: pointer;
+}
+.ki-type-dropdown__trigger:hover { background: var(--outline-hover); }
+.ki-type-dropdown__trigger svg { color: var(--primary); flex-shrink: 0; }
+.ki-type-dropdown__popover {
+  position: absolute; top: calc(100% + 6px); left: 0; right: 0;
+  background: var(--surface); border: var(--border); border-radius: var(--radius);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  z-index: 20; display: none; padding: 6px;
+}
+.ki-type-dropdown__popover.open { display: block; }
+.ki-type-dropdown__option {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 6px; cursor: pointer; border-radius: var(--form-radius);
+  font-family: var(--font-body); font-size: 0.85rem; color: var(--primary);
+}
+.ki-type-dropdown__option:hover { background: var(--outline-hover); }
+.ki-type-dropdown__option input[type="checkbox"] {
+  accent-color: var(--primary); width: 15px; height: 15px; cursor: pointer; flex-shrink: 0;
+}
+.ki-type-dropdown__option svg { color: var(--primary); flex-shrink: 0; }
+.ki-type-dropdown__option span:not(.ki-type-dropdown__option-count) { flex: 1; }
+.ki-type-dropdown__option-count {
+  font-size: 0.7rem; color: var(--neutral-40); font-weight: 500;
+}
+
+/* =========================================
    TIMELINE (SHARED)
    ========================================= */
-.ki-section { background: var(--surface); border: var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: var(--gap); }
-
-/* TOP CONTROL BAR */
-.ki-topbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .ki-search-wrap {
   flex: 1; min-width: 240px; border: var(--border); border-radius: var(--form-radius);
   padding: 5px 12px; display: flex; align-items: center; gap: 8px;
@@ -256,37 +314,6 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
   background: rgba(0,0,0,0.08);
 }
 .ki-viewswitch button.active .ki-viewswitch__count { background: rgba(255,255,255,0.2); }
-
-/* FILTER PILLS */
-.ki-filters { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
-.ki-filters__label {
-  font-family: var(--font-heading); font-weight: 500;
-  font-size: 0.75rem; color: var(--neutral-30);
-  text-transform: uppercase; letter-spacing: 0.04em;
-  margin-right: 4px;
-}
-.ki-pill {
-  display: inline-flex; align-items: center; gap: 6px;
-  border: 1px solid var(--primary); border-radius: var(--pill);
-  background: var(--surface); color: var(--primary);
-  font-family: var(--font-body); font-weight: 500; font-size: 0.8rem;
-  padding: 3px 11px; cursor: pointer; transition: background 0.1s, color 0.1s;
-  user-select: none;
-}
-.ki-pill:hover { background: var(--outline-hover); }
-.ki-pill.active { background: var(--primary); color: #fff; }
-.ki-pill.active svg { color: #fff; }
-.ki-pill svg { color: var(--primary); }
-.ki-pill[disabled], .ki-pill.disabled {
-  border-color: var(--neutral-50); color: var(--neutral-40);
-  background: var(--surface); cursor: not-allowed; opacity: 0.6;
-}
-.ki-pill[disabled]:hover, .ki-pill.disabled:hover { background: var(--surface); }
-.ki-pill[disabled] svg, .ki-pill.disabled svg { color: var(--neutral-40); }
-.ki-pill__count {
-  font-size: 0.7rem; font-weight: 700; padding-left: 4px;
-  font-family: var(--font-heading); opacity: 0.7;
-}
 
 /* ACTIVE FILTERS BANNER (shown when any filter is active: type, search, or date range) */
 .ki-scoped {
@@ -318,44 +345,31 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
 .ki-scoped__chip-x:hover { opacity: 1; background: var(--outline-hover); }
 
 /* =========================================
-   NAVIGATOR (SHARED CONTAINER)
-   ========================================= */
-.ki-nav-wrap {
-  background: var(--surface); border: var(--border); border-radius: var(--radius);
-  padding: 14px 16px; margin-bottom: var(--gap);
-}
-/* =========================================
    DATE RANGE NAVIGATOR (quick presets plus custom from/to)
    ========================================= */
-.ki-date-nav__bar {
-  display: flex; align-items: center; gap: 10px;
-}
-.ki-date-nav__label {
-  font-family: var(--font-heading); font-weight: 500; font-size: 0.75rem;
-  color: var(--neutral-30); text-transform: uppercase; letter-spacing: 0.04em;
-}
-.ki-daterange { position: relative; }
+.ki-daterange { position: relative; width: 100%; }
 .ki-daterange__trigger {
-  display: inline-flex; align-items: center; gap: 8px;
-  border: 1px solid var(--primary); border-radius: var(--pill);
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  border: 1px solid var(--primary); border-radius: var(--form-radius);
   background: var(--surface); color: var(--primary);
-  font-family: var(--font-heading); font-weight: 500; font-size: 0.85rem;
-  padding: 5px 14px; cursor: pointer;
+  font-family: var(--font-body); font-weight: 400; font-size: 0.85rem;
+  padding: 6px 10px; cursor: pointer;
 }
 .ki-daterange__trigger:hover { background: var(--outline-hover); }
-.ki-daterange__trigger svg { color: var(--primary); }
+.ki-daterange__trigger svg { color: var(--primary); flex-shrink: 0; }
+.ki-daterange__trigger span { flex: 1; text-align: left; }
 .ki-daterange__popover {
-  position: absolute; top: calc(100% + 6px); left: 0;
+  position: absolute; top: calc(100% + 6px); left: 0; right: 0;
   background: var(--surface); border: var(--border); border-radius: var(--radius);
   box-shadow: 0 4px 16px rgba(0,0,0,0.10);
-  min-width: 320px; z-index: 10; display: none;
+  z-index: 20; display: none;
   padding: 14px 16px;
 }
 .ki-daterange__popover.open { display: block; }
 .ki-daterange__section { display: flex; flex-direction: column; gap: 8px; }
 .ki-daterange__section-label {
-  font-family: var(--font-heading); font-weight: 500; font-size: 0.7rem;
-  color: var(--neutral-30); text-transform: uppercase; letter-spacing: 0.04em;
+  font-family: var(--font-body); font-weight: 400; font-size: 0.75rem;
+  color: var(--neutral-30);
 }
 .ki-daterange__presets {
   display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
@@ -422,12 +436,18 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
   font-family: var(--font-heading); font-weight: 500; font-size: 0.9rem;
   color: var(--primary); line-height: 1.25; word-break: break-word;
 }
-.ki-card__actions { display: flex; gap: 8px; flex-shrink: 0; }
-.ki-card__actions svg {
-  color: var(--primary); cursor: pointer; opacity: 0.6; transition: opacity 0.1s;
+.ki-card__actions { display: flex; gap: 2px; flex-shrink: 0; }
+.ki-card__pin-btn {
+  background: transparent; border: none; padding: 7px; margin: -7px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; border-radius: 50%; line-height: 0;
 }
-.ki-card__actions svg:hover { opacity: 1; }
-.ki-card__actions .pinned { opacity: 1; color: var(--primary); }
+.ki-card__pin-btn:hover { background: var(--outline-hover); }
+.ki-card__pin-btn svg {
+  color: var(--primary); opacity: 0.6; transition: opacity 0.1s;
+}
+.ki-card__pin-btn:hover svg { opacity: 1; }
+.ki-card__pin-btn.pinned svg { opacity: 1; }
 .ki-card__meta {
   font-family: var(--font-body); font-size: 0.72rem; color: var(--neutral-30);
   margin-left: 24px; margin-bottom: 4px;
@@ -441,27 +461,15 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.ki-card.is-pinned { border-left: 3px solid var(--primary); }
 .ki-card__date-warn {
   display: inline-flex; align-items: center; gap: 4px;
   font-family: var(--font-body); font-size: 0.7rem; color: var(--warning-0);
   font-weight: 500;
 }
-/* Milestone tier plus color rail, narrowed and combined per feedback.
-   Financial milestones (award, payment, installment) get a background
-   tint and a matching left accent stripe, so the two directions
-   reinforce one signal instead of introducing a second one. Title
-   typography and icon color stay identical to every other card; the
-   tint and stripe alone carry the signal. The stripe sits at left:5px
-   rather than flush against the edge, so it never collides with the
-   is-pinned border-left below on cards that are both. */
 /* Milestone tier. Financial milestones (award, payment, installment)
    get a background tint plus a darker-green border, so they read at a
    glance. Title typography and icon color stay identical to every
-   other card; the tint and border alone carry the signal. The color
-   rail stripe from the prior round was removed in favor of this
-   plain border treatment, which is a more standard pattern and
-   doesn't need the extra padding-left workaround the stripe required.
+   other card; the tint and border alone carry the signal.
    --success-dark (#37B87A) is sourced directly from the live GLM
    design system site and is not yet in style-brief-v2.md; worth
    adding there so this token has one source of truth. */
@@ -513,11 +521,10 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
   background: var(--neutral-60);
 }
 
-/* EMPTY STATE */
+/* EMPTY STATE (now always nested inside the persistent timeline bento) */
 .ki-empty {
-  padding: 60px 20px; text-align: center;
+  padding: 40px 20px; text-align: center;
   font-family: var(--font-body); color: var(--neutral-30); font-size: 0.9rem;
-  background: var(--surface); border: var(--border); border-radius: var(--radius);
 }
 .ki-empty__title {
   font-family: var(--font-heading); font-weight: 500; font-size: 1rem;
@@ -853,39 +860,67 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
       </div>
     </div>
 
-    <!-- TOP CONTROLS -->
-    <div class="ki-section">
-      <div class="ki-topbar">
-        <div class="ki-viewswitch" id="view-switch">
-          <button class="active" data-view="dated">
-            <svg width="13" height="13"><use href="#ic-calendar"/></svg>
-            Dated <span class="ki-viewswitch__count" id="dated-count">0</span>
-          </button>
-          <button data-view="undated">
-            <svg width="13" height="13"><use href="#ic-help"/></svg>
-            Undated <span class="ki-viewswitch__count" id="undated-count">0</span>
-          </button>
+    <!-- TWO COLUMN LAYOUT: timeline on the left, sticky filter bento on the right -->
+    <div class="ki-layout-split">
+
+      <!-- MAIN COLUMN -->
+      <div class="ki-main-col">
+
+        <!-- TIMELINE BENTO: static container, matches the Filter bento
+             pattern. Title stays put; only #timeline-content swaps
+             between the dated rail, the undated list, and empty states. -->
+        <div class="ki-vert" id="timeline-bento">
+          <div class="ki-col-title">Interactions</div>
+
+          <!-- PINNED SLOT (the single system-wide pinned interaction, if any) -->
+          <div class="ki-pinned-slot" id="pinned-slot" style="display:none"></div>
+
+          <div id="timeline-content"></div>
         </div>
-        <div class="ki-search-wrap">
-          <svg width="13" height="13" style="color:#aaa"><use href="#ic-search"/></svg>
-          <input type="text" id="search-input" placeholder="Search interactions by title or content">
+
+      </div>
+
+      <!-- FILTER COLUMN, sticky -->
+      <div class="ki-filter-col">
+        <div class="ki-filter-bento">
+          <div class="ki-col-title">Filter</div>
+
+          <!-- ACTIVE FILTERS BANNER (shown when any filter is active) -->
+          <div id="active-filters-banner" style="display:none"></div>
+
+          <div class="ki-filter-group">
+            <div class="ki-search-wrap">
+              <svg width="13" height="13" style="color:#aaa"><use href="#ic-search"/></svg>
+              <input type="text" id="search-input" placeholder="Search interactions">
+            </div>
+          </div>
+
+          <div class="ki-filter-group">
+            <span class="ki-filter-group__label">View</span>
+            <div class="ki-viewswitch" id="view-switch">
+              <button class="active" data-view="dated">
+                <svg width="13" height="13"><use href="#ic-calendar"/></svg>
+                Dated <span class="ki-viewswitch__count" id="dated-count">0</span>
+              </button>
+              <button data-view="undated">
+                <svg width="13" height="13"><use href="#ic-help"/></svg>
+                Undated <span class="ki-viewswitch__count" id="undated-count">0</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="ki-filter-group">
+            <span class="ki-filter-group__label">Event Type</span>
+            <div class="ki-type-dropdown" id="event-type-dropdown"></div>
+          </div>
+
+          <!-- NAVIGATOR: date range, rendered into here -->
+          <div id="navigator-host"></div>
+
         </div>
       </div>
 
-      <!-- FILTER PILLS -->
-      <div class="ki-filters" id="filter-pills">
-        <span class="ki-filters__label">Filter by type</span>
-      </div>
     </div>
-
-    <!-- NAVIGATOR (variant-driven, rendered into here) -->
-    <div id="navigator-host"></div>
-
-    <!-- ACTIVE FILTERS BANNER (shown when any filter is active) -->
-    <div id="active-filters-banner" style="display:none"></div>
-
-    <!-- TIMELINE -->
-    <div id="timeline"></div>
 
   </main>
 </div>
@@ -905,19 +940,19 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
 var ORG_INTERACTIONS = [
   /* ───── 2022: Urban Greenways early relationship ───── */
   { id: 1, type: 'email', system: false, pinned: false, title: 'Initial inquiry about environmental grant opportunity', request: 'Urban Greenways Initiative', date: '2022-02-08', author: 'Megan Dahl', body: 'Aaron reached out via our contact form asking about funding opportunities for a proposed greenway and community garden project. Sent preliminary eligibility guidelines and invited him to submit an LOI.' },
-  { id: 2, type: 'phone', system: false, pinned: true, title: 'Introductory call: scope and timeline', request: 'Urban Greenways Initiative', date: '2022-02-22', author: 'Sarah Johnson', body: '30-minute introductory call with Aaron Rodgers and Yvette Chen. Discussed scope, expected outcomes, fit with our Environment program, and timeline for the Q2 cycle.' },
+  { id: 2, type: 'phone', system: false, pinned: false, title: 'Introductory call: scope and timeline', request: 'Urban Greenways Initiative', date: '2022-02-22', author: 'Sarah Johnson', body: '30-minute introductory call with Aaron Rodgers and Yvette Chen. Discussed scope, expected outcomes, fit with our Environment program, and timeline for the Q2 cycle.' },
   { id: 3, type: 'email', system: false, pinned: false, title: 'Shared LOI template and review criteria', request: 'Urban Greenways Initiative', date: '2022-03-04', author: 'Megan Dahl', body: 'Sent the LOI template, review rubric, and a calendar of upcoming deadlines. Also included our annual report so they can see prior funded projects.' },
   { id: 4, type: 'system-email', system: true, pinned: false, title: 'LOI form sent', request: 'Urban Greenways Initiative', date: '2022-03-04', author: 'System', body: 'Automated: LOI form delivered to applicant.' },
   { id: 5, type: 'submitted-form', system: false, pinned: false, title: 'LOI submitted', request: 'Urban Greenways Initiative', date: '2022-03-18', author: 'Aaron Rodgers', body: 'Letter of inquiry submitted for the Urban Greenways Initiative project.' },
   { id: 6, type: 'system-email', system: true, pinned: false, title: 'LOI received confirmation sent', request: 'Urban Greenways Initiative', date: '2022-03-18', author: 'System', body: 'Automated receipt confirmation to applicant.' },
   { id: 7, type: 'note', system: false, pinned: false, title: 'LOI review note: strong candidate', request: 'Urban Greenways Initiative', date: '2022-03-29', author: 'Sarah Johnson', body: 'LOI is well-organized, partnerships in place, clear outcomes. Recommending invitation to submit full proposal.' },
   { id: 8, type: 'system-email', system: true, pinned: false, title: 'Full application form sent', request: 'Urban Greenways Initiative', date: '2022-04-02', author: 'System', body: 'Automated: full application form delivered.' },
-  { id: 9, type: 'in-person', system: false, pinned: true, title: 'Site visit: proposed greenway corridor', request: 'Urban Greenways Initiative', date: '2022-04-09', author: 'Sarah Johnson', body: 'Walked the proposed greenway corridor with Aaron and Yvette. The project is well-scoped, partnerships with three neighborhood associations are in place, and the city has signaled written support.' },
+  { id: 9, type: 'in-person', system: false, pinned: false, title: 'Site visit: proposed greenway corridor', request: 'Urban Greenways Initiative', date: '2022-04-09', author: 'Sarah Johnson', body: 'Walked the proposed greenway corridor with Aaron and Yvette. The project is well-scoped, partnerships with three neighborhood associations are in place, and the city has signaled written support.' },
   { id: 10, type: 'note', system: false, pinned: false, title: 'Internal: budget consideration', request: 'Urban Greenways Initiative', date: '2022-04-22', author: 'Sarah Johnson', body: 'Budget requested is $75K. Given our 2022 program area allocation and competing asks, recommending we fund at $60K with a request to narrow phase 1 scope.' },
   { id: 11, type: 'submitted-form', system: false, pinned: false, title: 'Full application submitted', request: 'Urban Greenways Initiative', date: '2022-04-30', author: 'Aaron Rodgers', body: 'Complete application package submitted.' },
   { id: 12, type: 'system-email', system: true, pinned: false, title: 'Application received confirmation', request: 'Urban Greenways Initiative', date: '2022-04-30', author: 'System', body: 'Automated confirmation of receipt.' },
   { id: 13, type: 'video', system: false, pinned: false, title: 'Follow-up video call: budget negotiation', request: 'Urban Greenways Initiative', date: '2022-05-14', author: 'Sarah Johnson', body: 'Called Aaron to share that we are recommending $60K vs. $75K requested and walked through scope adjustments. He understood and will revise the phase 1 plan.' },
-  { id: 14, type: 'award', system: false, pinned: true, title: 'Award decision: $60,000', request: 'Urban Greenways Initiative', date: '2022-06-03', author: 'Board', body: 'Board approved at $60,000 over 12 months.' },
+  { id: 14, type: 'award', system: false, pinned: false, title: 'Award decision: $60,000', request: 'Urban Greenways Initiative', date: '2022-06-03', author: 'Board', body: 'Board approved at $60,000 over 12 months.' },
   { id: 15, type: 'email', system: false, pinned: false, title: 'Award notification', request: 'Urban Greenways Initiative', date: '2022-06-03', author: 'Megan Dahl', body: 'Formal award notification sent. Grant agreement and payment schedule attached.' },
   { id: 16, type: 'system-email', system: true, pinned: false, title: 'Award notification email sent', request: 'Urban Greenways Initiative', date: '2022-06-03', author: 'System', body: 'Automated award notification.' },
   { id: 17, type: 'payment', system: false, pinned: false, title: 'Payment 1 of 2: $30,000', request: 'Urban Greenways Initiative', date: '2022-06-15', author: 'Finance', body: 'First installment of $30,000 disbursed.' },
@@ -965,7 +1000,7 @@ var ORG_INTERACTIONS = [
   { id: 49, type: 'submitted-form', system: false, pinned: false, title: 'Final narrative report submitted', request: 'Urban Greenways Initiative', date: '2024-02-26', author: 'Aaron Rodgers', body: 'Final narrative and financial report submitted. Strong outcomes documented.' },
   { id: 50, type: 'submitted-form', system: false, pinned: false, title: 'Final financial report submitted', request: 'Urban Greenways Initiative', date: '2024-02-28', author: 'Aaron Rodgers', body: 'Final financial report submitted.' },
   { id: 51, type: 'note', system: false, pinned: false, title: 'Final review and closure recommendation', request: 'Urban Greenways Initiative', date: '2024-03-08', author: 'Megan Dahl', body: 'Reports are strong. Recommending grant closure.' },
-  { id: 52, type: 'in-person', system: false, pinned: true, title: 'Ribbon cutting and grant closure event', request: 'Urban Greenways Initiative', date: '2024-05-20', author: 'Sarah Johnson', body: 'Attended the greenway ribbon-cutting. Three neighborhoods represented, about 80 community members present, strong press coverage. Clear outcomes delivered.' },
+  { id: 52, type: 'in-person', system: false, pinned: false, title: 'Ribbon cutting and grant closure event', request: 'Urban Greenways Initiative', date: '2024-05-20', author: 'Sarah Johnson', body: 'Attended the greenway ribbon-cutting. Three neighborhoods represented, about 80 community members present, strong press coverage. Clear outcomes delivered.' },
   { id: 53, type: 'system-email', system: true, pinned: false, title: 'Grant closed notification', request: 'Urban Greenways Initiative', date: '2024-06-01', author: 'System', body: 'Automated grant closure notification.' },
 
   /* ───── 2024 quiet middle period ───── */
@@ -981,7 +1016,7 @@ var ORG_INTERACTIONS = [
   { id: 61, type: 'note', system: false, pinned: false, title: 'LOI review: needs sustainability work', request: 'Youth Nature Programs', date: '2025-03-08', author: 'Sarah Johnson', body: 'Concept is strong but the sustainability plan beyond the grant period is thin. Recommending invitation with feedback.' },
   { id: 62, type: 'email', system: false, pinned: false, title: 'Feedback shared and full app invited', request: 'Youth Nature Programs', date: '2025-03-12', author: 'Megan Dahl', body: 'Sent feedback letter and full application invitation.' },
   { id: 63, type: 'system-email', system: true, pinned: false, title: 'Full application form sent', request: 'Youth Nature Programs', date: '2025-03-12', author: 'System', body: 'Automated form delivery.' },
-  { id: 64, type: 'video', system: false, pinned: true, title: 'Strategy conversation: program design', request: 'Youth Nature Programs', date: '2025-04-22', author: 'Sarah Johnson', body: 'Deeper conversation with Aaron and Yvette on the Youth Nature Programs design. Raised questions about sustainability and youth outcome measurement. They will revise.' },
+  { id: 64, type: 'video', system: false, pinned: false, title: 'Strategy conversation: program design', request: 'Youth Nature Programs', date: '2025-04-22', author: 'Sarah Johnson', body: 'Deeper conversation with Aaron and Yvette on the Youth Nature Programs design. Raised questions about sustainability and youth outcome measurement. They will revise.' },
 
   /* ───── 2025 mid: relationship building, system noise ───── */
   { id: 65, type: 'in-person', system: false, pinned: false, title: 'Dropped by their office during community visit', request: null, date: '2025-05-08', author: 'Sarah Johnson', body: 'Was in the neighborhood for another site visit, stopped by to say hello.' },
@@ -1286,39 +1321,72 @@ function renderRecordHeader() {
 /* ====================================================
    FILTER PILLS
    ==================================================== */
-function renderFilterPills() {
-  var host = document.getElementById('filter-pills');
-  var html = '<span class="ki-filters__label">Filter by type</span>';
-  /* "Show all" pill, disabled when no filters are active */
-  var anyActive = hasActiveTypeFilters();
-  html += '<button class="ki-pill' + (anyActive ? '' : ' disabled') + '" ' +
-    (anyActive ? 'onclick="clearTypeFilters()"' : 'disabled') + '>' +
-    'Show all' +
-    '</button>';
-  /* Compute counts on dated set for each type */
+function renderTypeFilters() {
+  renderTypeDropdown('event-type-dropdown', TYPE_ORDER);
+}
+
+function renderTypeDropdown(hostId, groupTypes) {
+  var host = document.getElementById(hostId);
+
+  /* Preserve open/closed state across re-renders, since checking a
+     box inside the popover triggers a re-render of this same host. */
+  var existingPopover = host.querySelector('.ki-type-dropdown__popover');
+  var wasOpen = existingPopover ? existingPopover.classList.contains('open') : false;
+
   var counts = {};
   var datedSet = datedData();
   for (var i = 0; i < datedSet.length; i++) {
     counts[datedSet[i].type] = (counts[datedSet[i].type] || 0) + 1;
   }
-  for (var j = 0; j < TYPE_ORDER.length; j++) {
-    var t = TYPE_ORDER[j];
+
+  var selectedCount = 0;
+  for (var g = 0; g < groupTypes.length; g++) {
+    if (state.activeTypes[groupTypes[g]]) selectedCount++;
+  }
+  var triggerLabel = selectedCount > 0 ? (selectedCount + ' selected') : 'Select any #';
+
+  var optionsHtml = '';
+  for (var j = 0; j < groupTypes.length; j++) {
+    var t = groupTypes[j];
     var meta = TYPE_META[t];
     var cnt = counts[t] || 0;
-    if (cnt === 0) continue;
-    var active = state.activeTypes[t];
-    html += '<button class="ki-pill' + (active ? ' active' : '') + '" data-type="' + t + '" onclick="togglePill(\'' + t + '\')">' +
+    var checked = state.activeTypes[t] ? ' checked' : '';
+    optionsHtml += '<label class="ki-type-dropdown__option">' +
+      '<input type="checkbox"' + checked + ' onchange="togglePill(\'' + t + '\')">' +
       '<svg width="13" height="13"><use href="#' + meta.icon + '"/></svg>' +
-      meta.label +
-      '<span class="ki-pill__count">' + cnt + '</span>' +
-      '</button>';
+      '<span>' + meta.label + '</span>' +
+      '<span class="ki-type-dropdown__option-count">' + cnt + '</span>' +
+      '</label>';
   }
-  host.innerHTML = html;
+
+  host.innerHTML =
+    '<button type="button" class="ki-type-dropdown__trigger" onclick="toggleTypeDropdown(\'' + hostId + '\')">' +
+      '<span>' + triggerLabel + '</span>' +
+      '<svg width="10" height="10"><use href="#ic-chevron-down"/></svg>' +
+    '</button>' +
+    '<div class="ki-type-dropdown__popover' + (wasOpen ? ' open' : '') + '">' + optionsHtml + '</div>';
 }
+
+function toggleTypeDropdown(hostId) {
+  var host = document.getElementById(hostId);
+  var popover = host.querySelector('.ki-type-dropdown__popover');
+  var isOpen = popover.classList.contains('open');
+  var allPopovers = document.querySelectorAll('.ki-type-dropdown__popover');
+  for (var i = 0; i < allPopovers.length; i++) allPopovers[i].classList.remove('open');
+  if (!isOpen) popover.classList.add('open');
+}
+
+document.addEventListener('click', function(e) {
+  var insideDropdown = e.target.closest ? e.target.closest('.ki-type-dropdown') : null;
+  if (!insideDropdown) {
+    var allPopovers = document.querySelectorAll('.ki-type-dropdown__popover');
+    for (var i = 0; i < allPopovers.length; i++) allPopovers[i].classList.remove('open');
+  }
+});
 
 function clearTypeFilters() {
   for (var k in state.activeTypes) { state.activeTypes[k] = false; }
-  renderFilterPills();
+  renderTypeFilters();
   renderNavigator();
   renderActiveFiltersBanner();
   renderTimeline();
@@ -1327,7 +1395,7 @@ function clearTypeFilters() {
 
 function togglePill(type) {
   state.activeTypes[type] = !state.activeTypes[type];
-  renderFilterPills();
+  renderTypeFilters();
   renderNavigator();
   renderActiveFiltersBanner();
   renderTimeline();
@@ -1424,7 +1492,7 @@ function clearAllFilters() {
   state.dateRange = null;
   var input = document.getElementById('search-input');
   if (input) input.value = '';
-  renderFilterPills();
+  renderTypeFilters();
   renderViewSwitchCounts();
   renderNavigator();
   renderActiveFiltersBanner();
@@ -1449,33 +1517,31 @@ function renderDateNav() {
   if (state.dateRange && state.dateRange.label) rangeLabel = state.dateRange.label;
 
   return '' +
-    '<div class="ki-nav-wrap ki-date-nav">' +
-      '<div class="ki-date-nav__bar">' +
-        '<span class="ki-date-nav__label">Date range</span>' +
-        '<div class="ki-daterange" id="ki-daterange">' +
-          '<button class="ki-daterange__trigger" id="ki-daterange-trigger" type="button">' +
-            '<svg width="13" height="13"><use href="#ic-calendar"/></svg>' +
-            '<span>' + rangeLabel + '</span>' +
-            '<svg width="10" height="10"><use href="#ic-chevron-down"/></svg>' +
-          '</button>' +
-          '<div class="ki-daterange__popover" id="ki-daterange-popover">' +
-            '<div class="ki-daterange__section">' +
-              '<div class="ki-daterange__section-label">Quick ranges</div>' +
-              '<div class="ki-daterange__presets">' +
-                '<button data-preset="all" class="' + (state.dateRange && state.dateRange.preset === 'all' || !state.dateRange ? 'active' : '') + '">All time</button>' +
-                '<button data-preset="12m" class="' + (state.dateRange && state.dateRange.preset === '12m' ? 'active' : '') + '">Last 12 months</button>' +
-                '<button data-preset="6m" class="' + (state.dateRange && state.dateRange.preset === '6m' ? 'active' : '') + '">Last 6 months</button>' +
-                '<button data-preset="3m" class="' + (state.dateRange && state.dateRange.preset === '3m' ? 'active' : '') + '">Last 3 months</button>' +
-              '</div>' +
+    '<div class="ki-filter-group">' +
+      '<span class="ki-filter-group__label">Date Range</span>' +
+      '<div class="ki-daterange" id="ki-daterange">' +
+        '<button class="ki-daterange__trigger" id="ki-daterange-trigger" type="button">' +
+          '<svg width="13" height="13"><use href="#ic-calendar"/></svg>' +
+          '<span>' + rangeLabel + '</span>' +
+          '<svg width="10" height="10"><use href="#ic-chevron-down"/></svg>' +
+        '</button>' +
+        '<div class="ki-daterange__popover" id="ki-daterange-popover">' +
+          '<div class="ki-daterange__section">' +
+            '<div class="ki-daterange__section-label">Quick ranges</div>' +
+            '<div class="ki-daterange__presets">' +
+              '<button data-preset="all" class="' + (state.dateRange && state.dateRange.preset === 'all' || !state.dateRange ? 'active' : '') + '">All time</button>' +
+              '<button data-preset="12m" class="' + (state.dateRange && state.dateRange.preset === '12m' ? 'active' : '') + '">Last 12 months</button>' +
+              '<button data-preset="6m" class="' + (state.dateRange && state.dateRange.preset === '6m' ? 'active' : '') + '">Last 6 months</button>' +
+              '<button data-preset="3m" class="' + (state.dateRange && state.dateRange.preset === '3m' ? 'active' : '') + '">Last 3 months</button>' +
             '</div>' +
-            '<div class="ki-daterange__divider"></div>' +
-            '<div class="ki-daterange__section">' +
-              '<div class="ki-daterange__section-label">Custom range</div>' +
-              '<div class="ki-daterange__custom">' +
-                '<label>From <input type="date" id="ki-date-from" value="' + (state.dateRange && state.dateRange.from ? state.dateRange.from : '') + '"></label>' +
-                '<label>To <input type="date" id="ki-date-to" value="' + (state.dateRange && state.dateRange.to ? state.dateRange.to : '') + '"></label>' +
-                '<button type="button" id="ki-date-apply" class="ki-daterange__apply">Apply</button>' +
-              '</div>' +
+          '</div>' +
+          '<div class="ki-daterange__divider"></div>' +
+          '<div class="ki-daterange__section">' +
+            '<div class="ki-daterange__section-label">Custom range</div>' +
+            '<div class="ki-daterange__custom">' +
+              '<label>From <input type="date" id="ki-date-from" value="' + (state.dateRange && state.dateRange.from ? state.dateRange.from : '') + '"></label>' +
+              '<label>To <input type="date" id="ki-date-to" value="' + (state.dateRange && state.dateRange.to ? state.dateRange.to : '') + '"></label>' +
+              '<button type="button" id="ki-date-apply" class="ki-daterange__apply">Apply</button>' +
             '</div>' +
           '</div>' +
         '</div>' +
@@ -1595,16 +1661,32 @@ function cardHtml(it, opts) {
       '<svg width="11" height="11"><use href="#ic-help"/></svg>Date not set' +
       '</span><span class="sep">|</span><span>Added ' + cd + '</span><span class="sep">|</span><span>Logged by: ' + it.author + '</span>';
   }
-  var pinIcon = it.pinned
-    ? '<svg width="14" height="14" class="pinned"><use href="#ic-pin"/></svg>'
-    : '<svg width="14" height="14"><use href="#ic-pin"/></svg>';
+  var pinTitle = it.pinned ? 'Unpin this interaction' : 'Pin this interaction';
+  var pinIcon =
+    '<button type="button" class="ki-card__pin-btn' + (it.pinned ? ' pinned' : '') + '" ' +
+      'onclick="togglePinInteraction(event, ' + it.id + ')" title="' + pinTitle + '">' +
+      '<svg width="14" height="14"><use href="#ic-pin"/></svg>' +
+    '</button>';
+  /* In the pinned slot, show the Pinned badge instead of the pin
+     button, in the same top-right actions spot. The badge itself now
+     carries its own unpin control, same removable-chip pattern as the
+     active-filters chips, since this was the only place pinning had
+     no way to undo without scrolling to find the card's other
+     instance in the timeline below. */
+  var actionsHtml = opts.showPinnedBadge
+    ? '<span class="ft-badge ft-badge--clear ki-pinned-badge">Pinned' +
+        '<button type="button" class="ki-pinned-badge__unpin" onclick="togglePinInteraction(event, ' + it.id + ')" title="Unpin this interaction">' +
+          '<svg width="9" height="9"><use href="#ic-close"/></svg>' +
+        '</button>' +
+      '</span>'
+    : pinIcon;
   return '<div class="ki-card' + pinClass + sysClass + '" data-type="' + it.type + '" onclick="openInteractionSlideout(' + it.id + ')">' +
     '<div class="ki-card__head">' +
       '<div class="ki-card__title-wrap">' +
         '<svg width="16" height="16"><use href="#' + meta.icon + '"/></svg>' +
         '<div class="ki-card__title">' + it.title + '</div>' +
       '</div>' +
-      '<div class="ki-card__actions">' + pinIcon + '</div>' +
+      '<div class="ki-card__actions">' + actionsHtml + '</div>' +
     '</div>' +
     '<div class="ki-card__meta">' + orgRequest + dateInfo + '</div>' +
     '<div class="ki-card__body">' + it.body + '</div>' +
@@ -1621,6 +1703,47 @@ function findInteractionById(id) {
     if (ORG_INTERACTIONS[i].id === id) return ORG_INTERACTIONS[i];
   }
   return null;
+}
+
+/* ====================================================
+   PINNING
+   The system allows only one pinned interaction at a time, across the
+   whole dataset (not per scope or per request). Clicking the pin icon
+   on the currently pinned card unpins it; clicking it on any other
+   card unpins whatever was pinned and pins that one instead. The
+   pinned card still appears in its normal chronological spot in the
+   timeline too; the slot above is a shortcut to it, not a move.
+   ==================================================== */
+function togglePinInteraction(evt, id) {
+  if (evt && evt.stopPropagation) evt.stopPropagation();
+  var it = findInteractionById(id);
+  if (!it) return;
+  var wasPinned = it.pinned;
+  for (var i = 0; i < ORG_INTERACTIONS.length; i++) {
+    ORG_INTERACTIONS[i].pinned = false;
+  }
+  it.pinned = !wasPinned;
+  renderPinnedSlot();
+  renderTimeline();
+}
+
+function findPinnedInteraction() {
+  for (var i = 0; i < ORG_INTERACTIONS.length; i++) {
+    if (ORG_INTERACTIONS[i].pinned) return ORG_INTERACTIONS[i];
+  }
+  return null;
+}
+
+function renderPinnedSlot() {
+  var host = document.getElementById('pinned-slot');
+  var pinnedItem = findPinnedInteraction();
+  if (!pinnedItem) {
+    host.style.display = 'none';
+    host.innerHTML = '';
+    return;
+  }
+  host.style.display = '';
+  host.innerHTML = cardHtml(pinnedItem, { showPinnedBadge: true });
 }
 
 function openInteractionSlideout(id) {
@@ -1715,7 +1838,7 @@ function renderVertical(data) {
       'Try clearing the date range, search, or type filters above.' +
       '</div>';
   }
-  var html = '<div class="ki-vert"><div class="ki-vert__rail">';
+  var html = '<div class="ki-vert__rail">';
   var lastKey = null;
   for (var i = 0; i < data.length; i++) {
     var it = data[i];
@@ -1740,7 +1863,7 @@ function renderVertical(data) {
     var dotCls = it.system ? ' ki-vert__dot--system' : '';
     html += '<div class="ki-vert__item" id="ki-item-' + it.id + '"><div class="ki-vert__dot' + dotCls + '"></div>' + cardHtml(it) + '</div>';
   }
-  html += '</div></div>';
+  html += '</div>';
   return html;
 }
 
@@ -1763,11 +1886,11 @@ function renderUndated() {
       '</div>';
   }
   /* Render as a simple chronological-by-create-date list, no gaps, no months */
-  var html = info + '<div class="ki-vert"><div class="ki-vert__rail">';
+  var html = info + '<div class="ki-vert__rail">';
   for (var i = 0; i < data.length; i++) {
     html += '<div class="ki-vert__item" id="ki-item-' + data[i].id + '"><div class="ki-vert__dot ki-vert__dot--system"></div>' + cardHtml(data[i]) + '</div>';
   }
-  html += '</div></div>';
+  html += '</div>';
   return html;
 }
 
@@ -1775,7 +1898,7 @@ function renderUndated() {
    TIMELINE DISPATCH
    ==================================================== */
 function renderTimeline() {
-  var host = document.getElementById('timeline');
+  var host = document.getElementById('timeline-content');
   if (state.view === 'undated') {
     host.innerHTML = renderUndated();
     return;
@@ -1789,10 +1912,11 @@ function renderTimeline() {
 function renderAll() {
   renderSidebar();
   renderRecordHeader();
-  renderFilterPills();
+  renderTypeFilters();
   renderViewSwitchCounts();
   renderNavigator();
   renderActiveFiltersBanner();
+  renderPinnedSlot();
   renderTimeline();
 }
 
