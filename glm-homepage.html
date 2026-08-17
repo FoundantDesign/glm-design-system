@@ -409,8 +409,8 @@ body.customizing .add-bento-tile { display: block; }
     <i class="fa-regular fa-magnifying-glass" style="color:#bbb;font-size:13px"></i> search
   </div>
   <div class="ft-navbar__spacer"></div>
-  <!-- Workload hub trigger: workload reachable from ANY page, not just home -->
-  <button class="ft-navbar__hub" onclick="openHub()">
+  <!-- Workload hub trigger: temporarily hidden from nav, panel/markup left intact for easy restore -->
+  <button class="ft-navbar__hub" onclick="openHub()" style="display:none">
     SHORTCUTS <span class="hub-dot"></span>
   </button>
   <button class="ft-navbar__role">ROLE (ADMINISTRATOR) <i class="fa-regular fa-chevron-down fa-xs"></i></button>
