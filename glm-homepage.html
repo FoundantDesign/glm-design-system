@@ -128,6 +128,15 @@ body.customizing .customizable { outline: 1px dashed #9BBEE8; outline-offset: 2p
 }
 .bento-chrome__btn:hover { color: var(--danger-fg); border-color: var(--danger-fg); }
 .bento-chrome__btn.handle { cursor: grab; }
+/* handle only makes sense once there's more than one bento in the row */
+.home-row[data-cols="1"] .bento-chrome__btn.handle { display: none; }
+
+/* slot drag/drop cues (rearranging bentos within a 2 or 3 column row) */
+.home-slot.slot-dragging { opacity: 0.35; }
+.home-slot.slot-drop-target { outline: 2px dashed var(--link); outline-offset: 3px; border-radius: var(--radius); }
+
+/* empty state when a process filter leaves a bento with nothing to show */
+.qlist__empty { font-size: 0.82rem; color: #888; padding: 10px 0; }
 
 /* ── Buttons ── */
 .btn-ft-filled, .btn-ft-outline {
@@ -220,13 +229,6 @@ body.customizing .customizable { outline: 1px dashed #9BBEE8; outline-offset: 2p
 
 /* ── Filter by process (restored control from today's page) ── */
 .wl-filter { position: relative; }
-.wl-filter__btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-family: var(--font-body); font-size: 0.72rem; color: var(--primary);
-  background: var(--surface); border: 1px solid var(--border-color);
-  border-radius: var(--pill); padding: 4px 12px; cursor: pointer;
-}
-.wl-filter__btn:hover { background: var(--sidebar-hover); }
 .wl-filter__btn i.fa-filter { color: #6B7785; }
 .wl-filter__menu {
   display: none; position: absolute; right: 0; top: 120%;
@@ -321,6 +323,12 @@ body.customizing .row-toolbar {
 .row-colctl button:last-child { border-right: none; }
 .row-colctl button:hover { background: var(--sidebar-hover); }
 .row-colctl button.active { background: var(--primary); color: #fff; }
+.row-delete {
+  width: 24px; height: 24px; border-radius: var(--form-radius); border: 1px solid var(--border-color);
+  background: var(--surface); color: #888; cursor: pointer; font-size: 11px;
+  display: inline-flex; align-items: center; justify-content: center; margin-left: 4px;
+}
+.row-delete:hover { color: var(--danger-fg); border-color: var(--danger-fg); }
 
 /* row reorder cues */
 .home-row.dragging { opacity: 0.4; }
@@ -341,16 +349,16 @@ body.customizing .home-row[data-cols="2"] .row-divider {
 .row-divider:hover::before, .row-divider.active::before { opacity: 1; }
 
 /* empty slot */
-.home-slot--empty { border: 2px dashed #C9DDF6; border-radius: var(--radius); background: #FBFDFF; align-items: center; justify-content: center; min-height: 130px; cursor: pointer; }
+.home-slot--empty { border: 1px dashed var(--primary); border-radius: var(--radius); background: #FBFDFF; align-items: center; justify-content: center; min-height: 130px; cursor: pointer; }
 .home-slot--empty:hover { background: #EEF4FC; }
-.home-slot--empty .slot-add { color: var(--info-fg); font-size: 0.85rem; font-weight: 500; }
+.home-slot--empty .slot-add { color: var(--primary); font-size: 0.85rem; font-weight: 500; }
 body:not(.customizing) .home-slot--empty { border-color: transparent; background: transparent; cursor: default; }
 body:not(.customizing) .home-slot--empty .slot-add { display: none; }
 
 /* add-a-bento tiles (customize only, top and bottom) */
 .add-bento-tile {
-  border: 2px dashed #C9DDF6; border-radius: var(--radius);
-  padding: 18px; text-align: center; color: var(--info-fg); cursor: pointer;
+  border: 1px dashed var(--primary); border-radius: var(--radius);
+  padding: 18px; text-align: center; color: var(--primary); cursor: pointer;
   font-size: 0.85rem; font-weight: 500; background: #FBFDFF; display: none;
 }
 body.customizing .add-bento-tile { display: block; }
@@ -403,7 +411,7 @@ body.customizing .add-bento-tile { display: block; }
   <div class="ft-navbar__spacer"></div>
   <!-- Workload hub trigger: workload reachable from ANY page, not just home -->
   <button class="ft-navbar__hub" onclick="openHub()">
-    WORKLOAD <span class="hub-dot"></span>
+    SHORTCUTS <span class="hub-dot"></span>
   </button>
   <button class="ft-navbar__role">ROLE (ADMINISTRATOR) <i class="fa-regular fa-chevron-down fa-xs"></i></button>
   <div class="ft-navbar__utils">
@@ -450,7 +458,7 @@ body.customizing .add-bento-tile { display: block; }
   <div class="hub-panel__body">
     <h3 class="hub-section-label">Daily work</h3>
     <div class="hub-row" tabindex="0" role="button" onclick="addModule('attention')" data-tip="The most time-sensitive items that need action now"><i class="fa-solid fa-wand-magic-sparkles"></i><span class="hub-row__name">Needs your attention</span></div>
-    <div class="hub-row" tabindex="0" role="button" onclick="addModule('myq')" data-tip="Follow-ups assigned to you, with quick assign to a teammate"><i class="fa-regular fa-user-check"></i><span class="hub-row__name">My Q <span class="hub-row__sub">(assigned to you)</span></span></div>
+    <div class="hub-row" tabindex="0" role="button" onclick="addModule('myq')" data-tip="Follow-ups assigned to you, with quick assign to a teammate"><i class="fa-regular fa-user-check"></i><span class="hub-row__name">My Queue <span class="hub-row__sub">(assigned to you)</span></span></div>
     <div class="hub-row" tabindex="0" role="button" onclick="addModule('yourevals')" data-tip="Evaluations assigned to you across active cycles"><i class="fa-solid fa-star-half-stroke"></i><span class="hub-row__name">Your evaluations</span></div>
     <div class="hub-row" tabindex="0" role="button" onclick="addModule('yourfu')" data-tip="Follow-ups you own, with due dates and status"><i class="fa-solid fa-arrow-rotate-right"></i><span class="hub-row__name">Your follow-ups</span></div>
     <div class="hub-row" tabindex="0" role="button" onclick="addModule('active')" data-tip="Counts by stage for each active process"><i class="fa-regular fa-diagram-project"></i><span class="hub-row__name">Active work by process</span></div>
@@ -485,7 +493,7 @@ body.customizing .add-bento-tile { display: block; }
     <div class="ft-greeting-sub">Cedar Ridge Foundation has moved <strong>$1.91M</strong> into the community this year.</div>
   </div>
   <div class="ft-page-head__actions">
-    <button class="btn-ft-outline" onclick="addBentoNewRow('bottom')"><i class="fa-solid fa-plus"></i> Add bento</button>
+    <span id="global-process-filter"></span>
     <button class="btn-ft-outline" id="customize-btn" onclick="toggleCustomizing()"><i class="fa-regular fa-table-cells-large"></i> <span id="customize-lbl">Customize</span></button>
   </div>
 </div>
@@ -494,7 +502,7 @@ body.customizing .add-bento-tile { display: block; }
   <div class="ft-content">
     <div class="customize-hint">
       <i class="fa-regular fa-table-cells-large"></i>
-      <span>Add rows with Add a bento. Set a row to 1, 2, or 3 columns, and drag the divider on a 2-column row to change the split. Drag the grip to reorder rows. (Layout is a concept and is not saved.)</span>
+      <span>Add rows with Add a bento. Set a row to 1, 2, or 3 columns, and drag the divider on a 2-column row to change the split. Drag the row grip to reorder rows, or use the trash icon to delete one. On 2 or 3 column rows, drag a bento by its handle to rearrange it within the row. (Layout is a concept and is not saved.)</span>
     </div>
     <!-- Row/slot grid. Row 1 is the fixed Workload row; the rest is customizable. -->
     <div class="custom-stack" id="home-stack"></div>
@@ -530,7 +538,7 @@ var WL_CARDS=[
   {title:'Follow Up', icon:'fa-table-cells', tone:'red', open:33, openAlert:true,
    subs:[{name:'Follow Up Draft',count:21,alert:true},{name:'Follow Up Submitted',count:7},{name:'Follow Up Complete',count:5}]}
 ];
-var wlProcess='All processes';
+var activeProcess='All processes';
 /* Fake per-process data: scale the base counts by a per-process factor */
 function wlDataFor(proc){
   if(proc==='All processes')return WL_CARDS;
@@ -550,7 +558,7 @@ function procFilterHTML(){
   var opts='<div class="wl-filter__opt" onclick="setProcFilter(this,\'All processes\')">All processes</div>';
   for(var i=0;i<PROCESSES.length;i++){opts+='<div class="wl-filter__opt" onclick="setProcFilter(this,\''+PROCESSES[i].name+'\')">'+PROCESSES[i].name+'</div>';}
   return '<div class="wl-filter">'+
-    '<button class="wl-filter__btn" onclick="toggleProcFilter(this)"><i class="fa-solid fa-filter"></i> <span class="wl-filter__label">'+wlProcess+'</span> <i class="fa-solid fa-chevron-down fa-2xs"></i></button>'+
+    '<button class="wl-filter__btn btn-ft-outline" onclick="toggleProcFilter(this)"><i class="fa-solid fa-filter"></i> <span class="wl-filter__label">'+activeProcess+'</span> <i class="fa-solid fa-chevron-down fa-2xs"></i></button>'+
     '<div class="wl-filter__menu">'+opts+'</div></div>';
 }
 function wlCardsHTML(cards){
@@ -579,19 +587,20 @@ function wlBentoHTML(withChrome){
   var chrome=withChrome?chromeHTML():'';
   return chrome+
     '<div class="ft-bento__header"><h2 class="ft-bento__title">Workload</h2>'+
-      '<div class="ft-bento__actions">'+procFilterHTML()+'<span class="ft-bento__link grid-link" data-grid="Workload">View all &rsaquo;</span></div>'+
+      '<div class="ft-bento__actions"><span class="ft-bento__link grid-link" data-grid="Workload">View all &rsaquo;</span></div>'+
     '</div>'+
-    '<div class="wl-cards">'+wlCardsHTML(wlDataFor(wlProcess))+'</div>';
+    '<div class="wl-cards">'+wlCardsHTML(wlDataFor(activeProcess))+'</div>';
 }
-/* Filter by process: fakes filtering by re-rendering the cards with scaled data */
+/* Filter by process: now a page-level control (see #global-process-filter) that
+   drives every process-aware bento, not just Workload. Fakes filtering by
+   re-rendering with scaled/filtered data. */
 function toggleProcFilter(btn){var f=btn.closest('.wl-filter');f.classList.toggle('open');}
 function setProcFilter(opt,name){
-  wlProcess=name;
+  activeProcess=name;
   var f=opt.closest('.wl-filter');
   f.querySelector('.wl-filter__label').textContent=name;
   f.classList.remove('open');
-  var host=document.querySelector('.wl-cards');
-  if(host)host.innerHTML=wlCardsHTML(wlDataFor(name));
+  renderLayout();
 }
 document.addEventListener('click',function(e){
   if(e.target.closest('.wl-filter'))return;
@@ -607,10 +616,15 @@ var PROCESSES=[
 ];
 function procBentoHTML(){
   var head='<div class="ft-bento__header"><h2 class="ft-bento__title">Active work</h2><span class="ft-bento__link">By process &rsaquo;</span></div>';
-  var t='<table class="proc-table"><thead><tr><th>Process</th><th>LOI</th><th>Application</th><th>Evaluations</th><th>Decisions</th><th>Follow Up</th></tr></thead><tbody>';
+  var list=[];
+  for(var k=0;k<PROCESSES.length;k++){ if(activeProcess==='All processes'||PROCESSES[k].name===activeProcess) list.push(PROCESSES[k]); }
   function chip(v,alert){if(v===0)return'<span class="proc-chip proc-chip--empty">&ndash;</span>';return'<span class="proc-chip '+(alert?'proc-chip--alert':'proc-chip--n')+'">'+v+'</span>';}
-  for(var i=0;i<PROCESSES.length && i<3;i++){
-    var p=PROCESSES[i];
+  if(!list.length){
+    return head+'<div class="qlist__empty">No process data for this filter.</div>';
+  }
+  var t='<table class="proc-table"><thead><tr><th>Process</th><th>LOI</th><th>Application</th><th>Evaluations</th><th>Decisions</th><th>Follow Up</th></tr></thead><tbody>';
+  for(var i=0;i<list.length && i<3;i++){
+    var p=list[i];
     t+='<tr><td>'+p.name+'</td><td>'+chip(p.loi)+'</td><td>'+chip(p.app)+'</td><td>'+chip(p.eval)+'</td><td>'+chip(p.dec)+'</td><td>'+chip(p.fu,p.fu>=10)+'</td></tr>';
   }
   t+='</tbody></table>';
@@ -625,19 +639,25 @@ function attentionHTML(){
     '<div class="nudge-row"><div class="nudge-icon nudge-icon--info"><i class="fa-solid fa-building"></i></div><div class="nudge-body"><div class="nudge-body__sentence"><strong>9 grantee organizations haven\'t had an interaction logged in 90+ days,</strong> including 3 with active awards.</div><span class="nudge-body__action">See organizations</span></div></div>'+
     '<div class="nudge-row"><div class="nudge-icon nudge-icon--success"><i class="fa-solid fa-money-check-dollar"></i></div><div class="nudge-body"><div class="nudge-body__sentence"><strong>$47,500 in installment payments</strong> are scheduled in the next 30 days. Riverdale Community Health is the largest at $22,000.</div><span class="nudge-body__action">View installment schedule</span></div></div>';
 }
-/* My Q: assign a single follow-up to yourself or a teammate (not the whole request). */
+/* My Queue: assign a single follow-up to yourself or a teammate (not the whole request). */
+var MYQ_ROWS=[
+  {name:'Q1 Progress Report follow-up',meta:'Urban Greenways · due in 3 days',who:'You',initials:'ME',empty:false,process:'Spring Arts Initiative'},
+  {name:'Budget revision follow-up',meta:'Riverside Youth · overdue 6 days',who:'Sam O.',initials:'SO',empty:false,process:'Spring Arts Initiative'},
+  {name:'Site visit summary follow-up',meta:'Delta Arts Collective · due in 8 days',who:null,initials:null,empty:true,process:'2026 General Operating'},
+  {name:'Final narrative follow-up',meta:'Cedar Scholars · due in 12 days',who:null,initials:null,empty:true,process:'Youth Scholarship'}
+];
 function myqHTML(){
-  function row(name,meta,who,initials,empty){
-    var assign=empty
+  function row(r){
+    var assign=r.empty
       ? '<span class="myq-assign myq-assign--empty"><i class="fa-regular fa-user-plus"></i> Assign</span>'
-      : '<span class="myq-assign"><span class="avatar">'+initials+'</span> '+who+' <i class="fa-solid fa-chevron-down fa-2xs"></i></span>';
-    return '<div class="myq-row"><div class="myq-body"><div class="myq-name">'+name+'</div><div class="myq-meta">'+meta+'</div></div>'+assign+'</div>';
+      : '<span class="myq-assign"><span class="avatar">'+r.initials+'</span> '+r.who+' <i class="fa-solid fa-chevron-down fa-2xs"></i></span>';
+    return '<div class="myq-row"><div class="myq-body"><div class="myq-name">'+r.name+'</div><div class="myq-meta">'+r.meta+'</div></div>'+assign+'</div>';
   }
-  return '<div class="ft-bento__header"><h2 class="ft-bento__title">My Q</h2><span class="ft-bento__link">View all &rsaquo;</span></div>'+
-    row('Q1 Progress Report follow-up','Urban Greenways · due in 3 days','You','ME',false)+
-    row('Budget revision follow-up','Riverside Youth · overdue 6 days','Sam O.','SO',false)+
-    row('Site visit summary follow-up','Delta Arts Collective · due in 8 days',null,null,true)+
-    row('Final narrative follow-up','Cedar Scholars · due in 12 days',null,null,true);
+  var rows=[];
+  for(var i=0;i<MYQ_ROWS.length;i++){ if(activeProcess==='All processes'||MYQ_ROWS[i].process===activeProcess) rows.push(MYQ_ROWS[i]); }
+  var body=''; for(var j=0;j<rows.length;j++){ body+=row(rows[j]); }
+  if(!rows.length) body='<div class="qlist__empty">Nothing in My Queue for this process.</div>';
+  return '<div class="ft-bento__header"><h2 class="ft-bento__title">My Queue</h2><span class="ft-bento__link">View all &rsaquo;</span></div>'+body;
 }
 function workshortHTML(){
   function row(icon,name,count,alert){
@@ -687,27 +707,39 @@ function mapHTML(){
       '</div>'+
     '</div>';
 }
+var YOUREVALS_ROWS=[
+  {name:'Urban Greenways Initiative',meta:'Spring Arts cycle · due in 3 days',badge:'Due soon',tone:'warning',process:'Spring Arts Initiative'},
+  {name:'Riverside Youth Collective',meta:'Spring Arts cycle · due in 5 days',badge:'',tone:'',process:'Spring Arts Initiative'},
+  {name:'Delta Arts Collective',meta:'2026 General Operating · due in 8 days',badge:'',tone:'',process:'2026 General Operating'},
+  {name:'Cedar Scholars Fund',meta:'Youth Scholarship · overdue 2 days',badge:'Overdue',tone:'danger',process:'Youth Scholarship'}
+];
 function yourEvalsHTML(){
-  function row(name,meta,badge,tone){
-    var b=badge?'<span class="ft-badge ft-badge--'+tone+'">'+badge+'</span>':'';
-    return '<div class="qlist__row"><i class="fa-solid fa-star-half-stroke"></i><span class="qlist__name">'+name+'<div class="myq-meta">'+meta+'</div></span>'+b+'</div>';
+  function row(r){
+    var b=r.badge?'<span class="ft-badge ft-badge--'+r.tone+'">'+r.badge+'</span>':'';
+    return '<div class="qlist__row"><i class="fa-solid fa-star-half-stroke"></i><span class="qlist__name">'+r.name+'<div class="myq-meta">'+r.meta+'</div></span>'+b+'</div>';
   }
-  return '<div class="ft-bento__header"><h2 class="ft-bento__title">Your evaluations</h2><span class="ft-bento__link">Open your evaluations &rsaquo;</span></div>'+
-    row('Urban Greenways Initiative','Spring Arts cycle · due in 3 days','Due soon','warning')+
-    row('Riverside Youth Collective','Spring Arts cycle · due in 5 days','','')+
-    row('Delta Arts Collective','2026 General Operating · due in 8 days','','')+
-    row('Cedar Scholars Fund','Youth Scholarship · overdue 2 days','Overdue','danger');
+  var rows=[];
+  for(var i=0;i<YOUREVALS_ROWS.length;i++){ if(activeProcess==='All processes'||YOUREVALS_ROWS[i].process===activeProcess) rows.push(YOUREVALS_ROWS[i]); }
+  var body=''; for(var j=0;j<rows.length;j++){ body+=row(rows[j]); }
+  if(!rows.length) body='<div class="qlist__empty">No evaluations for this process.</div>';
+  return '<div class="ft-bento__header"><h2 class="ft-bento__title">Your evaluations</h2><span class="ft-bento__link">Open your evaluations &rsaquo;</span></div>'+body;
 }
+var YOURFU_ROWS=[
+  {name:'Q1 Progress Report',meta:'Urban Greenways · overdue 6 days',badge:'Overdue',tone:'danger',process:'Spring Arts Initiative'},
+  {name:'Budget revision',meta:'Riverside Youth · due in 2 days',badge:'Due soon',tone:'warning',process:'Spring Arts Initiative'},
+  {name:'Site visit summary',meta:'Delta Arts Collective · due in 9 days',badge:'Upcoming',tone:'info',process:'2026 General Operating'},
+  {name:'Final narrative report',meta:'Cedar Scholars Fund · due in 12 days',badge:'Upcoming',tone:'info',process:'Youth Scholarship'}
+];
 function yourFollowupsHTML(){
-  function row(name,meta,badge,tone){
-    var b=badge?'<span class="ft-badge ft-badge--'+tone+'">'+badge+'</span>':'';
-    return '<div class="qlist__row"><i class="fa-solid fa-arrow-rotate-right"></i><span class="qlist__name">'+name+'<div class="myq-meta">'+meta+'</div></span>'+b+'</div>';
+  function row(r){
+    var b=r.badge?'<span class="ft-badge ft-badge--'+r.tone+'">'+r.badge+'</span>':'';
+    return '<div class="qlist__row"><i class="fa-solid fa-arrow-rotate-right"></i><span class="qlist__name">'+r.name+'<div class="myq-meta">'+r.meta+'</div></span>'+b+'</div>';
   }
-  return '<div class="ft-bento__header"><h2 class="ft-bento__title">Your follow-ups</h2><span class="ft-bento__link">Open your follow-ups &rsaquo;</span></div>'+
-    row('Q1 Progress Report','Urban Greenways · overdue 6 days','Overdue','danger')+
-    row('Budget revision','Riverside Youth · due in 2 days','Due soon','warning')+
-    row('Site visit summary','Delta Arts Collective · due in 9 days','Upcoming','info')+
-    row('Final narrative report','Cedar Scholars Fund · due in 12 days','Upcoming','info');
+  var rows=[];
+  for(var i=0;i<YOURFU_ROWS.length;i++){ if(activeProcess==='All processes'||YOURFU_ROWS[i].process===activeProcess) rows.push(YOURFU_ROWS[i]); }
+  var body=''; for(var j=0;j<rows.length;j++){ body+=row(rows[j]); }
+  if(!rows.length) body='<div class="qlist__empty">No follow-ups for this process.</div>';
+  return '<div class="ft-bento__header"><h2 class="ft-bento__title">Your follow-ups</h2><span class="ft-bento__link">Open your follow-ups &rsaquo;</span></div>'+body;
 }
 function pulseHTML(){
   return '<div class="ft-bento__header"><h2 class="ft-bento__title">Cedar Ridge is tracking ahead of last year. Awards are up 23% and your spring cycle is moving faster through Application than it did in 2024.</h2><span class="ft-bento__updated">Updated just now</span></div>'+
@@ -741,7 +773,7 @@ function renderUniqueApplicants(id){barChart(id,['2022','2023','2024','2025','20
 function renderDecisions(id){if(!C)return;var el=document.getElementById(id);if(!el)return;new C(el,{type:'doughnut',data:{labels:['Approval','Denial'],datasets:[{data:[11,1],backgroundColor:[BLUE_SOFT,PINK_SOFT],borderColor:[BLUE,PINK_FG],borderWidth:1}]},options:{cutout:'70%',responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:9,font:{size:10},padding:8}},centerText:{text:'92%'},tooltip:{callbacks:{label:function(c){return c.label+': '+c.parsed;}}}}},plugins:[centerText]});}
 
 /* ==== Module registry ==== */
-function chromeHTML(){return '<div class="bento-chrome"><button class="bento-chrome__btn" title="Remove" onclick="removeSlotBtn(this)"><i class="fa-solid fa-xmark"></i></button></div>';}
+function chromeHTML(){return '<div class="bento-chrome"><button class="bento-chrome__btn handle" title="Drag to rearrange within row"><i class="fa-solid fa-arrows-left-right"></i></button><button class="bento-chrome__btn" title="Remove" onclick="removeSlotBtn(this)"><i class="fa-solid fa-xmark"></i></button></div>';}
 var CID=0;
 function chartModule(title,size,renderer){return {chart:renderer,_t:title,_s:size,build:function(id){return chromeHTML()+chartHead(this._t)+'<div class="chart-box chart-box--'+this._s+'"><canvas id="'+id+'"></canvas></div>';}};}
 var MODULES={
@@ -804,7 +836,8 @@ function buildRow(row){
     tb.className='row-toolbar';
     tb.innerHTML='<span class="row-grip" title="Drag to reorder row"><i class="fa-solid fa-grip-vertical"></i></span>'+
       '<span class="row-toolbar__label">Columns</span>'+
-      '<span class="row-colctl">'+colBtn(1,row.cols)+colBtn(2,row.cols)+colBtn(3,row.cols)+'</span>';
+      '<span class="row-colctl">'+colBtn(1,row.cols)+colBtn(2,row.cols)+colBtn(3,row.cols)+'</span>'+
+      '<button class="row-delete" title="Delete row" data-row-id="'+row.id+'"><i class="fa-regular fa-trash-can"></i></button>';
     el.appendChild(tb);
     var dv=document.createElement('div'); dv.className='row-divider'; el.appendChild(dv);
   }
@@ -839,6 +872,11 @@ function removeSlotBtn(btn){
   var row=rowById(rowId); if(!row||row.fixed)return;
   row.slots[idx]=null;
   if(row.cols===1 && allNull(row.slots)) layout=layout.filter(function(r){return r.id!==rowId;});
+  renderLayout();
+}
+function deleteRow(rowId){
+  var row=rowById(rowId); if(!row||row.fixed)return;
+  layout=layout.filter(function(r){return r.id!==rowId;});
   renderLayout();
 }
 function openMenuFor(target){addTarget=target;openBentoMenu();}
@@ -913,6 +951,46 @@ function onRowUp(){
   renderLayout();
 }
 
+/* ==== Slot drag (rearrange bentos within a 2 or 3 column row) ==== */
+var slotDrag=null;
+function clearSlotCues(){var e=document.querySelectorAll('.slot-drop-target');for(var i=0;i<e.length;i++)e[i].classList.remove('slot-drop-target');}
+function startSlotDrag(e,handle){
+  if(!document.body.classList.contains('customizing'))return;
+  var slot=handle.closest('.home-slot'), rowEl=handle.closest('.home-row');
+  if(!slot||!rowEl||rowEl.getAttribute('data-cols')==='1')return;
+  e.preventDefault();
+  slotDrag={rowId:+rowEl.getAttribute('data-row-id'),fromIdx:+slot.getAttribute('data-slot'),el:slot};
+  slot.classList.add('slot-dragging');
+  document.addEventListener('pointermove',onSlotMove);
+  document.addEventListener('pointerup',onSlotUp);
+}
+function onSlotMove(e){
+  if(!slotDrag)return; e.preventDefault(); clearSlotCues();
+  var rowEl=document.querySelector('.home-row[data-row-id="'+slotDrag.rowId+'"]'); if(!rowEl)return;
+  var slots=rowEl.querySelectorAll('.home-slot');
+  for(var i=0;i<slots.length;i++){
+    var s=slots[i]; if(s===slotDrag.el)continue;
+    var r=s.getBoundingClientRect();
+    if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom){ s.classList.add('slot-drop-target'); }
+  }
+}
+function onSlotUp(){
+  if(!slotDrag)return;
+  var target=document.querySelector('.slot-drop-target');
+  if(target){
+    var rowEl=target.closest('.home-row'), rowId=+rowEl.getAttribute('data-row-id'), toIdx=+target.getAttribute('data-slot');
+    var row=rowById(rowId);
+    if(row && toIdx!==slotDrag.fromIdx){
+      var tmp=row.slots[slotDrag.fromIdx]; row.slots[slotDrag.fromIdx]=row.slots[toIdx]; row.slots[toIdx]=tmp;
+    }
+  }
+  if(slotDrag.el)slotDrag.el.classList.remove('slot-dragging');
+  clearSlotCues(); slotDrag=null;
+  document.removeEventListener('pointermove',onSlotMove);
+  document.removeEventListener('pointerup',onSlotUp);
+  renderLayout();
+}
+
 /* ==== Ratio drag (2-col divider, snaps 33/50/67) ==== */
 var ratioDrag=null;
 function startRatioDrag(e,rowEl){
@@ -944,6 +1022,8 @@ function initEngine(){
   host.addEventListener('click',function(e){
     var colb=e.target.closest('.row-colctl button');
     if(colb){var re=colb.closest('.home-row');setRowCols(+re.getAttribute('data-row-id'),+colb.getAttribute('data-n'));return;}
+    var del=e.target.closest('.row-delete');
+    if(del){deleteRow(+del.getAttribute('data-row-id'));return;}
     var tile=e.target.closest('.add-bento-tile');
     if(tile){addBentoNewRow(tile.getAttribute('data-add-where'));return;}
     var empty=e.target.closest('.home-slot--empty');
@@ -955,7 +1035,10 @@ function initEngine(){
   host.addEventListener('pointerdown',function(e){
     var grip=e.target.closest('.row-grip'); if(grip){startRowDrag(e,grip.closest('.home-row'));return;}
     var dv=e.target.closest('.row-divider'); if(dv){startRatioDrag(e,dv.closest('.home-row'));return;}
+    var sh=e.target.closest('.bento-chrome__btn.handle'); if(sh){startSlotDrag(e,sh);return;}
   });
+  var filterSlot=document.getElementById('global-process-filter');
+  if(filterSlot)filterSlot.innerHTML=procFilterHTML();
   renderLayout();
 }
 setGreetings();
