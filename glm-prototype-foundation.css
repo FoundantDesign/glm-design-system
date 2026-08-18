@@ -744,14 +744,23 @@ header .navbar-nav a.nav-link:active {
    the same rule purely to keep the field family visually unified, not because
    a select-specific override was found. Needs engineering review before it
    round-trips into mdb-customizations.css.
+
+   UPDATE (focus-state consistency pass): border-width is now 2px in both
+   rest and focus states, so focus never causes a layout shift. The focus
+   box-shadow ring is removed — border-color change alone (gray to navy) is
+   the only signal now, addressing engineering feedback that the box-shadow
+   ring read as unexpectedly thick. Still pending engineering sign-off before
+   this round-trips into mdb-customizations.css.
    --------------------------------------------------------------------------- */
 .form-control, .form-select {
+  border-width: 2px;
   border-color: var(--colors-borders-enabled);
   border-radius: var(--radius-sm);
 }
 .form-control:focus, .form-select:focus {
+  border-width: 2px;
   border-color: var(--colors-borders-focused);
-  box-shadow: 0 0 0 0.25rem rgba(45, 59, 74, 0.25);
+  box-shadow: none;
 }
 
 /* ---------------------------------------------------------------------------
@@ -794,6 +803,17 @@ header .navbar-nav a.nav-link:active {
    confirmed via mdb_min.css that MDB doesn't use accent-color anywhere, so
    that guess was removed rather than left in as dead/misleading code.
    Needs engineering review before it round-trips into mdb-customizations.css.
+
+   UPDATE (focus-state consistency pass): the focus box-shadow ring is
+   replaced with a 2px outline, matching the pattern already shipped on
+   buttons (.btn:focus-visible), rather than widening this component's own
+   border — the 1px border-width above was a deliberate earlier decision
+   this doesn't touch, and outline avoids the layout shift a border-width
+   change would cause. The Material ripple glow (:before box-shadow blur) is
+   explicitly suppressed rather than left un-recolored, per team decision —
+   simply removing the navy override would let it revert to MDB's own
+   default gray glow instead of actually disappearing. Still pending
+   engineering sign-off before this round-trips into mdb-customizations.css.
    --------------------------------------------------------------------------- */
 .form-check-input {
   border-width: 1px;
@@ -815,18 +835,71 @@ header .navbar-nav a.nav-link:active {
   background-color: var(--colors-brand-primary-dark-blue);
 }
 .form-check-input:focus {
-  border-color: var(--colors-borders-focused);
-  box-shadow: 0 0 0 0.25rem rgba(45, 59, 74, 0.25);
+  outline: solid 2px var(--colors-brand-primary-dark-blue);
+  outline-offset: 2px;
 }
-.form-check-input:checked:focus:before {
-  box-shadow: 0px 0px 0px 13px var(--colors-brand-primary-dark-blue);
+.form-check-input:focus:before,
+.form-check-input:checked:focus:before,
+.form-switch .form-check-input:checked:focus:before {
+  box-shadow: none;
 }
 .form-switch .form-check-input:checked[type=checkbox]:after {
   background-color: var(--colors-brand-primary-dark-blue);
 }
-.form-switch .form-check-input:checked:focus:before {
-  box-shadow: 3px -1px 0px 13px var(--colors-brand-primary-dark-blue);
+
+/* ---------------------------------------------------------------------------
+   7f. FOCUS STATE — REMAINING COMPONENTS — GAP, DRAFT. Nav-tabs, Pagination,
+   and standalone Dropdown sections are still WIP with no kitchen sink demo
+   of their own yet, so there's no status badge to flip for those until they
+   exist — this is the CSS side only, staged so it's ready when they are.
+   (.dropdown-item is already exercised live inside the built Navbar demo,
+   just not as its own dedicated section yet.)
+
+   Navbar and Sidenav are NOT WIP — both are already built and OVERRIDDEN
+   (confirmed directly in their own sections). Corrected here after an
+   earlier draft of this comment wrongly assumed both were unbuilt and
+   wrongly assumed Sidenav shared Navbar's customizable-background problem.
+   See the Focus treatment subsection added to each of those sections for
+   the real demo and rationale.
+
+   Buttons already ship a universal 2px navy outline in production
+   (.btn:focus-visible in mdb-customizations.css) — that's the reference
+   pattern this extends, not a new decision.
+
+   Nav-tabs, pagination, dropdown items, the close button, and Sidenav's
+   .list-group-item-action all sit on white or fixed-neutral backgrounds
+   that aren't org-customizable (Sidenav's .side-panel is hardcoded to
+   --colors-neutral-100, confirmed in its own section), so plain navy is
+   safe here the same way it is for buttons.
+
+   Navbar-nav is the one genuine exception: confirmed in its own section's
+   "Why" row, header/footer background is an org-brandable slot, and
+   individual foundations inject their own background/text color as a
+   matched pair. A fixed navy outline could fail WCAG 1.4.11 (3:1 non-text
+   contrast) against a dark org background, so this uses currentColor
+   instead — it inherits whatever text color already solved that problem,
+   no new logic, can't drift out of sync with the org's choice.
+
+   Not included here: the generic .focus-ring utility class. It's applied
+   unpredictably wherever someone reaches for it, potentially including
+   Navbar's customizable-background context, so it needs its own decision
+   rather than defaulting to navy. Flagged in the contract, not resolved.
+   --------------------------------------------------------------------------- */
+.nav-tabs .nav-link:focus-visible,
+.page-link:focus-visible,
+.dropdown-item:focus-visible,
+.btn-close:focus-visible,
+.side-panel .list-group-item-action:focus-visible {
+  outline: solid 2px var(--colors-brand-primary-dark-blue);
+  outline-offset: 2px;
 }
+.navbar-brand:focus-visible,
+.navbar-nav > li > a:focus-visible,
+.navbar-nav a.nav-link:focus-visible {
+  outline: solid 2px currentColor;
+  outline-offset: 2px;
+}
+
 .form-label {
   color: var(--colors-neutral-30);
   font-size: 0.75rem;
@@ -835,6 +908,11 @@ header .navbar-nav a.nav-link:active {
 /* ---------------------------------------------------------------------------
    8. GLOBAL TOAST  — RATIFIED from mdb-customizations.css
    --------------------------------------------------------------------------- */
+/* .toast-container positioning is verbatim production. #GlobalToast's own
+   production rule also carries display:none (it is revealed by script); that
+   one declaration is intentionally omitted here so demos and prototypes can
+   render the toast statically. */
+.toast-container { position: fixed; right: 5px; top: 5px; }
 #GlobalToast { background-color: var(--colors-semantic-success-50); border-left: 4px solid var(--colors-semantic-success-0); border-radius: 8px; }
 #GlobalToast .toast-header { background-color: transparent; border: none; color: var(--colors-brand-primary-dark-blue); padding: 12px 16px 8px 16px; }
 #GlobalToast .toast-body { background-color: transparent; padding: 0 16px 12px 16px; }

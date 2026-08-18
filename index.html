@@ -678,6 +678,17 @@ header, footer {
     <p class="gap-note">Production's top-level nav-link hover (<code>.navbar-nav &gt; li &gt; a:hover</code>) is a hardcoded gray gradient (<code>#eee</code> → <code>#e4e4e4</code>) with a 5px solid <code>#222</code> border-bottom — the last hardcoded-hex hover left in the system. This prototype replaces it with <code>background-color: var(--colors-state-layers-light-hover)</code> and <code>var(--radius-sm)</code>, matching the treatment already ratified for <code>.kebab-btn</code>, so the top-level toggle matches its own dropdown submenu instead of introducing a third hover language. Confirm with engineering before treating as ratified.</p>
     <p class="gap-note">Separately: production's dropdown toggles pair MDB5's own <code>.dropdown-toggle::after</code> arrow with a leftover Bootstrap-3 <code>&lt;span class="caret"&gt;</code>, and <code>.caret</code> has no rule anywhere in production CSS. Likely renders a duplicate indicator. Reproduced faithfully above since it's real production markup — flagging rather than silently dropping it.</p>
   </div>
+
+  <h3>Focus treatment <span class="gap-flag">GAP — resolution proposed, not yet in production</span></h3>
+  <div class="gap-zone">
+    <div class="code-block">.navbar-brand:focus-visible,
+.navbar-nav > li > a:focus-visible,
+.navbar-nav a.nav-link:focus-visible {
+  outline: solid 2px currentColor;
+  outline-offset: 2px;
+}</div>
+    <p class="gap-note">No <code>.navbar-nav</code> or <code>.navbar-brand</code> focus override exists anywhere in production today; keyboard focus currently falls back to the browser's own default focus indicator (color varies by browser). <code>.navbar-brand</code> is included here alongside <code>.navbar-nav</code> since it's structurally a sibling, not a child, of <code>.navbar-nav</code> — a rule scoped only to <code>.navbar-nav</code> would miss the logo entirely. This proposal uses <code>currentColor</code> rather than a fixed navy outline, deliberately: per the "Why" row above, header/footer background is an org-brandable slot, and individual foundations inject their own background <em>and</em> paired text color together. A fixed navy outline could fail WCAG 1.4.11 (3:1 non-text contrast) the moment an org picks a dark background. Inheriting <code>currentColor</code> means the outline automatically gets whatever text color the org already had to choose for legibility, no separate light/dark branching, and it can't drift out of sync with the org's own choice later. This is part of a system-wide focus-state consistency pass (see Buttons, Text Inputs, Checkbox/Radio/Switch, and Sidenav) — buttons already ship the fixed-navy version of this same outline in production; Navbar is the one component where that fixed color isn't safe. Needs engineering review before it round-trips into <code>mdb-customizations.css</code>.</p>
+  </div>
 </section>
 
 <!-- ═══ SIDENAV ═══ -->
@@ -825,6 +836,15 @@ header, footer {
   <div class="gap-zone">
     <p class="gap-note"><code>.request-info-card</code> carries no CSS of its own anywhere in production — its <code>--colors-neutral-70</code> background is set with an inline <code>style</code> attribute directly in the Razor markup rather than a class rule. It works, but it means the color can drift silently wherever this markup is copy-pasted. Consider moving it into a real class rule (e.g. <code>.request-info-card { background-color: var(--colors-neutral-70); }</code>) the next time this page is touched.</p>
   </div>
+
+  <h3>Focus treatment <span class="gap-flag">GAP — resolution proposed, not yet in production</span></h3>
+  <div class="gap-zone">
+    <div class="code-block">.side-panel .list-group-item-action:focus-visible {
+  outline: solid 2px var(--colors-brand-primary-dark-blue);
+  outline-offset: 2px;
+}</div>
+    <p class="gap-note">No <code>.list-group-item-action</code> focus override exists anywhere in production today; keyboard focus currently falls back to whatever MDB's stock list-group focus state renders. Unlike Navbar, <code>.side-panel</code>'s background is hardcoded to <code>--colors-neutral-100</code> (set directly above, not org-customizable), so there's no contrast risk in using a fixed navy outline here — same reasoning that keeps Nav-tabs, Pagination, Dropdown items, and the close button on plain navy too. Part of the same system-wide focus-state consistency pass as Navbar, Buttons, Text Inputs, and Checkbox/Radio/Switch. Needs engineering review before it round-trips into <code>mdb-customizations.css</code>.</p>
+  </div>
 </section>
 
 <!-- ═══ TABS ═══ -->
@@ -898,24 +918,111 @@ header, footer {
 
 <!-- ═══ BREADCRUMB ═══ -->
 <section class="sec" id="breadcrumb">
-  <h2>Breadcrumb <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Path navigation.</p>
-  <div class="no-override-detail"><strong>No override detected.</strong></div>
-  <nav style="font-size:13px"><a href="javascript:void(0)" style="color:var(--t-link);text-decoration:none">Home</a><span style="color:var(--g400);margin:0 6px">/</span><a href="javascript:void(0)" style="color:var(--t-link);text-decoration:none">Grants</a><span style="color:var(--g400);margin:0 6px">/</span><span style="color:var(--g500)">Application #1042</span></nav>
+  <h2>Breadcrumb <span class="status-tag status-default" title="No override in mdb-customizations.css or GLM_Summary.css">DEFAULT</span></h2>
+  <p class="sd">Ancestor trail for nested records. Stock MDB with no Foundant customization anywhere, so what renders below is exactly what production renders today.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>MDB <code>.breadcrumb</code> on an <code>&lt;ol&gt;</code>, one <code>.breadcrumb-item</code> per level, with <code>.active</code> plus <code>aria-current="page"</code> on the final item. Wrap in <code>&lt;nav aria-label="breadcrumb"&gt;</code>.</td></tr>
+    <tr><th>Where</th><td>No rule for <code>.breadcrumb</code> or <code>.breadcrumb-item</code> exists in <code>mdb-customizations.css</code> or <code>GLM_Summary.css</code>. Every value comes from <code>mdb.min.css</code>.</td></tr>
+    <tr><th>When</th><td>Only where a record genuinely sits inside a hierarchy the user can navigate up through (organization to request to award). Not as a substitute for a page title, and not on a top-level list page where the trail would be one item long.</td></tr>
+    <tr><th>Why</th><td>Nothing has been remapped, so there is no Foundant intent to document. See the finding below for why that is worth a review rather than a shrug.</td></tr>
+    <tr><th>How</th><td>Default padding is zero on both axes with a 1rem bottom margin, so the component carries no background or box of its own and sits directly in page flow.</td></tr>
+  </table>
+
+  <h3>Default rendering</h3>
+  <div class="cr" style="display:block">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#breadcrumb">Organizations</a></li>
+        <li class="breadcrumb-item"><a href="#breadcrumb">Community Health Alliance</a></li>
+        <li class="breadcrumb-item active" aria-current="page">2026 Operating Support</li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="code-block">/* Stock MDB, resolved. Nothing in mdb-customizations.css touches these. */
+.breadcrumb {
+  --mdb-breadcrumb-padding-x: 0;
+  --mdb-breadcrumb-padding-y: 0;
+  --mdb-breadcrumb-margin-bottom: 1rem;
+  --mdb-breadcrumb-item-padding-x: 0.5rem;
+  --mdb-breadcrumb-item-color: rgba(var(--mdb-emphasis-color-rgb), 0.55);
+  --mdb-breadcrumb-item-hover-color: rgba(var(--mdb-emphasis-color-rgb), 0.7);
+  --mdb-breadcrumb-item-active-color: rgba(var(--mdb-emphasis-color-rgb), 0.55);
+  --mdb-breadcrumb-divider-color: rgba(var(--mdb-emphasis-color-rgb), 0.55);
+}
+
+/* --mdb-emphasis-color-rgb resolves to 0, 0, 0 in mdb.min.css and is NOT
+   remapped in mdb-customizations.css, so every breadcrumb color above is
+   55% black on white (roughly #737373, 4.74:1) rather than a Foundant token.
+   Note this is emphasis-color, not body-color: production does remap
+   --mdb-body-color to navy, but breadcrumb never reads that variable. */</div>
+
+  <p class="ratified-note">Confirmed by absence: <code>grep</code> for <code>breadcrumb</code> across <code>mdb-customizations.css</code> and <code>GLM_Summary.css</code> returns nothing. This is a true DEFAULT, not an undocumented override.</p>
+
+  <p class="gap-note"><strong>Finding, link and current page are the same color.</strong> <code>--mdb-breadcrumb-item-color</code> and <code>--mdb-breadcrumb-item-active-color</code> resolve to the identical value, so the page you are on is visually indistinguishable from the ancestors you can click. Underline on the anchors is the only differentiator, which means the trail reads as three equal links. Two remaps fix it (active to <code>--colors-brand-primary-dark-blue</code>, items to a lighter neutral) and neither requires touching MDB's compiled rules, since both are real variables.</p>
+
+  <p class="gap-note"><strong>Finding, breadcrumb was missed by the focus pass.</strong> Block 7f of the foundation CSS stages the 2px navy outline for nav-tabs, pagination, dropdown items, <code>.btn-close</code> and side-panel actions, but not for <code>.breadcrumb-item a</code>. Breadcrumb links are keyboard focusable, sit on non-brandable page background, and belong in the same list. Flagged rather than added here, because the focus pass is one pending engineering decision and should round-trip as a single reviewed set rather than growing item by item.</p>
 </section>
 
 <!-- ═══ PAGINATION ═══ -->
 <section class="sec" id="pagination">
-  <h2>Pagination <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Page navigation.</p>
-  <div class="no-override-detail"><strong>No override detected.</strong></div>
-  <div style="display:flex;gap:3px">
-    <button style="padding:5px 10px;border:1px solid var(--t-bdr);background:#fff;border-radius:var(--r-sm);font-size:12px;color:var(--g400);cursor:pointer">Prev</button>
-    <button style="padding:5px 10px;border:1px solid var(--t-primary);background:var(--t-primary);border-radius:var(--r-sm);font-size:12px;color:#fff;cursor:pointer">1</button>
-    <button style="padding:5px 10px;border:1px solid var(--t-bdr);background:#fff;border-radius:var(--r-sm);font-size:12px;cursor:pointer">2</button>
-    <button style="padding:5px 10px;border:1px solid var(--t-bdr);background:#fff;border-radius:var(--r-sm);font-size:12px;cursor:pointer">3</button>
-    <button style="padding:5px 10px;border:1px solid var(--t-bdr);background:#fff;border-radius:var(--r-sm);font-size:12px;cursor:pointer">Next</button>
+  <h2>Pagination <span class="status-tag status-default" title="No override in mdb-customizations.css or GLM_Summary.css">DEFAULT</span></h2>
+  <p class="sd">Page controls for long record lists. Stock MDB today, and the section where MDB's own blue is most visible against a navy brand.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>MDB <code>.pagination</code> on a <code>&lt;ul&gt;</code>, <code>.page-item</code> per page, <code>.page-link</code> on the control itself. Current page carries <code>.active</code> and <code>aria-current="page"</code>; unavailable arrows carry <code>.disabled</code>.</td></tr>
+    <tr><th>Where</th><td>No rule for <code>.pagination</code>, <code>.page-item</code> or <code>.page-link</code> exists in <code>mdb-customizations.css</code> or <code>GLM_Summary.css</code>. All values resolve from <code>mdb.min.css</code>.</td></tr>
+    <tr><th>When</th><td>Server-paged lists. Grids handled by AG Grid use their own pager and are out of scope here until the AG Grid theme question is resolved (see Tables).</td></tr>
+    <tr><th>Why</th><td>Nothing is remapped, which is exactly the problem: the active state below is MDB blue, not Foundant navy, on a screen where every button beside it is navy.</td></tr>
+    <tr><th>How</th><td>Size variants are <code>.pagination-sm</code> and <code>.pagination-lg</code>. <code>.pagination-circle</code> is also available in MDB and swaps the radius to 50%.</td></tr>
+  </table>
+
+  <h3>Default rendering</h3>
+  <div class="cr" style="display:block">
+    <nav aria-label="Request list pages">
+      <ul class="pagination">
+        <li class="page-item disabled"><a class="page-link" href="#pagination" tabindex="-1" aria-disabled="true">Previous</a></li>
+        <li class="page-item active" aria-current="page"><a class="page-link" href="#pagination">1</a></li>
+        <li class="page-item"><a class="page-link" href="#pagination">2</a></li>
+        <li class="page-item"><a class="page-link" href="#pagination">3</a></li>
+        <li class="page-item"><a class="page-link" href="#pagination">Next</a></li>
+      </ul>
+    </nav>
   </div>
+
+  <div class="code-block">/* Stock MDB, resolved. Nothing in mdb-customizations.css touches these. */
+.pagination {
+  --mdb-pagination-color: var(--mdb-body-color);
+  --mdb-pagination-bg: var(--mdb-body-bg);
+  --mdb-pagination-border-color: var(--mdb-border-color);
+  --mdb-pagination-border-radius: 0.25rem;
+  --mdb-pagination-hover-bg: var(--mdb-highlight-bg-color);      /* #eeeeee */
+  --mdb-pagination-focus-bg: var(--mdb-highlight-bg-color);
+  --mdb-pagination-focus-box-shadow: 0 0 0 0.25rem rgba(59, 113, 202, 0.25);
+  --mdb-pagination-active-bg: var(--mdb-primary-bg-subtle);      /* #e2eaf7 */
+  --mdb-pagination-active-color: var(--mdb-primary-text-emphasis); /* #2f5aa2 */
+  --mdb-pagination-active-border-color: #3b71ca;                 /* literal */
+  --mdb-pagination-active-font-weight: 500;
+}
+
+/* Two of the three active-state colors resolve through variables and could be
+   remapped normally. The border-color is a hardcoded hex inside mdb.min.css,
+   so it is NOT reachable by remapping a Foundant token onto it and needs a
+   direct property override instead. Same class of problem as the alert and
+   tab cascade findings. */</div>
+
+  <p class="ratified-note">Confirmed by absence for the override status, and confirmed by value for the colors: <code>--mdb-pagination-active-border-color</code> is written as the literal <code>#3b71ca</code> in <code>mdb.min.css</code>, not as a variable reference.</p>
+
+  <p class="gap-note"><strong>Finding, three blues on a navy system.</strong> Active background <code>#e2eaf7</code>, active text <code>#2f5aa2</code>, active border <code>#3b71ca</code>, and a blue focus ring at <code>rgba(59, 113, 202, 0.25)</code>. None of these is a Foundant color. The natural resolution is active background to <code>--colors-brand-secondary-light-blue</code> with text and border on <code>--colors-brand-primary-dark-blue</code>, but that is a design decision, not a transcription, so it is flagged rather than drafted. Note the border is a literal and will need a direct property override, not a variable remap.</p>
+
+  <h3>Focus treatment <span class="gap-flag">GAP — staged in foundation CSS, pending engineering sign-off</span></h3>
+  <p class="sd" style="border:none;margin:0 0 8px">Block 7f already includes <code>.page-link:focus-visible</code> in the 2px navy outline set, on the reasoning that pagination always sits on non-brandable page background. That replaces the stock blue focus ring above. It is in <code>glm-prototype-foundation.css</code> only and has not round-tripped into <code>mdb-customizations.css</code> yet.</p>
+  <div class="code-block">/* From block 7f, foundation CSS. Applies to pagination among others. */
+.page-link:focus-visible {
+  outline: solid 2px var(--colors-brand-primary-dark-blue);
+  outline-offset: 2px;
+}</div>
 </section>
 
 <!-- ═══ BUTTONS ═══ -->
@@ -1282,13 +1389,62 @@ header, footer {
 
 <!-- ═══ ACCORDIONS ═══ -->
 <section class="sec" id="accordions">
-  <h2>Accordions <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Collapsible panels.</p>
-  <div class="no-override-detail"><strong>No override detected.</strong></div>
-  <div style="border:1px solid var(--t-bdr);border-radius:var(--r-md);overflow:hidden">
-    <div><div style="padding:10px 14px;font-weight:500;font-size:13px;cursor:pointer;display:flex;justify-content:space-between;background:var(--g50)">Item #1 <i class="fas fa-chevron-down" style="font-size:11px;color:var(--g400)"></i></div><div style="padding:12px 14px;font-size:13px;color:var(--g600);border-top:1px solid var(--t-bdr)">First item's content.</div></div>
-    <div style="border-top:1px solid var(--t-bdr)"><div style="padding:10px 14px;font-weight:500;font-size:13px;cursor:pointer;display:flex;justify-content:space-between">Item #2 <i class="fas fa-chevron-right" style="font-size:11px;color:var(--g400)"></i></div></div>
+  <h2>Accordions <span class="status-tag status-default" title="No override in mdb-customizations.css or GLM_Summary.css">DEFAULT</span></h2>
+  <p class="sd">Collapsible content panels. Stock MDB, and the one component in this batch whose brand color cannot be fixed by remapping alone.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>MDB <code>.accordion</code> wrapping <code>.accordion-item</code>, each with an <code>.accordion-button</code> header (carrying <code>.collapsed</code> when shut) and an <code>.accordion-collapse.collapse</code> body. Driven by <code>data-mdb-collapse-init</code> and <code>data-mdb-target</code>.</td></tr>
+    <tr><th>Where</th><td>No rule for <code>.accordion</code> exists in <code>mdb-customizations.css</code> or <code>GLM_Summary.css</code>. All values resolve from <code>mdb.min.css</code>.</td></tr>
+    <tr><th>When</th><td>Secondary detail on a record that most users skip: attachments, history, prior cycles. Not for primary content, since collapsed content is unsearchable by browser find and easy to miss.</td></tr>
+    <tr><th>Why</th><td>Nothing remapped. The open-state color is MDB blue, applied to both the header text and the chevron.</td></tr>
+    <tr><th>How</th><td>Variants are <code>.accordion-flush</code> (borderless, 2px divider between items) and <code>.accordion-borderless</code>. The default radius is <code>0.5rem</code>, which happens to equal <code>--radius-md</code> at 8px, so this component already matches the Foundant radius scale by coincidence rather than by remap.</td></tr>
+  </table>
+
+  <h3>Default rendering</h3>
+  <p class="sd" style="border:none;margin:0 0 8px">Rendered statically (one item open, one shut) since this reference page does not load MDB's JS bundle. The classes are the real ones MDB toggles at runtime.</p>
+  <div class="cr" style="display:block">
+    <div class="accordion" style="max-width:520px">
+      <div class="accordion-item">
+        <h3 class="accordion-header">
+          <button class="accordion-button" type="button">Award history</button>
+        </h3>
+        <div class="accordion-collapse collapse show">
+          <div class="accordion-body">Three prior awards totaling $185,000 between 2021 and 2024.</div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h3 class="accordion-header">
+          <button class="accordion-button collapsed" type="button">Attachments</button>
+        </h3>
+        <div class="accordion-collapse collapse">
+          <div class="accordion-body">Budget worksheet, board roster, IRS determination letter.</div>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <div class="code-block">/* Stock MDB, resolved. Nothing in mdb-customizations.css touches these. */
+.accordion {
+  --mdb-accordion-bg: var(--mdb-body-bg);
+  --mdb-accordion-color: var(--mdb-surface-color);
+  --mdb-accordion-border-color: var(--mdb-border-color);
+  --mdb-accordion-border-radius: 0.5rem;              /* equals --radius-md */
+  --mdb-accordion-btn-padding-x: 1.5rem;
+  --mdb-accordion-btn-padding-y: 1.15rem;
+  --mdb-accordion-btn-icon-width: 1.25rem;
+  --mdb-accordion-active-color: #3b71ca;              /* literal */
+  --mdb-accordion-btn-active-icon: url("data:image/svg+xml,... stroke='%233b71ca' ...");
+}
+
+/* Two separate problems, not one. The open-state text color is a literal hex,
+   so it needs a direct property override rather than a token remap. The open
+   chevron is worse: the color is baked INSIDE an inline SVG data URI, so
+   recoloring it means replacing the entire data URI string. No amount of
+   --mdb-* remapping can reach a color encoded in a URL. */</div>
+
+  <p class="ratified-note">Confirmed by absence for the override status. The two blue values are confirmed by reading <code>mdb.min.css</code> directly: <code>--mdb-accordion-active-color</code> is the literal <code>#3b71ca</code>, and the active chevron is a data URI carrying <code>stroke='%233b71ca'</code>.</p>
+
+  <p class="gap-note"><strong>Finding, a color the remap principle cannot reach.</strong> The project rule is to style by remapping <code>--mdb-*</code> onto Foundant tokens. That rule has a hard boundary here: a color encoded inside an SVG data URI is not a CSS value the cascade can override. Fixing the open chevron requires shipping a replacement data URI with the Foundant navy substituted, which is the first case in this reference where the governing principle needs a documented exception. Worth deciding as a general rule, not per component, since MDB uses data-URI icons in several places.</p>
 </section>
 
 <!-- ═══ TIMELINE ═══ -->
@@ -1348,12 +1504,14 @@ header, footer {
 &lt;/div&gt;
 
 .form-control {
+  border-width: 2px;
   border-color: var(--colors-borders-enabled);
   border-radius: var(--radius-sm);
 }
 .form-control:focus {
+  border-width: 2px;
   border-color: var(--colors-borders-focused);
-  box-shadow: 0 0 0 0.25rem rgba(45, 59, 74, 0.25);
+  box-shadow: none;
 }
 .form-label {
   color: var(--colors-neutral-30);
@@ -1361,7 +1519,7 @@ header, footer {
   font-size: 0.75rem;
   margin-bottom: 4px;
 }</div>
-    <p class="gap-note">Border/focus/label treatment is a proposed remap, not yet lifted from production evidence — <code>mdb-customizations.css</code> only confirms <code>.form-control</code> background (<code>--colors-neutral-100</code>). Border colors use the dedicated <code>--colors-borders-enabled</code>/<code>--colors-borders-focused</code> tokens rather than <code>--colors-brand-primary-dark-blue</code> directly, since <code>foundant-tokens.css</code> defines them as the more semantically correct target. Confirmed against <code>mdb_min.css</code>: MDB's own winning focus rule is a hardcoded hex (<code>border-color:#3b71ca</code>), not a variable, at the same specificity as this override, so the direct-property approach here is evidence-backed rather than a guess. Label color is deliberately lighter than body text, not matched to it: <code>mdb-customizations.css</code> sets <code>--mdb-body-color</code> to <code>--colors-brand-primary-dark-blue</code> globally, so unstyled text (including what's typed into the field) already renders navy by inheritance. Production already uses this exact light-label/dark-value hierarchy in two real places — <code>.detail-label</code> + <code>.detail-value</code>, and <code>.summary-card dt</code> + <code>dd</code> — where the label gets an explicit gray and the value inherits navy; this label follows that same pattern. Font-weight and margin are intentionally left out of the CSS rule and applied as <code>fw-normal</code>/<code>mb-1</code> utility classes in markup instead, per the already-ratified "spacing uses Bootstrap <code>m-*</code>/<code>p-*</code> utilities" convention. <code>font-size: 0.75rem</code> has no token to reference — <code>foundant-tokens.css</code> defines zero font-size tokens today (backlog #7), and production's own <code>.detail-label</code> hardcodes this same raw value with no token either, so this matches evidence rather than inventing a token unilaterally. This was sent to engineering directly as the answer to their own <code>.form-label</code> question — pending their confirmation. Disabled state is stock MDB, no override exists. Backlog item — needs engineering review before it round-trips into <code>mdb-customizations.css</code>.</p>
+    <p class="gap-note">Border/focus/label treatment is a proposed remap, not yet lifted from production evidence — <code>mdb-customizations.css</code> only confirms <code>.form-control</code> background (<code>--colors-neutral-100</code>). Border colors use the dedicated <code>--colors-borders-enabled</code>/<code>--colors-borders-focused</code> tokens rather than <code>--colors-brand-primary-dark-blue</code> directly, since <code>foundant-tokens.css</code> defines them as the more semantically correct target, even though the values are identical. <strong>Updated per team review:</strong> border-width is 2px in both rest and focus states, so focus never shifts layout, and the focus box-shadow ring from the earlier draft is dropped — the border-color change from gray to navy is now the only signal, since the ring read as unexpectedly heavy. Label color is deliberately lighter than body text, not matched to it: <code>mdb-customizations.css</code> sets <code>--mdb-body-color</code> to <code>--colors-brand-primary-dark-blue</code> globally, so unstyled text (including what's typed into the field) already renders navy by inheritance. Production already uses this exact light-label/dark-value hierarchy in two real places — <code>.detail-label</code> + <code>.detail-value</code>, and <code>.summary-card dt</code> + <code>dd</code> — where the label gets an explicit gray and the value inherits navy; this label follows that same pattern. Font-weight and margin are intentionally left out of the CSS rule and applied as <code>fw-normal</code>/<code>mb-1</code> utility classes in markup instead, per the already-ratified "spacing uses Bootstrap <code>m-*</code>/<code>p-*</code> utilities" convention. <code>font-size: 0.75rem</code> has no token to reference — <code>foundant-tokens.css</code> defines zero font-size tokens today (backlog #7), and production's own <code>.detail-label</code> hardcodes this same raw value with no token either, so this matches evidence rather than inventing a token unilaterally. Disabled state is stock MDB, no override exists. Backlog item — needs engineering review before it round-trips into <code>mdb-customizations.css</code>.</p>
   </div>
 </section>
 
@@ -1408,12 +1566,14 @@ header, footer {
 &lt;/div&gt;
 
 .form-control, .form-select {
+  border-width: 2px;
   border-color: var(--colors-borders-enabled);
   border-radius: var(--radius-sm);
 }
 .form-control:focus, .form-select:focus {
+  border-width: 2px;
   border-color: var(--colors-borders-focused);
-  box-shadow: 0 0 0 0.25rem rgba(45, 59, 74, 0.25);
+  box-shadow: none;
 }</div>
     <p class="gap-note">No production evidence exists for <code>.form-select</code> — this section has no confirmed baseline of its own, unlike Text Inputs (which at least has a confirmed background remap). This is a design decision to keep the field family visually unified, not a lifted or independently-verified value. If engineering has customized <code>.form-select</code> somewhere outside this project's file set, that evidence should override this draft. Needs engineering review before it round-trips into <code>mdb-customizations.css</code>.</p>
   </div>
@@ -1465,16 +1625,18 @@ header, footer {
   background-color: var(--colors-brand-primary-dark-blue);
 }
 .form-check-input:focus {
-  border-color: var(--colors-borders-focused);
-  box-shadow: 0 0 0 0.25rem rgba(45, 59, 74, 0.25);
+  outline: solid 2px var(--colors-brand-primary-dark-blue);
+  outline-offset: 2px;
+}
+.form-check-input:focus:before,
+.form-check-input:checked:focus:before,
+.form-switch .form-check-input:checked:focus:before {
+  box-shadow: none;
 }
 .form-switch .form-check-input:checked[type=checkbox]:after {
   background-color: var(--colors-brand-primary-dark-blue);
-}
-.form-switch .form-check-input:checked:focus:before {
-  box-shadow: 3px -1px 0px 13px var(--colors-brand-primary-dark-blue);
 }</div>
-    <p class="gap-note">Standalone proposal — unlike Select (Section 6h), there's no sibling remap to extend here; this is the first customization proposed for this component family. A first attempt at this fix was wrong on two counts, both about specificity, not load order, confirmed by checking <code>mdb_min.css</code> directly: <strong>checkbox's</strong> real checked-state rule is <code>.form-check-input[type=checkbox]:checked</code> — the attribute selector makes it more specific than a plain <code>.form-check-input:checked</code> rule. <strong>Radio's</strong> visible dot is a <code>::after</code> pseudo-element, untouched by any rule on the base element. Both were matched at the correct selector. <strong>Retested after deploying — found two more of the same pattern, this time on focus specifically:</strong> MDB has separate, more specific rules for the checked+focus combination (<code>.form-check-input:checked:focus</code> for radio's ring border, <code>.form-check-input[type=checkbox]:checked:focus</code> for checkbox's fill) that the plain <code>:checked</code> fixes above didn't reach — and clicking a control focuses it automatically, so this was visible immediately on click, not an edge case. Both now matched. <strong>Switch's</strong> knob and ripple were already correct from the specificity pass. <strong>Border width</strong> is 2px in MDB's own Material-style checkbox rule (<code>border: .125rem solid</code>); overridden to 1px at equal specificity. An earlier version of this fix guessed <code>accent-color</code> as the mechanism — confirmed via <code>mdb_min.css</code> that MDB doesn't use it anywhere, so that guess was removed. Disabled state is stock MDB, no override exists. Needs engineering review before it round-trips into <code>mdb-customizations.css</code>.</p>
+    <p class="gap-note">Standalone proposal — unlike Select (Section 6h), there's no sibling remap to extend here; this is the first customization proposed for this component family. A first attempt at this fix was wrong on two counts, both about specificity, not load order, confirmed by checking <code>mdb_min.css</code> directly: <strong>checkbox's</strong> real checked-state rule is <code>.form-check-input[type=checkbox]:checked</code> — the attribute selector makes it more specific than a plain <code>.form-check-input:checked</code> rule. <strong>Radio's</strong> visible dot is a <code>::after</code> pseudo-element, untouched by any rule on the base element. Both were matched at the correct selector. <strong>Retested after deploying — found two more of the same pattern, this time on focus specifically:</strong> MDB has separate, more specific rules for the checked+focus combination (<code>.form-check-input:checked:focus</code> for radio's ring border, <code>.form-check-input[type=checkbox]:checked:focus</code> for checkbox's fill) that the plain <code>:checked</code> fixes above didn't reach — and clicking a control focuses it automatically, so this was visible immediately on click, not an edge case. Both now matched. <strong>Border width</strong> is 2px in MDB's own Material-style checkbox rule (<code>border: .125rem solid</code>); overridden to 1px at equal specificity, a decision this update doesn't touch. <strong>Updated per team review:</strong> the focus box-shadow ring is replaced with a 2px outline, matching the pattern already shipped on buttons (<code>.btn:focus-visible</code>), and the Material ripple glow is explicitly suppressed rather than left un-recolored — simply removing the navy override would let it revert to MDB's own default gray glow instead of actually disappearing. An earlier version of this fix guessed <code>accent-color</code> as the mechanism — confirmed via <code>mdb_min.css</code> that MDB doesn't use it anywhere, so that guess was removed. Disabled state is stock MDB, no override exists. Needs engineering review before it round-trips into <code>mdb-customizations.css</code>.</p>
   </div>
 </section>
 
@@ -1909,48 +2071,198 @@ header, footer {
 
 <!-- ═══ TOASTS ═══ -->
 <section class="sec" id="toasts">
-  <h2>Toasts <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Notifications.</p>
-  <div class="no-override-detail"><strong>No structural override detected.</strong></div>
-  <div style="max-width:300px;display:flex;flex-direction:column;gap:8px">
-    <div style="background:#fff;border-left:4px solid var(--t-success);border-radius:var(--r-sm);box-shadow:var(--t-shadow-sm);padding:10px 14px;display:flex;align-items:center;gap:8px"><i class="fas fa-check-circle" style="color:var(--t-success);font-size:14px"></i><div><strong style="font-size:12px">Saved</strong><p style="margin:0;font-size:11px;color:var(--g500)">Changes saved.</p></div></div>
-    <div style="background:#fff;border-left:4px solid var(--t-danger);border-radius:var(--r-sm);box-shadow:var(--t-shadow-sm);padding:10px 14px;display:flex;align-items:center;gap:8px"><i class="fas fa-times-circle" style="color:var(--t-danger);font-size:14px"></i><div><strong style="font-size:12px">Error</strong><p style="margin:0;font-size:11px;color:var(--g500)">Payment failed.</p></div></div>
+  <h2>Toasts <span class="status-tag status-overridden" title="#GlobalToast and .toast-container are real production overrides">OVERRIDDEN</span></h2>
+  <p class="sd">Transient confirmation messages. Production ships one real customized toast, <code>#GlobalToast</code>, styled in <code>mdb-customizations.css</code> under its own "Global Toast Component" comment. This section previously showed a hand-styled fake using retired variables; it now shows the production component.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>MDB's <code>.toast</code> component (<code>.toast-header</code> plus <code>.toast-body</code>) inside a <code>.toast-container</code>. Production customizes a single instance <strong>by ID</strong>, not by adding a class variant.</td></tr>
+    <tr><th>Where</th><td>Two rules in <code>mdb-customizations.css</code>. <code>.toast-container</code> is pinned <code>position: fixed; top: 5px; right: 5px</code>. <code>#GlobalToast</code> gets a <code>--colors-semantic-success-50</code> background, a 4px <code>--colors-semantic-success-0</code> left border, and an 8px radius, with header and body backgrounds set transparent so the container color shows through.</td></tr>
+    <tr><th>When</th><td>Confirming that something saved or sent, where the user does not have to act on the message. Anything the user must read and respond to belongs in an alert or a modal instead, because a toast dismisses itself.</td></tr>
+    <tr><th>Why</th><td>Tinted background plus a 4px semantic left border is the same visual grammar already used by alerts and badges, so a toast reads as part of one family rather than a separate notification language.</td></tr>
+    <tr><th>How</th><td>Keep <code>id="GlobalToast"</code> exactly. Every Foundant style here is bound to that ID, so renaming or duplicating the element silently drops it back to stock MDB white.</td></tr>
+  </table>
+
+  <h3>Global toast (production)</h3>
+  <div class="cr" style="display:block">
+    <div class="toast show" id="GlobalToast" role="status" aria-live="polite" aria-atomic="true" style="display:block;position:static;max-width:340px">
+      <div class="toast-header">
+        <strong class="me-auto">Saved</strong>
+      </div>
+      <div class="toast-body">Your changes to this request have been saved.</div>
+    </div>
   </div>
+  <p class="sd" style="border:none;margin:6px 0 0">Rendered inline and forced visible so it can be read on this page. In production it sits inside a fixed <code>.toast-container</code> at the top right and starts at <code>display: none</code>. The header shows a title only: no icon or close button is specified in the production CSS, so none is shown here rather than inventing one.</p>
+
+  <div class="code-block">/* Verbatim from mdb-customizations.css, "Global Toast Component" */
+.toast-container {
+  position: fixed;
+  right: 5px;
+  top: 5px;
+}
+
+#GlobalToast {
+  display: none;
+  background-color: var(--colors-semantic-success-50);
+  border-left: 4px solid var(--colors-semantic-success-0);
+  border-radius: 8px;                 /* hardcoded, see backlog note below */
+}
+
+#GlobalToast .toast-header {
+  background-color: transparent;
+  border: none;
+  color: var(--colors-brand-primary-dark-blue);
+  padding: 12px 16px 8px 16px;
+}
+
+#GlobalToast .toast-body {
+  background-color: transparent;
+  padding: 0 16px 12px 16px;
+}</div>
+
+  <p class="ratified-note">Confirmed, not assumed: every value above is read directly out of <code>mdb-customizations.css</code>. Header and body are deliberately transparent so the single background on the parent carries the whole component, which is why overriding either one breaks the tint. The transparent header also removes MDB's stock header divider without needing a border reset.</p>
+
+  <p class="gap-note"><strong>GAP, success only.</strong> Production defines exactly one toast, and it is styled success. There is no danger, warning, or info toast anywhere in <code>mdb-customizations.css</code> or <code>GLM_Summary.css</code>. The error toast this section used to show had no production basis and has been removed rather than kept as an aspirational demo. If failure messages need a toast, that is new work: it needs a variant family and a decision on whether the ID-bound styling becomes a class first. Alerts already cover the failure case today.</p>
+
+  <p class="gap-note"><strong>Three items for the contract backlog.</strong> First, styling by <code>#GlobalToast</code> means a second toast on the same page cannot be styled at all, since IDs are unique; converting this to a class (or a <code>.toast-success</code> variant) is the reusable version and needs engineering review. Second, the <code>8px</code> radius is hardcoded where <code>var(--radius-md)</code> is already exactly 8px, so this is a free token cleanup that removes a literal. Third, <code>.toast-container</code> positioning exists in production but is <strong>not</strong> in <code>glm-prototype-foundation.css</code>, so prototypes will not place toasts where production places them until that rule is mirrored across.</p>
 </section>
 
 <!-- ═══ TOOLTIPS ═══ -->
 <section class="sec" id="tooltips">
-  <h2>Tooltips &amp; Popovers <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Contextual overlays.</p>
-  <div class="no-override-detail"><strong>No override detected.</strong></div>
-  <div class="cr" style="gap:28px">
-    <div style="position:relative;display:inline-block"><button class="btn-t btn-tp btn-sm2">Tooltip</button><div style="position:absolute;bottom:calc(100% + 7px);left:50%;transform:translateX(-50%);background:var(--t-dark);color:#fff;padding:4px 9px;border-radius:var(--r-sm);font-size:11px;white-space:nowrap">Tooltip text<div style="position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:var(--t-dark)"></div></div></div>
-    <div style="position:relative;display:inline-block"><button class="btn-t btn-to btn-sm2">Popover</button><div style="position:absolute;bottom:calc(100% + 9px);left:0;background:#fff;border:1px solid var(--t-bdr);border-radius:var(--r-md);box-shadow:var(--t-shadow);width:210px"><div style="padding:7px 10px;border-bottom:1px solid var(--t-bdr);font-weight:600;font-size:12px">Title</div><div style="padding:8px 10px;font-size:12px;color:var(--g600)">Rich content here.</div></div></div>
+  <h2>Tooltips &amp; Popovers <span class="status-tag status-default" title="No override in mdb-customizations.css or GLM_Summary.css">DEFAULT</span></h2>
+  <p class="sd">Contextual overlays. Stock MDB, with one accessibility item that needs validating before it can be called safe.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>Tooltip: <code>.tooltip</code> wrapper with a <code>.tooltip-inner</code> label, instantiated from a trigger carrying <code>data-mdb-tooltip-init</code> and <code>title</code>. Popover: <code>.popover</code> with <code>.popover-header</code> and <code>.popover-body</code>, from <code>data-mdb-popover-init</code>.</td></tr>
+    <tr><th>Where</th><td>No rule for <code>.tooltip</code> or <code>.popover</code> exists in <code>mdb-customizations.css</code> or <code>GLM_Summary.css</code>. All values resolve from <code>mdb.min.css</code>.</td></tr>
+    <tr><th>When</th><td>Tooltip for naming an icon-only control, which is the ratified pairing in the Icons section. Popover for a short explanation the user chooses to open. Neither may hold content the user needs to complete a task, since both are unavailable on touch and dismiss on blur.</td></tr>
+    <tr><th>Why</th><td>Nothing remapped. Unlike pagination and accordions, the default here is neutral gray rather than MDB blue, so there is no brand clash to resolve, only a contrast question.</td></tr>
+    <tr><th>How</th><td>MDB hides the pointer arrow on both components by default (<code>.tooltip-arrow</code> and <code>.popover-arrow</code> are set to <code>display: none</code>), so an overlay does not point at its trigger. Popover headers get a 2px bottom border rather than MDB's usual 1px.</td></tr>
+  </table>
+
+  <h3>Default rendering</h3>
+  <p class="sd" style="border:none;margin:0 0 8px">Rendered statically, since both components are JS-instantiated and this page does not load MDB's JS bundle. Classes and computed values are the real ones.</p>
+  <div class="cr" style="gap:32px;align-items:flex-start">
+    <div class="tooltip show" style="position:static;display:inline-block">
+      <div class="tooltip-inner">Download attachment</div>
+    </div>
+    <div class="popover show" style="position:static;display:inline-block;max-width:260px">
+      <h3 class="popover-header">Eligibility</h3>
+      <div class="popover-body">Applicants must have filed a Form 990 within the last 18 months.</div>
+    </div>
   </div>
+
+  <div class="code-block">/* Stock MDB, resolved. Nothing in mdb-customizations.css touches these. */
+.tooltip {
+  --mdb-tooltip-bg: var(--mdb-surface-inverted-bg);      /* #6d6d6d */
+  --mdb-tooltip-color: var(--mdb-surface-inverted-color); /* #fff */
+  --mdb-tooltip-opacity: 0.9;
+  --mdb-tooltip-font-size: 14px;
+  --mdb-tooltip-padding-x: 16px;
+  --mdb-tooltip-padding-y: 6px;
+  --mdb-tooltip-border-radius: 0.25rem;
+  --mdb-tooltip-max-width: 200px;
+  --mdb-tooltip-zindex: 1090;
+}
+.tooltip .tooltip-arrow { display: none; }
+.popover { --mdb-popover-border-bottom-width: 2px; }
+.popover .popover-arrow { display: none; }</div>
+
+  <p class="ratified-note">Confirmed by absence for the override status, and by value for the rest: the inverted surface resolves to <code>#6d6d6d</code>, not black, and neither arrow renders.</p>
+
+  <p class="gap-note"><strong>Open item, opacity lowers the real contrast.</strong> White on <code>#6d6d6d</code> is about 5.2:1 and clears AA comfortably. But <code>--mdb-tooltip-opacity: 0.9</code> applies to the whole element, so both the background and the text composite against whatever is behind them. On a white surface the effective background lightens to roughly <code>#7c7c7c</code> while the text stays white, landing near 4.2:1, which is below the 4.5:1 needed for 14px text. The exact figure moves with the page background underneath, so this needs measuring in the app rather than calculating here. Two candidate fixes: set opacity to 1, or darken the background to a Foundant neutral. Both are decisions, so neither is drafted here.</p>
+
+  <p class="gap-note"><strong>Question worth raising, the hidden arrow.</strong> Suppressing the arrow is MDB's own choice, not Foundant's, but it removes the visual link between an overlay and its trigger. With several icon buttons in a row, which one a tooltip belongs to becomes a guess. Restoring the arrow is a one-line change and probably a real improvement, which is precisely why it should be decided rather than slipped in.</p>
 </section>
 
 <!-- ═══ SPINNERS ═══ -->
 <section class="sec" id="spinners">
-  <h2>Spinners <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Loading indicators.</p>
-  <div class="no-override-detail"><strong>No override detected.</strong></div>
-  <div class="cr" style="align-items:center">
-    <div class="spinner-border" style="color:var(--t-primary);width:1.8rem;height:1.8rem" role="status"></div>
-    <div class="spinner-border" style="color:var(--t-success);width:1.8rem;height:1.8rem" role="status"></div>
-    <div class="spinner-border spinner-border-sm" style="color:var(--t-primary)" role="status"></div>
-    <button class="btn-t btn-tp btn-dis" style="display:flex;align-items:center;gap:6px"><div class="spinner-border spinner-border-sm" style="color:#fff" role="status"></div>Loading...</button>
+  <h2>Spinners <span class="status-tag status-default" title="No override in mdb-customizations.css or GLM_Summary.css">DEFAULT</span></h2>
+  <p class="sd">Loading indicators. Stock MDB, and the only section in this batch with nothing to flag: the component inherits its color rather than declaring one.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td><code>.spinner-border</code> (rotating ring) or <code>.spinner-grow</code> (pulsing dot), with <code>.spinner-border-sm</code> / <code>.spinner-grow-sm</code> for the 1rem size. Always pair with visually hidden text so the state is announced.</td></tr>
+    <tr><th>Where</th><td>No rule for <code>.spinner-border</code> or <code>.spinner-grow</code> exists in <code>mdb-customizations.css</code> or <code>GLM_Summary.css</code>. All values resolve from <code>mdb.min.css</code>.</td></tr>
+    <tr><th>When</th><td>Waits long enough to notice but too short to itemize. For anything with known steps or a known duration, a progress bar communicates more. For content-shaped waits, a skeleton reads better, though no skeleton pattern exists in this system today.</td></tr>
+    <tr><th>Why</th><td>Nothing needs remapping. The spinner colors itself from <code>currentColor</code>, so it adopts whatever text color it sits in. Since body text is remapped to <code>--colors-brand-primary-dark-blue</code> in production, a default spinner is already navy without a single override.</td></tr>
+    <tr><th>How</th><td>Default size is 2rem square with a <code>0.25em</code> border, dropping to 1rem and <code>0.2em</code> on the small variants. Speed is <code>0.75s</code>, and MDB slows it to <code>1.5s</code> under <code>prefers-reduced-motion</code> rather than stopping it.</td></tr>
+  </table>
+
+  <h3>Default rendering</h3>
+  <div class="cr" style="gap:24px;align-items:center">
+    <div class="spinner-border" role="status"><span class="visually-hidden">Loading</span></div>
+    <div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading</span></div>
+    <div class="spinner-grow" role="status"><span class="visually-hidden">Loading</span></div>
+    <div class="spinner-grow spinner-grow-sm" role="status"><span class="visually-hidden">Loading</span></div>
   </div>
+
+  <div class="code-block">/* Stock MDB, resolved. Nothing in mdb-customizations.css touches these. */
+.spinner-border {
+  --mdb-spinner-width: 2rem;
+  --mdb-spinner-height: 2rem;
+  --mdb-spinner-border-width: 0.25em;
+  --mdb-spinner-vertical-align: -0.125em;
+  --mdb-spinner-animation-speed: 0.75s;
+  --mdb-spinner-animation-name: spinner-border;
+}
+.spinner-border-sm { --mdb-spinner-width: 1rem; --mdb-spinner-height: 1rem;
+                     --mdb-spinner-border-width: 0.2em; }
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner-border, .spinner-grow { --mdb-spinner-animation-speed: 1.5s; }
+}
+
+/* Color comes from currentColor, not from a --mdb-spinner-* variable. That is
+   why this component is already on-brand with zero overrides, and why adding
+   a color utility to a spinner is usually the wrong instinct: it will already
+   match the text around it. */</div>
+
+  <p class="ratified-note">Confirmed by absence, and confirmed useful: DEFAULT here means correct rather than unexamined. Worth stating explicitly, because a blanket rule to override every DEFAULT component would make this one worse.</p>
 </section>
 
 <!-- ═══ PROGRESS ═══ -->
 <section class="sec" id="progress">
-  <h2>Progress Bars <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Completion indicators.</p>
-  <div class="no-override-detail"><strong>No override detected.</strong></div>
-  <div style="max-width:440px;display:flex;flex-direction:column;gap:10px">
-    <div><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--g600);margin-bottom:3px"><span>Progress</span><span>75%</span></div><div class="prog-t"><div class="prog-bar" style="width:75%;background:var(--t-primary)"></div></div></div>
-    <div><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--g600);margin-bottom:3px"><span>Budget</span><span>45%</span></div><div class="prog-t"><div class="prog-bar" style="width:45%;background:var(--t-success)"></div></div></div>
+  <h2>Progress Bars <span class="status-tag status-default" title="No override in mdb-customizations.css or GLM_Summary.css">DEFAULT</span></h2>
+  <p class="sd">Determinate completion indicators. Stock MDB, with the fill hardcoded to MDB blue.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td><code>.progress</code> track wrapping a <code>.progress-bar</code> fill, width set inline as a percentage. ARIA lives on the track: <code>role="progressbar"</code> with <code>aria-valuenow</code>, <code>aria-valuemin</code> and <code>aria-valuemax</code>.</td></tr>
+    <tr><th>Where</th><td>No rule for <code>.progress</code> or <code>.progress-bar</code> exists in <code>mdb-customizations.css</code> or <code>GLM_Summary.css</code>. All values resolve from <code>mdb.min.css</code>.</td></tr>
+    <tr><th>When</th><td>Known-quantity work: file uploads, bulk actions, application completeness. Not for indeterminate waits, which is what spinners are for.</td></tr>
+    <tr><th>Why</th><td>Nothing remapped, so the fill is MDB blue on every screen it appears on.</td></tr>
+    <tr><th>How</th><td>Default track height is only <code>4px</code>, so a percentage label will not fit inside the bar without raising the height. MDB also ships a circular variant at 48px with a 4px stroke.</td></tr>
+  </table>
+
+  <h3>Default rendering</h3>
+  <div class="cr" style="display:block;max-width:420px">
+    <div class="progress" role="progressbar" aria-label="Application completeness" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">
+      <div class="progress-bar" style="width:65%"></div>
+    </div>
   </div>
+
+  <div class="code-block">/* Stock MDB, resolved. Nothing in mdb-customizations.css touches these. */
+.progress {
+  --mdb-progress-height: 4px;
+  --mdb-progress-bg: var(--mdb-secondary-bg);      /* #eeeeee */
+  --mdb-progress-border-radius: var(--mdb-border-radius);
+  --mdb-progress-box-shadow: var(--mdb-box-shadow-inset);
+  --mdb-progress-font-size: 0.75rem;
+  --mdb-progress-bar-bg: #3b71ca;                  /* literal */
+  --mdb-progress-bar-color: #fff;
+  --mdb-progress-bar-transition: width 0.6s ease;
+  --mdb-progress-circular-size: 48px;
+  --mdb-progress-circular-bar-width: 4px;
+  --mdb-progress-circular-color: var(--mdb-emphasis-color);
+}
+
+/* The fill is a literal hex, so a token remap will not reach it; it needs a
+   direct property override. The circular variant is different again: it reads
+   --mdb-emphasis-color, which resolves to #000 and is not remapped either. */</div>
+
+  <p class="ratified-note">Confirmed by absence for the override status, and by value for the fill: <code>--mdb-progress-bar-bg</code> is written as the literal <code>#3b71ca</code> in <code>mdb.min.css</code>.</p>
+
+  <p class="gap-note"><strong>Finding, brand rather than accessibility.</strong> Blue on the <code>#eeeeee</code> track measures about 4.1:1, which clears the 3:1 that WCAG 1.4.11 asks of a graphical object, so this is not a compliance problem. It is a consistency problem: a blue fill next to navy buttons is the most visible remaining place MDB's identity shows through. The obvious resolution is <code>--colors-brand-primary-dark-blue</code> on the fill and a Foundant neutral on the track, but the track choice interacts with the neutral scale, so it is flagged rather than drafted.</p>
+
+  <p class="gap-note"><strong>Second question, height.</strong> At 4px this reads as a hairline and cannot carry a label. If progress is being used for application completeness, where a percentage is meaningful to the user, the height needs to grow and that is a design decision worth making once rather than per screen.</p>
 </section>
 
 <!-- ═══ OFFCANVAS ═══ -->
