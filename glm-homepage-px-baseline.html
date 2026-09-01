@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Homepage PX Baseline and Segmentation</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap">
+<style>
+:root {
+  --near-black: #272624;
+  --warm-grey: #747270;
+  --navy: #004784;
+  --green: #97D700;
+  --callout-fill: #F8FCEB;
+  --callout-label: #404D0C;
+  --rule-grey: #D9D9D9;
+  --white: #FFFFFF;
+  --bg: #FAFAF9;
+  --danger: #BD3B39;
+  --warning: #E8A735;
+  --success: #3A8F5C;
+  --c-home: #004784;
+  --c-app: #3A8F5C;
+  --c-follow: #E8A735;
+  --c-approve: #8A63A8;
+  --c-loi: #BD3B39;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Lato', sans-serif; color: var(--near-black); background: var(--bg); font-size: 16px; line-height: 1.6; }
+
+.topbar { background: var(--white); border-bottom: 1px solid var(--rule-grey); padding: 14px 40px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 100; }
+.topbar-logo { font-weight: 900; font-size: 0.85rem; color: var(--navy); letter-spacing: 0.08em; text-transform: uppercase; }
+.topbar-sep { color: var(--rule-grey); }
+.topbar-title { font-size: 0.85rem; color: var(--warm-grey); font-weight: 400; }
+
+.hero { background: var(--navy); color: var(--white); padding: 60px 40px; }
+.hero-inner { max-width: 960px; margin: 0 auto; }
+.hero-label { font-size: 0.9rem; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); margin-bottom: 12px; }
+.hero h1 { font-size: 2.2rem; font-weight: 500; line-height: 1.2; margin-bottom: 10px; }
+.hero h1 strong { font-weight: 900; }
+.hero-sub { font-size: 1.05rem; color: rgba(255,255,255,0.72); margin-bottom: 30px; max-width: 660px; }
+.hero-stats { display: flex; gap: 44px; flex-wrap: wrap; }
+.hero-stat { display: flex; flex-direction: column; }
+.hero-stat-value { font-size: 1.9rem; font-weight: 700; }
+.hero-stat-label { font-size: 0.72rem; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.06em; }
+
+.section { max-width: 960px; margin: 0 auto; padding: 56px 40px; }
+.section + .section { padding-top: 0; }
+.section-label { font-size: 0.9rem; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; color: var(--navy); margin-bottom: 8px; }
+.section h2 { font-size: 1.55rem; font-weight: 500; margin-bottom: 8px; }
+.section h2 strong { font-weight: 900; }
+.section-intro { font-size: 0.98rem; color: var(--warm-grey); margin-bottom: 28px; max-width: 680px; }
+
+.panel { background: var(--white); border-radius: 8px; padding: 28px; margin-bottom: 24px; }
+.panel h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
+.panel .panel-note { font-size: 0.82rem; color: var(--warm-grey); margin-bottom: 18px; }
+.panel p { font-size: 0.9rem; margin-bottom: 12px; }
+.panel p:last-child { margin-bottom: 0; }
+
+.chart-wrap { width: 100%; overflow-x: auto; }
+.chart-wrap svg { display: block; width: 100%; height: auto; min-width: 560px; }
+.legend { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 14px; }
+.legend-item { display: flex; align-items: center; gap: 7px; font-size: 0.78rem; color: var(--near-black); }
+.legend-swatch { width: 14px; height: 3px; border-radius: 2px; flex-shrink: 0; }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+th { text-align: left; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--warm-grey); font-weight: 700; padding: 8px 10px 8px 0; border-bottom: 2px solid var(--rule-grey); }
+td { padding: 9px 10px 9px 0; border-bottom: 1px solid var(--rule-grey); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.bar-cell { width: 42%; }
+.bar { height: 12px; border-radius: 2px; background: var(--navy); display: block; }
+.bar.muted { background: var(--warm-grey); }
+.bar.low { background: var(--danger); }
+.flag { font-size: 0.7rem; font-weight: 700; color: var(--danger); }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.card { background: var(--white); border-radius: 8px; padding: 24px; }
+.card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; }
+.card.works { border-left: 4px solid var(--success); }
+.card.works h3 { color: var(--success); }
+.card.breaks { border-left: 4px solid var(--danger); }
+.card.breaks h3 { color: var(--danger); }
+.card ul { list-style: none; padding: 0; }
+.card li { font-size: 0.85rem; padding: 7px 0; border-bottom: 1px solid var(--rule-grey); line-height: 1.5; }
+.card li:last-child { border-bottom: none; }
+.card li strong { font-weight: 700; }
+
+.callout { border-left: 4px solid var(--green); background: var(--callout-fill); border-radius: 0 8px 8px 0; padding: 20px 24px; margin: 24px 0; }
+.callout.warn { border-left-color: var(--danger); background: #FDF3F3; }
+.callout-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--callout-label); margin-bottom: 6px; }
+.callout.warn .callout-label { color: var(--danger); }
+.callout p { font-size: 0.87rem; margin: 0; }
+.callout p + p { margin-top: 10px; }
+
+code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.82em; background: #EFEFEE; padding: 1px 5px; border-radius: 3px; }
+
+.appendix-toggle { background: none; border: 1px solid var(--rule-grey); border-radius: 8px; padding: 14px 20px; font-size: 0.85rem; font-family: 'Lato', sans-serif; font-weight: 700; color: var(--navy); cursor: pointer; width: 100%; text-align: left; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.appendix-toggle:hover { background: var(--white); }
+.appendix-content { display: none; background: var(--white); border-radius: 8px; padding: 24px 32px; margin-bottom: 24px; }
+.appendix-content.open { display: block; }
+.appendix-content h4 { font-size: 0.9rem; font-weight: 700; color: var(--navy); margin: 20px 0 8px; }
+.appendix-content h4:first-child { margin-top: 0; }
+.appendix-content p, .appendix-content li { font-size: 0.85rem; margin-bottom: 8px; }
+.appendix-content ul, .appendix-content ol { padding-left: 20px; margin-bottom: 12px; }
+.appendix-content pre { background: #F3F3F2; border-radius: 6px; padding: 14px 16px; overflow-x: auto; font-size: 0.75rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; line-height: 1.5; margin-bottom: 12px; }
+
+.page-footer { text-align: center; padding: 40px; font-size: 0.75rem; color: var(--warm-grey); border-top: 1px solid var(--rule-grey); }
+
+@media (max-width: 768px) {
+  .two-col { grid-template-columns: 1fr; }
+  .section { padding: 36px 20px; }
+  .hero { padding: 36px 20px; }
+  .hero h1 { font-size: 1.5rem; }
+  .bar-cell { width: 26%; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-logo">GLM Product Design</span>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-title">Homepage PX Baseline and Segmentation</span>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Pre-launch reference</div>
+    <h1><strong>Homepage baseline</strong> in Gainsight PX</h1>
+    <p class="hero-sub">What we can measure on the homepage today, what we can segment it by, and where the segmentation stops working. Pulled through the PX MCP connector on September 1, 2026, covering the eight weeks ending August 24.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="hero-stat-value">10,838</span><span class="hero-stat-label">Unique users, 8 weeks</span></div>
+      <div class="hero-stat"><span class="hero-stat-value">3,124</span><span class="hero-stat-label">Unique accounts, 8 weeks</span></div>
+      <div class="hero-stat"><span class="hero-stat-value">2</span><span class="hero-stat-label">Homepage features tagged</span></div>
+      <div class="hero-stat"><span class="hero-stat-value">0</span><span class="hero-stat-label">Widget or Customize tags</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Why this <strong>exists</strong></h2>
+  <p class="section-intro">The post ship signal package is still an open team discussion. Most of the measures in it compare against a before state, and the before state stops being available the day the new homepage ships. This page records what that before state looks like now, so the conversation can happen without having lost the chance to answer it.</p>
+</div>
+
+<div class="section">
+  <div class="section-label">01 &middot; Baseline</div>
+  <h2>Homepage and workload grid <strong>reach</strong></h2>
+  <p class="section-intro">Weekly unique users. Flat across the window, which is what makes it usable: a post launch change of any real size will be visible against a stable line.</p>
+
+  <div class="panel">
+    <h3>Homepage and workload grid reach, weekly unique users</h3>
+    <p class="panel-note">Eight weeks ending August 24, 2026. GLM/SLM production, all channels.</p>
+    <div class="chart-wrap">
+      <svg viewBox="0 0 800 355" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Line chart of weekly unique users for the Admin Homepage and four workload grids">
+        <g stroke="#D9D9D9" stroke-width="1">
+          <line x1="70" y1="300" x2="770" y2="300"/>
+          <line x1="70" y1="231" x2="770" y2="231"/>
+          <line x1="70" y1="162" x2="770" y2="162"/>
+          <line x1="70" y1="93" x2="770" y2="93"/>
+          <line x1="70" y1="24" x2="770" y2="24"/>
+        </g>
+        <g font-family="Lato, sans-serif" font-size="11" fill="#747270" text-anchor="end">
+          <text x="60" y="304">0</text>
+          <text x="60" y="235">1,750</text>
+          <text x="60" y="166">3,500</text>
+          <text x="60" y="97">5,250</text>
+          <text x="60" y="28">7,000</text>
+        </g>
+        <g font-family="Lato, sans-serif" font-size="11" fill="#747270" text-anchor="middle">
+          <text x="70" y="320">Jul 6</text>
+          <text x="170" y="320">Jul 13</text>
+          <text x="270" y="320">Jul 20</text>
+          <text x="370" y="320">Jul 27</text>
+          <text x="470" y="320">Aug 3</text>
+          <text x="570" y="320">Aug 10</text>
+          <text x="670" y="320">Aug 17</text>
+          <text x="770" y="320">Aug 24</text>
+        </g>
+        <text x="70" y="345" font-family="Lato, sans-serif" font-size="11" fill="#747270">Week beginning</text>
+
+        <polyline fill="none" stroke="#004784" stroke-width="2.5" stroke-linejoin="round" points="70.0,42.6 170.0,37.4 270.0,39.4 370.0,40.6 470.0,43.2 570.0,40.7 670.0,37.3 770.0,37.1"/>
+        <polyline fill="none" stroke="#3A8F5C" stroke-width="2.5" stroke-linejoin="round" points="70.0,173.9 170.0,171.3 270.0,172.4 370.0,172.7 470.0,170.6 570.0,169.1 670.0,169.1 770.0,166.6"/>
+        <polyline fill="none" stroke="#E8A735" stroke-width="2.5" stroke-linejoin="round" points="70.0,201.7 170.0,201.0 270.0,204.5 370.0,204.8 470.0,205.8 570.0,206.8 670.0,210.1 770.0,208.1"/>
+        <polyline fill="none" stroke="#8A63A8" stroke-width="2.5" stroke-linejoin="round" points="70.0,237.7 170.0,236.8 270.0,238.6 370.0,240.2 470.0,240.6 570.0,241.4 670.0,242.3 770.0,242.2"/>
+        <polyline fill="none" stroke="#BD3B39" stroke-width="2.5" stroke-linejoin="round" points="70.0,277.9 170.0,277.2 270.0,277.7 370.0,277.0 470.0,276.8 570.0,276.9 670.0,277.1 770.0,277.0"/>
+
+        <g fill="#004784"><circle cx="70" cy="42.6" r="3"/><circle cx="170" cy="37.4" r="3"/><circle cx="270" cy="39.4" r="3"/><circle cx="370" cy="40.6" r="3"/><circle cx="470" cy="43.2" r="3"/><circle cx="570" cy="40.7" r="3"/><circle cx="670" cy="37.3" r="3"/><circle cx="770" cy="37.1" r="3"/></g>
+        <g fill="#3A8F5C"><circle cx="70" cy="173.9" r="3"/><circle cx="170" cy="171.3" r="3"/><circle cx="270" cy="172.4" r="3"/><circle cx="370" cy="172.7" r="3"/><circle cx="470" cy="170.6" r="3"/><circle cx="570" cy="169.1" r="3"/><circle cx="670" cy="169.1" r="3"/><circle cx="770" cy="166.6" r="3"/></g>
+        <g fill="#E8A735"><circle cx="70" cy="201.7" r="3"/><circle cx="170" cy="201.0" r="3"/><circle cx="270" cy="204.5" r="3"/><circle cx="370" cy="204.8" r="3"/><circle cx="470" cy="205.8" r="3"/><circle cx="570" cy="206.8" r="3"/><circle cx="670" cy="210.1" r="3"/><circle cx="770" cy="208.1" r="3"/></g>
+        <g fill="#8A63A8"><circle cx="70" cy="237.7" r="3"/><circle cx="170" cy="236.8" r="3"/><circle cx="270" cy="238.6" r="3"/><circle cx="370" cy="240.2" r="3"/><circle cx="470" cy="240.6" r="3"/><circle cx="570" cy="241.4" r="3"/><circle cx="670" cy="242.3" r="3"/><circle cx="770" cy="242.2" r="3"/></g>
+        <g fill="#BD3B39"><circle cx="70" cy="277.9" r="3"/><circle cx="170" cy="277.2" r="3"/><circle cx="270" cy="277.7" r="3"/><circle cx="370" cy="277.0" r="3"/><circle cx="470" cy="276.8" r="3"/><circle cx="570" cy="276.9" r="3"/><circle cx="670" cy="277.1" r="3"/><circle cx="770" cy="277.0" r="3"/></g>
+      </svg>
+    </div>
+    <div class="legend">
+      <span class="legend-item"><span class="legend-swatch" style="background:#004784"></span>Admin Homepage</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:#3A8F5C"></span>Application grid</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:#E8A735"></span>Follow Up grid</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:#8A63A8"></span>Approval grid</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:#BD3B39"></span>LOI grid</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Grid reach as a share of homepage users</h3>
+    <p class="panel-note">Week of August 24, 2026. Denominator is 6,668 unique homepage users that week.</p>
+    <table>
+      <thead>
+        <tr><th>Workload grid</th><th class="num">Weekly users</th><th class="bar-cell">Share of homepage users</th><th class="num">Share</th><th class="num">8 week trend</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Application</td><td class="num">3,383</td><td class="bar-cell"><span class="bar" style="width:100%"></span></td><td class="num">51%</td><td class="num">+5.8%</td></tr>
+        <tr><td>Follow Up</td><td class="num">2,330</td><td class="bar-cell"><span class="bar" style="width:69%"></span></td><td class="num">35%</td><td class="num">-6.6%</td></tr>
+        <tr><td>Approval</td><td class="num">1,465</td><td class="bar-cell"><span class="bar" style="width:43%"></span></td><td class="num">22%</td><td class="num">-7.3%</td></tr>
+        <tr><td>LOI <span class="flag">&#9679;</span></td><td class="num">583</td><td class="bar-cell"><span class="bar low" style="width:17%"></span></td><td class="num">9%</td><td class="num">+4.1%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">The number worth carrying into the readout</div>
+    <p>Nine out of ten people who land on the homepage never touch the LOI grid, and it occupies a quarter of the fixed Workload row. Approval reaches roughly one in five and is trending down. Three of five usability participants asked to remove processes they do not use, and one named LOI directly. That was written up as a convergent finding at 3 of 5. It is stronger than that: it is 3 of 5 corroborated across roughly 3,100 accounts.</p>
+    <p><strong>Before quoting it,</strong> resolve whether LOI is disabled for most organizations or enabled and ignored. Both point to the same fix, hiding unused processes, but they support different arguments. Configuration data answers this and PX does not.</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">02 &middot; Segmentation</div>
+  <h2>Role is populated, and it is <strong>not the role we mean</strong></h2>
+  <p class="section-intro">Role is a first-class user attribute in PX, not a global context field, so every measure on this page can be split by it. The values are the GLM permission role.</p>
+
+  <div class="panel">
+    <h3>Role distribution</h3>
+    <p class="panel-note">20,000 user sample of the GLM/SLM tenant, September 1, 2026. Multi-role users are stored as comma joined strings and are grouped here as one row.</p>
+    <table>
+      <thead>
+        <tr><th>Role</th><th class="num">Users</th><th class="bar-cell">Share of sample</th><th class="num">Share</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Administrator</td><td class="num">8,201</td><td class="bar-cell"><span class="bar" style="width:100%"></span></td><td class="num">41%</td></tr>
+        <tr><td>Applicant</td><td class="num">5,404</td><td class="bar-cell"><span class="bar muted" style="width:66%"></span></td><td class="num">27%</td></tr>
+        <tr><td>Blank</td><td class="num">4,027</td><td class="bar-cell"><span class="bar muted" style="width:49%"></span></td><td class="num">20%</td></tr>
+        <tr><td>Grants Manager</td><td class="num">1,424</td><td class="bar-cell"><span class="bar" style="width:17%"></span></td><td class="num">7%</td></tr>
+        <tr><td>Auditor</td><td class="num">346</td><td class="bar-cell"><span class="bar" style="width:4%"></span></td><td class="num">2%</td></tr>
+        <tr><td>Evaluator</td><td class="num">274</td><td class="bar-cell"><span class="bar" style="width:3%"></span></td><td class="num">1%</td></tr>
+        <tr><td>Multi-role combinations</td><td class="num">240</td><td class="bar-cell"><span class="bar muted" style="width:3%"></span></td><td class="num">1%</td></tr>
+        <tr><td>Board Member <span class="flag">&#9679;</span></td><td class="num">84</td><td class="bar-cell"><span class="bar low" style="width:1%"></span></td><td class="num">0.4%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="two-col">
+    <div class="card works">
+      <h3>What segments cleanly</h3>
+      <ul>
+        <li><strong>Permission role.</strong> Administrator, Grants Manager, Evaluator, Auditor, Board Member, Applicant. Splits every reach and adoption measure.</li>
+        <li><strong>License Type.</strong> Populated as a custom user attribute. Lets us watch Standard against Advanced behavior on the new page.</li>
+        <li><strong>Account.</strong> Adoption tables give which accounts use which features and at what depth.</li>
+        <li><strong>Tenure.</strong> Sign up date, first visit, last seen, and number of visits are all on the user record.</li>
+        <li><strong>Device and browser.</strong> Available per user, useful if density or type scale complaints recur after launch.</li>
+      </ul>
+    </div>
+    <div class="card breaks">
+      <h3>Where it breaks down</h3>
+      <ul>
+        <li><strong>There is no Program Officer role in GLM.</strong> The persona at the center of our open research question does not exist as a system role. Program officers appear as Administrator or Grants Manager, indistinguishable from anyone else with those permissions.</li>
+        <li><strong>20% of users have a blank role.</strong> Any role split silently drops a fifth of the base unless that bucket is reported.</li>
+        <li><strong>Multi-role users need normalizing.</strong> Values arrive as strings like Evaluator,Grants Manager and will not group correctly as-is.</li>
+        <li><strong>Functional Role is the job function field, and coverage looks thin.</strong> Maintained by Gainsight CS from Salesforce. Present on only two of thirteen users in the account sampled. Confirm coverage with CS before relying on it.</li>
+        <li><strong>Global context is empty</strong> on both page view and feature match events, for GLM and CommunitySuite. Anything we want in the event payload has to be added.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-label">What this does not solve</div>
+    <p>Role segmentation gives us permission level, not job function. It does not close the role gap in the usability study. The program officer research round still has to happen, because neither PX nor the post ship data can find those people for us.</p>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">One number to hand to CS or implementation</div>
+    <p>84 Board Members across a 20,000 user sample, 0.4%. Board reporting came up directly in the usability study, and board members finding the interface confusing appears in the investment brief. Either board members are not in GLM, they reach it by a path that is not instrumented, or the role is not being assigned. All three matter for the adoption breadth argument and none is answerable from PX.</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">03 &middot; Instrumentation</div>
+  <h2>What is tagged, and what <strong>is not</strong></h2>
+  <p class="section-intro">Of 240 tagged features in GLM/SLM, two mention the homepage. Everything else on this page is inferred from those two plus the workload grids beneath them.</p>
+
+  <div class="two-col">
+    <div class="card works">
+      <h3>Measurable today, no new work</h3>
+      <ul>
+        <li>Homepage reach by user and by account, daily or weekly</li>
+        <li>Per grid reach, trend, and share of homepage users</li>
+        <li>Account level adoption tables and per user visit counts</li>
+        <li>Feature ranking within a single account</li>
+        <li>Path analysis in the PX interface, including the homepage to reporting route and the homepage self loop</li>
+        <li>In-app surveys through PX engagements, the same mechanism that recruited the usability study</li>
+      </ul>
+    </div>
+    <div class="card breaks">
+      <h3>Not measurable until tags ship</h3>
+      <ul>
+        <li>Customize open rate and whether editing recurs after week one</li>
+        <li>Which widgets get added, in what order, and which get removed</li>
+        <li>Widgets per user</li>
+        <li>Drag between rows and columns, the friction point the study found</li>
+        <li>Old and new toggle, in both directions</li>
+        <li>Deep links out of individual widgets</li>
+        <li>Anything that distinguishes the new homepage from the old one</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-label">The only item with a deadline</div>
+    <p>PX feature tags bind to selectors. If the new markup ships without stable hooks, tagging becomes a scavenger hunt against generated class names. Stable <code>data-*</code> attributes on the nine elements above cost close to nothing during the build and cannot be added cheaply afterward. The <code>data-slot</code> pattern already in the prototype is the precedent.</p>
+    <p>Separately, the homepage to reporting and self loop baselines have to be captured against the current page. That is a pull rather than a build, so it can happen any time before launch, but it expires at launch.</p>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Reference</h2>
+  <button class="appendix-toggle" onclick="toggleAppendix('method')">
+    How these numbers were pulled
+    <span id="method-arrow">&#9660;</span>
+  </button>
+  <div class="appendix-content" id="method">
+    <h4>Source</h4>
+    <p>Gainsight PX, queried through the PX MCP connector on September 1, 2026. Product GLM/SLM, production environment, all channels. Reach figures cover the eight full weeks ending August 24, 2026, excluding the current partial week.</p>
+
+    <h4>Identifiers</h4>
+    <ul>
+      <li>Product key <code>AP-6PDODAIBA2KD-2-1</code>, group id <code>6PDODAIBA2KD</code></li>
+      <li>Admin Homepage module <code>26859e5c-1f2d-44f3-a126-9a53e9f3cf8b</code></li>
+      <li>Admin Homepage feature <code>3fe22b6a-f384-4e35-8898-25eab47354eb</code></li>
+      <li>Workload Grids module <code>f03d4857-e090-4a1a-bc87-f2ef218ba4f5</code></li>
+      <li>Application grid <code>ecbe5f3e-02b4-4083-aba8-bf882ce18e6d</code>, Follow Up grid <code>9ec2dd08-6ca3-447f-a7a3-d2db74dbfc19</code>, Approval grid <code>c796627e-2343-4f02-9235-5e62f9ec8102</code>, LOI grid <code>d7b26107-56de-4b7a-8f39-90ef85b7a089</code></li>
+    </ul>
+
+    <h4>Reach query shape</h4>
+    <p>Feature time series, swapping <code>featureId</code> per line and <code>groupByMetric</code> between USERS and ACCOUNTS.</p>
+    <pre>{
+  "filters": {
+    "featurePerformance": {
+      "featureId": "&lt;feature id&gt;",
+      "groupByMetric": "USERS",
+      "groupByType": "NONE",
+      "groupByKey": null,
+      "newReportLoaded": false,
+      "featureData": []
+    },
+    "dates": {
+      "type": "TRAILING",
+      "granularityType": "WEEK",
+      "trailingUnits": 8,
+      "compare": false
+    },
+    "properties": [ { "groupId": "6PDODAIBA2KD" } ]
+  }
+}</pre>
+
+    <h4>Role distribution query</h4>
+    <p>User list with server side aggregation, page size 1000, auto-paginated.</p>
+    <pre>aggregation: { "operation": "count", "groupBy": ["role"] }
+fetchAll: true, pageSize: 1000</pre>
+
+    <h4>Caveats on the numbers</h4>
+    <ul>
+      <li>The role sample hit the 20,000 record ceiling, so shares are of that sample rather than of the full tenant. It also spans GLM and SLM, and the blank bucket may include users from either.</li>
+      <li>Applicants are portal side and do not appear in Admin Homepage feature matches, so they inflate the role denominator relative to the homepage audience. Read role shares as a population picture, not as a homepage audience picture.</li>
+      <li>Grid share percentages use that week's homepage users as the denominator. A user who visits the homepage and a grid in different weeks is not double counted within a week but is across the eight week totals.</li>
+      <li>Grouping a module by its child features returned a server error, so the four grids were queried individually. Not a blocker, just slower.</li>
+      <li>Two accounts sampled for the role field check. Field presence is confirmed. Coverage rates across the base are not.</li>
+    </ul>
+
+    <h4>Open items</h4>
+    <ol>
+      <li>Is LOI disabled for most organizations, or enabled and ignored? Configuration data, not PX.</li>
+      <li>How complete is the Functional Role attribute across the base? Ask CS.</li>
+      <li>Why are there only 84 Board Members? Ask CS or implementation.</li>
+      <li>Who owns the tagging spec, and does it land in the wave one build?</li>
+      <li>Capture the homepage to reporting and self loop baselines from the PX interface before launch.</li>
+    </ol>
+  </div>
+</div>
+
+<div class="page-footer">
+  Foundant Technologies &middot; Product Design &middot; September 2026 &middot; Pre-launch reference for PI-28
+</div>
+
+<script>
+function toggleAppendix(id) {
+  var el = document.getElementById(id);
+  var arrow = document.getElementById(id + '-arrow');
+  var isOpen = el.classList.toggle('open');
+  arrow.innerHTML = isOpen ? '&#9650;' : '&#9660;';
+}
+</script>
+</body>
+</html>
