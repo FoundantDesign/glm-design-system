@@ -286,13 +286,20 @@ h6, .h6 { font-size: var(--h6-size); font-weight: var(--h-weight); }
   padding-bottom: .27rem;
   transition: all .2s linear;
 }
+/* UPDATE (focus-state consistency pass): the inset 1px ring is removed and
+   border-width pinned to 2px, so an input inside an input-group focuses
+   identically to a standalone one. This selector is more specific than
+   .form-control:focus, so the box-shadow:none in section 7d could never
+   reach it; it has to be repeated here. Same specificity trap as backlog
+   #24, resurfacing on focus treatment rather than border color. */
 .input-group > .form-control:focus {
+  border-width: 2px;
   border-color: var(--colors-borders-focused);
-  box-shadow: inset 0 0 0 1px var(--colors-borders-focused);
+  box-shadow: none;
 }
 
 /* ---------------------------------------------------------------------------
-   7f. AUTOCOMPLETE  — RATIFIED loader + org-search shadow removal (confirmed
+   7j. AUTOCOMPLETE  — RATIFIED loader + org-search shadow removal (confirmed
    in mdb-customizations.css), GAP for item/label color (proposed, stock MDB
    blue today). The input-group focus-border fix is a previously-flagged
    leftover (Section 6j) fixed here since this is where Autocomplete lives.
@@ -308,12 +315,16 @@ h6, .h6 { font-size: var(--h6-size); font-weight: var(--h-weight); }
 .autocomplete-label {
   --mdb-autocomplete-label-color: var(--colors-brand-primary-dark-blue);
 }
+/* UPDATE (focus-state consistency pass): widened from 1px to 2px. This rule
+   overrides a hardcoded #3b71ca left border in mdb-customizations.css and was
+   consistent when the field base border was 1px; the focus pass changed that
+   base underneath it, leaving one edge thinner than the other three. */
 .input-group > .autocomplete > .form-control:focus {
-  border-left: 1px solid var(--colors-borders-focused) !important;
+  border-left: 2px solid var(--colors-borders-focused) !important;
 }
 
 /* ---------------------------------------------------------------------------
-   7g. STEPPER  — GAP, DRAFT. Real MDB component (confirmed in mdb_min.css,
+   7k. STEPPER  — GAP, DRAFT. Real MDB component (confirmed in mdb_min.css,
    vertical-only — no .stepper-horizontal exists), no evidence GLM uses it in
    production anywhere. Proposed remap of state-icon colors from MDB's own
    stock -bg-subtle/-text-emphasis tokens to Foundant equivalents.
@@ -340,7 +351,7 @@ h6, .h6 { font-size: var(--h6-size); font-weight: var(--h-weight); }
 }
 
 /* ---------------------------------------------------------------------------
-   7h. VALIDATION — CURRENT  — RATIFIED. Confirmed live directly with
+   7l. VALIDATION — CURRENT  — RATIFIED. Confirmed live directly with
    engineering ("field level and bottom summary"), and confirmed in
    mdb-customizations.css. Both classes share this exact box styling.
    Deliberately NOT tokenized here to match reality — hardcoded hex is what
@@ -363,7 +374,7 @@ h6, .h6 { font-size: var(--h6-size); font-weight: var(--h-weight); }
 }
 
 /* ---------------------------------------------------------------------------
-   7i. VALIDATION — PROPOSED MODERNIZATION  — GAP, open for discussion.
+   7m. VALIDATION — PROPOSED MODERNIZATION  — GAP, open for discussion.
    Engineering: form completion is being modernized, not just ported forward,
    so this is offered as a starting point, not a decision. Reuses .alert-danger
    (already GAP/proposed, Alerts section) for the summary rather than a new
