@@ -147,7 +147,7 @@
   /* Heading scale — RATIFIED from the kitchen sink (confirmed correct scale).
      Supersedes the earlier gap: h1 is 1.75rem here, not production's stray 24px.
      Backlog: align production's h1{font-size:24px} to 1.75rem. */
-  --h1-size: 1.75rem;
+  --h1-size: 1.75rem;  /* 28px, see the conflict note at the h1 rules below */
   --h2-size: 1.25rem;
   --h3-size: 1rem;
   --h4-size: 0.875rem;
@@ -402,7 +402,43 @@ h6, .h6 { font-size: var(--h6-size); font-weight: var(--h-weight); }
 .modal-footer { --mdb-modal-footer-border-width: 0; }
 .modal-header .close { display: none; }
 
-h1 { font-size: 24px; }
+/* h1 sizing comes from --h1-size in the token block, as a single declaration.
+   A duplicate rule here previously set 24px while the token said 1.75rem, and
+   h1 rendered 24px only because this rule loaded later; reordering the file
+   would have silently changed every page title. That duplication is resolved.
+
+   28px, CONFIRMED against live production by devtools, and the foundation now
+   matches production's approach exactly rather than only its value.
+
+   Production declares:  h1 { font-size: var(--h1-size) }
+                         mdb-customizations.css:489
+   resolving to 28px, and winning over MDB's own
+   calc(1.375rem + 1.5vw) on h1, .h1 in mdb.min.css:18.
+
+   Two earlier readings in this file were wrong and are withdrawn:
+   - "h1 is 24px." That was true of the project snapshot, where line 210 reads
+     h1 { font-size: 24px } as a literal. It is not true of production, which
+     has moved to a token at line 489. The snapshot is stale, confirmed.
+   - "The visible title is 28px because an ID-scoped rule on span#PageTitle
+     overrides the h1." Wrong. The devtools cascade shows the winning
+     declaration on h1 itself; the span merely inherits. #PageTitle carries no
+     styling at all and is a JS hook only, the same pattern already found with
+     .kebab-btn. There is no unread stylesheet.
+
+   Worth recording the direction of travel: production moved a hardcoded 24px
+   literal to var(--h1-size). That is the round-trip working, a design-system
+   token reaching shipped CSS, and it is the first place this project has
+   caught it happening rather than assumed it. It also means the file line
+   numbers in this document are unreliable and should be re-derived, not
+   trusted, until UX-134 is done.
+
+   h1.OrganizationSelector is RATIFIED production (mdb-customizations.css:214)
+   and was previously missing from this file. */
+h1.OrganizationSelector {
+  color: var(--colors-primary-shades-50);
+  font-size: 32px;
+  font-weight: 700;
+}
 
 /* ---------------------------------------------------------------------------
    4. ENTITY SUMMARY PAGE CLASSES  — RATIFIED from GLM.Summary.css (condensed
