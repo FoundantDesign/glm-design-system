@@ -854,8 +854,133 @@ header .navbar-nav a.nav-link:active {
 .form-switch .form-check-input:checked:focus:before {
   box-shadow: none;
 }
+/* ---------------------------------------------------------------------------
+   7n. FEATURE TOGGLE (.toggle-on / .toggle-off)  — RATIFIED, mirrored
+   verbatim from mdb-customizations.css:474. This is a DIFFERENT COMPONENT
+   from the form switch in 7e, not an alternative implementation of it. It is
+   the affordance for opting into a previewed feature, and it is not a switch
+   at all: it is a Font Awesome icon (fa-regular fa-toggle-large-on) inside an
+   <a href>, colored through currentColor, with no track or knob to style.
+
+   Do not use it for form fields, and do not use the form switch for feature
+   previews. The two share a visual language on purpose; they do not share
+   behaviour.
+
+   .toggle-off deliberately sets no color. Production relies on inheriting
+   .text-muted from the parent container, so the same markup in a container
+   without that class renders body navy instead of gray. Reproduced as-is
+   rather than "fixed", per the rule that production is the source of truth
+   for what already exists. Logged as a fragility, not corrected here.
+
+   The interaction model has open accessibility questions (GET mutating state,
+   accessible name carried by title alone, no role="switch" or aria-checked).
+   See UX-116. Styling is ratified; the interaction model is not.
+   --------------------------------------------------------------------------- */
+.toggle-on {
+  color: var(--colors-semantic-success-0);
+  font-size: 25px;
+}
+.toggle-off {
+  font-size: 25px;
+}
+.toggle-off:hover {
+  color: unset;
+}
+
+/* UPDATE (UX-116, toggle switch standardization): reconstructed from the
+   production "Try the new Admin Dashboard" toggle. This is a geometry change,
+   not just a recolor. Stock MDB Material ships a 32x14 rail with a 20x20 knob
+   OVERHANGING it by 3px top and bottom; the target is a filled pill with the
+   knob contained inside. Height is capped at 20px to match the radio, which
+   mdb_min.css sets to 1.25rem square, so a switch and a radio in the same
+   column are the same height. Track 30x20, knob 16, inset 2, travel 12. The
+   track's margin-top is set to the radio's .125em rather than the switch's
+   own .3em for the same reason.
+
+   The earlier draft here set the checked knob to navy. Wrong direction: the
+   target keeps MDB's white knob in both states and moves the color onto the
+   TRACK. Superseded.
+
+   FIRST ATTEMPT WAS BROKEN, and it is worth recording why, because it is the
+   same specificity pattern as backlog #24 and #37 for the fourth time. That
+   attempt shrank the knob to 16px in a rule on
+   .form-switch .form-check-input:after  (0,2,1)
+   but MDB restates width and height in
+   .form-switch .form-check-input:checked[type=checkbox]:after  (0,3,1)
+   which is more specific. The knob therefore rendered 16px when off and 20px
+   when on, overflowing the track on the right and bottom in the on state.
+   Lesson: every geometry property MDB declares in its checked-state knob rule
+   has to be restated in the override at matching specificity, not just the
+   ones being changed. Dimensions are whole numbers to keep the arithmetic
+   checkable, and both the base and checked knob rules now declare width and
+   height explicitly so the two states cannot diverge again.
+
+   THIRD PASS, focus state. MDB resizes the knob AGAIN on focus, in two rules
+   that both compute to (0,3,1):
+     .form-check-input[type=checkbox]:focus:after  -> 14px, border-radius 0
+     .form-switch .form-check-input:focus:after    -> 20px, border-radius 50%
+   A knob rule at (0,2,1) loses to both, so on focus the knob reverted to 20px
+   while keeping the 2px inset, overflowing the track right and bottom. The
+   overrides below carry [type=checkbox] to reach (0,4,1) and are scoped under
+   .form-switch so a plain checkbox keeps MDB's own focus treatment, where the
+   14px square is the checkmark backdrop and not a knob at all.
+
+   Running tally: this component alone required geometry overrides at four
+   different specificity levels (base, checked, focus, checked+focus) because
+   MDB restates width and height at each one. Fifth occurrence of the pattern
+   behind backlog #24 and #37.
+
+   NOT YET VERIFIED VISUALLY. No .form-switch rule exists anywhere in
+   mdb-customizations.css or GLM_Summary.css, so the production toggle is
+   styled somewhere outside the files in this project. These dimensions come
+   from MDB's scale plus the screenshots, NOT from the real source. Check
+   against production before ratifying. See also UX-134. */
+.form-switch .form-check-input {
+  width: 1.875rem;
+  height: 1.25rem;
+  margin-top: 0.125em;
+  border-width: 0;
+  border-radius: var(--radius-round);
+  background-color: var(--colors-neutral-40);
+  background-image: none;
+}
+.form-switch .form-check-input:after {
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.125rem;
+  margin-left: 0.125rem;
+  background-color: var(--colors-neutral-100);
+}
+.form-switch .form-check-input:checked {
+  background-color: var(--colors-semantic-success-0);
+}
+/* Restates width, height and margin-top as well as the changed margin-left,
+   because MDB declares all of them at this higher specificity. */
 .form-switch .form-check-input:checked[type=checkbox]:after {
-  background-color: var(--colors-brand-primary-dark-blue);
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.125rem;
+  margin-left: 0.75rem;
+  background-color: var(--colors-neutral-100);
+}
+/* Focus keeps the same geometry as rest. Scoped to .form-switch so a plain
+   checkbox is untouched; [type=checkbox] lifts these to (0,4,1) and (0,5,1)
+   to clear MDB's two focus rules. */
+.form-switch .form-check-input[type=checkbox]:focus:after {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  margin-top: 0.125rem;
+  margin-left: 0.125rem;
+  background-color: var(--colors-neutral-100);
+}
+.form-switch .form-check-input:checked[type=checkbox]:focus:after {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  margin-top: 0.125rem;
+  margin-left: 0.75rem;
+  background-color: var(--colors-neutral-100);
 }
 
 /* ---------------------------------------------------------------------------
