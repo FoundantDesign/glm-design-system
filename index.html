@@ -112,7 +112,7 @@
   <div class="gl">Feedback</div>
   <a href="#modals">Modals</a><a href="#toasts">Toasts</a><a href="#tooltips">Tooltips</a><a href="#spinners">Spinners</a><a href="#progress">Progress</a>
   <div class="gl">Surfaces</div>
-  <a href="#offcanvas">Offcanvas</a><a href="#shadows">Shadows</a>
+  <a href="#offcanvas">Offcanvas</a><a href="#shadows">Shadows</a><a href="#page-patterns">Page Patterns</a>
 </nav>
 
 <!-- MAIN -->
@@ -1225,18 +1225,48 @@ header, footer {
 
 <!-- ═══ DROPDOWNS ═══ -->
 <section class="sec" id="dropdowns">
-  <h2>Dropdowns <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Contextual action menus.</p>
-  <div class="no-override-detail"><strong>No structural override detected.</strong></div>
-  <div style="position:relative;display:inline-block">
-    <button class="btn-t btn-tp btn-sm2">Actions <i class="fas fa-caret-down ms-1"></i></button>
-    <div style="position:absolute;top:100%;left:0;margin-top:4px;background:#fff;border:1px solid var(--t-bdr);border-radius:var(--r-md);box-shadow:var(--t-shadow);min-width:170px;z-index:10;overflow:hidden">
-      <a href="javascript:void(0)" style="display:block;padding:8px 14px;font-size:12px;color:var(--t-body);text-decoration:none"><i class="fas fa-edit me-2" style="width:14px;color:var(--g500)"></i>Edit</a>
-      <a href="javascript:void(0)" style="display:block;padding:8px 14px;font-size:12px;color:var(--t-body);text-decoration:none"><i class="fas fa-copy me-2" style="width:14px;color:var(--g500)"></i>Duplicate</a>
-      <div style="height:1px;background:var(--t-bdr);margin:3px 0"></div>
-      <a href="javascript:void(0)" style="display:block;padding:8px 14px;font-size:12px;color:var(--t-danger);text-decoration:none"><i class="fas fa-trash me-2" style="width:14px"></i>Delete</a>
+  <h2>Dropdowns <span class="status-tag status-default" title="No --mdb-dropdown-* remap in mdb-customizations.css or GLM_Summary.css">DEFAULT</span></h2>
+  <p class="sd">Contextual action menus. Stock MDB structurally, with one real Foundant state class bolted on beside it.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>MDB <code>.dropdown</code> wrapping a <code>.dropdown-toggle</code> trigger and a <code>.dropdown-menu</code> containing <code>.dropdown-item</code> links. Driven by <code>data-mdb-dropdown-init</code>.</td></tr>
+    <tr><th>Where</th><td>No <code>--mdb-dropdown-*</code> remap exists in either production file, so geometry, background, hover and text all resolve from <code>mdb.min.css</code>. The one production addition is <code>.dropdown-disabled</code> (<code>mdb-customizations.css</code>:440), which is a Foundant colour class, not an MDB remap.</td></tr>
+    <tr><th>When</th><td>Row actions in a grid, record-level actions in a page header, and the account menu in the navbar. Reach for it when several related actions would otherwise crowd the header.</td></tr>
+    <tr><th>Why</th><td>Nothing remapped, so the menu is MDB's own surface treatment. Item hover and the active state are MDB blue, which is the same family of problem tracked across the system.</td></tr>
+    <tr><th>How</th><td>Use <code>.dropdown-divider</code> to group unlike actions and put destructive actions last, below a divider. Apply <code>.dropdown-disabled</code> to an item that is present but unavailable rather than hiding it, so the menu does not change shape between states.</td></tr>
+  </table>
+
+  <h3>Default rendering</h3>
+  <p class="sd" style="border:none;margin:0 0 8px">Rendered statically with <code>.show</code> on the menu, since this reference page does not load MDB's JS bundle. The classes are the real ones MDB toggles at runtime.</p>
+  <div class="cr" style="display:block">
+    <div class="dropdown" style="position:relative;height:230px">
+      <button class="btn btn-primary dropdown-toggle" type="button">Actions</button>
+      <ul class="dropdown-menu show" style="position:static;display:block;margin-top:6px">
+        <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-pen-to-square me-2" aria-hidden="true"></i>Edit request</a></li>
+        <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-copy me-2" aria-hidden="true"></i>Duplicate</a></li>
+        <li><a class="dropdown-item dropdown-disabled" href="javascript:void(0)" aria-disabled="true"><i class="fa-light fa-paper-plane me-2" aria-hidden="true"></i>Send to review</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-trash-can me-2" aria-hidden="true"></i>Delete</a></li>
+      </ul>
     </div>
   </div>
+
+  <div class="code-block">&lt;div class="dropdown"&gt;
+  &lt;button class="btn btn-primary dropdown-toggle" type="button" data-mdb-dropdown-init&gt;Actions&lt;/button&gt;
+  &lt;ul class="dropdown-menu"&gt;
+    &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;&lt;i class="fa-light fa-pen-to-square me-2"&gt;&lt;/i&gt;Edit request&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class="dropdown-item dropdown-disabled" href="#" aria-disabled="true"&gt;Send to review&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;hr class="dropdown-divider"&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Delete&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+
+/* The only production rule for this component family. */
+.dropdown-disabled { color: var(--colors-primary-shades-40); }</div>
+
+  <p class="ratified-note"><code>.dropdown-disabled</code> is confirmed real, read from <code>mdb-customizations.css</code> line 440. The DEFAULT status is confirmed by absence: no <code>--mdb-dropdown-*</code> custom property is set anywhere in either production file. <code>.dropdown-item:focus-visible</code> is covered by the 2px navy outline in block 7f of the foundation CSS, which has not round-tripped into production yet.</p>
+
+  <p class="gap-note"><strong>Two findings.</strong> First, <code>.dropdown-disabled</code> is a colour-only class with no <code>pointer-events</code>, <code>aria-disabled</code> or <code>tabindex</code> handling, so an item styled as unavailable is still clickable and still reachable by keyboard. The markup above sets <code>aria-disabled</code> by hand; production does not. That is a behavioural gap, not a styling one. Second, this class was present in production but absent from <code>glm-prototype-foundation.css</code> until this rebuild, so prototypes rendered disabled dropdown items in the wrong colour. Now mirrored across. Three sibling classes had the same problem and are listed in the Tables section.</p>
 </section>
 
 <!-- ═══ CARDS ═══ -->
@@ -1329,7 +1359,7 @@ header, footer {
 .badge-success { background-color: var(--colors-semantic-success-50); color: var(--colors-brand-primary-dark-blue); border: 1px solid var(--colors-semantic-success-0); }
 .badge-warning { background-color: var(--colors-semantic-warning-50); color: var(--colors-brand-primary-dark-blue); border: 1px solid var(--colors-semantic-warning-0); }
 .badge-danger  { background-color: var(--colors-semantic-danger-50);  color: var(--colors-brand-primary-dark-blue); border: 1px solid var(--colors-semantic-danger-200); }
-.badge-secondary { background-color: var(--colors-neutral-70); color: var(--colors-neutral-30); border: 1px solid var(--colors-neutral-40); }</div>
+.badge-secondary { background-color: var(--colors-neutral-70); color: var(--colors-brand-primary-dark-blue); border: 1px solid var(--colors-neutral-40); }</div>
     <p class="gap-note">Production badges are genuinely pill-shaped and uppercase — confirmed ratified in <code>GLM.Summary.css</code>, not a stock-MDB leftover like Alerts/Tabs. This is a deliberate departure: rectangular (<code>--radius-sm</code>) since pills read too similar to pill buttons, uppercase/letter-spacing removed, and a saturated border added per variant for contrast against white. Text stays uniform navy for now — colored text per variant is a separate, still-open decision (see Colors section proposed ramps). Needs engineering review before it round-trips into <code>GLM.Summary.css</code>.</p>
   </div>
 
@@ -1413,31 +1443,127 @@ header, footer {
 
 <!-- ═══ TABLES ═══ -->
 <section class="sec" id="tables">
-  <h2>Tables <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Data tables.</p>
-  <div class="no-override-detail"><strong>No structural override detected:</strong> Table layout, hover states, and borders use MDB5 defaults. Your production app uses <code>ag-Grid</code> for complex tables (visible in computed styles as <code>--ag-*</code> variables), which is a separate component entirely.</div>
-  <div style="overflow-x:auto">
-    <table class="tbl-t">
-      <thead><tr><th>#</th><th>Organization</th><th>Program</th><th>Amount</th><th>Status</th></tr></thead>
+  <h2>Tables <span class="status-tag status-overridden" title="--mdb-table-bg remapped in mdb-customizations.css:133">OVERRIDDEN</span></h2>
+  <p class="sd">Tabular data. One remap on the MDB table, three supporting production classes, and one large open decision that this section deliberately does not answer.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>MDB <code>.table</code> on a real <code>&lt;table&gt;</code> with <code>&lt;thead&gt;</code> and <code>&lt;tbody&gt;</code>. Three production companions: <code>.table-action-button</code> for clickable cell icons, <code>.datatable</code> for MDB's sortable table, and <code>.settings-overview-table</code> for the Foundation Summary layout.</td></tr>
+    <tr><th>Where</th><td><code>mdb-customizations.css</code>:133 sets <code>--mdb-table-bg</code>. Line 518 sets <code>.table-action-button</code>. Line 561 positions the <code>.datatable</code> sort icon. <code>GLM_Summary.css</code>:369 defines <code>.settings-overview-table</code>.</td></tr>
+    <tr><th>When</th><td>Use the plain <code>.table</code> for short, static, read-only lists that fit on screen. Anything sortable, filterable, paginated or wide is AG Grid territory in production, which is a different component with a different theme.</td></tr>
+    <tr><th>Why</th><td>Only the background is remapped, so borders, striping, hover and spacing are all MDB defaults. The Foundation Summary table is the one place a Foundant-specific table treatment exists, and it is scoped to that page rather than generalised.</td></tr>
+    <tr><th>How</th><td>Add <code>.table-hover</code> only when rows are clickable, since hover implies affordance. Right-align currency. Put status in a badge, not bare text, and follow the status-to-semantic mapping once UX-131 ratifies one.</td></tr>
+  </table>
+
+  <h3>Plain table</h3>
+  <div class="cr" style="display:block">
+    <table class="table" style="max-width:760px">
+      <thead>
+        <tr><th scope="col">Organization</th><th scope="col">Program</th><th scope="col" class="text-end">Amount</th><th scope="col">Status</th></tr>
+      </thead>
       <tbody>
-        <tr><td>1</td><td>Community Health Alliance</td><td>Health Equity Fund</td><td>$75,000</td><td><span class="badge-t bs">Approved</span></td></tr>
-        <tr><td>2</td><td>Rural Education Network</td><td>Youth Development</td><td>$50,000</td><td><span class="badge-t bw">Pending</span></td></tr>
-        <tr><td>3</td><td>Arts Council of Metro</td><td>Cultural Enrichment</td><td>$25,000</td><td><span class="badge-t bd">Denied</span></td></tr>
+        <tr><td>Community Health Alliance</td><td>Health Equity Fund</td><td class="text-end">$75,000</td><td><span class="badge badge-success">Approved</span></td></tr>
+        <tr><td>Rural Education Network</td><td>Youth Development</td><td class="text-end">$50,000</td><td><span class="badge badge-warning">Pending</span></td></tr>
+        <tr><td>Arts Council of Metro</td><td>Cultural Enrichment</td><td class="text-end">$25,000</td><td><span class="badge badge-danger">Denied</span></td></tr>
       </tbody>
     </table>
   </div>
+
+  <div class="code-block">&lt;table class="table"&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th scope="col"&gt;Organization&lt;/th&gt;&lt;th scope="col" class="text-end"&gt;Amount&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td&gt;Community Health Alliance&lt;/td&gt;&lt;td class="text-end"&gt;$75,000&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+/* The single remap. Everything else on .table is stock MDB. */
+.table { --mdb-table-bg: var(--colors-neutral-100); }</div>
+
+  <h3>Settings overview table</h3>
+  <p class="sd" style="border:none;margin:0 0 8px">A real, page-scoped Foundant table treatment from the Foundation Summary. Fixed layout, 13px, divider-coloured borders, navy bold headers on <code>--colors-neutral-90</code>.</p>
+  <div class="cr" style="display:block">
+    <table class="settings-overview-table table" style="max-width:620px">
+      <thead><tr><th scope="col">Setting</th><th scope="col">Value</th></tr></thead>
+      <tbody>
+        <tr><td>Fiscal year start</td><td>July 1</td></tr>
+        <tr><td>Default currency</td><td>USD</td></tr>
+        <tr><td>Applicant portal</td><td><span class="settings-overview-overridden">Overridden</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="code-block">.settings-overview-table { table-layout: fixed; width: 100%; }
+.settings-overview-table th, .settings-overview-table td {
+  vertical-align: top; padding: 12px 16px;
+  border-color: var(--colors-borders-divider);
+  font-size: 13px; line-height: 1.5; word-break: break-word;
+}
+.settings-overview-table th {
+  font-weight: 700; color: var(--colors-brand-primary-dark-blue);
+  background-color: var(--colors-neutral-90);
+}
+.settings-overview-overridden { color: var(--colors-semantic-success-30); }</div>
+
+  <p class="ratified-note">All four rules above are confirmed real, read from <code>mdb-customizations.css</code> lines 133, 518 and 561 and <code>GLM_Summary.css</code> line 369. None was present in <code>glm-prototype-foundation.css</code> before this rebuild except <code>--mdb-table-bg</code>; the other three have now been mirrored across so prototypes match production.</p>
+
+  <div class="gap-flag">GAP — AG Grid theme is an open decision, deliberately not answered here</div>
+  <p class="gap-note"><strong>This section covers the MDB table only.</strong> Production renders every substantial data grid with AG Grid, shipping the stock Alpine theme with nothing Foundant applied. A draft <code>.ag-theme-foundant</code> exists in <code>glm-prototype-foundation.css</code> but has not been WCAG validated or reviewed by engineering, so it is not documented, not demonstrated, and not recommended here. Choosing a direction is the largest single gap in the design system and belongs to the team, not to this page. Tracked as UX-129.</p>
+
+  <p class="gap-note"><strong>Second finding, the plain table is almost entirely unstyled.</strong> One remapped custom property out of the roughly thirty MDB exposes on <code>.table</code> means border colour, striping, hover, header weight and cell padding all come from MDB rather than from Foundant tokens. The Foundation Summary table shows what a Foundant table actually looks like, but it is scoped to one page under a bespoke class rather than generalised into the component. Whether to promote that treatment to <code>.table</code> is worth deciding alongside UX-129, since the answer for MDB tables and AG Grid should be visually consistent.</p>
 </section>
 
 <!-- ═══ LIST GROUPS ═══ -->
 <section class="sec" id="list-groups">
-  <h2>List Groups <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Grouped list items.</p>
-  <div class="no-override-detail"><strong>No override detected.</strong></div>
-  <div style="max-width:280px;border:1px solid var(--t-bdr);border-radius:var(--r-md);overflow:hidden">
-    <div style="padding:8px 14px;display:flex;justify-content:space-between;align-items:center;background:var(--t-primary-bg);font-size:13px;font-weight:500;color:var(--t-primary)">Applications <span class="badge-t bp">14</span></div>
-    <div style="padding:8px 14px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--t-bdr);font-size:13px">Under Review <span class="badge-t bw">3</span></div>
-    <div style="padding:8px 14px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--t-bdr);font-size:13px">Approved <span class="badge-t bs">8</span></div>
+  <h2>List Groups <span class="status-tag status-default" title="No unscoped .list-group rule in either production file">DEFAULT</span></h2>
+  <p class="sd">Grouped list items. The generic component is stock MDB; the only production styling is scoped to the record side panel and documented under Sidenav.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>MDB <code>.list-group</code> wrapping <code>.list-group-item</code>. Interactive lists add <code>.list-group-item-action</code> to each item and render them as <code>&lt;a&gt;</code> or <code>&lt;button&gt;</code>.</td></tr>
+    <tr><th>Where</th><td>No unscoped <code>.list-group</code> rule exists in <code>mdb-customizations.css</code> or <code>GLM_Summary.css</code>. Every production rule is prefixed <code>.side-panel</code> (<code>GLM_Summary.css</code>:286 onward, plus a mobile block at :128). Outside the side panel the component is stock MDB.</td></tr>
+    <tr><th>When</th><td>A short, scannable set of peer items where each row is one thing: a navigation list, a summary count list, a set of linked records. Not for tabular data with several columns, which is a table.</td></tr>
+    <tr><th>Why</th><td>Nothing remapped at the generic level, so border colour, radius, padding and the active state all come from MDB. The active state is MDB blue.</td></tr>
+    <tr><th>How</th><td>Only add <code>.list-group-item-action</code> when the row actually navigates or acts, since it introduces hover and focus affordances that imply clickability. Use <code>.list-group-flush</code> inside a card so the group does not double up on the card's own border.</td></tr>
+  </table>
+
+  <h3>Default rendering</h3>
+  <div class="cr" style="display:block">
+    <ul class="list-group" style="max-width:340px">
+      <li class="list-group-item d-flex justify-content-between align-items-center">Applications <span class="badge badge-secondary">14</span></li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">Under review <span class="badge badge-warning">3</span></li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">Approved <span class="badge badge-success">8</span></li>
+    </ul>
   </div>
+
+  <div class="code-block">&lt;ul class="list-group"&gt;
+  &lt;li class="list-group-item d-flex justify-content-between align-items-center"&gt;
+    Applications &lt;span class="badge badge-secondary"&gt;14&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+/* Stock MDB. No unscoped .list-group rule exists in production. */</div>
+
+  <h3>Side panel variant</h3>
+  <p class="sd" style="border:none;margin:0 0 8px">The one place production styles this component. Borders removed, 16px text, flex alignment, light-blue active row, neutral-70 hover. Demonstrated in full in the Sidenav section; shown here so the contrast with the default above is visible in one place.</p>
+
+  <div class="code-block">/* GLM_Summary.css — scoped to .side-panel, not to .list-group */
+.side-panel .list-group-item:not(.ft-label) {
+  border: 0;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  --mdb-list-group-action-hover-bg: var(--colors-neutral-70);
+}
+.side-panel .list-group-item.active {
+  background-color: var(--colors-brand-secondary-light-blue);
+  font-weight: bold;
+  color: var(--mdb-list-group-color);
+}
+.side-panel .list-group-item svg { width: 20px; }</div>
+
+  <p class="ratified-note">The side-panel rules are confirmed real, read from <code>GLM_Summary.css</code> lines 286 to 302. The DEFAULT status for the generic component is confirmed by absence: a search of both production files returns no <code>.list-group</code> selector that is not prefixed with <code>.side-panel</code>.</p>
+
+  <p class="gap-note"><strong>Finding, the only Foundant list-group treatment is locked inside one context.</strong> Everything that makes the side-panel list look like GLM (borderless rows, 16px text, light-blue active state, neutral hover) is written against a <code>.side-panel</code> ancestor. Any list group elsewhere in the app gets MDB's defaults instead, including the MDB blue active state. That is two different-looking list groups in one product, and the better-looking one is unreachable. Worth deciding whether the side-panel treatment should be promoted to the component and the side panel keep only its true layout differences. Related to UX-138, since the generic active state is another MDB blue.</p>
 </section>
 
 <!-- ═══ ACCORDIONS ═══ -->
@@ -1502,14 +1628,54 @@ header, footer {
 
 <!-- ═══ TIMELINE ═══ -->
 <section class="sec" id="timeline">
-  <h2>Timeline <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Activity history.</p>
-  <div class="no-override-detail"><strong>No override detected:</strong> MDB5 timeline pattern with color-only changes from theme.</div>
-  <div style="max-width:420px;padding-left:22px;border-left:2px solid var(--t-bdr)">
-    <div style="position:relative;padding-bottom:16px"><div style="position:absolute;left:-29px;top:2px;width:14px;height:14px;border-radius:50%;background:var(--t-success);border:2px solid #fff"></div><strong style="font-size:13px">Approved</strong><p style="font-size:11px;color:var(--g500);margin:3px 0 0">Apr 28, 2026</p></div>
-    <div style="position:relative;padding-bottom:16px"><div style="position:absolute;left:-29px;top:2px;width:14px;height:14px;border-radius:50%;background:var(--t-primary);border:2px solid #fff"></div><strong style="font-size:13px">Review Complete</strong><p style="font-size:11px;color:var(--g500);margin:3px 0 0">Apr 22, 2026</p></div>
-    <div style="position:relative"><div style="position:absolute;left:-29px;top:2px;width:14px;height:14px;border-radius:50%;background:var(--g300);border:2px solid #fff"></div><strong style="font-size:13px;color:var(--g500)">Submitted</strong><p style="font-size:11px;color:var(--g400);margin:3px 0 0">Mar 15, 2026</p></div>
+  <h2>Timeline <span class="status-tag status-default" title="No .timeline rule in either production file; no confirmed production usage">DEFAULT</span></h2>
+  <p class="sd">Chronological activity history. MDB ships a real timeline component; there is no evidence GLM uses it, and no Foundant styling for it anywhere.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>MDB <code>.timeline</code> as a <code>&lt;ul&gt;</code> of <code>.timeline-item</code> entries, each pairing a marker on the rail with a content block.</td></tr>
+    <tr><th>Where</th><td>No <code>.timeline</code> rule exists in <code>mdb-customizations.css</code> or <code>GLM_Summary.css</code>, and no confirmed instance of the component appears in the production markup sampled so far.</td></tr>
+    <tr><th>When</th><td>Request history where the sequence and the gaps between events both matter: submitted, reviewed, board decision, awarded, reported. Not for a plain list of records with dates, which is a list group or a table.</td></tr>
+    <tr><th>Why</th><td>Nothing remapped, because nothing has been styled. Marker colour, rail colour and spacing all come from MDB.</td></tr>
+    <tr><th>How</th><td>Order newest first for an audit trail people scan for the latest change, oldest first for a process people follow forward. Pick one per context and stay with it, since a reversed timeline is easy to misread.</td></tr>
+  </table>
+
+  <h3>Default rendering</h3>
+  <p class="sd" style="border:none;margin:0 0 8px">MDB's real timeline markup, rendered statically. Semantic marker colours are shown using Foundant tokens to illustrate intent; production has no such rule, so this is a demonstration rather than a documented treatment.</p>
+  <div class="cr" style="display:block">
+    <ul class="timeline" style="max-width:460px;list-style:none;padding-left:28px;border-left:2px solid var(--colors-borders-divider);margin:0">
+      <li class="timeline-item" style="position:relative;padding-bottom:20px">
+        <span style="position:absolute;left:-35px;top:2px;width:14px;height:14px;border-radius:50%;background:var(--colors-semantic-success-0);border:2px solid var(--colors-neutral-100)"></span>
+        <h3 style="font-size:14px;margin:0">Approved</h3>
+        <p style="font-size:12px;color:var(--colors-neutral-30);margin:3px 0 0">28 April 2026</p>
+      </li>
+      <li class="timeline-item" style="position:relative;padding-bottom:20px">
+        <span style="position:absolute;left:-35px;top:2px;width:14px;height:14px;border-radius:50%;background:var(--colors-brand-primary-dark-blue);border:2px solid var(--colors-neutral-100)"></span>
+        <h3 style="font-size:14px;margin:0">Review complete</h3>
+        <p style="font-size:12px;color:var(--colors-neutral-30);margin:3px 0 0">22 April 2026</p>
+      </li>
+      <li class="timeline-item" style="position:relative">
+        <span style="position:absolute;left:-35px;top:2px;width:14px;height:14px;border-radius:50%;background:var(--colors-neutral-50);border:2px solid var(--colors-neutral-100)"></span>
+        <h3 style="font-size:14px;margin:0">Submitted</h3>
+        <p style="font-size:12px;color:var(--colors-neutral-30);margin:3px 0 0">15 March 2026</p>
+      </li>
+    </ul>
   </div>
+
+  <div class="code-block">&lt;ul class="timeline"&gt;
+  &lt;li class="timeline-item"&gt;
+    &lt;h3&gt;Approved&lt;/h3&gt;
+    &lt;p&gt;28 April 2026&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+/* No production rule exists. The marker and rail colours in the demo above
+   are illustrative, applied inline, and are NOT a ratified treatment.
+   Do not lift them into production. */</div>
+
+  <p class="ratified-note">DEFAULT is confirmed by absence in both production files. Unlike most DEFAULT components, this one is not merely unstyled: there is no confirmed evidence it is used in GLM at all. Treated the same way as Stepper, which has the same status.</p>
+
+  <div class="gap-flag">GAP — no production rule, and no confirmed production usage</div>
+  <p class="gap-note"><strong>Two things to settle before this becomes a real section.</strong> First, is the timeline actually used anywhere in GLM today? The icon inventory shows the same limitation, being drawn from a single page sample, so absence here means not yet observed rather than not used. Second, if request history is going to use it, the marker colours need a decision: mapping markers onto semantic tokens repeats the badge status-to-semantic question in UX-131, and it should get the same answer rather than a separate one. The inline colours in the demo above deliberately use tokens rather than literals, but they are a sketch of intent, not a proposal.</p>
 </section>
 
 <!-- ═══ INPUTS ═══ -->
@@ -2367,31 +2533,244 @@ header, footer {
 
 <!-- ═══ OFFCANVAS ═══ -->
 <section class="sec" id="offcanvas">
-  <h2>Offcanvas / Slide-over <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Slide-in panel.</p>
-  <div class="no-override-detail"><strong>No structural override detected.</strong></div>
-  <div style="width:270px;height:260px;background:#fff;border:1px solid var(--t-bdr);border-radius:0 var(--r-md) var(--r-md) 0;box-shadow:var(--t-shadow-lg)">
-    <div style="padding:12px 16px;border-bottom:1px solid var(--t-bdr);display:flex;justify-content:space-between;align-items:center"><span style="font-family:var(--t-heading);font-weight:var(--t-h-weight);font-size:var(--t-h4-size)">Filters</span><button style="background:none;border:none;font-size:16px;color:var(--g400);cursor:pointer">&times;</button></div>
-    <div style="padding:14px 16px;font-size:13px">
-      <p style="font-weight:500;margin:0 0 6px;font-size:12px">Status</p>
-      <div class="form-check"><input class="form-check-input" type="checkbox" checked><label class="form-check-label" style="font-size:12px">Active</label></div>
-      <div class="form-check"><input class="form-check-input" type="checkbox"><label class="form-check-label" style="font-size:12px">Closed</label></div>
-      <div style="margin-top:16px"><button class="btn-t btn-tp" style="width:100%;font-size:12px;padding:8px">Apply</button></div>
+  <h2>Offcanvas / Slide-over <span class="status-tag status-default" title="No .offcanvas rule in mdb-customizations.css or GLM_Summary.css">DEFAULT</span></h2>
+  <p class="sd">A panel that slides in over the page. Stock MDB with no Foundant styling, and a naming collision worth settling before it gets documented further.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>MDB <code>.offcanvas</code> with a direction class (<code>.offcanvas-end</code>, <code>.offcanvas-start</code>, <code>.offcanvas-top</code>, <code>.offcanvas-bottom</code>), containing <code>.offcanvas-header</code> with an <code>.offcanvas-title</code> and <code>.btn-close</code>, plus <code>.offcanvas-body</code>.</td></tr>
+    <tr><th>Where</th><td>No <code>.offcanvas</code> rule exists in <code>mdb-customizations.css</code> or <code>GLM_Summary.css</code>. Everything resolves from <code>mdb.min.css</code>.</td></tr>
+    <tr><th>When</th><td>Currently undecided. The working position is informational or read-only content, in-context actions such as downloading or linking to a record, and menus. Blocking decisions and field edits belong in a modal. That rule is drafted, not ratified, and is tracked as UX-146.</td></tr>
+    <tr><th>Why</th><td>Nothing remapped. Header border, body padding, panel width and the backdrop are all MDB defaults, so a slide-out does not currently look like the rest of GLM.</td></tr>
+    <tr><th>How</th><td>Use <code>.offcanvas-end</code> for record-adjacent detail, since it opens beside the content it relates to rather than displacing the reading position. Give the panel an <code>aria-labelledby</code> pointing at its title.</td></tr>
+  </table>
+
+  <h3>Default rendering</h3>
+  <p class="sd" style="border:none;margin:0 0 8px">Rendered statically with <code>.show</code> and positioning neutralised, since this page does not load MDB's JS bundle. The classes are the real ones MDB toggles at runtime.</p>
+  <div class="cr" style="display:block">
+    <div class="offcanvas offcanvas-end show" style="position:relative;visibility:visible;transform:none;width:300px;height:280px;border:1px solid var(--colors-borders-divider)">
+      <div class="offcanvas-header">
+        <h3 class="offcanvas-title">Filters</h3>
+        <button type="button" class="btn-close" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <p class="ft-label">Status</p>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="oc-active" checked>
+          <label class="form-check-label" for="oc-active">Active</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="oc-closed">
+          <label class="form-check-label" for="oc-closed">Closed</label>
+        </div>
+        <button class="btn btn-primary w-100 mt-3">Apply</button>
+      </div>
     </div>
   </div>
+
+  <div class="code-block">&lt;div class="offcanvas offcanvas-end" tabindex="-1" id="filters" aria-labelledby="filtersTitle"&gt;
+  &lt;div class="offcanvas-header"&gt;
+    &lt;h3 class="offcanvas-title" id="filtersTitle"&gt;Filters&lt;/h3&gt;
+    &lt;button type="button" class="btn-close" data-mdb-dismiss="offcanvas" aria-label="Close"&gt;&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class="offcanvas-body"&gt;...&lt;/div&gt;
+&lt;/div&gt;
+
+/* Stock MDB. No .offcanvas rule exists in production. */</div>
+
+  <p class="ratified-note">DEFAULT is confirmed by absence: no <code>.offcanvas</code> selector appears in either production file. The <code>.btn-close</code> focus outline is covered by block 7f of the foundation CSS, which has not round-tripped into production yet. <code>.ft-label</code> in the demo is a real production class.</p>
+
+  <div class="gap-flag">GAP — usage rule drafted not ratified, and a naming collision to settle</div>
+  <p class="gap-note"><strong>The name is already taken.</strong> <code>.side-panel</code> exists in production as the fixed 275px record navigation panel, which is permanent page furniture. A slide-over is a transient overlay. Calling both a side panel will produce a reference page that describes two unrelated patterns with one word, so the vocabulary needs settling before either gets written up properly. Tracked as UX-146.</p>
+
+  <p class="gap-note"><strong>Second finding, worth checking rather than assuming.</strong> If slide-outs are already appearing on modernised pages, they are either running entirely on stock MDB or being styled in page-level <code>&lt;style&gt;</code> blocks, because nothing in the two production CSS files touches them. The second case matters more than it sounds: page-level style blocks load before <code>mdb.min.css</code> and lose at equal specificity, which is a real source of styling that silently does not apply. An inventory of current slide-out usage would answer it and would also give UX-146 a factual base rather than an assumed one.</p>
 </section>
 
 <!-- ═══ SHADOWS ═══ -->
 <section class="sec" id="shadows">
-  <h2>Shadows <span class="wip-tag">WIP — not yet rebuilt</span></h2>
-  <p class="sd">Elevation levels.</p>
-  <div class="no-override-detail"><strong>No override detected:</strong> Shadow values match MDB5 defaults.</div>
+  <h2>Shadows <span class="status-tag status-overridden" title="Real shadow values in mdb-customizations.css lines 152, 206, 451, 457; shadows removed from buttons and cards">OVERRIDDEN</span></h2>
+  <p class="sd">Elevation. Production uses shadow sparingly and deliberately: it is removed from components MDB shadows by default, and added back in exactly two places. No shadow token exists.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>Two real production shadow values. A page-chrome shadow on <code>header, footer</code> and <code>.page-container</code>, and a directional inset on <code>.left-view-selected</code> / <code>.right-view-selected</code>. Everywhere else, shadow is switched off.</td></tr>
+    <tr><th>Where</th><td><code>mdb-customizations.css</code> lines 152 and 206 carry the chrome value; lines 451 and 457 carry the two directional insets. Shadow is set to <code>none</code> on buttons (<code>--mdb-btn-box-shadow</code>), on the autocomplete dropdown, and on focused form controls.</td></tr>
+    <tr><th>When</th><td>Use the chrome shadow only for structural page furniture that separates a surface from the page behind it. Do not add shadow to a card, button or badge to make it stand out; that is what spacing and borders are for in this system.</td></tr>
+    <tr><th>Why</th><td>GLM reads as a flat, bordered interface rather than a layered Material one. Removing MDB's default shadows is the larger half of the decision, and it is deliberate rather than incidental.</td></tr>
+    <tr><th>How</th><td>The inset directional shadows are a split-view affordance: the selected side casts a shadow toward the divider, so the two panes read as overlapping rather than abutting. Mirror the direction to match which side is selected.</td></tr>
+  </table>
+
+  <h3>Page chrome shadow</h3>
   <div class="cr">
-    <div style="width:100px;height:64px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--g500);border-radius:var(--r-sm)">None</div>
-    <div style="width:100px;height:64px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--g500);border-radius:var(--r-sm);box-shadow:var(--t-shadow-sm)">Small</div>
-    <div style="width:100px;height:64px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--g500);border-radius:var(--r-sm);box-shadow:var(--t-shadow)">Default</div>
-    <div style="width:100px;height:64px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--g500);border-radius:var(--r-sm);box-shadow:var(--t-shadow-lg)">Large</div>
+    <div style="width:220px;height:80px;background:var(--colors-neutral-100);border-radius:4px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.15), 0 1px 5px rgba(0,0,0,0.075);display:flex;align-items:center;justify-content:center;font-size:12px">header, footer, .page-container</div>
+    <div style="width:220px;height:80px;background:var(--colors-neutral-100);border:1px solid var(--colors-borders-divider);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--colors-neutral-30)">Everything else, no shadow</div>
   </div>
+
+  <div class="code-block">/* The one elevation value in the system, used verbatim in two rules. */
+header, footer {
+  background-color: var(--colors-neutral-100);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 5px rgba(0, 0, 0, 0.075);
+  font-size: 14px;
+}
+.page-container {
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 5px rgba(0, 0, 0, 0.075);
+  padding: 15px;
+}</div>
+
+  <h3>Split-view directional inset</h3>
+  <div class="cr" style="display:block">
+    <div style="display:flex;max-width:420px;border:1px solid var(--colors-borders-divider);border-radius:4px;overflow:hidden">
+      <div class="left-view-selected" style="flex:1;padding:20px 16px;font-size:13px;background:var(--colors-brand-secondary-light-blue);color:var(--colors-semantic-info-0);box-shadow:inset -6px 0 6px -5px rgba(0,0,0,0.25)">Left selected</div>
+      <div style="flex:1;padding:20px 16px;font-size:13px;background:var(--colors-neutral-100)">Unselected</div>
+    </div>
+  </div>
+
+  <div class="code-block">.left-view-selected {
+  background-color: var(--colors-brand-secondary-light-blue);
+  color: var(--colors-semantic-info-0);
+  box-shadow: inset -6px 0 6px -5px rgba(0, 0, 0, 0.25);
+}
+.right-view-selected {
+  background-color: var(--colors-brand-secondary-light-blue);
+  color: var(--colors-semantic-info-0);
+  box-shadow: inset 6px 0 6px -5px rgba(0, 0, 0, 0.25);
+}
+
+/* Removed, deliberately, across the system: */
+.btn { --mdb-btn-box-shadow: none; --mdb-btn-box-shadow-state: none; }
+.autocomplete-dropdown { --mdb-autocomplete-dropdown-box-shadow: none; }
+.form-control:focus { box-shadow: none; }</div>
+
+  <p class="ratified-note">All values above are confirmed real, read from <code>mdb-customizations.css</code> lines 152, 206, 451 and 457, and from the shadow-suppression rules already documented in the Buttons, Text Inputs and Autocomplete sections.</p>
+
+  <div class="gap-flag">GAP — no shadow token exists, and the chrome value is duplicated verbatim</div>
+  <p class="gap-note"><strong>Finding, one value written twice as a literal.</strong> The chrome shadow appears in full in both <code>header, footer</code> and <code>.page-container</code>, with no token behind it. Any change has to be made in two places and kept in sync by hand, and the raw <code>rgba()</code> values are hardcoded colour, which the governing principle otherwise forbids. A <code>--shadow-chrome</code> token would fix both problems at once. The directional insets are a second pair with the same duplication, differing only in sign. Not proposed here as a specific token name, since the radius and spacing scales use a naming convention that should be extended deliberately rather than guessed at.</p>
+
+  <p class="gap-note"><strong>Correction.</strong> An earlier pass in this session reported that the Shadows section was substantially rebuilt and only missing its usage table. That was wrong: it was measured by character count and the measurement accidentally captured the page footer and scripts that follow it, since Shadows is the last section on the page. The section was in fact still a stub, and has now been rebuilt from production evidence. UX-164 was filed against the incorrect reading and needs rescoping or closing as a duplicate of UX-122.</p>
+</section>
+
+<section class="sec" id="page-patterns">
+  <h2>Page Patterns <span class="status-tag status-overridden" title="All classes below are real, from GLM_Summary.css">OVERRIDDEN</span></h2>
+  <p class="sd">Compound layouts assembled from several real production classes. These are not MDB components; they are Foundant-authored patterns that had ratified CSS and no demo anywhere until now.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>Four page-level patterns: the record header detail bar, stat tiles, the summary card row, and the icon wrapper. Each is a small set of cooperating classes rather than a single component.</td></tr>
+    <tr><th>Where</th><td><code>GLM_Summary.css</code> lines 167 to 274. All are real, all are already mirrored in <code>glm-prototype-foundation.css</code>, and none had a demo in this reference before now.</td></tr>
+    <tr><th>When</th><td>Record views and summary pages. The detail bar sits under a record title; data cards sit above content as a stat strip; the summary card row lays out the body of a summary page.</td></tr>
+    <tr><th>Why</th><td>These are the patterns most likely to be rebuilt from scratch by someone who could not find them, which produces near-duplicates that drift. Documenting them is the cheapest drift prevention available.</td></tr>
+    <tr><th>How</th><td>Use <code>.detail-item-truncate</code> only on values that can run long, such as organization names, since it caps width at 240px and ellipsises. Reach for <code>.data-card-lg</code> when a tile carries a large number that needs breathing room.</td></tr>
+  </table>
+
+  <h3>Record header detail bar</h3>
+  <p class="sd" style="border:none;margin:0 0 8px">Metadata under a record title, divided by hairlines. The first item drops its left border and padding so the row aligns flush with the heading above it.</p>
+  <div class="cr" style="display:block">
+    <div style="max-width:720px">
+      <h3 style="margin:0">Community Health Alliance</h3>
+      <div class="detail-bar">
+        <div class="detail-item">
+          <span class="detail-label">Request ID</span>
+          <span class="detail-value">GLM-2026-0418</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Program</span>
+          <span class="detail-value"><a href="javascript:void(0)">Health Equity Fund</a></span>
+        </div>
+        <div class="detail-item detail-item-truncate">
+          <span class="detail-label">Organization</span>
+          <span class="detail-value">Community Health Alliance of Greater Metro Region</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Decision date</span>
+          <span class="detail-value empty">Not set</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="code-block">&lt;div class="detail-bar"&gt;
+  &lt;div class="detail-item"&gt;
+    &lt;span class="detail-label"&gt;Request ID&lt;/span&gt;
+    &lt;span class="detail-value"&gt;GLM-2026-0418&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class="detail-item detail-item-truncate"&gt;
+    &lt;span class="detail-label"&gt;Organization&lt;/span&gt;
+    &lt;span class="detail-value"&gt;Community Health Alliance of Greater Metro Region&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class="detail-item"&gt;
+    &lt;span class="detail-label"&gt;Decision date&lt;/span&gt;
+    &lt;span class="detail-value empty"&gt;Not set&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+/* GLM_Summary.css:187 onward. .detail-value.empty is the real empty state. */</div>
+
+  <h3>Data cards</h3>
+  <p class="sd" style="border:none;margin:0 0 8px">Stat tiles in an auto-fitting grid that reflows at a 225px minimum with no media query. <code>.data-card-lg</code> adds padding for tiles carrying a large figure.</p>
+  <div class="cr" style="display:block">
+    <div class="data-card-row" style="max-width:760px;margin-top:0">
+      <div class="data-card data-card-lg">
+        <span class="fs-6">Total requested</span>
+        <span class="h5">$1,248,000</span>
+      </div>
+      <div class="data-card data-card-lg">
+        <span class="fs-6">Awarded to date</span>
+        <span class="h5">$842,500</span>
+      </div>
+      <div class="data-card data-card-lg">
+        <span class="fs-6">Open requests</span>
+        <span class="h5">14</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="code-block">&lt;div class="data-card-row"&gt;
+  &lt;div class="data-card data-card-lg"&gt;
+    &lt;span class="fs-6"&gt;Total requested&lt;/span&gt;
+    &lt;span class="h5"&gt;$1,248,000&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+/* GLM_Summary.css:244 onward. Note the 10px radius, which is off the ramp. */
+.data-card-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(225px, 1fr)); gap: 16px; }
+.data-card { border: 1px solid var(--colors-borders-divider); border-radius: 10px; }</div>
+
+  <h3>Summary card row and icon wrapper</h3>
+  <p class="sd" style="border:none;margin:0 0 8px">A flex row where cards take a share of the width: <code>.summary-card-wide</code> takes 1.5 with a 480px basis, <code>.summary-card-full</code> takes a whole row. <code>.icon-wrapper</code> is the circular icon chip used in record headers.</p>
+  <div class="cr" style="display:block">
+    <div class="summary-card-row" style="max-width:760px;margin-top:0">
+      <div class="card summary-card summary-card-wide" style="padding:16px">
+        <div class="d-flex align-items-center" style="gap:10px">
+          <span class="icon-wrapper"><i class="fa-light fa-file-lines" aria-hidden="true"></i></span>
+          <strong>Recent activity</strong>
+        </div>
+        <p class="empty-text" style="margin:10px 0 0">No activity recorded</p>
+      </div>
+      <div class="card summary-card" style="padding:16px">
+        <strong>Contacts</strong>
+        <p class="empty-text" style="margin:10px 0 0">No contacts linked</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="code-block">&lt;div class="summary-card-row"&gt;
+  &lt;div class="card summary-card summary-card-wide"&gt;
+    &lt;span class="icon-wrapper"&gt;&lt;i class="fa-light fa-file-lines"&gt;&lt;/i&gt;&lt;/span&gt;
+    &lt;p class="empty-text"&gt;No activity recorded&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+/* GLM_Summary.css:167 (icon-wrapper) and the summary-card-* flex sizing. */
+.summary-card-wide { flex: 1.5 1 480px; }
+.summary-card-full { flex: 0 0 100%; }
+.icon-wrapper { background-color: var(--colors-neutral-50); border-radius: 50%; padding: 7px; width: 2em; height: 2em; }
+.summary-card .empty-text { color: var(--colors-neutral-30); font-style: italic; }</div>
+
+  <p class="ratified-note">Every class above is confirmed real, read from <code>GLM_Summary.css</code> lines 167 to 274, and every one was already present in <code>glm-prototype-foundation.css</code>. Nothing here is proposed; this section only adds the demos and usage guidance that were missing. Addresses UX-139.</p>
+
+  <div class="gap-flag">GAP — coverage audit, roughly fifty production classes still have no demo</div>
+  <p class="gap-note"><strong>Finding, this section closes four of about fifty.</strong> A systematic comparison of every class selector in <code>GLM_Summary.css</code> and <code>mdb-customizations.css</code> against this page found roughly fifty with no demo here. Five were already in the foundation CSS and so were ratified but undocumented: <code>.data-card</code>, <code>.data-card-row</code>, <code>.data-card-lg</code>, <code>.detail-bar</code> and <code>.summary-card-row</code>, plus <code>.well</code>, <code>.text-success</code>, <code>.text-info</code> and <code>.collapsing</code> elsewhere on the page. Building the demos above exposed a second problem: <code>.icon-wrapper</code>, <code>.icon-flex</code>, <code>.detail-item-truncate</code>, <code>.summary-card-full</code>, <code>.summary-card-wide</code> and <code>.empty-text</code> are all real production classes that were missing from the foundation CSS entirely, so the demo rendered wrong until they were mirrored across. That is the same failure found in the Dropdowns and Tables rebuilds, now three times in one session, which suggests the mirroring gap is systematic rather than incidental and is worth an automated check under UX-148. The rest are not in the foundation CSS at all, meaning prototypes cannot reproduce them: header furniture such as <code>.HeaderSearchBar</code>, <code>.SkipNavigation</code>, <code>.EnvironmentName</code> and <code>.SystemAdministrator</code>; card variants including <code>.content-card</code>, <code>.request-card</code>, <code>.document-card</code>, <code>.search-card</code>, <code>.inactive-card</code>, <code>.card-panel</code> and <code>.card-icon</code>; the Fine Uploader <code>.qq-*</code> family; and pinning, truncation and Candid utility classes.</p>
+
+  <p class="gap-note"><strong>Two things worth noting about that list.</strong> The card variants are the most consequential, since seven card-like classes with no shared documentation is how a system ends up with seven slightly different cards. And <code>.pull-right</code> is Bootstrap 3, so it belongs with the <code>span.caret</code> finding as evidence that framework leftovers are a pattern rather than a one-off. The audit is reproducible: extract class selectors from both production files and check each against this page.</p>
 </section>
 
 <!-- ═══ DANGER CONTRAST MATRIX MODAL ═══ -->

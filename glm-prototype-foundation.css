@@ -269,6 +269,31 @@ h6, .h6 { font-size: var(--h6-size); font-weight: var(--h-weight); }
 .table { --mdb-table-bg: var(--colors-neutral-100); }
 .form-control, .input-group { background-color: var(--colors-neutral-100); }
 
+/* ---------------------------------------------------------------------------
+   MIRRORED FROM PRODUCTION — RATIFIED, lifted verbatim, not proposed.
+   These four rules exist in mdb-customizations.css / GLM_Summary.css but were
+   absent from this file, so prototypes did not render them the way production
+   does. Copied across during the Dropdowns / Tables / List Groups rebuild.
+   Production is the source of truth for all four; do not "improve" them here.
+   --------------------------------------------------------------------------- */
+.dropdown-disabled { color: var(--colors-primary-shades-40); }
+.table-action-button { cursor: pointer; }
+.datatable {
+  --mdb-datatable-sort-icon-left: 0.3rem;
+  --mdb-datatable-sort-icon-top: calc(50% - 0.8rem);
+}
+.settings-overview-table { table-layout: fixed; width: 100%; }
+.settings-overview-table th, .settings-overview-table td {
+  vertical-align: top; padding: 12px 16px;
+  border-color: var(--colors-borders-divider);
+  font-size: 13px; line-height: 1.5; word-break: break-word;
+}
+.settings-overview-table th {
+  font-weight: 700; color: var(--colors-brand-primary-dark-blue);
+  background-color: var(--colors-neutral-90);
+}
+.settings-overview-overridden { color: var(--colors-semantic-success-30); }
+
 /* Input groups — RATIFIED radius/sizing from mdb-customizations.css, plus a
    GAP found while documenting this: MDB's .input-group > .form-control:focus
    is more specific than the plain .form-control:focus rule (Section 7d,
@@ -509,6 +534,24 @@ h1.OrganizationSelector {
 .summary-card dd { margin: 0; word-break: break-word; }
 .summary-card.warn { border-left: 4px solid var(--colors-borders-warning); }
 
+/* Mirrored from GLM_Summary.css during the Page Patterns build (UX-139).
+   Confirmed production, lifted verbatim. Lines 167 (.icon-wrapper /
+   .icon-flex), 217 (.detail-item-truncate), and the summary-card flex
+   sizing and empty-text rules. Production is the source of truth. */
+.icon-wrapper {
+  background-color: var(--colors-neutral-50);
+  border-radius: 50%; padding: 7px; width: 2em; height: 2em;
+}
+.icon-wrapper:hover { background-color: var(--colors-neutral-40); }
+.icon-flex, .icon-wrapper { display: flex; justify-content: center; align-items: center; }
+.detail-bar .detail-item-truncate { max-width: 240px; }
+.detail-bar .detail-item-truncate .detail-value {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; word-break: normal;
+}
+.summary-card-full { flex: 0 0 100%; }
+.summary-card-wide { flex: 1.5 1 480px; }
+.summary-card .empty-text { color: var(--colors-neutral-30); font-style: italic; }
+
 /* ---------------------------------------------------------------------------
    5. CARD-INTERNAL ROW  — RESOLUTION (contract gap #5)
    Production ships award-detail-row and fin-row as identical twins. Collapse to
@@ -659,8 +702,14 @@ header .navbar-nav a.nav-link:active {
    GAP — intentional prototype departure, flagged not silent: shape changed to
    rectangular (--radius-sm) since pill badges read too similar to pill buttons,
    uppercase/letter-spacing removed per team request, and a saturated border
-   added per variant for contrast against white. Needs engineering review
-   before it round-trips into GLM.Summary.css. See contract backlog.
+   added per variant for contrast against white. Secondary label text moved off
+   the neutral ramp to primary-dark-blue, matching the other three variants, so
+   badge text colour is now one rule with no exception; production's
+   neutral-30 read too light at the badge's 12px size (5.3:1 on neutral-70,
+   passing AA but thin), and an interim neutral-20 step was rejected because a
+   near-black gray sitting beside three navy labels read as an inconsistency
+   rather than a variant. Contrast on neutral-70 is 9.9:1. Needs engineering
+   review before it round-trips into GLM.Summary.css. See contract backlog.
    The status->semantic mapping (contract gap #6) is documented in the contract;
    apply these four backgrounds via the mapping rather than inventing names.
    --------------------------------------------------------------------------- */
@@ -671,7 +720,7 @@ header .navbar-nav a.nav-link:active {
 .badge-success { background-color: var(--colors-semantic-success-50); color: var(--colors-brand-primary-dark-blue); border: 1px solid var(--colors-semantic-success-0); }
 .badge-warning { background-color: var(--colors-semantic-warning-50); color: var(--colors-brand-primary-dark-blue); border: 1px solid var(--colors-semantic-warning-0); }
 .badge-danger  { background-color: var(--colors-semantic-danger-50);  color: var(--colors-brand-primary-dark-blue); border: 1px solid var(--colors-semantic-danger-200); }
-.badge-secondary { background-color: var(--colors-neutral-70); color: var(--colors-neutral-30); border: 1px solid var(--colors-neutral-40); }
+.badge-secondary { background-color: var(--colors-neutral-70); color: var(--colors-brand-primary-dark-blue); border: 1px solid var(--colors-neutral-40); }
 
 /* ---------------------------------------------------------------------------
    7b. ALERTS  — GAP, DRAFT. No .alert override exists anywhere in production;
