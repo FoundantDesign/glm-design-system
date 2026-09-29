@@ -1,8 +1,26 @@
-# GLM Design Contract v1
+# GLM Design Contract v1.1
 
 *The single source of truth for prototype generation and design-system governance.*
 *Ratifies the production dialect found in the live Request Summary build and its shipped CSS.*
 *Replaces: style-brief-v2.md. Retires: all `ft-*` invented classes and the `--primary` style of hardcoded tokens.*
+
+> **Correction and sync note, v1.1 (29 Sep 2026, UX-169).** Two things were wrong with this contract as of v1. First, it had drifted behind the kitchen sink and the foundation CSS. v1 carried no UX ticket references, had no sections for Breadcrumb, Pagination, Accordions, Timeline, Offcanvas, Shadows or Page Patterns (all live on glm-design-system.netlify.app), and its backlog ended at item 26, while `glm-prototype-foundation.css` already cited backlog #37. Second, it had never been committed to `FoundantDesign/glm-design-system` on any branch, even though `CLAUDE.md` lists it as a canonical repo file, so the contract was the one part of the three-part ratification rule (contract, foundation CSS, kitchen sink) with no source of truth.
+>
+> How this was confirmed: the v1 text was supplied by Gabe on 29 Sep 2026 as the latest version that exists anywhere; a search of every branch in the repo found no copy of this file; and a grep of `glm-prototype-foundation.css` found backlog #37 cited in two comments. v1 is committed unchanged immediately before this revision, so the v1.1 diff shows only what changed.
+>
+> What v1.1 adds: backlog items 27 to 37 (Section 9), summary sections for the seven components listed above (2g, 5d, 6q to 6u), an in-place correction to the `h1` row in Section 3, and cross-references from the relevant sections to the open decisions tracked in Jira. v1.1 changes no ratified value and resolves no open decision. Datepicker (6k) stays blocked on real markup.
+
+**Open decisions tracked in Jira.** None of these is settled by this document. Each is cross-referenced where it applies.
+
+| Ticket | Decision | Where it applies |
+|---|---|---|
+| UX-118 | h2 to h6 type ramp | Section 3, backlog #7 and #16 |
+| UX-129 | AG Grid theme direction, now gated on vendor accessibility conformance | Section 7, backlog #1 |
+| UX-130 | Success, warning and info ramps 50 to 900 | Section 2c, backlog #2 |
+| UX-131 | Badge status-to-semantic map | Section 6b, backlog #6 |
+| UX-132 | Hex vs rgb notation in token definitions | Section 2 |
+| UX-133 | Disabled button color per variant | Section 6a, backlog #10 |
+| UX-138 | Remap sweep vs Sass build for eliminating MDB blue | Section 6 |
 
 ---
 
@@ -39,6 +57,8 @@ Production loads CSS in this exact order, and each layer depends on the ones bef
 ## 2. Tokens (Foundant vocabulary)
 
 These are the canonical names. Everything else in the system points at these. Values are RATIFIED from `foundant-tokens.css`.
+
+> **Open decision, UX-132.** Token definitions currently mix hex and rgb notation (compare the rgb values in 2a with the hex secondary ramp below them). Which notation definitions should use is undecided. Token names are used at the point of use either way.
 
 ### 2a. Brand and primary
 
@@ -89,6 +109,8 @@ Contrast matrices (every foreground × background pairing, WCAG 2.2) now exist f
 
 **Danger is the only fully-validated semantic ramp** (`-50` through `-900`, WCAG-checked). Use the full ramp for danger states: `-500` anchor, `-600` hover, `-700` active/pressed, `-50` subtle bg.
 
+> **Open decision, UX-130.** Validating success, warning and info across 50 to 900 is tracked in UX-130. Until it closes, those three stay RATIFIED at 0/50 only.
+
 **Text on any `-50` subtle fill is always `--colors-brand-primary-dark-blue`.** This holds for badges, alerts, toasts, and row highlights. RATIFIED.
 
 ### 2d. State layers
@@ -119,6 +141,14 @@ Radius scale: `--radius-none` 0, `--radius-xs` 2px, `--radius-sm` 4px, `--radius
 
 > **GAP — `--radius-card` exists only in the prototype, not yet in `foundant-tokens.css`.** Real cards and the hero render at `6px` (hardcoded in page CSS); the prototype named this `--radius-card: 6px` in `glm-prototype-foundation.css` so components stop using a magic number. It has never been round-tripped into the actual token file — a prototype-only patch masquerading as a named token. See Section 9.
 
+### 2g. Shadows (added in v1.1)
+
+*Summarized from the Shadows section of the repo's `index.html`. Kitchen sink status: OVERRIDDEN, with a GAP flag for the missing token.*
+
+Production uses shadow sparingly. It is switched off on components MDB shadows by default (`--mdb-btn-box-shadow` on buttons, the autocomplete dropdown, focused form controls) and added back in two places only: a page-chrome shadow on `header`, `footer` and `.page-container` (`mdb-customizations.css` lines 152 and 206), and a directional inset on `.left-view-selected` / `.right-view-selected` (lines 451 and 457), a split-view affordance where the selected side casts toward the divider. Use the chrome shadow only for structural page furniture. Do not add shadow to a card, button or badge to make it stand out; spacing and borders do that job in this system.
+
+> **GAP, no shadow token.** The chrome value is written out in full twice, and the two insets are a second duplicated pair differing only in sign. The raw `rgba()` values are hardcoded color. A shadow token would fix both, but no token name is proposed, since the radius and spacing naming convention should be extended deliberately rather than guessed at.
+
 ---
 
 ## 3. Typography
@@ -127,15 +157,19 @@ Radius scale: `--radius-none` 0, `--radius-xs` 2px, `--radius-sm` 4px, `--radius
 |---|---|---|
 | Font family | `Roboto, sans-serif` via `--body-font` | RATIFIED (`foundant-tokens.css`) |
 | Base size | `16px` | RATIFIED |
-| `h1` | `24px` | RATIFIED (`mdb-customizations.css` sets `h1{font-size:24px}`) |
+| `h1` | `24px` | RATIFIED (`mdb-customizations.css` sets `h1{font-size:24px}`). **Superseded in v1.1, see the correction below the table.** |
 | `h1.OrganizationSelector` | `32px`, weight `700`, color `primary-shades-50` | RATIFIED, special case |
 | Body weight | `400` | RATIFIED |
 | Heading weight | `500` (MDB default, kept) | RATIFIED |
 | Button font size | `14px` | RATIFIED (`.btn{--mdb-btn-font-size:14px}`) |
 
+> **Correction, v1.1.** The `h1` row above was v1's claim: `24px`, RATIFIED, sourced to `mdb-customizations.css` setting `h1{font-size:24px}`. It is kept as history. That value is true of the CSS snapshot this contract was written from, where it is a hardcoded literal at line 210, but not of production today. Production's winning declaration is `h1 { font-size: var(--h1-size) }` at `mdb-customizations.css:489`, which beats MDB's own `calc(1.375rem + 1.5vw)` on `h1, .h1` and renders 28px. Production sets a size only, never a weight. This was confirmed in DevTools against live production and is recorded in the kitchen sink Typography section, which also withdraws an earlier claim that an ID-scoped `span#PageTitle` rule caused the 28px. The kitchen sink notes that file line numbers cited from the snapshot should be re-derived until UX-134 reconciles them. The value of `--h1-size` belongs to the heading-scale decision (UX-118), so this correction records what production does and does not ratify a scale.
+
 Record page titles use Bootstrap's `.fs-2` utility on an `<h1>` plus a page-specific class (e.g. `.request-header-title`), not a bare `h1`. Card titles use `.card-title` inside `.card-body`. RATIFIED from the live page.
 
 > **GAP — heading scale undocumented.** Only `h1` is pinned in shipped CSS. `h2`–`h6` fall through to MDB defaults. The v2 brief invented an `h1..h4` scale that production does not use; it is retired. If a heading scale is wanted, it must be added to `foundant-tokens.css` and validated, not assumed. See Section 9.
+>
+> **Open decision, UX-118.** Tracked in UX-118. v1.1 note: `h1` is still the only heading production pins, but it is now pinned through `var(--h1-size)` rather than a 24px literal; see the correction above.
 
 > **Note — font swap seam.** v2 kept a `--font-heading`/`--font-body` split so a heading face could be introduced later. Production uses a single `--body-font`. The contract follows production: one variable. If a heading face is later introduced, add `--heading-font` to the tokens file as a deliberate, ratified change.
 
@@ -187,6 +221,14 @@ Inside cards, repeating label/value rows use the `*-row` / `*-row-label` / `*-ro
 
 Two patterns coexist: `.data-card` / `.data-card-row` (auto-fit grid, `minmax(225px,1fr)`, 10px radius) in `GLM.Summary.css`, and the hero amount blocks (`.hero-amount-block` / `-label` / `-value`) inline on the page. RATIFIED both, but see Section 9 — these overlap conceptually.
 
+### 5d. Page patterns (added in v1.1)
+
+*Summarized from the Page Patterns section of the repo's `index.html`. Kitchen sink status: OVERRIDDEN, with a GAP flag for the coverage audit.*
+
+Four Foundant-authored compound patterns from `GLM_Summary.css` lines 167 to 274, none of which had a kitchen sink demo before (UX-139). The record header detail bar (`.detail-bar`) holds metadata under a record title, divided by hairlines, with the first item flush to the heading; `.detail-item-truncate` caps long values such as organization names at 240px. Data cards (`.data-card`, `.data-card-row`, `.data-card-lg`) are stat tiles in an auto-fit grid reflowing at a 225px minimum with no media query. The summary card row (`.summary-card-row`, `.summary-card-wide` at flex 1.5 with a 480px basis, `.summary-card-full` for a whole row) lays out a summary page body. `.icon-wrapper` is the circular icon chip used in record headers.
+
+> **GAP, coverage audit.** A comparison of every class selector in `GLM_Summary.css` and `mdb-customizations.css` against the kitchen sink found roughly fifty with no demo; this section closes four. Building it also found six real production classes (`.icon-wrapper`, `.icon-flex`, `.detail-item-truncate`, `.summary-card-full`, `.summary-card-wide`, `.empty-text`) missing from the foundation CSS until they were mirrored, the third such mirroring failure in one session, which motivates an automated check under UX-148. The rest cannot be reproduced by prototypes today, including seven undocumented card variants (`.content-card`, `.request-card`, `.document-card`, `.search-card`, `.inactive-card`, `.card-panel`, `.card-icon`), header furniture, the Fine Uploader `.qq-*` family, and the Bootstrap 3 leftover `.pull-right`.
+
 ---
 
 ## 6. Components — the remap pattern
@@ -194,6 +236,8 @@ Two patterns coexist: `.data-card` / `.data-card-row` (auto-fit grid, `minmax(22
 **Ratified styling principle (confirmed with engineering).** Components are reskinned by remapping MDB's own `--mdb-*` variables onto Foundant tokens, not by writing bespoke override classes that reach around MDB. The `--mdb-*` layer is the indirection: a class reads MDB's variables, and those variables hold Foundant token values. The goal is fewer one-off classes, achieved by leaning on MDB's variable system. Prototypes follow this: compose from MDB/Bootstrap classes with `--mdb-*` remaps, and do not invent parallel component classes. (This is why the invented `ft-*`/`.btn-t` vocabularies were retired.)
 
 Every styled component below follows that rule. Values RATIFIED from `mdb-customizations.css`.
+
+> **Open decision, UX-138.** MDB's brand blue is a literal throughout `mdb.min.css`, and very few declarations read `var(--mdb-primary)`, so under this principle every blue has to be fixed at its own component variable. Whether to continue that component-by-component sweep or set `$primary` in a Sass build of MDB5 Pro is an engineering stack decision tracked in UX-138. The literal blues noted in 6r and 6s are instances of it.
 
 ### 6a. Buttons
 
@@ -210,6 +254,8 @@ Base `.btn` sets `--mdb-btn-border-radius: var(--radius-round)`, `--mdb-btn-font
 | Link | `.btn.btn-link` | all states `primary-dark-blue` |
 
 Focus is global: `.btn:focus-visible{outline:solid 2px var(--colors-brand-primary-dark-blue);outline-offset:2px}`. RATIFIED.
+
+> **Open decision, UX-133.** Disabled color per variant (each variant fading its own color vs a single neutral gray) is tracked in UX-133. See backlog #10.
 
 **The record-page default action button is `.btn.btn-outline-dark.btn-sm.fw-bold`.** Card-level primary action is `.btn.btn-dark.btn-sm.fw-bold.shadow-none`. This replaces v2's `.btn-ft-sm`/`.btn-ft-default`.
 
@@ -231,7 +277,7 @@ Base `.badge` sets `--mdb-badge-color: var(--colors-brand-primary-dark-blue)`. P
 
 `GLM.Summary.css` defines `.badge-success` / `-warning` / `-danger` / `-secondary` as pill badges (subtle `-50` background, primary or neutral text, uppercase, letter-spaced). RATIFIED.
 
-> **GAP — badge family fragmentation.** v2 invented ten `ft-badge--*` status names (approved, manual, loi-draft, overdue, etc.). Production has four semantic `badge-*` classes. The *domain statuses* (LOI Draft, Overdue, Pending…) still need a home: they should map onto the four semantic backgrounds via a documented status→semantic table, not a parallel class family. This mapping is the badge governance task. See Section 9.
+> **GAP — badge family fragmentation.** v2 invented ten `ft-badge--*` status names (approved, manual, loi-draft, overdue, etc.). Production has four semantic `badge-*` classes. The *domain statuses* (LOI Draft, Overdue, Pending…) still need a home: they should map onto the four semantic backgrounds via a documented status→semantic table, not a parallel class family. This mapping is the badge governance task. See Section 9. Open decision, tracked in UX-131.
 
 > **GAP — intentional shape/border departure, team-requested.** Prototype now ships badges rectangular (`--radius-sm`, not `.rounded-pill`) with uppercase/letter-spacing removed and a saturated `-0`/`-200` border added per variant, since pills read too similar to pill buttons and needed more contrast against white. This is a real, deliberate change to ratified production behavior, not a bug fix — flagged, not silent. Text stays uniform navy for now; colored text per variant is a separate open decision tied to the proposed WCAG ramps (Section 2c, backlog #4). Needs engineering review before it round-trips into `GLM.Summary.css`.
 
@@ -359,7 +405,7 @@ Confirmed via a real modal's full outerHTML plus its DevTools Styles panel check
 
 **Interactive demo, upgraded from a static preview:** the Modals section now has a real "Pop the modal" trigger plus a working `.modal-backdrop` scrim, toggled with a small helper script since this reference page doesn't load MDB's JS bundle — the code sample still shows the real `data-mdb-dismiss="modal"` markup you'd actually ship, kept deliberately separate from the demo's `onclick` handlers. Because the demo now uses the real `.modal > .modal-dialog > .modal-content` structure instead of skipping straight to `.modal-content`, `--mdb-modal-padding` (defined on `.modal` itself) cascades down to `.modal-body` correctly without any manual workaround.
 
-**Dependency worth flagging:** H2's current value (`1.25rem`/20px, `font-weight: 500`) is itself part of the same disputed v2 typography scale flagged in Section 2 (Typography) — only H1's real winning override (24px) has been separately confirmed; H2–H6 haven't been through that same confirmation pass. Modals and Cards will inherit whatever H2 ends up being once that's resolved, which is the point of using the real tag instead of a local override — but it means this decision's visual result isn't fully settled yet either.
+**Dependency worth flagging:** H2's current value (`1.25rem`/20px, `font-weight: 500`) is itself part of the same disputed v2 typography scale flagged in Section 2 (Typography) — only H1's real winning override (24px; superseded in v1.1, see the Section 3 correction) has been separately confirmed; H2–H6 haven't been through that same confirmation pass. Modals and Cards will inherit whatever H2 ends up being once that's resolved, which is the point of using the real tag instead of a local override — but it means this decision's visual result isn't fully settled yet either.
 
 ### 6p. Icons — usage reference, plus a standardized icon button
 
@@ -383,6 +429,30 @@ Confirmed via a real modal's full outerHTML plus its DevTools Styles panel check
 
 **`.kebab-btn` and `.icon-btn` still share one rule**, so this fix applies to both without needing two copies to keep in sync. The Buttons section's own code sample now points to this section rather than repeating the CSS a third time, to avoid the exact kind of drift this whole exercise was meant to eliminate.
 
+### 6q to 6u. Components added to the kitchen sink since v1 (added in v1.1)
+
+*Each summary below restates only what the Breadcrumb, Pagination, Accordions, Timeline and Offcanvas sections of the repo's `index.html` document, with the same status. None proposes a value.*
+
+### 6q. Breadcrumb
+
+DEFAULT, confirmed by absence: no `.breadcrumb` or `.breadcrumb-item` rule exists in `mdb-customizations.css` or `GLM_Summary.css`. Markup is MDB `.breadcrumb` on an `<ol>` inside `<nav aria-label="breadcrumb">`, with `.active` and `aria-current="page"` on the last item. Use it only where a record sits in a hierarchy the user can navigate up through, not as a page title substitute. Two findings: the current page and its clickable ancestors render in the identical color, fixable with two reachable remaps (backlog #31); and `.breadcrumb-item a` was missed by focus block 7f (backlog #32).
+
+### 6r. Pagination
+
+DEFAULT, confirmed by absence. MDB `.pagination` on a `<ul>`, `.page-item` and `.page-link`, with `.active` plus `aria-current="page"` on the current page and `.disabled` on unavailable arrows. AG Grid's own pager is out of scope pending Section 7. Finding: three separate MDB blues (active background, text and border) plus a blue focus ring, none a Foundant color, and the border is the literal `#3b71ca` in `mdb.min.css`, so it needs a direct property override rather than a remap (backlog #33). The natural fix is flagged as a design decision, not drafted. The focus ring is covered by `.page-link:focus-visible` in foundation block 7f, a GAP pending engineering sign-off.
+
+### 6s. Accordions
+
+DEFAULT, confirmed by absence. MDB `.accordion` > `.accordion-item` with `.accordion-button` (`.collapsed` when shut) and `.accordion-collapse.collapse`, driven by `data-mdb-collapse-init`. Variants `.accordion-flush` and `.accordion-borderless`. The default 0.5rem radius equals `--radius-md` by coincidence, not remap. Use for secondary detail most users skip, not primary content. Finding: the open-state color is MDB blue on both header text and chevron, and the chevron is an SVG data URI (`stroke='%233b71ca'`) that no cascade remap can reach. This is the first case needing a documented exception to the remap principle (backlog #27).
+
+### 6t. Timeline
+
+DEFAULT, confirmed by absence in both production files, with a GAP flag: there is no confirmed evidence GLM uses the component at all, the same posture as Stepper (6m). MDB `.timeline` as a `<ul>` of `.timeline-item` entries. The kitchen sink demo's semantic marker colors use tokens as a sketch of intent, not a proposal. Two questions before it becomes a real section: whether it is used anywhere (absence from the single-page sample means not yet observed, not unused), and, if request history adopts it, how markers map to semantic colors, which should get the same answer as UX-131.
+
+### 6u. Offcanvas / slide-over
+
+DEFAULT, confirmed by absence, with a GAP flag. MDB `.offcanvas` with a direction class, `.offcanvas-header` (`.offcanvas-title`, `.btn-close`) and `.offcanvas-body`; `.offcanvas-end` for record-adjacent detail, with `aria-labelledby` pointing at the title. The usage rule (informational or read-only content, in-context actions and menus in a slide-over; blocking decisions and field edits in a modal) is drafted, not ratified, and tracked in UX-146. Findings: the name collides with the production `.side-panel` (the permanent 275px record nav, 6d), also UX-146; and any slide-outs already on modernized pages are either stock MDB or styled in page-level `<style>` blocks, which load before `mdb.min.css` and lose at equal specificity. An inventory of current usage would settle it.
+
 ---
 
 ## 7. AG Grid
@@ -390,6 +460,8 @@ Confirmed via a real modal's full outerHTML plus its DevTools Styles panel check
 **GAP — this is the largest un-Foundanted surface in the system.** The shipped AG Grid theme is **stock Alpine**: `--ag-foreground-color: #000`, `--ag-background-color: #fff`, `--ag-font-family: 'Helvetica Neue'`, `--ag-active-color: #2196f3`, `--ag-border-radius: 0px`. The only Foundant remap is a single `--ag-font-family: var(--body-font)` in `mdb-customizations.css`, which the stock theme then overrides downstream.
 
 So data grids — the pages where you said AG Grid is central — currently render in colors and a typeface that match nothing else in GLM. This is the clearest, highest-impact instance of the consistency problem the design system exists to solve.
+
+> **Open decision, UX-129.** Theme direction is tracked in UX-129, rescoped on 11 Sep 2026: an informal applicant-panel accessibility audit attributed 25 of 70 failures to AG Grid's own DOM and ARIA output, which no theme can fix, so vendor conformance is to be answered before theming is decided.
 
 **Prototype resolution.** Until a Foundant AG Grid theme exists, prototypes that need a grid should apply an explicit Foundant theme override block that remaps the core `--ag-*` variables onto tokens: foreground → `primary-dark-blue`, font → `--body-font` (enforced), header background → `neutral-90`, borders → `borders-divider`, active/selected → `brand-secondary-light-blue`, row hover → `state-layers-light-hover`, font-size 14px, radius from the scale. This block becomes the draft of the real production theme. It is the natural second deliverable after this contract, and it is worth its own working session because the variable surface is large (200+ props) and several need WCAG validation the way the danger ramp got.
 
@@ -405,22 +477,22 @@ MDB handles modal, toast, dropdown, accordion, and tab via `data-mdb-*` attribut
 
 These are the live gaps and inconsistencies the production files reveal. The design system's job is to close them in the real codebase, not to copy them forward. Listed roughly by leverage.
 
-1. **AG Grid is unthemed (stock Alpine).** Build and validate a Foundant AG Grid theme. Highest impact; see Section 7.
-2. **Only the danger semantic ramp is complete.** Success, warning, info need full 50–900 ramps through the same WCAG process. `foundant-tokens.css` flags this in a comment. **Now also: a generated secondary ramp** (`--colors-brand-secondary-light-blue` tinted 0–90, matching primary's existing formula) is proposed alongside these — see Section 2a. All four (success/warning/info/secondary) share the same status: drafted in the kitchen sink, not yet in `foundant-tokens.css`, pending team review.
+1. **AG Grid is unthemed (stock Alpine).** Build and validate a Foundant AG Grid theme. Highest impact; see Section 7. *Open decision, UX-129.*
+2. **Only the danger semantic ramp is complete.** Success, warning, info need full 50–900 ramps through the same WCAG process. `foundant-tokens.css` flags this in a comment. **Now also: a generated secondary ramp** (`--colors-brand-secondary-light-blue` tinted 0–90, matching primary's existing formula) is proposed alongside these — see Section 2a. All four (success/warning/info/secondary) share the same status: drafted in the kitchen sink, not yet in `foundant-tokens.css`, pending team review. *Open decision, UX-130.*
 3. **`--colors-semantic-success-30` is used but never defined.** `GLM.Summary.css` `.settings-overview-overridden` references it; it resolves to nothing. Either define it (part of the success ramp work) or change the reference.
 4. **No `6px` radius token, yet cards/hero use 6px.** Page CSS hardcodes `border-radius:6px` while the scale offers only 4/8/round. Cards (6px), `.page-container` (4px), `.data-card` (10px) all differ. Reconcile to a documented card-radius token. **Discrepancy found while adding CSS examples to the kitchen sink (Cards/Spacing sections):** searched all three production evidence files in this project — `mdb-customizations.css`, `GLM.Summary.css`, and the raw `Event_Request_...html` — for a literal `border-radius: 6px` and found zero matches anywhere. The only place 6px is actually applied is `.hero-card` in the prototype's own foundation CSS; generic `.card` has no radius override and renders on MDB's stock 8px. This may mean the original "cards hardcode 6px" claim came from a live DevTools/screenshot session that predates these evidence files, or it may mean the claim was never quite right for generic `.card`. Not resolved here — flagging so it gets reconciled with real evidence rather than carried forward silently. The Cards and Spacing sections of the kitchen sink have been corrected to state only what's actually verifiable today (hero = 6px via token, card = stock 8px, unremapped).
 5. **Duplicate row components.** `award-detail-row` and `fin-row` are identical; collapse to one. Same for the conceptual overlap between `.data-card` and `.hero-amount-block`.
-6. **Badge status mapping is undefined.** Domain statuses (LOI Draft, Overdue, Pending, Approved, Cancelled…) need a documented status→semantic-background table on top of the four `badge-*` classes, replacing the retired `ft-badge--*` family.
-7. **Heading scale `h2`–`h6` undocumented.** Falls through to MDB defaults. Decide and ratify, or explicitly accept MDB defaults.
+6. **Badge status mapping is undefined.** Domain statuses (LOI Draft, Overdue, Pending, Approved, Cancelled…) need a documented status→semantic-background table on top of the four `badge-*` classes, replacing the retired `ft-badge--*` family. *Open decision, UX-131.*
+7. **Heading scale `h2`–`h6` undocumented.** Falls through to MDB defaults. Decide and ratify, or explicitly accept MDB defaults. *Open decision, UX-118.*
 8. **Two icon families render (`fa-light` + `fa-regular`).** Confirm this is intentional (it likely is — regular for filled-state controls) and document when each is used.
 9. **`success-30` aside:** several one-off hex values appear inline in the hero/page CSS (e.g. `#536E8A`, `#F4C862`, `#2D3B4A` in `.content-card`) that duplicate existing tokens. Replace with token references.
-10. **~~Disabled buttons fall back to MDB default colors.~~ RESOLVED.** The disabled remaps (`--mdb-btn-disabled-bg`, `-color`, `-border-color` per variant) were added to the prototype foundation CSS and are being adopted in production's `mdb-customizations.css`. Disabled buttons now fade the Foundant color, not MDB's stock blue.
+10. **~~Disabled buttons fall back to MDB default colors.~~ RESOLVED.** The disabled remaps (`--mdb-btn-disabled-bg`, `-color`, `-border-color` per variant) were added to the prototype foundation CSS and are being adopted in production's `mdb-customizations.css`. Disabled buttons now fade the Foundant color, not MDB's stock blue. *v1.1 cross-reference: UX-133 records the per-variant fade approach as provisional pending engineering confirmation, with a single neutral gray as the alternative. RESOLVED here means the remaps are in place; it does not settle that decision.*
 11. **Navbar top-level hover uses hardcoded hex (proposed resolution, not yet adopted).** `.navbar-nav > li > a:hover` is a gray gradient (`#eee`→`#e4e4e4`) with a 5px solid `#222` border-bottom — the last hardcoded-hex hover in the system, and inconsistent with the stock-MDB dropdown-item hover one level down in the same menu. Prototype foundation CSS now applies `background-color: var(--colors-state-layers-light-hover)` + `--radius-sm` instead, matching the already-ratified `.kebab-btn` treatment. Needs engineering confirmation before ratifying.
 12. **Navbar dropdown toggles carry a redundant caret.** Markup pairs MDB5's native `.dropdown-toggle::after` arrow with a leftover Bootstrap-3 `<span class="caret">`. `.caret` has no rule anywhere in production CSS, so this likely renders a duplicate indicator. Needs confirmation and, if confirmed, removal of the dead `<span class="caret">` markup.
 13. **Header/footer brand color is ad hoc per-tenant CSS, not a documented mechanism.** The org-brandable header slot (Section 6e) works today via each foundation injecting its own `<style>` override after the standard stack. There's no token, variable, or documented contract for what's themeable (background only? text too? logo sizing?) or how an implementer should apply it consistently.
 14. **`.request-info-card` background is set inline, not via a class rule.** Unlike every other ratified component, its `--colors-neutral-70` background lives in a `style` attribute on the Razor markup itself (Section 6d). Correct token, wrong layer — should move into a real CSS rule.
 15. **~~`.btn-ghost` draft.~~ REMOVED, not pursued.** Was proposed as a pill-shaped, transparent-at-rest borderless button matching `.kebab-btn`'s hover treatment. Pulled from the kitchen sink, foundation CSS, and this contract at the team's request — not carried forward as a backlog item.
-16. **Kitchen sink is running the retired v2 heading scale — flagged, not yet fixed, pending team decision.** Section 3 already documents the real state: `h1` = 24px (RATIFIED, `mdb-customizations.css`) plus `h1.OrganizationSelector` = 32px (RATIFIED special case); `h2`–`h6` are an undocumented gap, falling through to MDB defaults. Despite that, `glm-prototype-foundation.css` still ships the retired v2 `--h1-size` through `--h6-size` scale (h1 = 1.75rem/28px), and the kitchen sink's Typography section presented it as settled fact until this entry. Cross-checked against three real surfaces: Request Summary page renders h1 at 24px (matches ratified), an Organization record page renders h1 at 32px (pending confirmation that this is the ratified `.OrganizationSelector` case, not a fourth value), and the kitchen sink itself renders 28px (the retired scale, not a real production value). **Team decision needed:** formally design and ratify a full h2–h6 scale into `foundant-tokens.css`, or strip the invented scale out entirely and leave h2–h6 on MDB defaults until one is deliberately designed. Do not resolve by simply picking one of the three numbers — h1 itself is already answered; the open question is whether a broader scale should exist at all.
+16. **Kitchen sink is running the retired v2 heading scale — flagged, not yet fixed, pending team decision.** Section 3 already documents the real state: `h1` = 24px (RATIFIED, `mdb-customizations.css`) plus `h1.OrganizationSelector` = 32px (RATIFIED special case); `h2`–`h6` are an undocumented gap, falling through to MDB defaults. Despite that, `glm-prototype-foundation.css` still ships the retired v2 `--h1-size` through `--h6-size` scale (h1 = 1.75rem/28px), and the kitchen sink's Typography section presented it as settled fact until this entry. Cross-checked against three real surfaces: Request Summary page renders h1 at 24px (matches ratified), an Organization record page renders h1 at 32px (pending confirmation that this is the ratified `.OrganizationSelector` case, not a fourth value), and the kitchen sink itself renders 28px (the retired scale, not a real production value). **Team decision needed:** formally design and ratify a full h2–h6 scale into `foundant-tokens.css`, or strip the invented scale out entirely and leave h2–h6 on MDB defaults until one is deliberately designed. Do not resolve by simply picking one of the three numbers — h1 itself is already answered; the open question is whether a broader scale should exist at all. *Open decision, UX-118. v1.1: the `h1` = 24px statement in this item is superseded by the Section 3 correction.*
 17. **`.alert` variants are a draft, not lifted from production evidence.** No alert customization exists anywhere in production — ships as stock MDB today. Section 6f drafts `-success`/`-warning`/`-danger`/`-info` mirroring the badge color convention. Needs engineering review before it round-trips into `mdb-customizations.css`.
 18. **`.nav-tabs`/`.nav-pills` are a draft, not lifted from production evidence.** No tab/pill customization exists anywhere in production — ships as stock MDB today. Section 6g drafts active/hover states matching the `.kebab-btn`/navbar hover convention. Needs engineering review before it round-trips into `mdb-customizations.css`.
 19. **`--radius-card` exists only in the prototype, never round-tripped into `foundant-tokens.css`.** Real cards and the hero hardcode `6px`; the prototype named it but the actual token file was never updated to match. Section 2f.
@@ -431,6 +503,20 @@ These are the live gaps and inconsistencies the production files reveal. The des
 24. **`.input-group > .form-control:focus` needs its own specificity-matched fix, separate from Text Inputs.** MDB's own selector at this nesting level is more specific than the plain `.form-control:focus` rule, so the Text Inputs focus-color fix (backlog #22) never reached inputs inside an input-group. Fixed in Section 6j at matching specificity. A separate, still-unfixed leftover exists for autocomplete nested in an input-group (`.input-group > .autocomplete > .form-control:focus`, hardcoded `#3b71ca`) — deferred to whenever Autocomplete gets built. Needs engineering review before either round-trips into `mdb-customizations.css`.
 25. **Validation modernization proposal (Section 6n) needs actual team discussion, not just engineering review.** Unlike most GAP items, this one isn't "lift the evidence, propose the obvious remap" — it's a genuinely open design question the team explicitly wants to reconsider (engineering: form completion is being modernized, not ported forward). The current legacy system (`.field-validation-error`/`.validation-summary-errors`) is accurately documented and confirmed live; the proposed replacement (`is-invalid`/`.invalid-feedback` + `.alert-danger` summary) is one starting point, not the only option. Don't treat this as settled just because a proposal exists in the kitchen sink.
 26. **`.icon-btn` standardization (Section 6p) needs engineering buy-in on rollout, not just the class itself.** Icon color is a direct lift from real production values. Sizing (24×24, the WCAG floor exactly) and the removed border are direct design decisions, not evidence — production's real `.kebab-btn` instance has a border; it was removed on the basis that WCAG 2.5.8 governs tappable area, not visual styling. `:focus-visible` is new, added specifically for WCAG 2.2 SC 2.5.8/2.4.7 compliance, since the original inline-style pattern had no explicit dimensions or focus state at all. What needs review is the *adoption*: formalizing this into `mdb-customizations.css` implies replacing inline styles — and removing the border — at every existing icon-only-button call site, a real migration, not a drop-in addition. `aria-label` is required on every instance per WCAG 1.1.1/4.1.2 — flagged as a hard requirement, not a nice-to-have, in the kitchen sink documentation.
+
+*Items 27 to 37 were added in v1.1. Each was proposed in `kitchen-sink-status.md` (18 Aug 2026) and is numbered here for the first time. The text is verbatim from that document. Item types are as proposed there and are not ratified decisions.*
+
+27. Data-URI encoded colors are unreachable by the remap principle. Needs a documented general exception, starting with the accordion chevron. *Type: Governance. Proposed in `kitchen-sink-status.md` (18 Aug 2026), numbered in v1.1.*
+28. `#GlobalToast` is styled by ID, so a second toast on the same page cannot be styled at all. Converting to a class or `.toast-success` variant is the reusable form. *Type: Reuse. Proposed in `kitchen-sink-status.md` (18 Aug 2026), numbered in v1.1.*
+29. Toast radius is a hardcoded `8px` where `var(--radius-md)` is already exactly 8px. Free literal removal. *Type: Token cleanup. Proposed in `kitchen-sink-status.md` (18 Aug 2026), numbered in v1.1.*
+30. No danger, warning, or info toast exists in production. If failure messages need a toast, that is new work and depends on item 28. *Type: Gap. Proposed in `kitchen-sink-status.md` (18 Aug 2026), numbered in v1.1.*
+31. Breadcrumb renders the current page in the identical color to its clickable ancestors. Two remaps fix it, both reachable. *Type: Usability. Proposed in `kitchen-sink-status.md` (18 Aug 2026), numbered in v1.1.*
+32. Breadcrumb links were missed by the focus pass. `.breadcrumb-item a` belongs in block 7f. *Type: Focus pass. Proposed in `kitchen-sink-status.md` (18 Aug 2026), numbered in v1.1.*
+33. Pagination carries three separate blues plus a blue focus ring. One of the three is a literal. *Type: Brand. Proposed in `kitchen-sink-status.md` (18 Aug 2026), numbered in v1.1.*
+34. Progress bar fill is MDB blue, and the track height of 4px cannot carry a label. Contrast passes at 4.1:1, so this is a brand and usability item, not a compliance one. *Type: Brand. Proposed in `kitchen-sink-status.md` (18 Aug 2026), numbered in v1.1.*
+35. Tooltip `opacity: 0.9` composites both background and text against the page, dropping effective contrast to roughly 4.2:1 on white against a 4.5:1 requirement for 14px text. Needs measuring in the app. *Type: Accessibility. Proposed in `kitchen-sink-status.md` (18 Aug 2026), numbered in v1.1.*
+36. MDB hides the tooltip and popover arrows by default, removing the visual link between an overlay and its trigger. Restoring is a one-line change, which is why it should be decided rather than slipped in. *Type: Decision. Proposed in `kitchen-sink-status.md` (18 Aug 2026), numbered in v1.1.*
+37. Specificity traps recur. Backlog 24 flagged that `.input-group > .form-control:focus` outranks `.form-control:focus`; the focus pass hit the identical wall on a different property. Any change to a base form-control rule needs a paired check on its input-group descendant, which is a candidate lint rule rather than a memory exercise. *Type: Governance (see UX-148). Proposed in `kitchen-sink-status.md` (18 Aug 2026), numbered in v1.1. Cross-reference: UX-148, the lint automation story this item motivated.*
 
 ---
 
@@ -445,6 +531,6 @@ These are the live gaps and inconsistencies the production files reveal. The des
 | Inline SVG symbol icons, FA banned | Font Awesome Pro, `fa-light` default |
 | `ft-sidebar` global rail | `side-panel` 275px contextual rail with responsive collapse |
 | `--font-heading` + `--font-body` split | single `--body-font` |
-| Invented `h1..h4` scale | `h1: 24px` ratified; rest is a documented gap |
+| Invented `h1..h4` scale | `h1: 24px` ratified; rest is a documented gap (v1.1: `h1` superseded, see Section 3 correction) |
 
 The litmus test for any future prototype: **could an engineer paste a card or a button straight into a Razor view and have it match production?** With v2 the answer was no. With the contract, for ratified components, the answer is yes.
