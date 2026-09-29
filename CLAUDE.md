@@ -90,7 +90,8 @@ General rule: if finishing a ticket requires a design choice that is not already
 - Jira is the source of truth for work tracking. Do not mirror Jira tickets into GitHub issues. Use GitHub issues only for repo-internal work (build scripts, tooling).
 - Jira writes are permanent: comments and links cannot be deleted through the connector. Post at most one comment per ticket, linking the draft PR.
 - Do not transition ticket status, create links, or create tickets without explicit approval.
-- Only work tickets labeled `claude-ready`. If a ticket's description is too thin to define done, stop and ask rather than guessing at acceptance criteria.
+- Unattended runs (routines) only work tickets labeled claude-ready. A ticket named directly in a user's prompt is authorized by that prompt and needs no label.
+- If a ticket's description is too thin to define done, stop and ask rather than guessing at acceptance criteria.
 - Atlassian cloudId: 8ac51c62-b131-4177-9bfb-75275e7a7a6b
 - Project key: UX
 - Board query: project = UX AND statusCategory != Done ORDER BY key ASC
