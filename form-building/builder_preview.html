@@ -1600,6 +1600,13 @@ header .navbar-nav a.nav-link:active {
 [tabindex="-1"]:focus:not(:focus-visible) { outline: none; }
 h1[tabindex="-1"]:focus, h2[tabindex="-1"]:focus { outline: none; }
 
+/* Builder C drag and drop: the drop spot shows before release. A bar above or below the field it will
+   land beside, or the group's add zone. Drag is never the only way; clicking a palette item still adds. */
+.proto-field.is-drop-before { box-shadow: 0 -3px 0 0 var(--colors-brand-primary-dark-blue); }
+.proto-field.is-drop-target { box-shadow: 0 3px 0 0 var(--colors-brand-primary-dark-blue); }
+.proto-canvas-add.is-drop-target, .proto-canvas-section.is-drop-target { border-color: var(--colors-brand-primary-dark-blue); border-style: solid; background: var(--colors-brand-secondary-light-blue); color: var(--colors-brand-primary-dark-blue); }
+#chips [draggable="true"], #tiles [draggable="true"] { cursor: grab; }
+
 </style>
 <script>
 /* real-form.js: the anonymized real application (structure only), shared by all builder variants.
@@ -2190,18 +2197,18 @@ function mount_c(P, on) {
   /* ---------- palette ---------- */
   function renderPalette() {
     $('chips').innerHTML = Object.keys(TYPES).map(function (k) {
-      return '<button type="button" class="btn btn-outline-secondary btn-sm" data-add-type="' + k + '">' + TYPES[k] + '</button>';
+      return '<button type="button" class="btn btn-outline-secondary btn-sm" draggable="true" data-add-type="' + k + '">' + TYPES[k] + '</button>';
     }).join('');
     var groups = {};
     F().tiles.forEach(function (t, i) { (groups[t.group] = groups[t.group] || []).push({ t: t, i: i }); });
     $('tiles').innerHTML = Object.keys(groups).map(function (g) {
       return '<div class="nav-group-header">' + esc(g) + '</div>' + groups[g].map(function (o) {
-        return '<button type="button" class="list-group-item list-group-item-action" data-add-tile="' + o.i + '"><span>' + esc(o.t.label) +
+        return '<button type="button" class="list-group-item list-group-item-action" draggable="true" data-add-tile="' + o.i + '"><span>' + esc(o.t.label) +
           '<span class="d-block small text-muted">' + TYPES[o.t.type] + (o.t.from ? ', from ' + esc(o.t.from) : '') + '</span></span><i class="fa-light fa-plus ms-auto" aria-hidden="true"></i></button>';
       }).join('');
     }).join('');
     var t = targetSection();
-    $('targetHint').textContent = t ? 'Adds to the ' + t.title + ' section.' : 'This form is blank. Your first field starts a new group.';
+    $('targetHint').textContent = t ? 'Drag a field onto the form, or select one to add it to ' + t.title + '.' : 'This form is blank. Drag or select a field to start the first group.';
   }
   function targetSection() {
     var secs = F().sections;
@@ -2265,7 +2272,8 @@ function mount_c(P, on) {
   function fieldHtml(f, sec) {
     var sel = selected === f.id;
     var meta = TYPES[f.type] + ', ' + answersText(f.answers) + (f.required ? ', required' : '') + (f.copied ? ', copied' : '') + (f.hidden ? ', hidden from new applicants' : '') + (f.stopWhen ? ', ends the application when "' + f.stopWhen + '"' : '');
-    return '<div class="proto-field' + (f.width === 'half' ? ' proto-field--half' : '') + (sel ? ' is-selected' : '') + '" data-field="' + f.id + '">' +
+    var isNew = f._new; delete f._new;
+    return '<div class="proto-field' + (f.width === 'half' ? ' proto-field--half' : '') + (sel ? ' is-selected' : '') + (isNew ? ' proto-a-new' : '') + '" data-field="' + f.id + '">' +
       '<button type="button" class="proto-field__select" data-select="' + f.id + '" aria-expanded="' + sel + '">' +
         '<span class="proto-field__label">' + esc(f.label) + (f.hidden ? ' (hidden)' : '') + '</span>' +
         '<span class="proto-field__preview">' + preview(f) + '</span>' +
@@ -2382,12 +2390,50 @@ function mount_c(P, on) {
 
   var renaming = null;
   function newGroup() { var secs = F().sections, g = { id: 's' + (uid++), title: 'Group ' + (secs.length + 1), fields: [] }; secs.push(g); return g; }
-  function add(f) {
-    var s = targetSection() || newGroup(); f.id = 'f' + (uid++); f.answers = 0; f.width = f.width || (f.type === 'table' || f.type === 'textarea' ? 'full' : 'half');
-    s.fields.push(f); selected = f.id; target = s.id; rerender();
+  function add(f, at) {
+    var s = (at && F().sections.filter(function (x) { return x.id === at.sec; })[0]) || targetSection() || newGroup();
+    f.id = 'f' + (uid++); f.answers = 0; f.width = f.width || (f.type === 'table' || f.type === 'textarea' ? 'full' : 'half');
+    if (at && at.index != null) s.fields.splice(at.index, 0, f); else s.fields.push(f);
+    selected = f.id; target = s.id; f._new = true; rerender();
     var b = document.querySelector('[data-select="' + f.id + '"]'); if (b) b.focus();
     say('Added ' + f.label + ' to ' + s.title + '.');
   }
+
+  var dragItem = null;
+  function fromDrag(d) {
+    if (d.kind === 'type') return { label: 'New ' + TYPES[d.v].toLowerCase() + ' question', type: d.v, columns: d.v === 'table' ? ['Column 1', 'Column 2'] : undefined };
+    var t = F().tiles[d.v]; return { label: t.label, type: t.type, columns: t.columns ? t.columns.slice() : undefined, options: t.options ? t.options.slice() : undefined, copied: t.from };
+  }
+  function clearDrop() { [].slice.call(document.querySelectorAll('.is-drop-before, .is-drop-target')).forEach(function (n) { n.classList.remove('is-drop-before', 'is-drop-target'); }); }
+  /* Where a drop lands: before the field under the pointer, at the end of a group (its add zone or
+     empty space in it), or, on a blank form, in a new first group. */
+  function dropSpot(e) {
+    var fld = e.target.closest('#canvas .proto-field'), zone = e.target.closest('#canvas .proto-canvas-add'), sec = e.target.closest('#canvas .proto-canvas-section');
+    if (fld) {
+      var id = fld.dataset.field, hit = findField(id), r = fld.getBoundingClientRect(), after = e.clientY > r.top + r.height / 2;
+      return { el: fld, cls: after ? 'is-drop-target' : 'is-drop-before', sec: hit.s.id, index: hit.i + (after ? 1 : 0) };
+    }
+    if (zone) return { el: zone, cls: 'is-drop-target', sec: zone.dataset.target, index: null };
+    if (sec && sec.querySelector('.proto-canvas-add')) { var z = sec.querySelector('.proto-canvas-add'); return { el: z, cls: 'is-drop-target', sec: z.dataset.target, index: null }; }
+    if (e.target.closest('#canvas') && !F().sections.length) return { el: document.querySelector('#canvas .proto-canvas-section'), cls: 'is-drop-target', sec: null, index: null };
+    return null;
+  }
+  on(document, 'dragstart', function (e) {
+    var t = e.target.closest && e.target.closest('[data-add-type], [data-add-tile]'); if (!t) return;
+    dragItem = t.dataset.addType ? { kind: 'type', v: t.dataset.addType } : { kind: 'tile', v: Number(t.dataset.addTile) };
+    e.dataTransfer.effectAllowed = 'copy'; e.dataTransfer.setData('text/plain', t.textContent.trim());
+    document.getElementById('canvas').classList.add('is-dropping');
+  });
+  on(document, 'dragover', function (e) {
+    if (!dragItem) return; var spot = dropSpot(e); clearDrop(); if (!spot) return;
+    e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; if (spot.el) spot.el.classList.add(spot.cls);
+  });
+  on(document, 'drop', function (e) {
+    if (!dragItem) return; var spot = dropSpot(e); if (!spot) return;
+    e.preventDefault(); var d = dragItem; dragItem = null; clearDrop(); document.getElementById('canvas').classList.remove('is-dropping');
+    add(fromDrag(d), spot.sec ? { sec: spot.sec, index: spot.index } : null);
+  });
+  on(document, 'dragend', function () { dragItem = null; clearDrop(); var c = document.getElementById('canvas'); if (c) c.classList.remove('is-dropping'); });
 
   on(document, 'click', function (e) {
     var rnb = e.target.closest('[data-rename]');
