@@ -1,4 +1,4 @@
-# GLM Design Contract v1.1
+# GLM Design Contract v1.2
 
 *The single source of truth for prototype generation and design-system governance.*
 *Ratifies the production dialect found in the live Request Summary build and its shipped CSS.*
@@ -9,6 +9,8 @@
 > How this was confirmed: the v1 text was supplied by Gabe on 29 Sep 2026 as the latest version that exists anywhere; a search of every branch in the repo found no copy of this file; and a grep of `glm-prototype-foundation.css` found backlog #37 cited in two comments. v1 is committed unchanged immediately before this revision, so the v1.1 diff shows only what changed.
 >
 > What v1.1 adds: backlog items 27 to 37 (Section 9), summary sections for the seven components listed above (2g, 5d, 6q to 6u), an in-place correction to the `h1` row in Section 3, and cross-references from the relevant sections to the open decisions tracked in Jira. v1.1 changes no ratified value and resolves no open decision. Datepicker (6k) stays blocked on real markup.
+
+> **Sync note, v1.2 (27 Oct 2026, UX-000).** v1.2 adds one section, Pattern governance, placed after Section 0 because it extends the governing principle stated there. It defines when a UI need becomes a pattern candidate and how single-use needs are solved as one-offs. v1.2 changes no ratified value, resolves no open decision, and renumbers no existing section.
 
 **Open decisions tracked in Jira.** None of these is settled by this document. Each is cross-referenced where it applies.
 
@@ -33,6 +35,22 @@ This contract has two kinds of statement, kept rigorously separate so "what is t
 **GAP** means production is incomplete, internally inconsistent, or using a stock default where a Foundant value belongs. Prototypes should follow the *resolution* noted, and the design system should close the gap in the real codebase. Gaps are listed in Section 9 and flagged inline where relevant.
 
 The governing principle of the whole system: **style components by remapping MDB's own `--mdb-*` variables onto Foundant tokens. Never write new component CSS, never hardcode a color.** This is how production already works, and it is the reason the dialect is liftable.
+
+---
+
+## Pattern governance
+
+### Default: use what exists
+Most UI needs are solved with existing MDB5 components or existing design system patterns. A need only becomes a pattern candidate when nothing existing fits.
+
+### What counts as a use case
+A pattern requires at least two use cases. A use case is a distinct workflow or a distinct user role. Repeated use of the same UI within one workflow counts as one use case: inventing patterns in isolation hides whether the need is truly reusable.
+
+### One-off solutions
+When a need has one use case, it is solved as a one-off: a new combination of MDB5 components, or an established plugin already in production (for example AG Grid for data tables). One-offs introduce no new tokens and no new design system classes.
+
+### Candidates
+One-offs are logged in the Candidate swim lane on the UX board. When a second workflow or role surfaces the same need, the candidate moves to a pattern proposal in the lab. (Lane format open for team feedback.)
 
 ---
 
