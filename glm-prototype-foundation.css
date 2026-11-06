@@ -116,7 +116,7 @@
 
 
 /* ---------------------------------------------------------------------------
-   P3. STEPPER STATE COLORS  (PROPOSED, DESIGN-SYSTEM.md Gaps > Steppers)
+   P3. STEPPER STATE COLORS  (PROPOSED, UX-171)
    GLM.Web has no stepper today. MDB's stepper is vertical only. This remaps
    its state icons from MDB's stock subtle tokens to Foundant equivalents, for
    the first workflow that needs one. --colors-semantic-success-700 now exists
@@ -142,7 +142,7 @@
 
 
 /* ---------------------------------------------------------------------------
-   P4. VALIDATION MODERNIZATION  (PROPOSED, YOGI-8094)
+   P4. VALIDATION MODERNIZATION  (PROPOSED, UX-172, YOGI-8094)
    Production validates with .field-validation-error and
    .validation-summary-errors. Validation placement is an open decision in
    DESIGN-SYSTEM.md (YOGI-8094). This is a starting point for that
