@@ -1,1025 +1,72 @@
 /* ============================================================================
-   GLM Prototype Foundation
-   Companion to GLM-design-contract.md v1.
-   Load AFTER mdb.min.css and the Font Awesome kit, in this file's place in the
-   contract's load order (tokens -> remaps -> component/page classes).
+   GLM kitchen sink: PROPOSALS ONLY
+   ============================================================================
+   Production CSS is no longer copied into this repo. index.html loads it live
+   from beta, in production's own load order:
+     /Scripts/Mdb/mdb.min.css, /css/mdb-patches.css, /css/foundant-tokens.css,
+     /css/mdb-customizations.css, /css/ag-customizations.css, /css/GLM.Summary.css
+   The rules for what production ships live in GLM.Web/DESIGN-SYSTEM.md.
 
-   This file reproduces the PRODUCTION dialect so prototype markup is liftable.
-   Verbatim production values are marked RATIFIED. The few resolutions the
-   contract calls for (card radius token, single row component, Foundant AG Grid
-   theme) are marked RESOLUTION and are the draft of what production should adopt.
-   Nothing here invents a color or a component style outside that.
+   This file holds only what production does not ship yet: proposals the team
+   can look at, test with users, and accept or reject. It loads after the
+   production stack, so a proposal here overrides production on this page only.
+   When a proposal ships in GLM.Web, delete it from this file in the same PR
+   that updates the kitchen sink section.
+
+   Every block below is tagged PROPOSED so the drift report in GLM.Web
+   (.claude/skills/design-system/drift.py) files it under "Proposed".
+   Same rules as production: remap --mdb-* onto tokens, no color literals,
+   real MDB classes only.
+
+   Retired 6 Nov 2026 (UX-115). The previous version of this file mirrored
+   production by hand and went stale. Its full text is in git history at
+   commit 4df3746. Proposals production has since shipped or decided
+   differently were removed, and are listed in the PR for that change.
    ============================================================================ */
 
-/* ---------------------------------------------------------------------------
-   1. FOUNDANT TOKENS  — RATIFIED verbatim from foundant-tokens.css
-   --------------------------------------------------------------------------- */
-:root {
-  --body-font: Roboto, sans-serif;
-
-  /* borders */
-  --colors-borders-enabled: rgb(117, 117, 117);
-  --colors-borders-divider: rgb(224, 224, 224);
-  --colors-borders-hover: rgb(45, 59, 74);
-  --colors-borders-focused: rgb(45, 59, 74);
-  --colors-borders-brand: rgb(45, 59, 74);
-  --colors-borders-pressed: rgb(45, 59, 74);
-  --colors-borders-disabled: rgb(189, 189, 189);
-  --colors-borders-danger: rgb(189, 59, 57);
-  --colors-borders-warning: rgb(244, 200, 98);
-  --colors-borders-success: rgb(103, 207, 157);
-  --colors-borders-info: rgb(83, 110, 138);
-
-  /* brand */
-  --colors-brand-primary-dark-blue: rgb(45, 59, 74);
-  --colors-brand-tertiary-white: rgb(255, 255, 255);
-  --colors-brand-orange: rgb(242, 107, 34);
-  --colors-brand-light-yellow: rgb(254, 251, 220);
-  --colors-brand-secondary-light-blue: rgb(213, 226, 250);
-  --colors-brand-yellow: rgb(246, 184, 69);
-
-  /* state layers */
-  --colors-state-layers-dark-link: rgb(57, 110, 196);
-  --colors-state-layers-dark-hover: rgb(66, 79, 92);
-  --colors-state-layers-dark-focused: rgb(66, 79, 92);
-  --colors-state-layers-dark-pressed: rgb(87, 98, 110);
-  --colors-state-layers-light-hover: rgb(234, 235, 237);
-  --colors-state-layers-light-focused: rgb(234, 235, 237);
-  --colors-state-layers-light-pressed: rgb(213, 216, 219);
-
-  /* neutral ramp */
-  --colors-neutral-0: rgb(0, 0, 0);
-  --colors-neutral-10: rgb(33, 33, 33);
-  --colors-neutral-20: rgb(66, 66, 66);
-  --colors-neutral-30: rgb(97, 97, 97);
-  --colors-neutral-40: rgb(117, 117, 117);
-  --colors-neutral-50: rgb(189, 189, 189);
-  --colors-neutral-60: rgb(224, 224, 224);
-  --colors-neutral-70: rgb(238, 238, 238);
-  --colors-neutral-80: rgb(245, 245, 245);
-  --colors-neutral-90: rgb(250, 250, 250);
-  --colors-neutral-100: rgb(255, 255, 255);
-
-  /* primary shades ramp */
-  --colors-primary-shades-0: rgb(45, 59, 74);
-  --colors-primary-shades-10: rgb(66, 79, 92);
-  --colors-primary-shades-20: rgb(87, 98, 110);
-  --colors-primary-shades-30: rgb(108, 118, 128);
-  --colors-primary-shades-40: rgb(129, 137, 146);
-  --colors-primary-shades-50: rgb(150, 157, 165);
-  --colors-primary-shades-60: rgb(171, 177, 183);
-  --colors-primary-shades-70: rgb(192, 196, 201);
-  --colors-primary-shades-80: rgb(213, 216, 219);
-  --colors-primary-shades-90: rgb(234, 235, 237);
-
-  /* semantic — 0/50 anchors */
-  --colors-semantic-success-0: rgb(103, 207, 157);
-  --colors-semantic-danger-0: rgb(189, 59, 57);
-  --colors-semantic-warning-0: rgb(244, 200, 98);
-  --colors-semantic-info-0: rgb(83, 110, 138);
-  --colors-semantic-success-50: rgb(225, 245, 235);
-  --colors-semantic-warning-50: rgb(255, 244, 209);
-  --colors-semantic-info-50: rgb(213, 226, 250);
-  --colors-semantic-info-90: rgb(240, 247, 255);
-
-  /* danger — the one complete, WCAG-validated ramp */
-  --colors-semantic-danger-50:  #FAEAEA;
-  --colors-semantic-danger-100: #F2BEBE;
-  --colors-semantic-danger-200: #E89090;
-  --colors-semantic-danger-300: #DD6463;
-  --colors-semantic-danger-400: #D44D4B;
-  --colors-semantic-danger-500: #BD3B39;
-  --colors-semantic-danger-600: #A33230;
-  --colors-semantic-danger-700: #882927;
-  --colors-semantic-danger-800: #6B1F1E;
-  --colors-semantic-danger-900: #4D1514;
-
-  /* PROPOSED — pending team review, NOT in foundant-tokens.css yet (contract
-     backlog #4). Existing -0/-50 anchors are untouched; -100 through -900 are
-     new, built with the same S/L curve methodology as the danger ramp above.
-     Contrast figures are against that same ramp's own -50, matching how danger
-     was validated. success-900 and info-600+ clear AA (4.5:1) for colored text;
-     warning cannot clear AA without leaving the amber hue family (reads as
-     brown/olive by the time it's dark enough) — keep warning text on navy. */
-  --colors-semantic-success-100: #C7ECDA; /* 1.12:1 on success-50 */
-  --colors-semantic-success-200: #AAE3C8; /* 1.27:1 */
-  --colors-semantic-success-300: #8DDAB5; /* 1.44:1 */
-  --colors-semantic-success-400: #7CD5AB; /* 1.54:1 */
-  --colors-semantic-success-500: #67CF9D; /* 1.68:1 — same as success-0 */
-  --colors-semantic-success-600: #4CC88C; /* 1.86:1 */
-  --colors-semantic-success-700: #37B87A; /* 2.22:1 */
-  --colors-semantic-success-800: #2E9C67; /* 3.04:1 */
-  --colors-semantic-success-900: #20794E; /* 4.73:1 — AA text on success-50 */
-
-  --colors-semantic-warning-100: #FEE9B7; /* 1.09:1 on warning-50 */
-  --colors-semantic-warning-200: #FCDF9D; /* 1.18:1 */
-  --colors-semantic-warning-300: #F9D583; /* 1.29:1 */
-  --colors-semantic-warning-400: #F7D074; /* 1.34:1 */
-  --colors-semantic-warning-500: #F4C862; /* 1.44:1 — same as warning-0 */
-  --colors-semantic-warning-600: #F3BD41; /* 1.57:1 */
-  --colors-semantic-warning-700: #F1B21E; /* 1.72:1 */
-  --colors-semantic-warning-800: #DD9E0C; /* 2.13:1 */
-  --colors-semantic-warning-900: #B98408; /* 3.00:1 — never clears AA, see note above */
-
-  --colors-semantic-info-100: #ACCCEF; /* 1.27:1 on info-50 */
-  --colors-semantic-info-200: #86B0DB; /* 1.74:1 */
-  --colors-semantic-info-300: #6893C1; /* 2.46:1 */
-  --colors-semantic-info-400: #5983AE; /* 3.05:1 */
-  --colors-semantic-info-500: #536E8A; /* 4.06:1 — same as info-0, just under AA */
-  --colors-semantic-info-600: #455D75; /* 5.23:1 — AA text on info-50 */
-  --colors-semantic-info-700: #374B5F; /* 6.89:1 */
-  --colors-semantic-info-800: #293848; /* 9.17:1 */
-  --colors-semantic-info-900: #19242F; /* 12.05:1 */
-
-  /* links + radius */
-  --colors-link-default: rgb(25, 118, 210);
-  --colors-link-hover: rgb(35, 82, 124);
-  --radius-none: 0;
-  --radius-xs: 2px;
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-round: 50px;
-
-  /* RESOLUTION (contract gap #4): a real card radius token. Production hardcodes
-     6px on cards/hero. Named here so prototypes stop hardcoding it. */
-  --radius-card: 6px;
-
-  /* Heading scale — RATIFIED from the kitchen sink (confirmed correct scale).
-     Supersedes the earlier gap: h1 is 1.75rem here, not production's stray 24px.
-     Backlog: align production's h1{font-size:24px} to 1.75rem. */
-  --h1-size: 1.75rem;  /* 28px, see the conflict note at the h1 rules below */
-  --h2-size: 1.25rem;
-  --h3-size: 1rem;
-  --h4-size: 0.875rem;
-  --h5-size: 0.75rem;
-  --h6-size: 0.75rem;
-  --h-weight: 500;
-}
-
-/* Apply the heading scale. Weight 500 matches MDB/production. */
-h1, .h1 { font-size: var(--h1-size); font-weight: var(--h-weight); }
-h2, .h2 { font-size: var(--h2-size); font-weight: var(--h-weight); }
-h3, .h3 { font-size: var(--h3-size); font-weight: var(--h-weight); }
-h4, .h4 { font-size: var(--h4-size); font-weight: var(--h-weight); }
-h5, .h5 { font-size: var(--h5-size); font-weight: var(--h-weight); }
-h6, .h6 { font-size: var(--h6-size); font-weight: var(--h-weight); }
-
-/* Section eyebrow — RATIFIED as a NON-HEADING label class.
-   Use on a div/span/p to label the region below it. NEVER on an h* element:
-   an eyebrow styled as a heading lies to the document outline and to screen
-   readers. Values derived from production's .nav-group-header.
-   Backlog: fix the netlify h3-as-eyebrow and reconcile .nav-group-header,
-   .ft-label, .ft-footer against this. */
-.section-eyebrow {
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--colors-neutral-30);
-  margin-bottom: 6px;
-  display: block;
-}
 
 /* ---------------------------------------------------------------------------
-   2. MDB REMAPS  — RATIFIED verbatim from mdb-customizations.css :root block
+   P1. FOCUS OUTLINE FOR THE REMAINING COMPONENTS  (PROPOSED, UX-117, UX-153)
+   Production ships the 2px navy outline on .btn and .form-check-input only.
+   This extends the same treatment to nav tabs, pagination, dropdown items,
+   the close button, the side panel nav and breadcrumb links. These all sit on
+   fixed neutral backgrounds, so navy is safe. The navbar is the exception:
+   its background is a per-tenant brand slot, so it uses currentColor and
+   inherits whatever text color the tenant already paired with it.
    --------------------------------------------------------------------------- */
-:root {
-  --mdb-body-bg: var(--colors-neutral-80);
-  --mdb-body-color: var(--colors-brand-primary-dark-blue);
-  --mdb-secondary-color: var(--colors-primary-shades-40);
-  --mdb-surface-color: var(--colors-brand-primary-dark-blue);
-  --mdb-font-sans-serif: var(--body-font);
-  --mdb-link-color-rgb: var(--colors-brand-primary-dark-blue);
-}
-
-/* ---------------------------------------------------------------------------
-   3. COMPONENT OVERRIDES  — RATIFIED from mdb-customizations.css
-   The remap pattern: set --mdb-* vars on the base class, never new component CSS.
-   --------------------------------------------------------------------------- */
-.btn {
-  --mdb-btn-border-radius: var(--radius-round);
-  --mdb-btn-font-size: 14px;
-  text-transform: initial;
-}
-.btn:focus-visible {
+.nav-tabs .nav-link:focus-visible,
+.page-link:focus-visible,
+.dropdown-item:focus-visible,
+.btn-close:focus-visible,
+.side-panel .list-group-item-action:focus-visible,
+.breadcrumb-item a:focus-visible {
   outline: solid 2px var(--colors-brand-primary-dark-blue);
   outline-offset: 2px;
 }
-.btn-primary {
-  --mdb-btn-bg: var(--colors-brand-primary-dark-blue);
-  --mdb-btn-hover-bg: var(--colors-state-layers-dark-hover);
-  --mdb-btn-focus-bg: var(--colors-state-layers-dark-focused);
-  --mdb-btn-active-bg: var(--colors-state-layers-dark-pressed);
-  --mdb-btn-box-shadow: none;
-  --mdb-btn-box-shadow-state: none;
-  --mdb-btn-active-shadow: none;
-  /* Disabled remap (contract backlog): without these, MDB's disabled state
-     falls back to its default blue, not Foundant navy. Fades via opacity 0.65. */
-  --mdb-btn-disabled-bg: var(--colors-brand-primary-dark-blue);
-  --mdb-btn-disabled-color: var(--colors-neutral-100);
-  --mdb-btn-disabled-border-color: var(--colors-brand-primary-dark-blue);
-}
-.btn-outline-secondary {
-  --mdb-btn-bg: var(--colors-neutral-100);
-  --mdb-btn-color: var(--colors-brand-primary-dark-blue);
-  --mdb-btn-hover-bg: var(--colors-state-layers-light-hover);
-  --mdb-btn-hover-color: var(--colors-brand-primary-dark-blue);
-  --mdb-btn-focus-bg: var(--colors-state-layers-light-hover);
-  --mdb-btn-focus-color: var(--colors-brand-primary-dark-blue);
-  --mdb-btn-active-bg: var(--colors-state-layers-light-pressed);
-  --mdb-btn-active-color: var(--colors-brand-primary-dark-blue);
-  --mdb-btn-outline-border-color: var(--colors-brand-primary-dark-blue);
-  --mdb-btn-outline-hover-border-color: var(--colors-brand-primary-dark-blue);
-}
-.btn-link {
-  --mdb-btn-color: var(--colors-brand-primary-dark-blue);
-  --mdb-btn-hover-color: var(--colors-brand-primary-dark-blue);
-  --mdb-btn-focus-color: var(--colors-brand-primary-dark-blue);
-  --mdb-btn-active-color: var(--colors-brand-primary-dark-blue);
-}
-.btn-danger {
-  --mdb-btn-bg: var(--colors-semantic-danger-500);
-  --mdb-btn-color: var(--colors-neutral-100);
-  --mdb-btn-hover-bg: var(--colors-semantic-danger-600);
-  --mdb-btn-hover-color: var(--colors-neutral-100);
-  --mdb-btn-focus-bg: var(--colors-semantic-danger-600);
-  --mdb-btn-focus-color: var(--colors-neutral-100);
-  --mdb-btn-active-bg: var(--colors-semantic-danger-700);
-  --mdb-btn-active-color: var(--colors-neutral-100);
-  --mdb-btn-box-shadow: none;
-  --mdb-btn-box-shadow-state: none;
-  --mdb-btn-active-shadow: none;
-  --mdb-btn-disabled-bg: var(--colors-semantic-danger-500);
-  --mdb-btn-disabled-color: var(--colors-neutral-100);
-  --mdb-btn-disabled-border-color: var(--colors-semantic-danger-500);
-}
-.btn-outline-danger {
-  --mdb-btn-bg: transparent;
-  --mdb-btn-color: var(--colors-semantic-danger-500);
-  --mdb-btn-hover-bg: var(--colors-semantic-danger-50);
-  --mdb-btn-hover-color: var(--colors-semantic-danger-600);
-  --mdb-btn-active-bg: var(--colors-semantic-danger-50);
-  --mdb-btn-active-color: var(--colors-semantic-danger-700);
-  --mdb-btn-outline-border-color: var(--colors-semantic-danger-500);
-  --mdb-btn-outline-hover-border-color: var(--colors-semantic-danger-600);
-  border-color: var(--mdb-btn-outline-border-color);
-}
-
-.badge { --mdb-badge-color: var(--colors-brand-primary-dark-blue); }
-.table { --mdb-table-bg: var(--colors-neutral-100); }
-.form-control, .input-group { background-color: var(--colors-neutral-100); }
-
-/* ---------------------------------------------------------------------------
-   MIRRORED FROM PRODUCTION — RATIFIED, lifted verbatim, not proposed.
-   These four rules exist in mdb-customizations.css / GLM_Summary.css but were
-   absent from this file, so prototypes did not render them the way production
-   does. Copied across during the Dropdowns / Tables / List Groups rebuild.
-   Production is the source of truth for all four; do not "improve" them here.
-   --------------------------------------------------------------------------- */
-.dropdown-disabled { color: var(--colors-primary-shades-40); }
-.table-action-button { cursor: pointer; }
-.datatable {
-  --mdb-datatable-sort-icon-left: 0.3rem;
-  --mdb-datatable-sort-icon-top: calc(50% - 0.8rem);
-}
-.settings-overview-table { table-layout: fixed; width: 100%; }
-.settings-overview-table th, .settings-overview-table td {
-  vertical-align: top; padding: 12px 16px;
-  border-color: var(--colors-borders-divider);
-  font-size: 13px; line-height: 1.5; word-break: break-word;
-}
-.settings-overview-table th {
-  font-weight: 700; color: var(--colors-brand-primary-dark-blue);
-  background-color: var(--colors-neutral-90);
-}
-.settings-overview-overridden { color: var(--colors-semantic-success-30); }
-
-/* Input groups — RATIFIED radius/sizing from mdb-customizations.css, plus a
-   GAP found while documenting this: MDB's .input-group > .form-control:focus
-   is more specific than the plain .form-control:focus rule (Section 7d,
-   Text Inputs), so that rule's navy focus color never reached an input
-   inside an input-group. Matched at the same specificity here. */
-.input-group > :not(:first-child) > .form-control {
-  margin-left: calc(var(--mdb-border-width) * -1);
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-.input-group > div > .form-control {
-  min-height: calc(2.08rem + 2px);
-  height: calc(2.08rem + 2px);
-  padding-top: .27rem;
-  padding-bottom: .27rem;
-  transition: all .2s linear;
-}
-/* UPDATE (focus-state consistency pass): the inset 1px ring is removed and
-   border-width pinned to 2px, so an input inside an input-group focuses
-   identically to a standalone one. This selector is more specific than
-   .form-control:focus, so the box-shadow:none in section 7d could never
-   reach it; it has to be repeated here. Same specificity trap as backlog
-   #24, resurfacing on focus treatment rather than border color. */
-.input-group > .form-control:focus {
-  border-width: 2px;
-  border-color: var(--colors-borders-focused);
-  box-shadow: none;
-}
-
-/* ---------------------------------------------------------------------------
-   7j. AUTOCOMPLETE  — RATIFIED loader + org-search shadow removal (confirmed
-   in mdb-customizations.css), GAP for item/label color (proposed, stock MDB
-   blue today). The input-group focus-border fix is a previously-flagged
-   leftover (Section 6j) fixed here since this is where Autocomplete lives.
-   --------------------------------------------------------------------------- */
-.autocomplete-loader { display: none; }
-#autocomplete-dropdown-organizationSearch .autocomplete-dropdown {
-  --mdb-autocomplete-dropdown-box-shadow: none;
-}
-.autocomplete-item.active,
-.autocomplete-item:hover {
-  --mdb-autocomplete-item-hover-background-color: var(--colors-state-layers-light-hover);
-}
-.autocomplete-label {
-  --mdb-autocomplete-label-color: var(--colors-brand-primary-dark-blue);
-}
-/* UPDATE (focus-state consistency pass): widened from 1px to 2px. This rule
-   overrides a hardcoded #3b71ca left border in mdb-customizations.css and was
-   consistent when the field base border was 1px; the focus pass changed that
-   base underneath it, leaving one edge thinner than the other three. */
-.input-group > .autocomplete > .form-control:focus {
-  border-left: 2px solid var(--colors-borders-focused) !important;
-}
-
-/* ---------------------------------------------------------------------------
-   7k. STEPPER  — GAP, DRAFT. Real MDB component (confirmed in mdb_min.css,
-   vertical-only — no .stepper-horizontal exists), no evidence GLM uses it in
-   production anywhere. Proposed remap of state-icon colors from MDB's own
-   stock -bg-subtle/-text-emphasis tokens to Foundant equivalents.
-   --colors-semantic-success-700 isn't a ratified token yet (danger has the
-   full 50-900 ramp; success is still proposed, Section 2c) — used with a
-   fallback to --colors-brand-primary-dark-blue. danger-700 is real and
-   ratified, used directly with no fallback needed.
-   --------------------------------------------------------------------------- */
-.stepper-completed .stepper-head-icon {
-  background-color: var(--colors-semantic-success-50);
-  color: var(--colors-semantic-success-700, var(--colors-brand-primary-dark-blue));
-}
-.stepper-active .stepper-head-icon {
-  background-color: var(--colors-brand-secondary-light-blue);
-  color: var(--colors-brand-primary-dark-blue);
-}
-.stepper-invalid .stepper-head-icon {
-  background-color: var(--colors-semantic-danger-50);
-  color: var(--colors-semantic-danger-700);
-}
-.stepper-disabled .stepper-head-icon {
-  background-color: var(--colors-neutral-70);
-  color: var(--colors-neutral-40);
-}
-
-/* ---------------------------------------------------------------------------
-   7l. VALIDATION — CURRENT  — RATIFIED. Confirmed live directly with
-   engineering ("field level and bottom summary"), and confirmed in
-   mdb-customizations.css. Both classes share this exact box styling.
-   Deliberately NOT tokenized here to match reality — hardcoded hex is what
-   production actually does today, not an oversight in this file.
-   --------------------------------------------------------------------------- */
-.field-validation-error,
-.validation-summary-errors {
-  border-radius: 4px;
-  color: #000000 !important;
-  display: block;
-  line-height: 1.5em;
-  margin-top: 15px;
-  padding: 5px 7px 4px;
-  border: 2px solid #cd0a0a;
-}
-.validation-summary-errors ul {
-  margin-bottom: 0;
-  list-style-type: none;
-  padding-left: 16px;
-}
-
-/* ---------------------------------------------------------------------------
-   7m. VALIDATION — PROPOSED MODERNIZATION  — GAP, open for discussion.
-   Engineering: form completion is being modernized, not just ported forward,
-   so this is offered as a starting point, not a decision. Reuses .alert-danger
-   (already GAP/proposed, Alerts section) for the summary rather than a new
-   invention, and the real, already-live fa-circle-exclamation/fa-circle-check
-   icon classes (.form-group .fa-circle-exclamation, confirmed in
-   mdb-customizations.css) rather than new iconography.
-   --------------------------------------------------------------------------- */
-.form-control.is-invalid {
-  --mdb-form-control-border-color: var(--colors-semantic-danger-0);
-  border-color: var(--colors-semantic-danger-0);
-}
-.invalid-feedback {
-  color: var(--colors-semantic-danger-0);
-  font-size: 12px;
-}
-
-.text-muted { color: var(--colors-primary-shades-30) !important; }
-.text-danger { color: var(--colors-semantic-danger-0) !important; }
-.text-success { color: var(--colors-semantic-success-0) !important; }
-.text-info { color: var(--colors-semantic-info-0) !important; }
-.dark-link { color: var(--colors-state-layers-dark-link) !important; }
-.card-header { border-bottom: none; }
-.card-footer { border-top: none; }
-.modal-header { --mdb-modal-header-border-width: 0; }
-.modal-footer { --mdb-modal-footer-border-width: 0; }
-.modal-header .close { display: none; }
-
-/* h1 sizing comes from --h1-size in the token block, as a single declaration.
-   A duplicate rule here previously set 24px while the token said 1.75rem, and
-   h1 rendered 24px only because this rule loaded later; reordering the file
-   would have silently changed every page title. That duplication is resolved.
-
-   28px, CONFIRMED against live production by devtools, and the foundation now
-   matches production's approach exactly rather than only its value.
-
-   Production declares:  h1 { font-size: var(--h1-size) }
-                         mdb-customizations.css:489
-   resolving to 28px, and winning over MDB's own
-   calc(1.375rem + 1.5vw) on h1, .h1 in mdb.min.css:18.
-
-   Two earlier readings in this file were wrong and are withdrawn:
-   - "h1 is 24px." That was true of the project snapshot, where line 210 reads
-     h1 { font-size: 24px } as a literal. It is not true of production, which
-     has moved to a token at line 489. The snapshot is stale, confirmed.
-   - "The visible title is 28px because an ID-scoped rule on span#PageTitle
-     overrides the h1." Wrong. The devtools cascade shows the winning
-     declaration on h1 itself; the span merely inherits. #PageTitle carries no
-     styling at all and is a JS hook only, the same pattern already found with
-     .kebab-btn. There is no unread stylesheet.
-
-   Worth recording the direction of travel: production moved a hardcoded 24px
-   literal to var(--h1-size). That is the round-trip working, a design-system
-   token reaching shipped CSS, and it is the first place this project has
-   caught it happening rather than assumed it. It also means the file line
-   numbers in this document are unreliable and should be re-derived, not
-   trusted, until UX-134 is done.
-
-   h1.OrganizationSelector is RATIFIED production (mdb-customizations.css:214)
-   and was previously missing from this file. */
-h1.OrganizationSelector {
-  color: var(--colors-primary-shades-50);
-  font-size: 32px;
-  font-weight: 700;
-}
-
-/* ---------------------------------------------------------------------------
-   4. ENTITY SUMMARY PAGE CLASSES  — RATIFIED from GLM.Summary.css (condensed
-   to the desktop essentials; full responsive collapse lives in production).
-   --------------------------------------------------------------------------- */
-.panel-layout { display: flex; flex-wrap: wrap; overflow-x: auto; height: 100%; }
-.main-content-body { flex: 1; min-width: 0; overflow-x: hidden; }
-
-.side-panel {
-  background-color: var(--colors-neutral-100);
-  width: 275px;
-  min-width: 275px;
-}
-.side-panel .list-group-item:not(.ft-label) {
-  border: 0;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  --mdb-list-group-action-hover-bg: var(--colors-neutral-70);
-}
-.side-panel .list-group-item.active {
-  background-color: var(--colors-brand-secondary-light-blue);
-  font-weight: bold;
-  color: var(--mdb-list-group-color);
-}
-.side-panel .list-group-item svg { width: 20px; }
-.side-panel .nav-group-header {
-  font-size: 12px; font-weight: 700; text-transform: uppercase;
-  color: var(--colors-neutral-30); letter-spacing: 0.5px; padding: 12px 16px 4px;
-}
-.ft-label { font-size: 12px; font-weight: 400; line-height: 20px; font-variant: small-caps; }
-
-/* Side panel mobile collapse: fade edges on the horizontal scroll-tab bar
-   under 768px. Hidden/inert on desktop (opacity 0, pointer-events none);
-   production toggles the .visible class via scroll-position JS. RATIFIED. */
-.nav-fade {
-  position: absolute; top: 0; bottom: 0; width: 40px;
-  pointer-events: none; z-index: 10; opacity: 0; transition: opacity 0.15s;
-}
-.nav-fade.visible { opacity: 1; }
-.nav-fade-left { left: 0; background: linear-gradient(to right, var(--colors-neutral-100), transparent); }
-.nav-fade-right { right: 0; background: linear-gradient(to left, var(--colors-neutral-100), transparent); }
-
-/* detail bar (header meta strip) */
-.detail-bar { display: flex; flex-wrap: wrap; gap: 0; margin-top: 0.5rem; }
-.detail-bar .detail-item { padding: 0 16px; border-left: 1px solid var(--colors-neutral-50); }
-.detail-bar .detail-item:first-child { padding-left: 0; border-left: 0; }
-.detail-bar .detail-label { display: block; font-size: 0.75rem; line-height: 1; color: var(--colors-neutral-30); }
-.detail-bar .detail-value { display: block; line-height: 1.4; word-break: break-word; }
-.detail-bar .detail-value a { color: var(--colors-state-layers-dark-link); text-decoration: none; }
-.detail-bar .detail-value a:hover { text-decoration: underline; }
-.detail-bar .detail-value.empty { color: var(--colors-neutral-40); font-style: italic; }
-
-/* stat tiles */
-.data-card-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(225px, 1fr)); gap: 16px; margin-top: 16px; }
-.data-card {
-  display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
-  gap: 5px; border: 1px solid var(--colors-borders-divider); border-radius: 10px;
-}
-.data-card-lg { min-width: 225px; padding: 20px 12px; }
-.data-card .h5 { color: var(--colors-brand-primary-dark-blue); font-size: 20px; font-weight: 700; line-height: 26px; }
-
-/* summary cards */
-.summary-card-row { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px; }
-.summary-card { flex: 1 1 320px; min-height: 150px; }
-.summary-card dl { display: grid; grid-template-columns: max-content 1fr; column-gap: 16px; row-gap: 6px; margin: 0; align-items: baseline; }
-.summary-card dt { color: var(--colors-neutral-30); font-weight: 400; }
-.summary-card dd { margin: 0; word-break: break-word; }
-.summary-card.warn { border-left: 4px solid var(--colors-borders-warning); }
-
-/* Mirrored from GLM_Summary.css during the Page Patterns build (UX-139).
-   Confirmed production, lifted verbatim. Lines 167 (.icon-wrapper /
-   .icon-flex), 217 (.detail-item-truncate), and the summary-card flex
-   sizing and empty-text rules. Production is the source of truth. */
-.icon-wrapper {
-  background-color: var(--colors-neutral-50);
-  border-radius: 50%; padding: 7px; width: 2em; height: 2em;
-}
-.icon-wrapper:hover { background-color: var(--colors-neutral-40); }
-.icon-flex, .icon-wrapper { display: flex; justify-content: center; align-items: center; }
-.detail-bar .detail-item-truncate { max-width: 240px; }
-.detail-bar .detail-item-truncate .detail-value {
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; word-break: normal;
-}
-.summary-card-full { flex: 0 0 100%; }
-.summary-card-wide { flex: 1.5 1 480px; }
-.summary-card .empty-text { color: var(--colors-neutral-30); font-style: italic; }
-
-/* ---------------------------------------------------------------------------
-   5. CARD-INTERNAL ROW  — RESOLUTION (contract gap #5)
-   Production ships award-detail-row and fin-row as identical twins. Collapse to
-   one canonical .kv-row. Compatibility aliases keep liftability both ways until
-   production consolidates.
-   --------------------------------------------------------------------------- */
-.kv-row,
-.award-detail-row,
-.fin-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 8px 0; border-bottom: 1px solid var(--colors-borders-divider);
-  font-size: 0.85rem;
-}
-.kv-row:last-of-type,
-.award-detail-row:last-of-type,
-.fin-row:last-of-type { border-bottom: none; }
-.kv-row-label,
-.award-detail-row-label,
-.fin-label { color: var(--colors-neutral-40); }
-.kv-row-value,
-.award-detail-row-value,
-.fin-value { font-weight: 500; color: var(--colors-brand-primary-dark-blue); }
-.kv-row .badge, .fin-row .badge { font-size: 0.75rem; }
-
-/* ---------------------------------------------------------------------------
-   6. HERO CARD  — RATIFIED from the live page's inline style blocks
-   --------------------------------------------------------------------------- */
-.hero-card {
-  background: var(--colors-neutral-100);
-  border: 1px solid var(--colors-borders-divider);
-  border-radius: var(--radius-card);
-  padding: 20px 24px 12px;
-  display: flex; align-items: flex-start; gap: 32px; flex-wrap: wrap;
-}
-.hero-amount-block { display: flex; flex-direction: column; gap: 2px; }
-.hero-amount-label { font-size: 0.75rem; color: var(--colors-neutral-40); font-weight: 400; }
-.hero-amount-value { font-size: 1.5rem; font-weight: 700; color: var(--colors-brand-primary-dark-blue); }
-.hero-amount-value.is-empty { color: var(--colors-neutral-50); }
-.hero-divider { width: 1px; align-self: stretch; background: var(--colors-borders-divider); flex-shrink: 0; }
-.hero-status-badge {
-  display: inline-block; border-radius: 999px; padding: 2px 12px;
-  font-size: 0.85rem; font-weight: 500;
-  background: var(--colors-semantic-info-50); color: var(--colors-brand-primary-dark-blue); white-space: nowrap;
-}
-.hero-stage-track { display: flex; align-items: flex-start; flex: 1; min-width: 280px; }
-.hero-stage-step { display: flex; flex-direction: column; align-items: center; flex: 0 0 auto; width: 56px; }
-.hero-stage-node {
-  width: 28px; height: 28px; border-radius: 50%;
-  border: 2px solid var(--colors-borders-divider); background: var(--colors-neutral-100);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.7rem; font-weight: 700; color: var(--colors-neutral-40); position: relative; z-index: 1;
-}
-.hero-stage-node.is-done { background: var(--colors-semantic-success-50); border-color: var(--colors-semantic-success-0); color: var(--colors-brand-primary-dark-blue); }
-.hero-stage-node.is-active { background: var(--colors-semantic-warning-50); border-color: var(--colors-semantic-warning-0); color: var(--colors-brand-primary-dark-blue); }
-.hero-stage-label { font-size: 0.7rem; color: var(--colors-neutral-40); margin-top: 4px; text-align: center; white-space: nowrap; }
-.hero-stage-line { flex: 1; height: 1px; background: var(--colors-borders-divider); margin-top: 14px; margin-left: -10px; margin-right: -10px; }
-.hero-stage-line.is-done { background: var(--colors-semantic-success-0); }
-
-/* Icon button — standardized, WCAG 2.2 AA target-size compliant.
-   SUPERSEDES two earlier versions of this rule.
-   v1 had no explicit width/height — sizing was purely incidental, driven
-   by padding plus whatever font-size/line-height happened to be inherited
-   from context. WCAG 2.2 SC 2.5.8 (Target Size Minimum, AA) requires at
-   least 24x24 CSS pixels for pointer targets, with narrow exceptions
-   (inline text, essential presentation, equivalent control elsewhere,
-   adequate spacing) that don't apply here.
-   v2 fixed that with explicit 32x32 sizing plus a 24x24 .icon-btn-sm
-   variant for dense contexts. Corrected again, on direct instruction:
-   32px reads too heavy in dense UI (table rows in particular), so the
-   default is now exactly 24x24 — the real WCAG floor, not a comfort
-   margin above it. Since there's no longer a larger default to shrink
-   down from, .icon-btn-sm is gone; one size only.
-   Also removed the border. WCAG 2.5.8 governs the tappable AREA, not
-   visual styling — a border was never a compliance requirement, just
-   what production's one real kebab-btn instance happened to use. Removed
-   on direct instruction; hover and focus-visible states still make the
-   control's presence and boundary clear without a border at rest.
-   .kebab-btn is kept as an alias — same rule, real production class name. */
-.icon-btn, .kebab-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  background: none;
-  border: none;
-  border-radius: 4px;
-  padding: 0;
-  cursor: pointer;
-  color: var(--colors-brand-primary-dark-blue);
-  font-size: 14px;
-  line-height: 1;
-}
-.icon-btn:hover, .kebab-btn:hover {
-  background: var(--colors-state-layers-light-hover);
-}
-.icon-btn:focus-visible, .kebab-btn:focus-visible {
-  outline: solid 2px var(--colors-brand-primary-dark-blue);
+.navbar-brand:focus-visible,
+.navbar-nav > li > a:focus-visible,
+.navbar-nav a.nav-link:focus-visible {
+  outline: solid 2px currentColor;
   outline-offset: 2px;
 }
-.icon-btn:disabled, .kebab-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+
 
 /* ---------------------------------------------------------------------------
-   6b. NAVBAR  — RATIFIED structure from mdb-customizations.css + the live
-   Request Summary page. Header/footer background is an ORG-BRANDABLE SLOT:
-   Foundant ships neutral-100 by default; individual foundations inject their
-   own background/text color via per-tenant CSS layered on top of this stack.
-   This block ships the Foundant default only.
+   P2. FORM SWITCH, FILLED PILL TRACK  (PROPOSED, UX-116)
+   Production recolors the checked knob navy and keeps MDB's stock geometry
+   (32x14 rail, 20px knob overhanging it). The preferred styling in UX-116 is
+   a filled 30x20 pill with a contained 16px white knob, matching the radio's
+   20px height.
+
+   Track color is not settled. The success token used here fails WCAG 1.4.11
+   at about 1.73:1 (UX-149), and whether "on" should use a semantic success
+   color at all is open (UX-151). Decide those before this ships.
+
+   MDB restates the knob's width and height at four specificity levels (rest,
+   checked, focus, checked plus focus), so every one is restated here. The
+   focus ripple is suppressed on the switch only; production keeps it on
+   checkboxes and radios.
    --------------------------------------------------------------------------- */
-header, footer {
-  background-color: var(--colors-neutral-100);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 5px rgba(0, 0, 0, 0.075);
-  font-size: 14px;
-}
-#MainNavigation.collapse.show,
-#MainNavigation.collapsing {
-  background-color: var(--colors-neutral-100);
-}
-.navbar-nav > li > a,
-.navbar-nav a.nav-link {
-  padding: 15px;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-}
-
-/* GAP RESOLUTION (contract backlog #11 — proposed, not yet adopted in production).
-   Production's top-level nav-link hover is a hardcoded gray gradient
-   (#eee to #e4e4e4) with a 5px solid #222 border-bottom, the only hardcoded-hex
-   hover left in the system. Replaced here with the same flat state-layer
-   treatment already ratified for .kebab-btn, so the top-level toggle matches
-   its own dropdown submenu (stock MDB, already this color family) instead of
-   introducing a third hover language. */
-header .navbar-nav > li > a:hover,
-header .navbar-nav > li > a:active,
-header .navbar-nav a.nav-link:hover,
-header .navbar-nav a.nav-link:active {
-  background-color: var(--colors-state-layers-light-hover);
-  border-radius: var(--radius-sm);
-  color: var(--colors-brand-primary-dark-blue);
-}
-
-/* ---------------------------------------------------------------------------
-   7. PILL BADGES  — originally RATIFIED pill/uppercase from GLM.Summary.css.
-   GAP — intentional prototype departure, flagged not silent: shape changed to
-   rectangular (--radius-sm) since pill badges read too similar to pill buttons,
-   uppercase/letter-spacing removed per team request, and a saturated border
-   added per variant for contrast against white. Secondary label text moved off
-   the neutral ramp to primary-dark-blue, matching the other three variants, so
-   badge text colour is now one rule with no exception; production's
-   neutral-30 read too light at the badge's 12px size (5.3:1 on neutral-70,
-   passing AA but thin), and an interim neutral-20 step was rejected because a
-   near-black gray sitting beside three navy labels read as an inconsistency
-   rather than a variant. Contrast on neutral-70 is 9.9:1. Needs engineering
-   review before it round-trips into GLM.Summary.css. See contract backlog.
-   The status->semantic mapping (contract gap #6) is documented in the contract;
-   apply these four backgrounds via the mapping rather than inventing names.
-   --------------------------------------------------------------------------- */
-.badge-success, .badge-warning, .badge-danger, .badge-secondary {
-  display: inline-block; padding: 4px 10px; border-radius: var(--radius-sm);
-  font-size: 12px; font-weight: 600;
-}
-.badge-success { background-color: var(--colors-semantic-success-50); color: var(--colors-brand-primary-dark-blue); border: 1px solid var(--colors-semantic-success-0); }
-.badge-warning { background-color: var(--colors-semantic-warning-50); color: var(--colors-brand-primary-dark-blue); border: 1px solid var(--colors-semantic-warning-0); }
-.badge-danger  { background-color: var(--colors-semantic-danger-50);  color: var(--colors-brand-primary-dark-blue); border: 1px solid var(--colors-semantic-danger-200); }
-.badge-secondary { background-color: var(--colors-neutral-70); color: var(--colors-brand-primary-dark-blue); border: 1px solid var(--colors-neutral-40); }
-
-/* ---------------------------------------------------------------------------
-   7b. ALERTS  — GAP, DRAFT. No .alert override exists anywhere in production;
-   these ship as pure stock MDB defaults today. Mirrors the badge convention
-   already ratified above (-50 tint background, primary-dark-blue text) since
-   only the danger ramp is WCAG-validated past -50 (contract backlog #4).
-   Needs engineering review before it round-trips into mdb-customizations.css.
-   --------------------------------------------------------------------------- */
-.alert-success {
-  --mdb-alert-bg: var(--colors-semantic-success-50);
-  --mdb-alert-color: var(--colors-brand-primary-dark-blue);
-  --mdb-alert-border-color: var(--colors-semantic-success-0);
-  background-color: var(--colors-semantic-success-50);
-  color: var(--colors-brand-primary-dark-blue);
-  border: 1px solid var(--colors-semantic-success-0);
-}
-.alert-warning {
-  --mdb-alert-bg: var(--colors-semantic-warning-50);
-  --mdb-alert-color: var(--colors-brand-primary-dark-blue);
-  --mdb-alert-border-color: var(--colors-semantic-warning-0);
-  background-color: var(--colors-semantic-warning-50);
-  color: var(--colors-brand-primary-dark-blue);
-  border: 1px solid var(--colors-semantic-warning-0);
-}
-.alert-danger {
-  --mdb-alert-bg: var(--colors-semantic-danger-50);
-  --mdb-alert-color: var(--colors-brand-primary-dark-blue);
-  --mdb-alert-border-color: var(--colors-semantic-danger-200);
-  background-color: var(--colors-semantic-danger-50);
-  color: var(--colors-brand-primary-dark-blue);
-  border: 1px solid var(--colors-semantic-danger-200);
-}
-.alert-info {
-  --mdb-alert-bg: var(--colors-semantic-info-90);
-  --mdb-alert-color: var(--colors-brand-primary-dark-blue);
-  --mdb-alert-border-color: var(--colors-semantic-info-50);
-  background-color: var(--colors-semantic-info-90);
-  color: var(--colors-brand-primary-dark-blue);
-  border: 1px solid var(--colors-semantic-info-50);
-}
-
-/* ---------------------------------------------------------------------------
-   7c. TABS  — GAP, DRAFT. No .nav-tabs override exists anywhere in production;
-   ships as pure stock MDB defaults today. Active/hover treatment matches the
-   state-layer + primary-dark-blue convention already ratified for .kebab-btn
-   and the navbar hover fix. Needs engineering review before it round-trips
-   into mdb-customizations.css.
-   --------------------------------------------------------------------------- */
-.nav-tabs {
-  --mdb-nav-tabs-border-color: var(--colors-borders-divider);
-  --mdb-nav-tabs-link-active-color: var(--colors-brand-primary-dark-blue);
-  --mdb-nav-tabs-link-active-border-color: transparent transparent var(--colors-brand-primary-dark-blue);
-  border-bottom-color: var(--colors-borders-divider);
-}
-.nav-tabs .nav-link {
-  --mdb-nav-link-color: var(--colors-neutral-40);
-  color: var(--colors-neutral-40);
-  font-weight: 500;
-  border-radius: 0;
-  text-transform: none;
-}
-.nav-tabs .nav-link:hover {
-  background-color: var(--colors-state-layers-light-hover);
-  border-color: transparent;
-  color: var(--colors-brand-primary-dark-blue);
-}
-.nav-tabs .nav-link.active {
-  color: var(--colors-brand-primary-dark-blue);
-  font-weight: 700;
-  border-bottom: 2px solid var(--colors-brand-primary-dark-blue);
-}
-.nav-pills .nav-link {
-  --mdb-nav-pills-link-active-bg: var(--colors-brand-primary-dark-blue);
-  border-radius: var(--radius-round);
-  color: var(--colors-neutral-40);
-  font-weight: 500;
-  text-transform: none;
-}
-.nav-pills .nav-link:hover { background-color: var(--colors-state-layers-light-hover); color: var(--colors-brand-primary-dark-blue); }
-.nav-pills .nav-link.active {
-  background-color: var(--colors-brand-primary-dark-blue);
-  color: var(--colors-neutral-100);
-  font-weight: 700;
-}
-
-/* ---------------------------------------------------------------------------
-   7d. FORM CONTROLS — TEXT INPUTS & SELECT  — GAP, DRAFT. Production only
-   confirms .form-control background (--colors-neutral-100, set above). Border
-   and focus treatment are proposed here since mdb-customizations.css doesn't
-   wire them up yet. Confirmed against mdb_min.css: the base border does use a
-   variable (--mdb-border-color), but it's shared across many unrelated
-   components, so scoping the override to .form-control/.form-select directly
-   is safer than remapping that variable globally. The winning focus rule in
-   mdb_min.css is a hardcoded hex (border-color:#3b71ca), not a variable, at
-   the same specificity as this override — confirming the direct-property
-   approach (following the Alerts/Tabs precedent) rather than variable
-   indirection. Border tokens use the dedicated --colors-borders-enabled/
-   -focused tokens from foundant-tokens.css rather than
-   --colors-brand-primary-dark-blue directly, since they're the more
-   semantically correct remap target even though the values currently match.
-   Label color is deliberately lighter than body text, not matched to it:
-   mdb-customizations.css sets --mdb-body-color to
-   --colors-brand-primary-dark-blue globally, so all unstyled text (including
-   what's typed into the field) already renders navy by inheritance. Production
-   already uses this exact light-label/dark-value hierarchy in two real places
-   — .detail-label + .detail-value, and .summary-card dt + dd — where the
-   label gets an explicit gray and the value is left to inherit navy. This
-   label follows that same established pattern rather than introducing a
-   fourth caption treatment. Font-weight and margin are intentionally NOT set
-   here — use fw-normal/mb-1 utility classes in markup instead, per the
-   already-ratified "spacing uses Bootstrap m-*/p-* utilities" convention.
-   font-size: 0.75rem has no token to reference — foundant-tokens.css defines
-   zero font-size tokens today (see backlog #7, heading scale), and production's
-   own .detail-label hardcodes this same raw value with no token either, so
-   this matches evidence rather than inventing a token unilaterally.
-   .form-select has no production evidence of its own at all; it's folded into
-   the same rule purely to keep the field family visually unified, not because
-   a select-specific override was found. Needs engineering review before it
-   round-trips into mdb-customizations.css.
-
-   UPDATE (focus-state consistency pass): border-width is now 2px in both
-   rest and focus states, so focus never causes a layout shift. The focus
-   box-shadow ring is removed — border-color change alone (gray to navy) is
-   the only signal now, addressing engineering feedback that the box-shadow
-   ring read as unexpectedly thick. Still pending engineering sign-off before
-   this round-trips into mdb-customizations.css.
-   --------------------------------------------------------------------------- */
-.form-control, .form-select {
-  border-width: 2px;
-  border-color: var(--colors-borders-enabled);
-  border-radius: var(--radius-sm);
-}
-.form-control:focus, .form-select:focus {
-  border-width: 2px;
-  border-color: var(--colors-borders-focused);
-  box-shadow: none;
-}
-
-/* ---------------------------------------------------------------------------
-   7e. CHECKBOX, RADIO & SWITCH  — GAP, DRAFT. No .form-check-input override
-   exists anywhere in production; checked/focus state ships as pure stock MDB
-   blue (#3b71ca) today, and the border is 2px. Standalone proposal, not an
-   extension of a sibling remap like Select was — the first customization
-   proposed for this component family.
-
-   Confirmed against mdb_min.css directly (now in this project) that the
-   first attempt at this fix was wrong on two counts, both about specificity,
-   not load order:
-   - Checkbox: MDB's real checked-state rule is
-     .form-check-input[type=checkbox]:checked — the [type=checkbox] attribute
-     selector makes it MORE specific than a plain .form-check-input:checked
-     rule, so MDB's blue won outright regardless of which stylesheet loaded
-     last. Fixed by matching that exact selector below.
-   - Radio: the visible dot isn't the base element's background at all — it's
-     a ::after pseudo-element (.form-check-input[type=radio]:checked:after).
-     A rule on the base element never touches it. Fixed by targeting the
-     pseudo-element directly.
-   - Switch: MDB colors the knob, not the track, via a ::after pseudo-element
-     at higher specificity
-     (.form-switch .form-check-input:checked[type=checkbox]:after) — this was
-     already correctly targeted in an earlier pass and needs no change.
-   - Border width: mdb_min.css sets a second, later .form-check-input rule
-     (MDB's own Material-style checkbox, layered on top of the Bootstrap base)
-     with border: .125rem solid — that's exactly 2px. Overridden to 1px below
-     per design direction, at equal specificity, later-loaded wins.
-
-   Retested after deploying — found two more of the same specificity pattern,
-   this time on the FOCUS state specifically: MDB has separate, more specific
-   rules for the checked+focus combination that a plain :checked rule doesn't
-   reach, since clicking a control focuses it automatically:
-   .form-check-input:checked:focus{border-color:#3b71ca} (radio's ring) and
-   .form-check-input[type=checkbox]:checked:focus{background-color:#3b71ca}
-   (checkbox's fill). Both now matched at the same specificity.
-
-   An earlier version of this rule added `accent-color` as a guessed fix —
-   confirmed via mdb_min.css that MDB doesn't use accent-color anywhere, so
-   that guess was removed rather than left in as dead/misleading code.
-   Needs engineering review before it round-trips into mdb-customizations.css.
-
-   UPDATE (focus-state consistency pass): the focus box-shadow ring is
-   replaced with a 2px outline, matching the pattern already shipped on
-   buttons (.btn:focus-visible), rather than widening this component's own
-   border — the 1px border-width above was a deliberate earlier decision
-   this doesn't touch, and outline avoids the layout shift a border-width
-   change would cause. The Material ripple glow (:before box-shadow blur) is
-   explicitly suppressed rather than left un-recolored, per team decision —
-   simply removing the navy override would let it revert to MDB's own
-   default gray glow instead of actually disappearing. Still pending
-   engineering sign-off before this round-trips into mdb-customizations.css.
-   --------------------------------------------------------------------------- */
-.form-check-input {
-  border-width: 1px;
-}
-.form-check-input:checked {
-  border-color: var(--colors-brand-primary-dark-blue);
-}
-.form-check-input:checked:focus {
-  border-color: var(--colors-brand-primary-dark-blue);
-}
-.form-check-input[type=checkbox]:checked {
-  background-color: var(--colors-brand-primary-dark-blue);
-}
-.form-check-input[type=checkbox]:checked:focus {
-  background-color: var(--colors-brand-primary-dark-blue);
-}
-.form-check-input[type=radio]:checked:after {
-  border-color: var(--colors-brand-primary-dark-blue);
-  background-color: var(--colors-brand-primary-dark-blue);
-}
-.form-check-input:focus {
-  outline: solid 2px var(--colors-brand-primary-dark-blue);
-  outline-offset: 2px;
-}
-.form-check-input:focus:before,
-.form-check-input:checked:focus:before,
-.form-switch .form-check-input:checked:focus:before {
-  box-shadow: none;
-}
-/* ---------------------------------------------------------------------------
-   7n. FEATURE TOGGLE (.toggle-on / .toggle-off)  — RATIFIED, mirrored
-   verbatim from mdb-customizations.css:474. This is a DIFFERENT COMPONENT
-   from the form switch in 7e, not an alternative implementation of it. It is
-   the affordance for opting into a previewed feature, and it is not a switch
-   at all: it is a Font Awesome icon (fa-regular fa-toggle-large-on) inside an
-   <a href>, colored through currentColor, with no track or knob to style.
-
-   Do not use it for form fields, and do not use the form switch for feature
-   previews. The two share a visual language on purpose; they do not share
-   behaviour.
-
-   .toggle-off deliberately sets no color. Production relies on inheriting
-   .text-muted from the parent container, so the same markup in a container
-   without that class renders body navy instead of gray. Reproduced as-is
-   rather than "fixed", per the rule that production is the source of truth
-   for what already exists. Logged as a fragility, not corrected here.
-
-   The interaction model has open accessibility questions (GET mutating state,
-   accessible name carried by title alone, no role="switch" or aria-checked).
-   See UX-116. Styling is ratified; the interaction model is not.
-   --------------------------------------------------------------------------- */
-.toggle-on {
-  color: var(--colors-semantic-success-0);
-  font-size: 25px;
-}
-.toggle-off {
-  font-size: 25px;
-}
-.toggle-off:hover {
-  color: unset;
-}
-
-/* UPDATE (UX-116, toggle switch standardization): reconstructed from the
-   production "Try the new Admin Dashboard" toggle. This is a geometry change,
-   not just a recolor. Stock MDB Material ships a 32x14 rail with a 20x20 knob
-   OVERHANGING it by 3px top and bottom; the target is a filled pill with the
-   knob contained inside. Height is capped at 20px to match the radio, which
-   mdb_min.css sets to 1.25rem square, so a switch and a radio in the same
-   column are the same height. Track 30x20, knob 16, inset 2, travel 12. The
-   track's margin-top is set to the radio's .125em rather than the switch's
-   own .3em for the same reason.
-
-   The earlier draft here set the checked knob to navy. Wrong direction: the
-   target keeps MDB's white knob in both states and moves the color onto the
-   TRACK. Superseded.
-
-   FIRST ATTEMPT WAS BROKEN, and it is worth recording why, because it is the
-   same specificity pattern as backlog #24 and #37 for the fourth time. That
-   attempt shrank the knob to 16px in a rule on
-   .form-switch .form-check-input:after  (0,2,1)
-   but MDB restates width and height in
-   .form-switch .form-check-input:checked[type=checkbox]:after  (0,3,1)
-   which is more specific. The knob therefore rendered 16px when off and 20px
-   when on, overflowing the track on the right and bottom in the on state.
-   Lesson: every geometry property MDB declares in its checked-state knob rule
-   has to be restated in the override at matching specificity, not just the
-   ones being changed. Dimensions are whole numbers to keep the arithmetic
-   checkable, and both the base and checked knob rules now declare width and
-   height explicitly so the two states cannot diverge again.
-
-   THIRD PASS, focus state. MDB resizes the knob AGAIN on focus, in two rules
-   that both compute to (0,3,1):
-     .form-check-input[type=checkbox]:focus:after  -> 14px, border-radius 0
-     .form-switch .form-check-input:focus:after    -> 20px, border-radius 50%
-   A knob rule at (0,2,1) loses to both, so on focus the knob reverted to 20px
-   while keeping the 2px inset, overflowing the track right and bottom. The
-   overrides below carry [type=checkbox] to reach (0,4,1) and are scoped under
-   .form-switch so a plain checkbox keeps MDB's own focus treatment, where the
-   14px square is the checkmark backdrop and not a knob at all.
-
-   Running tally: this component alone required geometry overrides at four
-   different specificity levels (base, checked, focus, checked+focus) because
-   MDB restates width and height at each one. Fifth occurrence of the pattern
-   behind backlog #24 and #37.
-
-   NOT YET VERIFIED VISUALLY. No .form-switch rule exists anywhere in
-   mdb-customizations.css or GLM_Summary.css, so the production toggle is
-   styled somewhere outside the files in this project. These dimensions come
-   from MDB's scale plus the screenshots, NOT from the real source. Check
-   against production before ratifying. See also UX-134. */
 .form-switch .form-check-input {
   width: 1.875rem;
   height: 1.25rem;
@@ -1039,8 +86,6 @@ header .navbar-nav a.nav-link:active {
 .form-switch .form-check-input:checked {
   background-color: var(--colors-semantic-success-0);
 }
-/* Restates width, height and margin-top as well as the changed margin-left,
-   because MDB declares all of them at this higher specificity. */
 .form-switch .form-check-input:checked[type=checkbox]:after {
   width: 1rem;
   height: 1rem;
@@ -1048,9 +93,6 @@ header .navbar-nav a.nav-link:active {
   margin-left: 0.75rem;
   background-color: var(--colors-neutral-100);
 }
-/* Focus keeps the same geometry as rest. Scoped to .form-switch so a plain
-   checkbox is untouched; [type=checkbox] lifts these to (0,4,1) and (0,5,1)
-   to clear MDB's two focus rules. */
 .form-switch .form-check-input[type=checkbox]:focus:after {
   width: 1rem;
   height: 1rem;
@@ -1067,220 +109,69 @@ header .navbar-nav a.nav-link:active {
   margin-left: 0.75rem;
   background-color: var(--colors-neutral-100);
 }
+.form-switch .form-check-input:focus:before,
+.form-switch .form-check-input:checked:focus:before {
+  box-shadow: none;
+}
+
 
 /* ---------------------------------------------------------------------------
-   7f. FOCUS STATE — REMAINING COMPONENTS — GAP, DRAFT. Nav-tabs, Pagination,
-   and standalone Dropdown sections are still WIP with no kitchen sink demo
-   of their own yet, so there's no status badge to flip for those until they
-   exist — this is the CSS side only, staged so it's ready when they are.
-   (.dropdown-item is already exercised live inside the built Navbar demo,
-   just not as its own dedicated section yet.)
-
-   Navbar and Sidenav are NOT WIP — both are already built and OVERRIDDEN
-   (confirmed directly in their own sections). Corrected here after an
-   earlier draft of this comment wrongly assumed both were unbuilt and
-   wrongly assumed Sidenav shared Navbar's customizable-background problem.
-   See the Focus treatment subsection added to each of those sections for
-   the real demo and rationale.
-
-   Buttons already ship a universal 2px navy outline in production
-   (.btn:focus-visible in mdb-customizations.css) — that's the reference
-   pattern this extends, not a new decision.
-
-   Nav-tabs, pagination, dropdown items, the close button, and Sidenav's
-   .list-group-item-action all sit on white or fixed-neutral backgrounds
-   that aren't org-customizable (Sidenav's .side-panel is hardcoded to
-   --colors-neutral-100, confirmed in its own section), so plain navy is
-   safe here the same way it is for buttons.
-
-   Navbar-nav is the one genuine exception: confirmed in its own section's
-   "Why" row, header/footer background is an org-brandable slot, and
-   individual foundations inject their own background/text color as a
-   matched pair. A fixed navy outline could fail WCAG 1.4.11 (3:1 non-text
-   contrast) against a dark org background, so this uses currentColor
-   instead — it inherits whatever text color already solved that problem,
-   no new logic, can't drift out of sync with the org's choice.
-
-   Not included here: the generic .focus-ring utility class. It's applied
-   unpredictably wherever someone reaches for it, potentially including
-   Navbar's customizable-background context, so it needs its own decision
-   rather than defaulting to navy. Flagged in the contract, not resolved.
+   P3. STEPPER STATE COLORS  (PROPOSED, DESIGN-SYSTEM.md Gaps > Steppers)
+   GLM.Web has no stepper today. MDB's stepper is vertical only. This remaps
+   its state icons from MDB's stock subtle tokens to Foundant equivalents, for
+   the first workflow that needs one. --colors-semantic-success-700 now exists
+   in foundant-tokens.css, but the extended ramps are still being validated
+   (UX-130). The navy fallback is kept until that lands.
    --------------------------------------------------------------------------- */
-.nav-tabs .nav-link:focus-visible,
-.page-link:focus-visible,
-.dropdown-item:focus-visible,
-.btn-close:focus-visible,
-.side-panel .list-group-item-action:focus-visible {
-  outline: solid 2px var(--colors-brand-primary-dark-blue);
-  outline-offset: 2px;
+.stepper-completed .stepper-head-icon {
+  background-color: var(--colors-semantic-success-50);
+  color: var(--colors-semantic-success-700, var(--colors-brand-primary-dark-blue));
 }
-.navbar-brand:focus-visible,
-.navbar-nav > li > a:focus-visible,
-.navbar-nav a.nav-link:focus-visible {
-  outline: solid 2px currentColor;
-  outline-offset: 2px;
-}
-
-.form-label {
-  color: var(--colors-neutral-30);
-  font-size: 0.75rem;
-}
-
-/* ---------------------------------------------------------------------------
-   8. GLOBAL TOAST  — RATIFIED from mdb-customizations.css
-   --------------------------------------------------------------------------- */
-/* .toast-container positioning is verbatim production. #GlobalToast's own
-   production rule also carries display:none (it is revealed by script); that
-   one declaration is intentionally omitted here so demos and prototypes can
-   render the toast statically. */
-.toast-container { position: fixed; right: 5px; top: 5px; }
-#GlobalToast { background-color: var(--colors-semantic-success-50); border-left: 4px solid var(--colors-semantic-success-0); border-radius: 8px; }
-#GlobalToast .toast-header { background-color: transparent; border: none; color: var(--colors-brand-primary-dark-blue); padding: 12px 16px 8px 16px; }
-#GlobalToast .toast-body { background-color: transparent; padding: 0 16px 12px 16px; }
-
-/* ---------------------------------------------------------------------------
-   9. FOUNDANT AG GRID THEME  — RESOLUTION / DRAFT (contract gap #1, Section 7)
-   Production ships STOCK ALPINE (#000 text, Helvetica Neue, #2196f3 active,
-   0px radius) — themed to nothing. This block remaps the core variables onto
-   Foundant tokens so prototype grids match the rest of GLM. It is a DRAFT of the
-   real production theme and needs WCAG validation before it ships.
-   Apply by wrapping the grid in class "ag-theme-foundant" (alongside whatever
-   base AG theme class the app uses).
-   --------------------------------------------------------------------------- */
-.ag-theme-foundant {
-  --ag-font-family: var(--body-font);
-  --ag-font-size: 14px;
-  --ag-foreground-color: var(--colors-brand-primary-dark-blue);
-  --ag-background-color: var(--colors-neutral-100);
-  --ag-data-color: var(--colors-brand-primary-dark-blue);
-  --ag-header-background-color: var(--colors-neutral-90);
-  --ag-header-foreground-color: var(--colors-brand-primary-dark-blue);
-  --ag-border-color: var(--colors-borders-divider);
-  --ag-secondary-border-color: var(--colors-borders-divider);
-  --ag-row-border-color: var(--colors-borders-divider);
-  --ag-border-radius: var(--radius-sm);
-  --ag-row-hover-color: var(--colors-state-layers-light-hover);
-  --ag-selected-row-background-color: var(--colors-brand-secondary-light-blue);
-  --ag-active-color: var(--colors-state-layers-dark-link);
-  --ag-range-selection-border-color: var(--colors-state-layers-dark-link);
-  --ag-checkbox-checked-color: var(--colors-brand-primary-dark-blue);
-  --ag-disabled-foreground-color: var(--colors-neutral-50);
-  --ag-odd-row-background-color: var(--colors-neutral-90);
-  --ag-cell-horizontal-padding: 12px;
-}
-
-/* ---------------------------------------------------------------------------
-   10. KITCHEN-SINK REFERENCE AFFORDANCES
-   These are for the reference page ONLY — not part of the production dialect.
-   They render usage annotations and gap flags. Prototypes never use these.
-   --------------------------------------------------------------------------- */
-
-/* GAP flag: marks a demo that is NOT yet in production (falls through to stock
-   MDB today). Makes provisional variants impossible to mistake for ratified. */
-.gap-flag {
-  display: inline-block;
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--colors-semantic-danger-600);
-  background: var(--colors-semantic-danger-50);
-  border: 1px solid var(--colors-semantic-danger-200);
-  border-radius: var(--radius-sm);
-  padding: 1px 6px;
-  vertical-align: middle;
-}
-.gap-zone {
-  border: 1px dashed var(--colors-semantic-danger-200);
-  border-radius: var(--radius-sm);
-  padding: 12px;
-  background: repeating-linear-gradient(45deg, transparent, transparent 8px, var(--colors-semantic-danger-50) 8px, var(--colors-semantic-danger-50) 9px);
-}
-.gap-note {
-  font-size: 12px;
-  color: var(--colors-semantic-danger-700);
-  margin-top: 8px;
-}
-/* Ratified equivalent of .gap-note — used when a decision is settled, not a draft/gap.
-   No .gap-zone-equivalent striped wrapper: ratified content isn't hazard-striped. */
-.ratified-note {
-  font-size: 12px;
+.stepper-active .stepper-head-icon {
+  background-color: var(--colors-brand-secondary-light-blue);
   color: var(--colors-brand-primary-dark-blue);
-  background: var(--colors-semantic-success-50);
-  border-left: 3px solid var(--colors-semantic-success-0);
-  border-radius: var(--radius-sm);
-  padding: 8px 12px;
-  margin-top: 8px;
+}
+.stepper-invalid .stepper-head-icon {
+  background-color: var(--colors-semantic-danger-50);
+  color: var(--colors-semantic-danger-700);
+}
+.stepper-disabled .stepper-head-icon {
+  background-color: var(--colors-neutral-70);
+  color: var(--colors-neutral-40);
 }
 
-/* Copy-paste code block shown under each component demo. */
-.code-block {
-  background: var(--colors-neutral-10);
-  color: var(--colors-neutral-90);
-  border-radius: var(--radius-sm);
-  padding: 12px 14px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+/* ---------------------------------------------------------------------------
+   P4. VALIDATION MODERNIZATION  (PROPOSED, YOGI-8094)
+   Production validates with .field-validation-error and
+   .validation-summary-errors. Validation placement is an open decision in
+   DESIGN-SYSTEM.md (YOGI-8094). This is a starting point for that
+   conversation: Bootstrap's own .is-invalid and .invalid-feedback, colored
+   with the danger token the earlier draft used.
+   --------------------------------------------------------------------------- */
+.form-control.is-invalid {
+  --mdb-form-control-border-color: var(--colors-semantic-danger-0);
+  border-color: var(--colors-semantic-danger-0);
+}
+.invalid-feedback {
+  color: var(--colors-semantic-danger-0);
   font-size: 12px;
-  line-height: 1.6;
-  overflow-x: auto;
-  white-space: pre;
-  margin: 10px 0 4px;
 }
-.code-block.code-collapsed { display: none; }
 
-/* "View code example" disclosure toggle — reference-page furniture only,
-   not part of the production dialect. Every .code-block on the page is
-   wrapped and collapsed by default via the script at the bottom of the page. */
-.code-toggle-wrap { margin-top: 8px; }
-.code-toggle-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: transparent;
-  border: none;
-  padding: 4px 0;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--colors-neutral-30);
-  cursor: pointer;
-}
-.code-toggle-btn:hover { color: var(--colors-brand-primary-dark-blue); }
-.code-toggle-btn i { font-size: 10px; transition: transform 0.15s; }
 
-/* Usage annotation table: the what/where/when/why/how standard per component. */
-.usage {
-  font-size: 13px;
-  border-collapse: collapse;
-  margin: 10px 0;
-  width: 100%;
-}
-.usage th, .usage td {
-  text-align: left;
-  vertical-align: top;
-  padding: 6px 12px;
-  border-bottom: 1px solid var(--colors-borders-divider);
-}
-.usage th {
-  width: 90px;
-  color: var(--colors-neutral-30);
+/* ---------------------------------------------------------------------------
+   P5. SECTION EYEBROW  (PROPOSED, UX-143)
+   A non-heading overline label for the region below it. Never put it on an
+   h* element. Production has two treatments of the same idea, .ft-label
+   (small caps) and .nav-group-header (uppercase, neutral-30). This proposes
+   one, derived from .nav-group-header, as the candidate UX-143 settles on.
+   --------------------------------------------------------------------------- */
+.section-eyebrow {
+  display: block;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
-  font-size: 11px;
   letter-spacing: 0.5px;
+  color: var(--colors-neutral-30);
+  margin-bottom: 6px;
 }
-
-/* Swatch grid (colors section of the reference page). Reference-only furniture. */
-.sg{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}
-.sw{width:96px;border:1px solid var(--colors-borders-divider);border-radius:var(--radius-sm);overflow:hidden;font-size:11px}
-.swc{height:52px}
-.swi{padding:5px 7px;background:var(--colors-neutral-100)}
-.swi strong{display:block;font-weight:600;color:var(--colors-brand-primary-dark-blue)}
-.swi span{color:var(--colors-neutral-40);font-family:ui-monospace,monospace;font-size:10px}
-
-/* Override-status badges (reference page). Reflect what production CSS actually does:
-   OVERRIDDEN = customized via --mdb-* remaps/override rules in mdb-customizations.css
-   DEFAULT    = renders on stock MDB5, no Foundant customization
-   (GAP flag, defined above, marks stock-today-but-treatment-drafted, e.g. AG Grid.) */
-.status-tag{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-radius:var(--radius-sm);padding:1px 7px;margin-left:8px;vertical-align:middle}
-.status-overridden{color:#166534;background:#dcfce7;border:1px solid #86efac}
-.status-default{color:var(--colors-neutral-30);background:var(--colors-neutral-70);border:1px solid var(--colors-neutral-50)}

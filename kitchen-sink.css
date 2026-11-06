@@ -1,0 +1,130 @@
+/* ============================================================================
+   Kitchen sink page furniture
+   Usage tables, code blocks, swatches, status tags and notes for index.html.
+   None of this is a GLM component. Prototypes never load this file.
+   Moved out of glm-prototype-foundation.css on 6 Nov 2026 (UX-115), where it
+   was section 10. The one color literal it carried (.status-overridden) now
+   uses tokens.
+   ============================================================================ */
+
+
+/* GAP flag: marks a demo that is NOT yet in production (falls through to stock
+   MDB today). Makes provisional variants impossible to mistake for ratified. */
+.gap-flag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--colors-semantic-danger-600);
+  background: var(--colors-semantic-danger-50);
+  border: 1px solid var(--colors-semantic-danger-200);
+  border-radius: var(--radius-sm);
+  padding: 1px 6px;
+  vertical-align: middle;
+}
+.gap-zone {
+  border: 1px dashed var(--colors-semantic-danger-200);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  background: repeating-linear-gradient(45deg, transparent, transparent 8px, var(--colors-semantic-danger-50) 8px, var(--colors-semantic-danger-50) 9px);
+}
+.gap-note {
+  font-size: 12px;
+  color: var(--colors-semantic-danger-700);
+  margin-top: 8px;
+}
+/* Ratified equivalent of .gap-note — used when a decision is settled, not a draft/gap.
+   No .gap-zone-equivalent striped wrapper: ratified content isn't hazard-striped. */
+.ratified-note {
+  font-size: 12px;
+  color: var(--colors-brand-primary-dark-blue);
+  background: var(--colors-semantic-success-50);
+  border-left: 3px solid var(--colors-semantic-success-0);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  margin-top: 8px;
+}
+
+/* Copy-paste code block shown under each component demo. */
+.code-block {
+  background: var(--colors-neutral-10);
+  color: var(--colors-neutral-90);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  overflow-x: auto;
+  white-space: pre;
+  margin: 10px 0 4px;
+}
+.code-block.code-collapsed { display: none; }
+
+/* "View code example" disclosure toggle — reference-page furniture only,
+   not part of the production dialect. Every .code-block on the page is
+   wrapped and collapsed by default via the script at the bottom of the page. */
+.code-toggle-wrap { margin-top: 8px; }
+.code-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  padding: 4px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--colors-neutral-30);
+  cursor: pointer;
+}
+.code-toggle-btn:hover { color: var(--colors-brand-primary-dark-blue); }
+.code-toggle-btn i { font-size: 10px; transition: transform 0.15s; }
+
+/* Usage annotation table: the what/where/when/why/how standard per component. */
+.usage {
+  font-size: 13px;
+  border-collapse: collapse;
+  margin: 10px 0;
+  width: 100%;
+}
+.usage th, .usage td {
+  text-align: left;
+  vertical-align: top;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--colors-borders-divider);
+}
+.usage th {
+  width: 90px;
+  color: var(--colors-neutral-30);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+
+/* Swatch grid (colors section of the reference page). Reference-only furniture. */
+.sg{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}
+.sw{width:96px;border:1px solid var(--colors-borders-divider);border-radius:var(--radius-sm);overflow:hidden;font-size:11px}
+.swc{height:52px}
+.swi{padding:5px 7px;background:var(--colors-neutral-100)}
+.swi strong{display:block;font-weight:600;color:var(--colors-brand-primary-dark-blue)}
+.swi span{color:var(--colors-neutral-40);font-family:ui-monospace,monospace;font-size:10px}
+
+/* Override-status badges (reference page). Reflect what production CSS actually does:
+   OVERRIDDEN = customized via --mdb-* remaps/override rules in mdb-customizations.css
+   DEFAULT    = renders on stock MDB5, no Foundant customization
+   (GAP flag, defined above, marks stock-today-but-treatment-drafted, e.g. AG Grid.) */
+.status-tag{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-radius:var(--radius-sm);padding:1px 7px;margin-left:8px;vertical-align:middle}
+.status-overridden{color:var(--colors-brand-primary-dark-blue);background:var(--colors-semantic-success-50);border:1px solid var(--colors-semantic-success-0)}
+.status-default{color:var(--colors-neutral-30);background:var(--colors-neutral-70);border:1px solid var(--colors-neutral-50)}
+
+
+/* Per-section reference strip: status, where the shipped rule lives, open tickets. */
+.ref-strip{font-size:12px;line-height:1.7;margin:2px 0 14px;padding:8px 12px;border-radius:var(--radius-sm);background:var(--colors-neutral-90);border:1px solid var(--colors-borders-divider);color:var(--colors-brand-primary-dark-blue)}
+.ref-strip a{color:var(--colors-state-layers-dark-link)}
+.ref-strip .ref-label{font-weight:700;margin-right:4px}
+.status-proposal{color:var(--colors-brand-primary-dark-blue);background:var(--colors-semantic-info-50);border:1px solid var(--colors-semantic-info-0)}
+.status-gap{color:var(--colors-brand-primary-dark-blue);background:var(--colors-semantic-warning-50);border:1px solid var(--colors-semantic-warning-0)}
+.lab-intro{background:var(--colors-neutral-100);border:1px solid var(--colors-borders-divider);border-radius:var(--radius-md);padding:16px 20px;margin:12px 0 0;font-size:13px;line-height:1.6}
+.lab-intro p{margin:0 0 8px}
+.lab-intro p:last-child{margin-bottom:0}
