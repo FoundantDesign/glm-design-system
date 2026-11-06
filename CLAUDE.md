@@ -14,6 +14,7 @@ It is not the design system's rulebook. That is `GLM.Web/DESIGN-SYSTEM.md` in th
 - `glm-prototype-foundation.css`: proposals only. Everything here is something production does not ship yet. Every block is tagged `PROPOSED` with its ticket so the GLM.Web drift report (`.claude/skills/design-system/drift.py`) files it correctly. Never copy production CSS into it.
 - `kitchen-sink.css`: page furniture for `index.html` (usage tables, code blocks, status tags, reference strips). Not GLM components.
 - `GLM-design-contract.md`: retired. A pointer to DESIGN-SYSTEM.md; the full text is in git history.
+- `products/<product>/`: what the `glm-prototyping` skill builds from. `manifest.json` lists the product's live CSS, scripts and icons on its non-production environment, where its rules live, and its shells; `shells/*.html` are starting pages with the product's real header, layout and footer. When production's layout changes, update the shells and bump `shellVersion`. `products/README.md` explains adding a product line.
 - Prototype folders (`form-building/`, `form-filling/`, `request-summary/`, `key-interactions/`, `applicant-assistant/`, `application-analysis/`) and the `glm-homepage*` files: self-contained prototypes and user-test findings. Each inlines its own CSS, so changing the files above does not change them.
 
 ## Rules
