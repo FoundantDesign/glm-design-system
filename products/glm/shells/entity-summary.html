@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="foundant-prototype" content="product=glm; shell=record-summary; shell-version=2026-11-06" />
+  <meta name="foundant-prototype" content="product=glm; shell=entity-summary; shell-version=2026-11-06" />
   <title>Community Garden Expansion | GLM prototype</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
   <!-- GLM production CSS, live from beta, in production's load order. Don't copy or inline it. -->
@@ -69,106 +69,141 @@
   </nav>
 </header>
 
+<!-- Entity Summary page (DESIGN-SYSTEM.md, Layout). Structure follows the shipped containers:
+     Request, Organization, User, Foundation and Process Manager (*Container.cshtml in GLM.Web).
+     Keep .panel-header-wrapper, .panel-header-desktop and #ContentContainer: GLM.SideNavigation
+     moves the record header between them at the 768px breakpoint. -->
 <main id="MainContent" class="mb-6">
   <div class="h-100 panel-layout">
-    <!-- Record nav rail: belongs to the record, not the app. 275px; scrolls horizontally under 768px. -->
+    <div class="panel-header-wrapper"></div>
+
+    <!-- Record nav rail: belongs to the record, not the app. Edit the items for your record type. -->
     <div class="side-panel">
       <div class="nav-fade nav-fade-left" aria-hidden="true"></div>
       <div class="nav-fade nav-fade-right" aria-hidden="true"></div>
       <div class="d-flex flex-column">
         <div class="my-3 mx-2 request-info-card-wrapper">
-          <div class="card request-info-card">
+          <div class="card request-info-card" style="background-color: var(--colors-neutral-70)">
             <div class="my-3 mx-3">
-              <div class="list-group-item ft-label"><i class="fa-light fa-circle-user me-3 h6 mb-0"></i><a href="javascript:void(0)">Jordan Applicant</a></div>
-              <div class="list-group-item ft-label mt-1"><i class="fa-light fa-envelope me-3 h6 mb-0"></i><a href="javascript:void(0)">jordan@example.org</a></div>
+              <div class="list-group-item ft-label d-flex align-items-center">
+                <i class="fa-light fa-circle-user me-3 h6 mb-0"></i>
+                <a href="javascript:void(0)">Jordan Applicant</a>
+              </div>
+              <div class="list-group-item ft-label mt-1">
+                <i class="fa-light fa-envelope me-3 h6 mb-0"></i>
+                <a href="javascript:void(0)">jordan@example.org</a>
+              </div>
+              <div class="list-group-item ft-label mt-1">
+                <i class="fa-light fa-phone me-3 h6 mb-0"></i>
+                <span>(555) 010-0142</span>
+              </div>
             </div>
           </div>
         </div>
-        <div class="list-group list-group-flush mt-1">
-          <div class="nav-group-header">Request</div>
-          <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple active" aria-current="page"><i class="fa-light fa-house me-2 me-md-3"></i>Summary</a>
-          <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple"><i class="fa-light fa-file-lines me-2 me-md-3"></i>Submissions</a>
-          <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple"><i class="fa-light fa-clipboard-list-check me-2 me-md-3"></i>Evaluations</a>
-          <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple"><i class="fa-light fa-circle-dollar me-2 me-md-3"></i>Payments</a>
-          <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple"><i class="fa-light fa-folder me-2 me-md-3"></i>Documents</a>
+        <div class="d-lg-block">
+          <div class="list-group list-group-flush mt-1">
+            <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple active" aria-current="page"><i class="fa-light fa-hand-holding-seedling me-2 me-md-3"></i>Summary</a>
+            <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple"><i class="fa-light fa-money-bill-1 me-2 me-md-3"></i>Award Details</a>
+            <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple"><i class="fa-light fa-file-magnifying-glass me-2 me-md-3"></i>Evaluations</a>
+            <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple"><i class="fa-light fa-clipboard-list-check me-2 me-md-3"></i>Follow Ups</a>
+            <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple"><i class="fa-light fa-message me-2 me-md-3"></i>Comments</a>
+            <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple"><i class="fa-light fa-file-lines me-2 me-md-3"></i>Documents</a>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="main-content-body d-flex flex-column px-3">
-      <!-- ═══ PROTOTYPE CONTENT START: replace everything inside .main-content-body ═══ -->
-      <div class="d-flex justify-content-between align-items-start mt-3 mb-3 gap-3">
-        <div>
-          <span class="badge badge-primary text-uppercase mb-2">Request Summary</span>
-          <h1 class="mb-1">Community Garden Expansion</h1>
-          <div class="small">Riverside Food Collective · Spring Grants 2026</div>
+    <div class="main-content-body d-flex flex-column">
+      <div class="panel-header-desktop">
+        <!-- ═══ PROTOTYPE CONTENT START: record header (title, record type, actions) ═══ -->
+        <div class="d-flex mt-4 mb-4">
+          <div class="mx-3 w-100">
+            <span class="badge badge-primary text-uppercase mb-2">Request Summary</span>
+            <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
+              <h1 class="mb-0">Community Garden Expansion</h1>
+              <div class="d-flex align-items-center gap-2">
+                <button type="button" class="btn btn-primary">Approve</button>
+                <div class="dropdown">
+                  <button class="btn btn-outline-dark fw-bold dropdown-toggle" type="button" id="RecordActionsDropdown" data-mdb-dropdown-init aria-expanded="false">Actions</button>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="RecordActionsDropdown">
+                    <li><button type="button" class="dropdown-item">Create Documents</button></li>
+                    <li><button type="button" class="dropdown-item">Copy Request</button></li>
+                    <li><hr class="dropdown-divider" /></li>
+                    <li><button type="button" class="dropdown-item text-danger">Delete Request</button></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="small mt-1">Riverside Food Collective · Spring Grants 2026</div>
+          </div>
         </div>
-        <div id="HeaderButtons" class="d-flex gap-2">
-          <button type="button" class="btn btn-outline-dark fw-bold">Actions</button>
-        </div>
+        <!-- ═══ PROTOTYPE CONTENT END ═══ -->
       </div>
 
-      <div class="hero-card mb-3">
-        <div class="hero-amount-block">
-          <div class="hero-amount-label">Awarded</div>
-          <div class="hero-amount-value">$25,000.00</div>
-        </div>
-        <div class="hero-divider"></div>
-        <div class="hero-amount-block">
-          <div class="hero-amount-label">Paid</div>
-          <div class="hero-amount-value is-empty">TBD</div>
-        </div>
-        <div class="hero-divider"></div>
-        <div class="hero-amount-block">
-          <div class="hero-amount-label">Status</div>
-          <div><span class="badge badge-info">Approved</span></div>
-        </div>
-        <div class="hero-divider"></div>
-        <div class="hero-stage-track">
-          <div class="hero-stage-step">
-            <div class="hero-stage-node is-done"><i class="fa-light fa-check"></i></div>
-            <div class="hero-stage-label">LOI</div>
+      <div id="ContentContainer" class="d-flex flex-column flex-grow-1 p-3 pt-md-0">
+        <!-- ═══ PROTOTYPE CONTENT START: the page's content ═══ -->
+        <div class="hero-card mb-3">
+          <div class="hero-amount-block">
+            <div class="hero-amount-label">Awarded</div>
+            <div class="hero-amount-value">$25,000.00</div>
           </div>
-          <div class="hero-stage-line is-done"></div>
-          <div class="hero-stage-step">
-            <div class="hero-stage-node is-active"></div>
-            <div class="hero-stage-label">Application</div>
+          <div class="hero-divider"></div>
+          <div class="hero-amount-block">
+            <div class="hero-amount-label">Paid</div>
+            <div class="hero-amount-value is-empty">TBD</div>
           </div>
-          <div class="hero-stage-line"></div>
-          <div class="hero-stage-step">
-            <div class="hero-stage-node"></div>
-            <div class="hero-stage-label">Follow Up</div>
+          <div class="hero-divider"></div>
+          <div class="hero-amount-block">
+            <div class="hero-amount-label">Status</div>
+            <div><span class="badge badge-info">Approved</span></div>
           </div>
-        </div>
-      </div>
-
-      <div class="row g-3">
-        <div class="col-12 col-xl-6">
-          <div class="card summary-card h-100 mb-0">
-            <div class="card-body pt-3">
-              <h2 class="h5 mb-3">Request Details</h2>
-              <dl>
-                <dt>Process</dt><dd>Spring Grants 2026</dd>
-                <dt>Submitted</dt><dd>03/14/2026</dd>
-                <dt>Requested</dt><dd>$30,000.00</dd>
-              </dl>
+          <div class="hero-divider"></div>
+          <div class="hero-stage-track">
+            <div class="hero-stage-step">
+              <div class="hero-stage-node is-done"><i class="fa-light fa-check"></i></div>
+              <div class="hero-stage-label">LOI</div>
+            </div>
+            <div class="hero-stage-line is-done"></div>
+            <div class="hero-stage-step">
+              <div class="hero-stage-node is-active"></div>
+              <div class="hero-stage-label">Application</div>
+            </div>
+            <div class="hero-stage-line"></div>
+            <div class="hero-stage-step">
+              <div class="hero-stage-node"></div>
+              <div class="hero-stage-label">Follow Up</div>
             </div>
           </div>
         </div>
-        <div class="col-12 col-xl-6">
-          <div class="card summary-card h-100 mb-0">
-            <div class="card-body pt-3">
-              <h2 class="h5 mb-3">Award Details</h2>
-              <dl>
-                <dt>Decision</dt><dd>05/02/2026</dd>
-                <dt>Grant Period</dt><dd>06/01/2026 – 05/31/2027</dd>
-                <dt>Fund</dt><dd class="empty-text">None</dd>
-              </dl>
+
+        <div class="row g-3">
+          <div class="col-12 col-xl-6">
+            <div class="card summary-card h-100 mb-0">
+              <div class="card-body pt-3">
+                <h2 class="h5 mb-3">Request Details</h2>
+                <dl>
+                  <dt>Process</dt><dd>Spring Grants 2026</dd>
+                  <dt>Submitted</dt><dd>03/14/2026</dd>
+                  <dt>Requested</dt><dd>$30,000.00</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-xl-6">
+            <div class="card summary-card h-100 mb-0">
+              <div class="card-body pt-3">
+                <h2 class="h5 mb-3">Award Details</h2>
+                <dl>
+                  <dt>Decision</dt><dd>05/02/2026</dd>
+                  <dt>Grant Period</dt><dd>06/01/2026 – 05/31/2027</dd>
+                  <dt>Fund</dt><dd class="empty-text">None</dd>
+                </dl>
+              </div>
             </div>
           </div>
         </div>
+        <!-- ═══ PROTOTYPE CONTENT END ═══ -->
       </div>
-      <!-- ═══ PROTOTYPE CONTENT END ═══ -->
     </div>
   </div>
 </main>
@@ -199,6 +234,7 @@
 <script src="https://beta.grantinterface.com/Scripts/MVC/GLM.Utility.js"></script>
 <script src="https://beta.grantinterface.com/Scripts/MVC/GLM.Toast.js"></script>
 <script src="https://beta.grantinterface.com/Scripts/Modern/GLM.SlidePanel.js"></script>
+<script src="https://beta.grantinterface.com/Scripts/MVC/GLM.SideNavigation.js"></script>
 <script>
   // Production's header offset (Foundant/Views/Shared/Mdb/_TopLayoutBase.cshtml)
   (function () {
@@ -223,6 +259,11 @@
     window.addEventListener('resize', adjustMainPadding);
     adjustMainPadding();
   })();
+</script>
+<script>
+  // As the shipped containers do: move the record header on small screens, and fade the side panel's scroll edges.
+  GLM.SideNavigation.initContainerLayout('.panel-header-wrapper', '.panel-header-desktop');
+  GLM.SideNavigation.initSidePanelFades();
 </script>
 <!-- PROTOTYPE-ONLY SCRIPT: interactions for this prototype. -->
 <script>

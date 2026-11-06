@@ -71,17 +71,21 @@
 
 <main id="MainContent" class="container mt-4 mb-6 page-container">
   <!-- ═══ PROTOTYPE CONTENT START: replace everything inside <main> ═══ -->
-  <div class="page-header-container d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-      <h1>Requests</h1>
-    </div>
-    <div id="HeaderButtons" class="d-flex gap-2 align-items-start">
-      <button type="button" class="btn btn-outline-secondary">Export</button>
-      <button type="button" class="btn btn-primary">+ New Request</button>
+  <!-- Page title: markup of GLM.Web's PageHeader view component (Views/Shared/Layout/Components/PageHeader) -->
+  <div class="page-header d-flex flex-column gap-3 mb-4">
+    <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
+      <h1 class="mb-0 flex-grow-1">
+        <span id="PageTitle">Requests</span>
+        <small id="PageSubTitle"></small>
+      </h1>
+      <div class="page-header-actions flex-shrink-0 d-flex gap-2">
+        <button type="button" class="btn btn-outline-secondary">Export</button>
+        <button type="button" class="btn btn-primary">+ New Request</button>
+      </div>
     </div>
   </div>
 
-  <div class="card mt-3">
+  <div class="card">
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="h5 card-title mb-0">Spring Grants 2026</h2>
@@ -130,6 +134,7 @@
 <script src="https://beta.grantinterface.com/Scripts/MVC/GLM.Utility.js"></script>
 <script src="https://beta.grantinterface.com/Scripts/MVC/GLM.Toast.js"></script>
 <script src="https://beta.grantinterface.com/Scripts/Modern/GLM.SlidePanel.js"></script>
+<script src="https://beta.grantinterface.com/Scripts/MVC/GLM.SideNavigation.js"></script>
 <script>
   // Production's header offset (Foundant/Views/Shared/Mdb/_TopLayoutBase.cshtml)
   (function () {

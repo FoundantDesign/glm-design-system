@@ -27,7 +27,8 @@
     "/Scripts/Mdb/mdb.umd.min.js",
     "/Scripts/MVC/GLM.Utility.js",
     "/Scripts/MVC/GLM.Toast.js",
-    "/Scripts/Modern/GLM.SlidePanel.js"
+    "/Scripts/Modern/GLM.SlidePanel.js",
+    "/Scripts/MVC/GLM.SideNavigation.js"
   ],
   "icons": {
     "script": "/Scripts/Font-Awesome-Pro-7/all.js",
@@ -44,9 +45,9 @@
       "persona": "Client administrator"
     },
     {
-      "id": "record-summary",
-      "file": "shells/record-summary.html",
-      "use": "A record's Summary page: side panel nav, title block, hero card and card grid. Request, Organization, User, Foundation.",
+      "id": "entity-summary",
+      "file": "shells/entity-summary.html",
+      "use": "The Entity Summary page (DESIGN-SYSTEM.md, Layout): side panel nav, record header and content area. Request, Organization, User and Foundation Summary pages, and the Process Manager behind the Update Process preview. Structure follows the shipped *Container.cshtml views, not the DESIGN-SYSTEM.md tree.",
       "persona": "Client administrator"
     },
     {
@@ -59,6 +60,7 @@
   "behaviors": {
     "toast": "GLM.Toast.showToast('GlobalToast', header, body); also showInfoToast, showWarningToast, showErrorToast",
     "slidePanel": "GLM.SlidePanel.open({ title, content, width }); GLM.SlidePanel.close(). Use open with static HTML; load() needs a GLM server.",
-    "mdb": "Production loads MDB's explicit-init build. Components need their data-mdb-*-init attribute (dropdown, collapse, tab, modal, tooltip)."
+    "mdb": "Production loads MDB's explicit-init build. Components need their data-mdb-*-init attribute (dropdown, collapse, tab, modal, tooltip).",
+    "sideNavigation": "GLM.SideNavigation.initContainerLayout('.panel-header-wrapper', '.panel-header-desktop') and GLM.SideNavigation.initSidePanelFades(); the entity-summary shell already calls both."
   }
 }

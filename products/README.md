@@ -32,4 +32,4 @@ products/
 
 | Product | Folder | Shells | Rules |
 |---|---|---|---|
-| Grant Lifecycle Manager | `glm/` | admin-page, record-summary, applicant-page | GLM.Web/DESIGN-SYSTEM.md |
+| Grant Lifecycle Manager | `glm/` | admin-page, entity-summary, applicant-page | GLM.Web/DESIGN-SYSTEM.md |
