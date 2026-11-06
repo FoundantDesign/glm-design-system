@@ -26,13 +26,12 @@ It is not the design system's rulebook. That is `GLM.Web/DESIGN-SYSTEM.md` in th
 
 ## Kitchen sink sections
 
-Each section heading carries one status and a reference strip directly under it:
+Each section shows, in order: a heading with one status, a link to its DESIGN-SYSTEM.md rule, a one-line description, the What / Where / When / Why / How usage table, the live demo, and copy-paste markup. Nothing else. No history, correction notes or evidence trails on the page; those belong in the PR and in Jira.
 
-- SHIPPED: in production and documented in DESIGN-SYSTEM.md. The demo renders production CSS.
-- PROPOSAL (or SHIPPED + PROPOSAL): a block from `glm-prototype-foundation.css` applies in this section.
-- PRODUCTION GAP: production ships it with a known defect and no fix has shipped.
+- SHIPPED: in production. Any open defect ticket is linked next to the badge as "Defect: UX-123".
+- PROPOSED: a proposed change or an open decision. Its UX ticket is linked next to the badge. A subsection can carry its own PROPOSED badge and ticket. Every proposal needs a UX ticket; if one is missing, say so and ask rather than inventing one.
 
-The strip links the DESIGN-SYSTEM.md section, the open tickets, what this lab adds, and what changed since the August to October rebuild. Update the strip whenever a section's status changes. The older usage tables and notes inside sections are a historical record; when one turns out wrong, record the correction in place (what was claimed, what is true, how it was confirmed) rather than quietly overwriting it.
+Keep the usage tables current: they describe what production does today, in plain language, grounded in DESIGN-SYSTEM.md and the production CSS. Code blocks hold markup someone would copy, not copies of production CSS; production CSS already loads live. Proposal CSS can appear in a code block under its PROPOSED subsection.
 
 ## Checking against production
 
