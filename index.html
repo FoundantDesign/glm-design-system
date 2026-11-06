@@ -4,20 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GLM Frontend Component Kitchen Sink</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.min.css" rel="stylesheet" />
-  <script src="https://kit.fontawesome.com/67a3468e65.js" crossorigin="anonymous"></script>
+  <!-- Production CSS, loaded live from beta in production's own order (see
+       Foundant/Views/Shared/Mdb/_TopLayoutBase.cshtml in GLM.Web). Static files on
+       beta need no login. What renders here is what GLM ships. -->
+  <link href="https://beta.grantinterface.com/Scripts/Mdb/mdb.min.css" rel="stylesheet" />
+  <link href="https://beta.grantinterface.com/css/mdb-patches.css" rel="stylesheet" />
+  <link href="https://beta.grantinterface.com/css/foundant-tokens.css" rel="stylesheet" />
+  <link href="https://beta.grantinterface.com/css/mdb-customizations.css" rel="stylesheet" />
+  <link href="https://beta.grantinterface.com/css/ag-customizations.css" rel="stylesheet" />
+  <link href="https://beta.grantinterface.com/css/GLM.Summary.css" rel="stylesheet" />
+  <!-- Production's self-hosted Font Awesome Pro 7 subset. An icon missing from it renders a placeholder circle, as it would in GLM. -->
+  <script src="https://beta.grantinterface.com/Scripts/Font-Awesome-Pro-7/all.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
-  <!-- Authoritative GLM tokens, MDB remaps, real component classes, heading scale, .section-eyebrow.
-       This is the same file prototypes load, so the reference cannot drift from what prototypes render. -->
+  <!-- Proposals only: what production does not ship yet. Loads last so it wins on this page. -->
   <link href="glm-prototype-foundation.css" rel="stylesheet" />
+  <!-- Page furniture: usage tables, code blocks, status tags. Not GLM components. -->
+  <link href="kitchen-sink.css" rel="stylesheet" />
 
   <style>
     /* ═══════════════════════════════════════════════════════════
-       KITCHEN SINK — page furniture only.
-       All component styling comes from the linked foundation CSS
-       (glm-prototype-foundation.css), which is the single source of truth.
-       The old production/MDB-default toggle and --t-* alias layer have been
-       removed; this page now renders production truth directly.
+       KITCHEN SINK, page layout only (sidebar, section shells).
+       Components are styled by production CSS loaded from beta, plus the
+       proposals in glm-prototype-foundation.css.
        ═══════════════════════════════════════════════════════════ */
 
     /* Sidebar / table of contents */
@@ -120,13 +128,19 @@
 
 <div style="margin-bottom:24px">
   <h1 style="margin:0 0 4px">GLM Frontend Component Kitchen Sink</h1>
-  <p style="color:var(--colors-neutral-30);font-size:13px;margin:0 0 8px">The source-of-truth reference for GLM components and styles. Every component shows real production markup you can lift into Razor. Styling comes from the shared foundation CSS.</p>
-  <p style="font-size:12px;margin:0;line-height:1.9"><span class="status-tag status-overridden">OVERRIDDEN</span> production customizes this via MDB remaps. <span class="status-tag status-default">DEFAULT</span> renders on stock MDB5 (a candidate to review). <span class="gap-flag">GAP</span> stock today but a Foundant treatment is drafted/needed. <span class="wip-tag">WIP</span> section not yet rebuilt to real markup.</p>
+  <p style="color:var(--colors-neutral-30);font-size:13px;margin:0 0 8px">The design lab for GLM: experiments, prototypes, user testing and proposed changes to the design system. Every demo renders production CSS loaded live from beta, so what you see is what GLM ships, plus any proposal marked in that section.</p>
+  <div class="lab-intro">
+    <p><strong>Where the rules live.</strong> What production ships, and how to use it, is written in <a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#glm-design-system" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; GLM Design System</a> in the GLM.Web repo, and rendered at <a href="https://beta.grantinterface.com/Dev/DesignSystem" target="_blank" rel="noopener">/Dev/DesignSystem</a> (System Administrator only). When this page and that document disagree, shipped code wins, then the document, then this page.</p>
+    <p><strong>What lives here.</strong> Proposals sit in <code>glm-prototype-foundation.css</code> and load after production, so a section marked PROPOSAL shows the proposed treatment. Open decisions are tracked in the <a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#open-decisions" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Open decisions</a> table and on the UX board. When a proposal ships, it comes out of this repo in the same change that updates its section.</p>
+    <p><strong>Older notes.</strong> The usage tables and notes inside each section were written during the August to October 2026 rebuild, against hand-copied production CSS. They are kept as the record of how each decision was reached. Where a note disagrees with what renders, the rendered result is production. The strip under each heading is current as of 6 November 2026.</p>
+  </div>
+  <p style="font-size:12px;margin:12px 0 0;line-height:1.9"><span class="status-tag status-overridden">SHIPPED</span> in production, documented in DESIGN-SYSTEM.md. <span class="status-tag status-proposal">PROPOSAL</span> applied in this section from <code>glm-prototype-foundation.css</code>, not in production. <span class="status-tag status-gap">PRODUCTION GAP</span> production ships it with a known defect and no fix has shipped yet.</p>
 </div>
 
 <!-- ═══ COLORS ═══ -->
 <section class="sec" id="colors">
-  <h2>Colors <span class="status-tag status-overridden" title="Foundant tokens replace MDB defaults">OVERRIDDEN</span></h2>
+  <h2>Colors <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#tokens" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Tokens</a>. <span class="ref-label">Open:</span><a href="https://foundanttech.atlassian.net/browse/UX-130" target="_blank" rel="noopener">UX-130</a>, <a href="https://foundanttech.atlassian.net/browse/UX-132" target="_blank" rel="noopener">UX-132</a>.</p>
   <p class="sd">The Foundant token palette. All values come from <code>foundant-tokens.css</code>.</p>
 
   <table class="usage">
@@ -288,7 +302,8 @@
 
 <!-- ═══ TYPOGRAPHY ═══ -->
 <section class="sec" id="typography">
-  <h2>Typography <span class="status-tag status-overridden" title="h1 + heading scale customized">OVERRIDDEN</span></h2>
+  <h2>Typography <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#typography" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Typography</a>.</p>
   <p class="sd">Roboto throughout. Compressed heading scale for a data-dense interface.</p>
 
   <table class="usage">
@@ -352,7 +367,8 @@
 
 <!-- ═══ ICONS ═══ -->
 <section class="sec" id="icons">
-  <h2>Icons <span class="status-tag status-overridden" title="FA Pro (light) vs MDB stock FA Free">OVERRIDDEN</span></h2>
+  <h2>Icons <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#icons" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Icons</a>. <span class="ref-label">Open:</span><a href="https://foundanttech.atlassian.net/browse/UX-160" target="_blank" rel="noopener">UX-160</a>. <span class="ref-label">Since the rebuild:</span>Icons now come from production's Font Awesome Pro 7 subset on beta. The icon-only button proposal in this section shipped as <code>.btn.btn-icon</code> (YOGI-8290).</p>
   <p class="sd">Font Awesome Pro. Default family <code>fa-light</code>; <code>fa-regular</code> for filled-state controls.</p>
 
   <table class="usage">
@@ -445,61 +461,24 @@
 
   <p class="gap-note"><strong>Most icon instances carry no explicit weight class.</strong> The ratified default is <code>fa-light</code>, but a large share of icon usages in the sampled page specify no family at all and inherit whatever the Kit default is. That works only as long as the Kit default matches the ratified weight, and it breaks silently if the Kit configuration changes. Worth deciding whether <code>fa-light</code> should be written explicitly every time or guaranteed at the Kit level. Note that instance counts cannot be quoted precisely here: the page runs Font Awesome in SVG-with-JS mode, which leaves the original <code>&lt;i&gt;</code> alongside the generated <code>&lt;svg&gt;</code>, so class names appear more than once in the source. Distinct icon names are reliable; totals are not.</p>
 
-  <h3 style="margin-top:24px">Icon button — standardized <span class="gap-flag">GAP — real color values, sizing/no-border is a direct design decision for WCAG 2.2 AA compliance</span></h3>
-  <p class="sd" style="border:none;margin:6px 0 12px">Every icon-only clickable button in production today (the record-detail kebab menu, and any others styled the same way) uses the class name <code>kebab-btn</code> — but there is no <code>.kebab-btn</code> rule anywhere in <code>mdb-customizations.css</code> or <code>mdb_min.css</code>. The class is a JS/dropdown hook only; every actual instance repeats the identical look via a copy-pasted inline <code>style=""</code> attribute, with no explicit size at all — width and height fall out incidentally from padding plus whatever font-size happens to be inherited. That's two separate problems: no enforced consistency, and no guaranteed target size.</p>
-
-  <table class="usage">
-    <tr><th>What</th><td>One <code>.icon-btn</code> class for any icon-only clickable control — row-menu triggers, delete, edit, download, anywhere an icon alone is the whole button.</td></tr>
-    <tr><th>Where</th><td>24×24px, one size, everywhere — including dense contexts like table rows, where the earlier 32px draft read too heavy.</td></tr>
-    <tr><th>When</th><td>Use <code>.icon-btn</code> for any new icon-only action. Don't reach for a bare <code>&lt;i&gt;</code> wrapped in a plain <code>&lt;button&gt;</code> or <code>&lt;a&gt;</code> with ad hoc inline sizing — that's exactly the drift this consolidates.</td></tr>
-    <tr><th>Why</th><td><strong>WCAG 2.2 SC 2.5.8, Target Size (Minimum), Level AA:</strong> pointer targets must be at least 24×24 CSS pixels, with narrow exceptions (inline text, essential presentation, an equivalent control elsewhere, adequate spacing) that don't apply to a standalone icon button. 24×24 is the exact floor — not a comfort margin above it, so there's no smaller "sm" variant to accidentally reach for. No border: 2.5.8 governs the tappable <em>area</em>, not visual styling — hover and focus-visible states carry the affordance instead.</td></tr>
-    <tr><th>How</th><td><strong>Every icon-only button needs a real <code>aria-label</code>.</strong> There's no visible text for a screen reader to announce, so without one the control has no accessible name at all — this is WCAG 1.1.1 (Non-text Content) and 4.1.2 (Name, Role, Value), both Level A. <code>title</code> alone is not sufficient; it's inconsistently exposed to assistive tech.</td></tr>
-  </table>
-
-  <div class="gap-zone">
-    <div class="cr" style="align-items:center;gap:16px">
-      <button type="button" class="icon-btn" aria-label="More actions"><i class="fa-regular fa-ellipsis-vertical"></i></button>
-      <button type="button" class="icon-btn" aria-label="Edit"><i class="fa-light fa-pen-to-square"></i></button>
-      <button type="button" class="icon-btn" aria-label="Delete"><i class="fa-light fa-trash-can"></i></button>
-      <button type="button" class="icon-btn" aria-label="Download" disabled><i class="fa-light fa-download"></i></button>
-    </div>
-    <div class="code-block">&lt;button type="button" class="icon-btn" aria-label="More actions"&gt;
-  &lt;i class="fa-regular fa-ellipsis-vertical"&gt;&lt;/i&gt;
-&lt;/button&gt;
-
-.icon-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  background: none;
-  border: none;
-  border-radius: 4px;
-  padding: 0;
-  cursor: pointer;
-  color: var(--colors-brand-primary-dark-blue);
-  font-size: 14px;
-  line-height: 1;
-}
-.icon-btn:hover {
-  background: var(--colors-state-layers-light-hover);
-}
-.icon-btn:focus-visible {
-  outline: solid 2px var(--colors-brand-primary-dark-blue);
-  outline-offset: 2px;
-}
-.icon-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}</div>
-    <p class="gap-note">Icon color is the same real value found on production's kebab button. <strong>Sizing and border are direct design decisions, corrected twice now:</strong> the first pass had no explicit width/height at all (incidental sizing, a real WCAG risk); the second pass fixed that with a 32×32 default plus a 24×24 "dense-context" variant, but 32px read too heavy in practice — table rows in particular — so the default is now 24×24 everywhere, exactly the WCAG floor, with no smaller variant needed since there's nothing left to shrink from. The border from production's real kebab-btn instance was also removed on direct instruction: WCAG 2.5.8 requires the tappable area to be 24×24, not a visible border — that was never a compliance requirement, just what one real instance happened to look like. Hover and focus-visible carry the visual affordance at rest and on keyboard focus instead. <code>aria-label</code> is not optional; every example above includes one. Needs engineering review before it round-trips into <code>mdb-customizations.css</code>, since it would mean replacing inline styles (and removing the border) at every existing call site.</p>
+  <h3 style="margin-top:24px">Icon-only button <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h3>
+  <p class="ratified-note"><strong>Correction recorded 6 Nov 2026.</strong> This subsection proposed a new <code>.icon-btn</code> class: 24x24, no border, navy icon, state-layer hover, 2px focus outline. Production adopted it as a modifier on the real button instead, <code>.btn.btn-icon</code> (YOGI-8290, 30 Oct 2026), and removed <code>.icon-btn</code>, <code>.kebab-btn</code>, <code>.table-action-button</code> and <code>.btn-icon-circle</code>. Confirmed in <code>mdb-customizations.css</code> on GLM.Web trunk. The demo below renders that production rule. The previous proposal text is in this repo's git history.</p>
+  <div class="cr" style="align-items:center;gap:16px">
+    <button type="button" class="btn btn-icon" aria-label="More actions"><i class="fa-regular fa-ellipsis-vertical"></i></button>
+    <button type="button" class="btn btn-icon" aria-label="Edit"><i class="fa-light fa-pen-to-square"></i></button>
+    <button type="button" class="btn btn-icon" aria-label="Delete"><i class="fa-light fa-trash-can"></i></button>
+    <button type="button" class="btn btn-icon" aria-label="Download" disabled><i class="fa-light fa-download"></i></button>
   </div>
+  <div class="code-block">&lt;button type="button" class="btn btn-icon" aria-label="More actions"&gt;
+  &lt;i class="fa-regular fa-ellipsis-vertical"&gt;&lt;/i&gt;
+&lt;/button&gt;</div>
+  <p class="sd" style="border:none;margin:8px 0 0">Every icon-only button needs an <code>aria-label</code>. Don't add <code>.btn-link</code>, <code>.btn-sm</code>, padding utilities or icon sizing; the modifier owns size and color. In GLM.Web views, take the icon class from <code>Icons.Classic.*</code>.</p>
 </section>
 
 <!-- ═══ GRID ═══ -->
 <section class="sec" id="grid">
-  <h2>Grid System <span class="status-tag status-default" title="stock Bootstrap 12-col grid">DEFAULT</span></h2>
+  <h2>Grid System <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#principles" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Principles</a>.</p>
   <p class="sd">Stock Bootstrap/MDB 12-column responsive grid. No overrides.</p>
 
   <table class="usage">
@@ -537,7 +516,8 @@
 
 <!-- ═══ SPACING ═══ -->
 <section class="sec" id="spacing">
-  <h2>Spacing &amp; Radius <span class="status-tag status-overridden" title="custom radius scale (spacing is stock)">OVERRIDDEN</span></h2>
+  <h2>Spacing &amp; Radius <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#radius" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Radius</a>. <span class="ref-label">Open:</span><a href="https://foundanttech.atlassian.net/browse/UX-141" target="_blank" rel="noopener">UX-141</a>.</p>
   <p class="sd">Bootstrap spacing utilities. Custom Foundant radius scale.</p>
 
   <table class="usage">
@@ -574,7 +554,8 @@
 
 <!-- ═══ NAVBAR ═══ -->
 <section class="sec" id="navbar">
-  <h2>Navbar <span class="status-tag status-overridden" title="header/footer + hover remapped to tokens">OVERRIDDEN</span></h2>
+  <h2>Navbar <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span> <span class="status-tag status-proposal" title="A proposal from glm-prototype-foundation.css is applied in this section">+ PROPOSAL</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#navbar" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Navbar</a>. <span class="ref-label">Open:</span><a href="https://foundanttech.atlassian.net/browse/UX-117" target="_blank" rel="noopener">UX-117</a>, <a href="https://foundanttech.atlassian.net/browse/UX-156" target="_blank" rel="noopener">UX-156</a>. <span class="ref-label">In this lab:</span>currentColor focus outline on nav links (P1). <span class="ref-label">Since the rebuild:</span>The hardcoded hover gradient is gone. Production's hover uses the state-layer token (UX-155, closed).</p>
   <p class="sd">Top application header. Structure is standard MDB5 (<code>navbar</code>, <code>navbar-expand-lg</code>, <code>collapse</code>, <code>dropdown</code>) confirmed from the live Request Summary page. Reconstructed from the real markup, not guessed from CSS selectors.</p>
 
   <table class="usage">
@@ -745,7 +726,8 @@ header, footer {
 
 <!-- ═══ SIDENAV ═══ -->
 <section class="sec" id="sidenav">
-  <h2>Sidenav <span class="status-tag status-overridden" title="side-panel list-group remapped to tokens">OVERRIDDEN</span></h2>
+  <h2>Sidenav <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span> <span class="status-tag status-proposal" title="A proposal from glm-prototype-foundation.css is applied in this section">+ PROPOSAL</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#side-panel-navigation" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Side panel navigation</a>. <span class="ref-label">Open:</span><a href="https://foundanttech.atlassian.net/browse/UX-117" target="_blank" rel="noopener">UX-117</a>, <a href="https://foundanttech.atlassian.net/browse/UX-143" target="_blank" rel="noopener">UX-143</a>, <a href="https://foundanttech.atlassian.net/browse/UX-168" target="_blank" rel="noopener">UX-168</a>. <span class="ref-label">In this lab:</span>Navy focus outline on side panel items (P1).</p>
   <p class="sd">Contextual record-page navigation rail, real markup from the live Request Summary page — not a global app sidebar. Structure is Bootstrap's <code>.list-group</code>, remapped via <code>--mdb-list-group-*</code> and a handful of <code>.side-panel</code>-scoped overrides.</p>
 
   <table class="usage">
@@ -901,7 +883,8 @@ header, footer {
 
 <!-- ═══ TABS ═══ -->
 <section class="sec" id="tabs">
-  <h2>Tabs &amp; Pills <span class="gap-flag">GAP — stock MDB today, Foundant treatment drafted here</span></h2>
+  <h2>Tabs &amp; Pills <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span> <span class="status-tag status-proposal" title="A proposal from glm-prototype-foundation.css is applied in this section">+ PROPOSAL</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#tabs" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Tabs</a>. <span class="ref-label">Open:</span><a href="https://foundanttech.atlassian.net/browse/UX-117" target="_blank" rel="noopener">UX-117</a>. <span class="ref-label">In this lab:</span>Navy focus outline on tab links (P1). <span class="ref-label">Since the rebuild:</span>Tabs and pills now ship in production. The GAP label this section carried is retired.</p>
   <p class="sd">Horizontal navigation within a page. No <code>.nav-tabs</code>/<code>.nav-pills</code> override exists anywhere in production — these currently ship as pure stock MDB defaults.</p>
 
   <table class="usage">
@@ -970,7 +953,8 @@ header, footer {
 
 <!-- ═══ BREADCRUMB ═══ -->
 <section class="sec" id="breadcrumb">
-  <h2>Breadcrumb <span class="status-tag status-default" title="No override in mdb-customizations.css or GLM_Summary.css">DEFAULT</span></h2>
+  <h2>Breadcrumb <span class="status-tag status-gap" title="Known production defect, fix not shipped">PRODUCTION GAP</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#stock-mdb-components" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Stock MDB components</a>. <span class="ref-label">Open:</span><a href="https://foundanttech.atlassian.net/browse/UX-152" target="_blank" rel="noopener">UX-152</a>, <a href="https://foundanttech.atlassian.net/browse/UX-153" target="_blank" rel="noopener">UX-153</a>. <span class="ref-label">In this lab:</span>Navy focus outline on breadcrumb links (P1, UX-153).</p>
   <p class="sd">Ancestor trail for nested records. Stock MDB with no Foundant customization anywhere, so what renders below is exactly what production renders today.</p>
 
   <table class="usage">
@@ -1019,7 +1003,8 @@ header, footer {
 
 <!-- ═══ PAGINATION ═══ -->
 <section class="sec" id="pagination">
-  <h2>Pagination <span class="status-tag status-default" title="No override in mdb-customizations.css or GLM_Summary.css">DEFAULT</span></h2>
+  <h2>Pagination <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span> <span class="status-tag status-proposal" title="A proposal from glm-prototype-foundation.css is applied in this section">+ PROPOSAL</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#brand" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Tokens: Brand</a>. <span class="ref-label">Open:</span><a href="https://foundanttech.atlassian.net/browse/UX-117" target="_blank" rel="noopener">UX-117</a>. <span class="ref-label">In this lab:</span>Navy focus outline on page links (P1). <span class="ref-label">Since the rebuild:</span>Production now colors the active page navy.</p>
   <p class="sd">Page controls for long record lists. Stock MDB today, and the section where MDB's own blue is most visible against a navy brand.</p>
 
   <table class="usage">
@@ -1079,7 +1064,8 @@ header, footer {
 
 <!-- ═══ BUTTONS ═══ -->
 <section class="sec" id="buttons">
-  <h2>Buttons <span class="status-tag status-overridden" title="--mdb-btn-* remapped to tokens">OVERRIDDEN</span></h2>
+  <h2>Buttons <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#buttons" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Buttons</a>. <span class="ref-label">Open:</span><a href="https://foundanttech.atlassian.net/browse/UX-133" target="_blank" rel="noopener">UX-133</a>. <span class="ref-label">Since the rebuild:</span>Default <code>.btn</code> is now 32px and <code>.btn-sm</code> 24px, for dense rows only (YOGI-8289).</p>
   <p class="sd">Styled by remapping <code>--mdb-btn-*</code> variables onto Foundant tokens. No bespoke button classes.</p>
 
   <table class="usage">
@@ -1196,17 +1182,16 @@ header, footer {
   <p class="sd" style="border:none;margin:0 0 8px">Checked every real <code>.btn</code> in the production sample: 19 total, 1 with an icon — and that one (<code>.kebab-btn</code>) is icon-<em>only</em>, not a text+icon combo. Every button that has a label is text-only. That's the rule now, not an aspiration: <strong>default to text-only</strong>, with one deliberate, curated exception below. <code>.kebab-btn</code> stays its own separate pattern — icon-only, never paired with a label.</p>
   <div class="cr" style="align-items:center">
     <button class="btn btn-primary"><i class="fa-light fa-plus me-2"></i>New</button>
-    <button type="button" class="kebab-btn" aria-label="More actions"><i class="fa-regular fa-ellipsis-vertical"></i></button>
+    <button type="button" class="btn btn-icon" aria-label="More actions"><i class="fa-regular fa-ellipsis-vertical"></i></button>
   </div>
   <div class="code-block">&lt;!-- The one sanctioned exception: primary "create new" actions --&gt;
 &lt;button class="btn btn-primary"&gt;&lt;i class="fa-light fa-plus me-2"&gt;&lt;/i&gt;New&lt;/button&gt;
 
 &lt;!-- Icon-only stays its own separate pattern, never combined with a label --&gt;
-&lt;button type="button" class="kebab-btn" aria-label="More actions"&gt;&lt;i class="fa-regular fa-ellipsis-vertical"&gt;&lt;/i&gt;&lt;/button&gt;
+&lt;button type="button" class="btn btn-icon" aria-label="More actions"&gt;&lt;i class="fa-regular fa-ellipsis-vertical"&gt;&lt;/i&gt;&lt;/button&gt;
 
-/* Full rule (explicit 24x24 sizing, no border, focus-visible, WCAG 2.2 AA)
-   lives in the Icons section under "Icon button — standardized" — not
-   repeated here to avoid two copies drifting apart. */</div>
+/* .btn.btn-icon is production's icon-only button (YOGI-8290).
+   See the Icons section and DESIGN-SYSTEM.md, Buttons. */</div>
   <p class="ratified-note">Ratified decision, not a draft. <strong>Exception list:</strong> primary "create new" actions only (<code>+ New</code>, <code>+ Add</code>) — the <code>+</code> is a near-universal affordance and these buttons recur often enough across list/table views to benefit from a scan-target. <strong>Everything else is text-only</strong>: Edit, Save, Cancel, Delete, Confirm, Submit, Download — no icon, no exceptions. Modals follow this too — confirmed (Section on Modals) footer buttons are already text-only in the real example checked.</p>
   <p class="gap-note" style="border-left-color:var(--colors-semantic-warning-0);background:var(--colors-semantic-warning-50);color:var(--colors-brand-primary-dark-blue)"><strong>Frequency rule, decision not evidence:</strong> an icon+text button should appear <strong>at most once per page</strong> — it's reserved for a single primary action, not a general-purpose style. Only use the <code>+</code> when the action is genuinely additive (creating something new); don't reach for it as decoration on an already-text-only button. Icon-<em>only</em> buttons (<code>.icon-btn</code>/<code>.kebab-btn</code>) can be used far more liberally — they're compact enough not to compete for attention the way an icon+text combo does, so repeating them across a page (row menus, table actions) doesn't create the same visual noise.</p>
 
@@ -1224,7 +1209,8 @@ header, footer {
 
 <!-- ═══ DROPDOWNS ═══ -->
 <section class="sec" id="dropdowns">
-  <h2>Dropdowns <span class="status-tag status-default" title="No --mdb-dropdown-* remap in mdb-customizations.css or GLM_Summary.css">DEFAULT</span></h2>
+  <h2>Dropdowns <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span> <span class="status-tag status-proposal" title="A proposal from glm-prototype-foundation.css is applied in this section">+ PROPOSAL</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#dropdowns" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Dropdowns</a>. <span class="ref-label">Open:</span><a href="https://foundanttech.atlassian.net/browse/UX-117" target="_blank" rel="noopener">UX-117</a>, <a href="https://foundanttech.atlassian.net/browse/UX-166" target="_blank" rel="noopener">UX-166</a>. <span class="ref-label">In this lab:</span>Navy focus outline on dropdown items (P1).</p>
   <p class="sd">Contextual action menus. Stock MDB structurally, with one real Foundant state class bolted on beside it.</p>
 
   <table class="usage">
@@ -1270,7 +1256,8 @@ header, footer {
 
 <!-- ═══ CARDS ═══ -->
 <section class="sec" id="cards">
-  <h2>Cards <span class="status-tag status-overridden" title="header/footer borders removed">OVERRIDDEN</span></h2>
+  <h2>Cards <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#cards" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Cards</a>.</p>
   <p class="sd">Content containers. MDB <code>.card</code> with header/footer borders removed via customizations.</p>
 
   <table class="usage">
@@ -1332,7 +1319,8 @@ header, footer {
 
 <!-- ═══ BADGES ═══ -->
 <section class="sec" id="badges">
-  <h2>Badges &amp; Status <span class="status-tag status-overridden" title="--mdb-badge-* + semantic badge classes">OVERRIDDEN</span></h2>
+  <h2>Badges &amp; Status <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#badges" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Badges</a>. <span class="ref-label">Open:</span><a href="https://foundanttech.atlassian.net/browse/UX-131" target="_blank" rel="noopener">UX-131</a>. <span class="ref-label">Since the rebuild:</span>The squared, bordered badge drafted here shipped in production.</p>
   <p class="sd">Rectangular badges for status. Four semantic backgrounds; dark text on subtle tints, saturated border for contrast.</p>
 
   <table class="usage">
@@ -1386,7 +1374,8 @@ header, footer {
 
 <!-- ═══ ALERTS ═══ -->
 <section class="sec" id="alerts">
-  <h2>Alerts <span class="gap-flag">GAP — stock MDB today, Foundant treatment drafted here</span></h2>
+  <h2>Alerts <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#alerts" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Alerts</a>. <span class="ref-label">Since the rebuild:</span>Alerts now ship in production with the treatment drafted here. Compact and dismissible variants are still undecided.</p>
   <p class="sd">Contextual feedback messages. No <code>.alert</code> override exists anywhere in production — these currently ship as pure stock MDB defaults, which is why they read as generic/off-brand today.</p>
 
   <table class="usage">
@@ -1442,7 +1431,8 @@ header, footer {
 
 <!-- ═══ TABLES ═══ -->
 <section class="sec" id="tables">
-  <h2>Tables <span class="status-tag status-overridden" title="--mdb-table-bg remapped in mdb-customizations.css:133">OVERRIDDEN</span></h2>
+  <h2>Tables <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#tables-and-data-grids" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Tables and data grids</a>. <span class="ref-label">Open:</span><a href="https://foundanttech.atlassian.net/browse/UX-129" target="_blank" rel="noopener">UX-129</a>. <span class="ref-label">Since the rebuild:</span><code>.table-action-button</code> no longer exists. Use <code>.btn.btn-icon</code>.</p>
   <p class="sd">Tabular data. One remap on the MDB table, three supporting production classes, and one large open decision that this section deliberately does not answer.</p>
 
   <table class="usage">
@@ -1514,7 +1504,8 @@ header, footer {
 
 <!-- ═══ LIST GROUPS ═══ -->
 <section class="sec" id="list-groups">
-  <h2>List Groups <span class="status-tag status-default" title="No unscoped .list-group rule in either production file">DEFAULT</span></h2>
+  <h2>List Groups <span class="status-tag status-gap" title="Known production defect, fix not shipped">PRODUCTION GAP</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#side-panel-navigation" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Side panel navigation</a>. <span class="ref-label">Open:</span><a href="https://foundanttech.atlassian.net/browse/UX-168" target="_blank" rel="noopener">UX-168</a>.</p>
   <p class="sd">Grouped list items. The generic component is stock MDB; the only production styling is scoped to the record side panel and documented under Sidenav.</p>
 
   <table class="usage">
@@ -1567,7 +1558,8 @@ header, footer {
 
 <!-- ═══ ACCORDIONS ═══ -->
 <section class="sec" id="accordions">
-  <h2>Accordions <span class="status-tag status-default" title="No override in mdb-customizations.css or GLM_Summary.css">DEFAULT</span></h2>
+  <h2>Accordions <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#stock-mdb-components" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Stock MDB components</a>. <span class="ref-label">Open:</span><a href="https://foundanttech.atlassian.net/browse/UX-147" target="_blank" rel="noopener">UX-147</a>.</p>
   <p class="sd">Collapsible content panels. Stock MDB, and the one component in this batch whose brand color cannot be fixed by remapping alone.</p>
 
   <table class="usage">
@@ -1627,7 +1619,8 @@ header, footer {
 
 <!-- ═══ TIMELINE ═══ -->
 <section class="sec" id="timeline">
-  <h2>Timeline <span class="status-tag status-default" title="No .timeline rule in either production file; no confirmed production usage">DEFAULT</span></h2>
+  <h2>Timeline <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#timeline" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Gaps: Timeline</a>.</p>
   <p class="sd">Chronological activity history. MDB ships a real timeline component; there is no evidence GLM uses it, and no Foundant styling for it anywhere.</p>
 
   <table class="usage">
@@ -1679,7 +1672,8 @@ header, footer {
 
 <!-- ═══ INPUTS ═══ -->
 <section class="sec" id="inputs">
-  <h2>Text Inputs <span class="gap-flag">GAP — background confirmed in production, border/focus/label remap proposed here</span></h2>
+  <h2>Text Inputs <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#forms" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Forms</a>. <span class="ref-label">Since the rebuild:</span>Production shipped a 1px border with an inset focus ring, not the 2px no-ring border proposed here. The proposal was retired.</p>
   <p class="sd">Plain top-label field: label above input. GLM does not use MDB's notched floating-outline pattern (<code>.form-outline</code>/<code>.form-notch</code>) for standard form fields.</p>
 
   <table class="usage">
@@ -1743,7 +1737,8 @@ header, footer {
 
 <!-- ═══ SELECTS ═══ -->
 <section class="sec" id="selects">
-  <h2>Select <span class="gap-flag">GAP — no evidence of its own; extends the Text Inputs proposal for visual consistency</span></h2>
+  <h2>Select <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#select" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Gaps: Select</a>.</p>
   <p class="sd">Native <code>&lt;select&gt;</code>, styled to match <code>.form-control</code> so the field family reads as one system.</p>
 
   <table class="usage">
@@ -1799,7 +1794,8 @@ header, footer {
 
 <!-- ═══ CHECK/RADIO/SWITCH ═══ -->
 <section class="sec" id="checkradio">
-  <h2>Checkbox, Radio &amp; Switch <span class="gap-flag">GAP — stock MDB checked/focus color, Foundant treatment proposed here</span></h2>
+  <h2>Checkbox, Radio &amp; Switch <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span> <span class="status-tag status-proposal" title="A proposal from glm-prototype-foundation.css is applied in this section">+ PROPOSAL</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#forms" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Forms</a>. <span class="ref-label">Open:</span><a href="https://foundanttech.atlassian.net/browse/UX-116" target="_blank" rel="noopener">UX-116</a>, <a href="https://foundanttech.atlassian.net/browse/UX-149" target="_blank" rel="noopener">UX-149</a>, <a href="https://foundanttech.atlassian.net/browse/UX-151" target="_blank" rel="noopener">UX-151</a>. <span class="ref-label">In this lab:</span>Filled pill switch track (P2). Track color pending UX-149 and UX-151. <span class="ref-label">Since the rebuild:</span>Production keeps MDB's focus ripple on checkboxes and radios. The proposal to remove it was retired.</p>
   <p class="sd">Selection controls. Markup was already real MDB (<code>.form-check</code>/<code>.form-check-input</code>/<code>.form-switch</code>) — the correction here is the color, not the structure.</p>
 
   <table class="usage">
@@ -1907,7 +1903,8 @@ header, footer {
 
 <!-- ═══ DATEPICKER ═══ -->
 <section class="sec" id="datepicker">
-  <h2>Datepicker <span class="wip-tag">WIP — decision made, real markup still needed</span></h2>
+  <h2>Datepicker <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#date-picker" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Date picker</a>. <span class="ref-label">Since the rebuild:</span>This section ratified styling <code>bootstrap-datepicker.js</code>. Production went the other way: GLM.Web uses MDB5's datepicker, and the legacy plugin remains only on unmodernized pages.</p>
   <p class="sd">Calendar selection. <strong>Direction confirmed:</strong> style production's actual library (<code>bootstrap-datepicker.js</code>), not MDB5's native Datepicker component — see note below.</p>
 
   <table class="usage">
@@ -1925,7 +1922,8 @@ header, footer {
 
 <!-- ═══ AUTOCOMPLETE ═══ -->
 <section class="sec" id="autocomplete">
-  <h2>Autocomplete <span class="gap-flag">GAP — real component confirmed in use, item/label color proposed here</span></h2>
+  <h2>Autocomplete <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#autocomplete" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Autocomplete</a>. <span class="ref-label">Since the rebuild:</span>The item and label colors proposed here shipped in production.</p>
   <p class="sd">MDB5's native Autocomplete — genuinely in production (unlike Datepicker), confirmed via real markup and two scoped overrides.</p>
 
   <table class="usage">
@@ -1994,7 +1992,8 @@ header, footer {
 
 <!-- ═══ STEPPER ═══ -->
 <section class="sec" id="stepper">
-  <h2>Stepper <span class="gap-flag">GAP — real MDB component, structurally different from the old draft, no evidence of production use</span></h2>
+  <h2>Stepper <span class="status-tag status-proposal" title="Not in production; applied here from glm-prototype-foundation.css">PROPOSAL</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#steppers" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Gaps: Steppers</a>. <span class="ref-label">In this lab:</span>Foundant state colors on MDB's stepper (P3).</p>
   <p class="sd">MDB5's native Stepper — confirmed real in <code>mdb_min.css</code>, but it's <strong>vertical-only</strong>. There's no <code>.stepper-horizontal</code> class anywhere; the previous draft's horizontal icon-row didn't match the real component's structure, not just its colors.</p>
 
   <table class="usage">
@@ -2082,7 +2081,8 @@ header, footer {
 
 <!-- ═══ VALIDATION ═══ -->
 <section class="sec" id="validation">
-  <h2>Validation <span class="status-tag status-overridden" title="Confirmed live in production">CONFIRMED</span> <span class="gap-flag">+ PROPOSED modernization below</span></h2>
+  <h2>Validation <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span> <span class="status-tag status-proposal" title="A proposal from glm-prototype-foundation.css is applied in this section">+ PROPOSAL</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#forms" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Forms</a>. <span class="ref-label">Open:</span><a href="https://foundanttech.atlassian.net/browse/YOGI-8094" target="_blank" rel="noopener">YOGI-8094</a>. <span class="ref-label">In this lab:</span><code>.is-invalid</code> and <code>.invalid-feedback</code> (P4).</p>
   <p class="sd">Two things here: what's actually live in production today (confirmed by engineering, not guessed), and a proposed modern replacement — the team is planning to modernize form completion, not just port it as-is, so this is an open design conversation, not a settled decision.</p>
 
   <table class="usage">
@@ -2191,7 +2191,8 @@ header, footer {
 
 <!-- ═══ INPUT GROUPS ═══ -->
 <section class="sec" id="input-groups">
-  <h2>Input Groups <span class="gap-flag">GAP — real overrides exist, plus a newly-found focus-color bug</span></h2>
+  <h2>Input Groups <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#forms" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Forms</a>. <span class="ref-label">Open:</span><a href="https://foundanttech.atlassian.net/browse/UX-159" target="_blank" rel="noopener">UX-159</a>.</p>
   <p class="sd">Combined inputs: a prefix/suffix addon or a trailing button attached to a <code>.form-control</code>.</p>
 
   <table class="usage">
@@ -2254,7 +2255,8 @@ header, footer {
 
 <!-- ═══ MODALS ═══ -->
 <section class="sec" id="modals">
-  <h2>Modals <span class="status-tag status-default" title="Confirmed stock MDB, no overrides exist">DEFAULT</span></h2>
+  <h2>Modals <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#modals" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Modals</a>.</p>
   <p class="sd">Dialog overlays. Confirmed against a real modal in production (the Collaborate dialog) — full markup, DevTools computed styles, and a screenshot all checked together.</p>
 
   <table class="usage">
@@ -2336,7 +2338,8 @@ header, footer {
 
 <!-- ═══ TOASTS ═══ -->
 <section class="sec" id="toasts">
-  <h2>Toasts <span class="status-tag status-overridden" title="#GlobalToast and .toast-container are real production overrides">OVERRIDDEN</span></h2>
+  <h2>Toasts <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#toasts" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Toasts</a>. <span class="ref-label">Open:</span><a href="https://foundanttech.atlassian.net/browse/UX-158" target="_blank" rel="noopener">UX-158</a>. <span class="ref-label">Since the rebuild:</span>Info, warning and danger toasts now ship through <code>GLM.Toast</code>.</p>
   <p class="sd">Transient confirmation messages. Production ships one real customized toast, <code>#GlobalToast</code>, styled in <code>mdb-customizations.css</code> under its own "Global Toast Component" comment. This section previously showed a hand-styled fake using retired variables; it now shows the production component.</p>
 
   <table class="usage">
@@ -2393,7 +2396,8 @@ header, footer {
 
 <!-- ═══ TOOLTIPS ═══ -->
 <section class="sec" id="tooltips">
-  <h2>Tooltips &amp; Popovers <span class="status-tag status-default" title="No override in mdb-customizations.css or GLM_Summary.css">DEFAULT</span></h2>
+  <h2>Tooltips &amp; Popovers <span class="status-tag status-gap" title="Known production defect, fix not shipped">PRODUCTION GAP</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#info-icon-tooltip" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Gaps: Info-icon tooltip</a>. <span class="ref-label">Open:</span><a href="https://foundanttech.atlassian.net/browse/UX-154" target="_blank" rel="noopener">UX-154</a>, <a href="https://foundanttech.atlassian.net/browse/UX-163" target="_blank" rel="noopener">UX-163</a>, <a href="https://foundanttech.atlassian.net/browse/UX-120" target="_blank" rel="noopener">UX-120</a>.</p>
   <p class="sd">Contextual overlays. Stock MDB, with one accessibility item that needs validating before it can be called safe.</p>
 
   <table class="usage">
@@ -2441,7 +2445,8 @@ header, footer {
 
 <!-- ═══ SPINNERS ═══ -->
 <section class="sec" id="spinners">
-  <h2>Spinners <span class="status-tag status-default" title="No override in mdb-customizations.css or GLM_Summary.css">DEFAULT</span></h2>
+  <h2>Spinners <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#loading" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Loading</a>.</p>
   <p class="sd">Loading indicators. Stock MDB, and the only section in this batch with nothing to flag: the component inherits its color rather than declaring one.</p>
 
   <table class="usage">
@@ -2486,7 +2491,8 @@ header, footer {
 
 <!-- ═══ PROGRESS ═══ -->
 <section class="sec" id="progress">
-  <h2>Progress Bars <span class="status-tag status-default" title="No override in mdb-customizations.css or GLM_Summary.css">DEFAULT</span></h2>
+  <h2>Progress Bars <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#brand" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Tokens: Brand</a>. <span class="ref-label">Open:</span><a href="https://foundanttech.atlassian.net/browse/UX-162" target="_blank" rel="noopener">UX-162</a>. <span class="ref-label">Since the rebuild:</span>The bar is navy in production now. Height and labeling are still open.</p>
   <p class="sd">Determinate completion indicators. Stock MDB, with the fill hardcoded to MDB blue.</p>
 
   <table class="usage">
@@ -2532,7 +2538,8 @@ header, footer {
 
 <!-- ═══ OFFCANVAS ═══ -->
 <section class="sec" id="offcanvas">
-  <h2>Offcanvas / Slide-over <span class="status-tag status-default" title="No .offcanvas rule in mdb-customizations.css or GLM_Summary.css">DEFAULT</span></h2>
+  <h2>Offcanvas / Slide-over <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#slide-in-panel" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Gaps: Slide-in panel</a>. <span class="ref-label">Open:</span><a href="https://foundanttech.atlassian.net/browse/UX-146" target="_blank" rel="noopener">UX-146</a>.</p>
   <p class="sd">A panel that slides in over the page. Stock MDB with no Foundant styling, and a naming collision worth settling before it gets documented further.</p>
 
   <table class="usage">
@@ -2586,7 +2593,8 @@ header, footer {
 
 <!-- ═══ SHADOWS ═══ -->
 <section class="sec" id="shadows">
-  <h2>Shadows <span class="status-tag status-overridden" title="Real shadow values in mdb-customizations.css lines 152, 206, 451, 457; shadows removed from buttons and cards">OVERRIDDEN</span></h2>
+  <h2>Shadows <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#shadows" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Shadows</a>.</p>
   <p class="sd">Elevation. Production uses shadow sparingly and deliberately: it is removed from components MDB shadows by default, and added back in exactly two places. No shadow token exists.</p>
 
   <table class="usage">
@@ -2649,7 +2657,8 @@ header, footer {
 </section>
 
 <section class="sec" id="page-patterns">
-  <h2>Page Patterns <span class="status-tag status-overridden" title="All classes below are real, from GLM_Summary.css">OVERRIDDEN</span></h2>
+  <h2>Page Patterns <span class="status-tag status-overridden" title="Renders production CSS loaded from beta">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#page-patterns-glmsummarycss" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Page patterns</a>.</p>
   <p class="sd">Compound layouts assembled from several real production classes. These are not MDB components; they are Foundant-authored patterns that had ratified CSS and no demo anywhere until now.</p>
 
   <table class="usage">
