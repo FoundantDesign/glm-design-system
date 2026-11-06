@@ -47,7 +47,7 @@
     {
       "id": "entity-summary",
       "file": "shells/entity-summary.html",
-      "use": "The Entity Summary page (DESIGN-SYSTEM.md, Layout): side panel nav, record header and content area. Request, Organization, User and Foundation Summary pages, and the Process Manager behind the Update Process preview. Structure follows the shipped *Container.cshtml views, not the DESIGN-SYSTEM.md tree.",
+      "use": "The Entity Summary page (DESIGN-SYSTEM.md, Layout): side panel nav, record header and content area. Request, Organization, User and Foundation Summary pages, and the Process Manager behind the Update Process preview. Structure follows the shipped *Container.cshtml views, not the DESIGN-SYSTEM.md tree (UX-175).",
       "persona": "Client administrator"
     },
     {
