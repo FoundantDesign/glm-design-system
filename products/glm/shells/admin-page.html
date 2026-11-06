@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="foundant-prototype" content="product=glm; shell=admin-page; shell-version=2026-11-06" />
+  <title>Requests | GLM prototype</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+  <!-- GLM production CSS, live from beta, in production's load order. Don't copy or inline it. -->
+  <link rel="stylesheet" href="https://beta.grantinterface.com/Scripts/Mdb/mdb.min.css" />
+  <link rel="stylesheet" href="https://beta.grantinterface.com/css/mdb-patches.css" />
+  <link rel="stylesheet" href="https://beta.grantinterface.com/css/foundant-tokens.css" />
+  <link rel="stylesheet" href="https://beta.grantinterface.com/css/mdb-customizations.css" />
+  <link rel="stylesheet" href="https://beta.grantinterface.com/css/ag-customizations.css" />
+  <link rel="stylesheet" href="https://beta.grantinterface.com/css/GLM.Summary.css" />
+  <!-- Optional: proposals from the design lab. Uncomment only when this prototype tests a proposal. -->
+  <!-- <link rel="stylesheet" href="https://glm-design-system.netlify.app/glm-prototype-foundation.css" /> -->
+  <script src="https://beta.grantinterface.com/Scripts/Font-Awesome-Pro-7/all.js"></script>
+  <!-- PROTOTYPE-ONLY STYLES: page-specific layout only, tokens only, no color literals. -->
+  <style>
+  </style>
+</head>
+<body>
+<a href="#MainContent" class="SkipNavigation">Skip to main content</a>
+<header id="MainHeader" class="fixed-top">
+  <nav class="navbar navbar-expand-lg" aria-label="Header Menu">
+    <div class="container-fluid">
+      <a class="navbar-brand p-0" href="javascript:void(0)">
+        <span class="fw-bold">Riverside Community Foundation</span>
+      </a>
+      <div class="navbar-nav">
+        <div class="nav-item">
+          <a class="nav-link" href="javascript:void(0)" aria-label="Dashboard"><i class="fa-light fa-house fa-lg"></i></a>
+        </div>
+      </div>
+      <button data-mdb-collapse-init class="navbar-toggler p-2" type="button" data-mdb-target="#MainNavigation" aria-controls="MainNavigation" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa-light fa-bars"></i>
+      </button>
+      <div class="order-lg-last align-content-end ms-lg-auto">
+        <ul class="nav navbar-nav d-flex flex-row align-items-center flex-nowrap">
+          <li class="dropdown nav-item">
+            <a href="javascript:void(0)" class="nav-link dropdown-toggle" role="button" data-mdb-dropdown-init aria-expanded="false" aria-label="User menu for Megan Dahl">
+              <i class="fa-light fa-user fa-lg"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-user me-2"></i>Edit My Profile</a></li>
+              <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-sliders me-2"></i>Preferences</a></li>
+              <li class="dropdown-divider" aria-hidden="true"></li>
+              <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-right-from-bracket me-2"></i>Sign Out</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="collapse navbar-collapse flex-grow-0" id="MainNavigation">
+        <ul id="TopLinks" class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a href="javascript:void(0)" class="nav-link dropdown-toggle" role="button" data-mdb-dropdown-init aria-expanded="false">Search</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-file-lines me-2"></i>Requests &amp; Decisions</a></li>
+              <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-building me-2"></i>Organizations</a></li>
+              <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-user me-2"></i>Users</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="javascript:void(0)">Processes</a></li>
+          <li class="nav-item"><a class="nav-link" href="javascript:void(0)">Reports</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main id="MainContent" class="container mt-4 mb-6 page-container">
+  <!-- ═══ PROTOTYPE CONTENT START: replace everything inside <main> ═══ -->
+  <div class="page-header-container d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+      <h1>Requests</h1>
+    </div>
+    <div id="HeaderButtons" class="d-flex gap-2 align-items-start">
+      <button type="button" class="btn btn-outline-secondary">Export</button>
+      <button type="button" class="btn btn-primary">+ New Request</button>
+    </div>
+  </div>
+
+  <div class="card mt-3">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h5 card-title mb-0">Spring Grants 2026</h2>
+        <span class="badge badge-primary rounded-pill">3</span>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-sm table-hover align-middle mb-0">
+          <thead>
+            <tr><th scope="col">Organization</th><th scope="col">Project</th><th scope="col">Status</th><th scope="col" class="text-end">Requested</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Riverside Food Collective</td><td>Community Garden Expansion</td><td><span class="badge badge-success">Approved</span></td><td class="text-end">$30,000.00</td><td class="text-end"><button type="button" class="btn btn-icon" aria-label="More actions for Community Garden Expansion"><i class="fa-regular fa-ellipsis-vertical"></i></button></td></tr>
+            <tr><td>Northside Literacy Project</td><td>Summer Reading Program</td><td><span class="badge badge-warning">Pending</span></td><td class="text-end">$12,500.00</td><td class="text-end"><button type="button" class="btn btn-icon" aria-label="More actions for Summer Reading Program"><i class="fa-regular fa-ellipsis-vertical"></i></button></td></tr>
+            <tr><td>Harbor Youth Arts</td><td>Mural Apprenticeships</td><td><span class="badge badge-secondary">Draft</span></td><td class="text-end">$8,000.00</td><td class="text-end"><button type="button" class="btn btn-icon" aria-label="More actions for Mural Apprenticeships"><i class="fa-regular fa-ellipsis-vertical"></i></button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!-- ═══ PROTOTYPE CONTENT END ═══ -->
+</main>
+
+<div class="footer-spacer d-none d-md-block" aria-hidden="true"></div>
+
+<footer class="fixed-bottom d-none d-md-block">
+  <div class="d-flex justify-content-between align-items-center px-3 py-2">
+    <span class="nav-link d-inline">Riverside Community Foundation</span>
+    <span class="nav-link d-inline">Foundant &copy; 2026</span>
+  </div>
+</footer>
+
+<!-- Production's shared toast. Show it with GLM.Toast.showToast('GlobalToast', header, body). -->
+<div id="GlobalToast" class="toast" role="alert" aria-live="polite" aria-atomic="true"
+     data-mdb-autohide="true" data-mdb-delay="3000" data-mdb-width="350px"
+     data-mdb-position="top-right" data-mdb-append-to-body="true">
+  <div class="toast-header">
+    <div id="ToastHeader" class="d-flex align-items-center fw-bold flex-grow-1"></div>
+    <button type="button" class="btn-close ms-2" data-mdb-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div id="ToastBody" class="toast-body"></div>
+</div>
+
+<!-- Production scripts from beta: jQuery, MDB, then GLM.Utility, GLM.Toast and GLM.SlidePanel. -->
+<script src="https://beta.grantinterface.com/Scripts/jquery-3.7.1.js"></script>
+<script src="https://beta.grantinterface.com/Scripts/Mdb/mdb.umd.min.js"></script>
+<script src="https://beta.grantinterface.com/Scripts/MVC/GLM.Utility.js"></script>
+<script src="https://beta.grantinterface.com/Scripts/MVC/GLM.Toast.js"></script>
+<script src="https://beta.grantinterface.com/Scripts/Modern/GLM.SlidePanel.js"></script>
+<script>
+  // Production's header offset (Foundant/Views/Shared/Mdb/_TopLayoutBase.cshtml)
+  (function () {
+    'use strict';
+    function adjustMainPadding() {
+      const header = document.getElementById('MainHeader');
+      const main = document.getElementById('MainContent');
+      if (header && main) {
+        if (main.classList.contains('page-container')) {
+          main.classList.remove('mt-4');
+          main.style.marginTop = (header.offsetHeight + 15) + 'px';
+        } else {
+          main.style.paddingTop = header.offsetHeight + 'px';
+        }
+      }
+    }
+    const header = document.getElementById('MainHeader');
+    if (header && 'ResizeObserver' in window) {
+      new ResizeObserver(adjustMainPadding).observe(header);
+    }
+    window.addEventListener('load', adjustMainPadding);
+    window.addEventListener('resize', adjustMainPadding);
+    adjustMainPadding();
+  })();
+</script>
+<!-- PROTOTYPE-ONLY SCRIPT: interactions for this prototype. -->
+<script>
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+{
+  "product": "glm",
+  "name": "Grant Lifecycle Manager",
+  "shellVersion": "2026-11-06",
+  "environment": {
+    "origin": "https://beta.grantinterface.com",
+    "note": "Static CSS and JS on beta load without a login. Prototypes always link them live; never copy or inline production CSS."
+  },
+  "rules": {
+    "designSystem": "https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md",
+    "designSystemRaw": "https://raw.githubusercontent.com/Foundant/glm/trunk/GLM.Web/DESIGN-SYSTEM.md",
+    "renderedReference": "https://beta.grantinterface.com/Dev/DesignSystem",
+    "kitchenSink": "https://glm-design-system.netlify.app/",
+    "note": "DESIGN-SYSTEM.md is in a private repo. In Cowork or Claude Code, read it from a Foundant/glm checkout; in chat, ask for it as an attachment or use the kitchen sink."
+  },
+  "fonts": "https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap",
+  "styles": [
+    "/Scripts/Mdb/mdb.min.css",
+    "/css/mdb-patches.css",
+    "/css/foundant-tokens.css",
+    "/css/mdb-customizations.css",
+    "/css/ag-customizations.css",
+    "/css/GLM.Summary.css"
+  ],
+  "scripts": [
+    "/Scripts/jquery-3.7.1.js",
+    "/Scripts/Mdb/mdb.umd.min.js",
+    "/Scripts/MVC/GLM.Utility.js",
+    "/Scripts/MVC/GLM.Toast.js",
+    "/Scripts/Modern/GLM.SlidePanel.js"
+  ],
+  "icons": {
+    "script": "/Scripts/Font-Awesome-Pro-7/all.js",
+    "default": "fa-light",
+    "filledState": "fa-regular",
+    "note": "Production's curated Font Awesome Pro 7 subset. An icon missing from it renders a placeholder circle, exactly as it would in GLM."
+  },
+  "proposals": "https://glm-design-system.netlify.app/glm-prototype-foundation.css",
+  "shells": [
+    {
+      "id": "admin-page",
+      "file": "shells/admin-page.html",
+      "use": "Admin pages inside the white page container: lists, search results, settings, process pages.",
+      "persona": "Client administrator"
+    },
+    {
+      "id": "record-summary",
+      "file": "shells/record-summary.html",
+      "use": "A record's Summary page: side panel nav, title block, hero card and card grid. Request, Organization, User, Foundation.",
+      "persona": "Client administrator"
+    },
+    {
+      "id": "applicant-page",
+      "file": "shells/applicant-page.html",
+      "use": "Applicant-facing pages: the lighter applicant header, a form or dashboard in the page container.",
+      "persona": "Applicant"
+    }
+  ],
+  "behaviors": {
+    "toast": "GLM.Toast.showToast('GlobalToast', header, body); also showInfoToast, showWarningToast, showErrorToast",
+    "slidePanel": "GLM.SlidePanel.open({ title, content, width }); GLM.SlidePanel.close(). Use open with static HTML; load() needs a GLM server.",
+    "mdb": "Production loads MDB's explicit-init build. Components need their data-mdb-*-init attribute (dropdown, collapse, tab, modal, tooltip)."
+  }
+}

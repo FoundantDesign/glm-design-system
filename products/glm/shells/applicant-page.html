@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="foundant-prototype" content="product=glm; shell=applicant-page; shell-version=2026-11-06" />
+  <title>Application | GLM prototype</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+  <!-- GLM production CSS, live from beta, in production's load order. Don't copy or inline it. -->
+  <link rel="stylesheet" href="https://beta.grantinterface.com/Scripts/Mdb/mdb.min.css" />
+  <link rel="stylesheet" href="https://beta.grantinterface.com/css/mdb-patches.css" />
+  <link rel="stylesheet" href="https://beta.grantinterface.com/css/foundant-tokens.css" />
+  <link rel="stylesheet" href="https://beta.grantinterface.com/css/mdb-customizations.css" />
+  <link rel="stylesheet" href="https://beta.grantinterface.com/css/ag-customizations.css" />
+  <link rel="stylesheet" href="https://beta.grantinterface.com/css/GLM.Summary.css" />
+  <!-- Optional: proposals from the design lab. Uncomment only when this prototype tests a proposal. -->
+  <!-- <link rel="stylesheet" href="https://glm-design-system.netlify.app/glm-prototype-foundation.css" /> -->
+  <script src="https://beta.grantinterface.com/Scripts/Font-Awesome-Pro-7/all.js"></script>
+  <!-- PROTOTYPE-ONLY STYLES: page-specific layout only, tokens only, no color literals. -->
+  <style>
+  </style>
+</head>
+<body>
+<a href="#MainContent" class="SkipNavigation">Skip to main content</a>
+<header id="MainHeader" class="fixed-top">
+  <nav class="navbar navbar-expand-lg" aria-label="Header Menu">
+    <div class="container-fluid">
+      <a class="navbar-brand p-0" href="javascript:void(0)">
+        <span class="fw-bold">Riverside Community Foundation</span>
+      </a>
+      <div class="navbar-nav">
+        <div class="nav-item"><a class="nav-link" href="javascript:void(0)">My Dashboard</a></div>
+      </div>
+      <div class="order-lg-last align-content-end ms-auto">
+        <ul class="nav navbar-nav d-flex flex-row align-items-center flex-nowrap">
+          <li class="dropdown nav-item">
+            <a href="javascript:void(0)" class="nav-link dropdown-toggle" role="button" data-mdb-dropdown-init aria-expanded="false" aria-label="User menu for Jordan Applicant">
+              <i class="fa-light fa-user fa-lg"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-user me-2"></i>Edit My Profile</a></li>
+              <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-building me-2"></i>Edit Organization</a></li>
+              <li class="dropdown-divider" aria-hidden="true"></li>
+              <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-right-from-bracket me-2"></i>Sign Out</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main id="MainContent" class="container mt-4 mb-6 page-container">
+  <!-- ═══ PROTOTYPE CONTENT START: replace everything inside <main> ═══ -->
+  <div class="page-header-container d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+      <h1>Spring Grants 2026 Application</h1>
+      <p class="mb-0">Due April 15, 2026 at 5:00 PM</p>
+    </div>
+  </div>
+
+  <form class="mt-3" style="max-width: 640px" novalidate>
+    <div class="mb-3">
+      <label for="ProjectTitle" class="form-label">Project title</label>
+      <input type="text" id="ProjectTitle" class="form-control" value="Community Garden Expansion" />
+    </div>
+    <div class="mb-3">
+      <label for="AmountRequested" class="form-label">Amount requested</label>
+      <div class="input-group">
+        <span class="input-group-text">$</span>
+        <input type="text" id="AmountRequested" class="form-control" inputmode="decimal" value="30,000.00" />
+      </div>
+      <div class="form-text">Up to $50,000.</div>
+    </div>
+    <div class="mb-3">
+      <label for="ProjectSummary" class="form-label">Project summary</label>
+      <textarea id="ProjectSummary" class="form-control" rows="4">Expand the community garden from 12 to 30 plots and add an accessible raised-bed section.</textarea>
+    </div>
+    <fieldset class="mb-4">
+      <legend class="form-label">Have you received funding from us before?</legend>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="PriorFunding" id="PriorFundingYes" />
+        <label class="form-check-label" for="PriorFundingYes">Yes</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="PriorFunding" id="PriorFundingNo" checked />
+        <label class="form-check-label" for="PriorFundingNo">No</label>
+      </div>
+    </fieldset>
+    <div class="d-flex justify-content-between">
+      <button type="button" class="btn btn-outline-secondary">Save Draft</button>
+      <button type="button" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+  <!-- ═══ PROTOTYPE CONTENT END ═══ -->
+</main>
+
+<div class="footer-spacer d-none d-md-block" aria-hidden="true"></div>
+
+<footer class="fixed-bottom d-none d-md-block">
+  <div class="d-flex justify-content-between align-items-center px-3 py-2">
+    <span class="nav-link d-inline">Riverside Community Foundation</span>
+    <span class="nav-link d-inline">Foundant &copy; 2026</span>
+  </div>
+</footer>
+
+<!-- Production's shared toast. Show it with GLM.Toast.showToast('GlobalToast', header, body). -->
+<div id="GlobalToast" class="toast" role="alert" aria-live="polite" aria-atomic="true"
+     data-mdb-autohide="true" data-mdb-delay="3000" data-mdb-width="350px"
+     data-mdb-position="top-right" data-mdb-append-to-body="true">
+  <div class="toast-header">
+    <div id="ToastHeader" class="d-flex align-items-center fw-bold flex-grow-1"></div>
+    <button type="button" class="btn-close ms-2" data-mdb-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div id="ToastBody" class="toast-body"></div>
+</div>
+
+<!-- Production scripts from beta: jQuery, MDB, then GLM.Utility, GLM.Toast and GLM.SlidePanel. -->
+<script src="https://beta.grantinterface.com/Scripts/jquery-3.7.1.js"></script>
+<script src="https://beta.grantinterface.com/Scripts/Mdb/mdb.umd.min.js"></script>
+<script src="https://beta.grantinterface.com/Scripts/MVC/GLM.Utility.js"></script>
+<script src="https://beta.grantinterface.com/Scripts/MVC/GLM.Toast.js"></script>
+<script src="https://beta.grantinterface.com/Scripts/Modern/GLM.SlidePanel.js"></script>
+<script>
+  // Production's header offset (Foundant/Views/Shared/Mdb/_TopLayoutBase.cshtml)
+  (function () {
+    'use strict';
+    function adjustMainPadding() {
+      const header = document.getElementById('MainHeader');
+      const main = document.getElementById('MainContent');
+      if (header && main) {
+        if (main.classList.contains('page-container')) {
+          main.classList.remove('mt-4');
+          main.style.marginTop = (header.offsetHeight + 15) + 'px';
+        } else {
+          main.style.paddingTop = header.offsetHeight + 'px';
+        }
+      }
+    }
+    const header = document.getElementById('MainHeader');
+    if (header && 'ResizeObserver' in window) {
+      new ResizeObserver(adjustMainPadding).observe(header);
+    }
+    window.addEventListener('load', adjustMainPadding);
+    window.addEventListener('resize', adjustMainPadding);
+    adjustMainPadding();
+  })();
+</script>
+<!-- PROTOTYPE-ONLY SCRIPT: interactions for this prototype. -->
+<script>
+</script>
+</body>
+</html>
