@@ -58,7 +58,8 @@ If finishing a ticket needs a design choice that is not recorded in DESIGN-SYSTE
 ## Git workflow
 
 - Never commit to `main` or force push. Merge only when Gabe says to in the session.
-- Branch per ticket: `UX-123/short-slug`. Commit messages start with the Jira key.
+- Branch per ticket when there is one: `UX-123/short-slug` (a YOGI key works too), with commit messages starting with the key. Kitchen sink and proposal changes always have a ticket.
+- A prototype doesn't need a ticket. Without one, use `proto/<short-slug>` and start commit messages with `PROTO:`. Create a UX ticket for a prototype only when the person asks for one.
 - Add `[skip ci]` to every commit except the last one intended for deploy. Netlify production deploys cost credits; aim for one per session.
 - Open PRs as drafts and fill in `.github/pull_request_template.md`.
 
