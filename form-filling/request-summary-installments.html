@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="foundant-prototype" content="product=glm; shell=entity-summary; shell-version=2026-11-06" />
+  <title>Riverside Murals for Youth | Request Summary | GLM prototype</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+  <!-- GLM production CSS, live from beta, in production's load order. Don't copy or inline it. -->
+  <link rel="stylesheet" href="https://beta.grantinterface.com/Scripts/Mdb/mdb.min.css" />
+  <link rel="stylesheet" href="https://beta.grantinterface.com/css/mdb-patches.css" />
+  <link rel="stylesheet" href="https://beta.grantinterface.com/css/foundant-tokens.css" />
+  <link rel="stylesheet" href="https://beta.grantinterface.com/css/mdb-customizations.css" />
+  <link rel="stylesheet" href="https://beta.grantinterface.com/css/ag-customizations.css" />
+  <link rel="stylesheet" href="https://beta.grantinterface.com/css/GLM.Summary.css" />
+  <!-- Optional: proposals from the design lab. Uncomment only when this prototype tests a proposal. -->
+  <!-- <link rel="stylesheet" href="https://glm-design-system.netlify.app/glm-prototype-foundation.css" /> -->
+  <script src="https://beta.grantinterface.com/Scripts/Font-Awesome-Pro-7/all.js"></script>
+  <!-- PROTOTYPE-ONLY STYLES: page-specific layout only, tokens only, no color literals. -->
+  <style>
+    /* Layout only: two-column totals list inside the Award Details card. */
+    .proto-award-totals { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 4px 16px; }
+    .proto-award-totals > div { min-width: 0; }
+  </style>
+</head>
+<body>
+<a href="#MainContent" class="SkipNavigation">Skip to main content</a>
+<header id="MainHeader" class="fixed-top">
+  <nav class="navbar navbar-expand-lg" aria-label="Header Menu">
+    <div class="container-fluid">
+      <a class="navbar-brand p-0" href="javascript:void(0)">
+        <span class="fw-bold">Riverbend Community Fund</span>
+      </a>
+      <div class="navbar-nav">
+        <div class="nav-item">
+          <a class="nav-link" href="javascript:void(0)" aria-label="Dashboard"><i class="fa-light fa-house fa-lg"></i></a>
+        </div>
+      </div>
+      <button data-mdb-collapse-init class="navbar-toggler p-2" type="button" data-mdb-target="#MainNavigation" aria-controls="MainNavigation" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa-light fa-bars"></i>
+      </button>
+      <div class="order-lg-last align-content-end ms-lg-auto">
+        <ul class="nav navbar-nav d-flex flex-row align-items-center flex-nowrap">
+          <li class="dropdown nav-item">
+            <a href="javascript:void(0)" class="nav-link dropdown-toggle" role="button" data-mdb-dropdown-init aria-expanded="false" aria-label="User menu for Megan Dahl">
+              <i class="fa-light fa-user fa-lg"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-user me-2"></i>Edit My Profile</a></li>
+              <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-sliders me-2"></i>Preferences</a></li>
+              <li class="dropdown-divider" aria-hidden="true"></li>
+              <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-right-from-bracket me-2"></i>Sign Out</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="collapse navbar-collapse flex-grow-0" id="MainNavigation">
+        <ul id="TopLinks" class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a href="javascript:void(0)" class="nav-link dropdown-toggle" role="button" data-mdb-dropdown-init aria-expanded="false">Search</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-file-lines me-2"></i>Requests &amp; Decisions</a></li>
+              <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-building me-2"></i>Organizations</a></li>
+              <li><a class="dropdown-item" href="javascript:void(0)"><i class="fa-light fa-user me-2"></i>Users</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="javascript:void(0)">Processes</a></li>
+          <li class="nav-item"><a class="nav-link" href="javascript:void(0)">Reports</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- Entity Summary page (DESIGN-SYSTEM.md, Layout). Structure follows the shipped containers:
+     Request, Organization, User, Foundation and Process Manager (*Container.cshtml in GLM.Web).
+     Keep .panel-header-wrapper, .panel-header-desktop and #ContentContainer: GLM.SideNavigation
+     moves the record header between them at the 768px breakpoint. -->
+<main id="MainContent" class="mb-6">
+  <div class="h-100 panel-layout">
+    <div class="panel-header-wrapper"></div>
+
+    <!-- Record nav rail: belongs to the record, not the app. Edit the items for your record type. -->
+    <div class="side-panel">
+      <div class="nav-fade nav-fade-left" aria-hidden="true"></div>
+      <div class="nav-fade nav-fade-right" aria-hidden="true"></div>
+      <div class="d-flex flex-column">
+        <div class="my-3 mx-2 request-info-card-wrapper">
+          <div class="card request-info-card" style="background-color: var(--colors-neutral-70)">
+            <div class="my-3 mx-3">
+              <div class="list-group-item ft-label d-flex align-items-center">
+                <i class="fa-light fa-circle-user me-3 h6 mb-0"></i>
+                <a href="javascript:void(0)">Dana Whitfield</a>
+              </div>
+              <div class="list-group-item ft-label mt-1">
+                <i class="fa-light fa-envelope me-3 h6 mb-0"></i>
+                <a href="javascript:void(0)">dana@maplestreetarts.org</a>
+              </div>
+              <div class="list-group-item ft-label mt-1">
+                <i class="fa-light fa-phone me-3 h6 mb-0"></i>
+                <span>555-214-0193</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="d-lg-block">
+          <div class="list-group list-group-flush mt-1">
+            <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple active" aria-current="page"><i class="fa-light fa-hand-holding-seedling me-2 me-md-3"></i>Summary</a>
+            <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple"><i class="fa-light fa-money-bill-1 me-2 me-md-3"></i>Award Details</a>
+            <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple"><i class="fa-light fa-file-magnifying-glass me-2 me-md-3"></i>Evaluations</a>
+            <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple"><i class="fa-light fa-clipboard-list-check me-2 me-md-3"></i>Follow Ups</a>
+            <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple"><i class="fa-light fa-message me-2 me-md-3"></i>Comments</a>
+            <a href="javascript:void(0)" class="list-group-item list-group-item-action ripple"><i class="fa-light fa-file-lines me-2 me-md-3"></i>Documents</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-content-body d-flex flex-column">
+      <div class="panel-header-desktop">
+        <!-- ═══ PROTOTYPE CONTENT START: record header (title, record type, actions) ═══ -->
+        <div class="d-flex mt-4 mb-4">
+          <div class="mx-3 w-100">
+            <span class="badge badge-primary text-uppercase mb-2">Request Summary</span>
+            <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
+              <h1 class="mb-0">Riverside Murals for Youth</h1>
+              <div class="dropdown">
+                <button class="btn btn-outline-dark fw-bold dropdown-toggle" type="button" id="RecordActionsDropdown" data-mdb-dropdown-init aria-expanded="false">Actions</button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="RecordActionsDropdown">
+                  <li><button type="button" class="dropdown-item">Create Documents</button></li>
+                  <li><button type="button" class="dropdown-item">Copy Request</button></li>
+                  <li><hr class="dropdown-divider" /></li>
+                  <li><button type="button" class="dropdown-item text-danger">Delete Request</button></li>
+                </ul>
+              </div>
+            </div>
+            <div class="small mt-1">Maple Street Arts Collective · 2027 Community Impact Grant</div>
+          </div>
+        </div>
+        <!-- ═══ PROTOTYPE CONTENT END ═══ -->
+      </div>
+
+      <div id="ContentContainer" class="d-flex flex-column flex-grow-1 p-3 pt-md-0">
+        <!-- ═══ PROTOTYPE CONTENT START: the page's content ═══ -->
+        <div class="hero-card mb-3">
+          <div class="hero-amount-block">
+            <div class="hero-amount-label">Awarded</div>
+            <div class="hero-amount-value">$18,500.00</div>
+          </div>
+          <div class="hero-divider"></div>
+          <div class="hero-amount-block">
+            <div class="hero-amount-label">Paid</div>
+            <div class="hero-amount-value">$9,250.00</div>
+          </div>
+          <div class="hero-divider"></div>
+          <div class="hero-amount-block">
+            <div class="hero-amount-label">Status</div>
+            <div><span class="badge badge-info">Approved</span></div>
+          </div>
+          <div class="hero-divider"></div>
+          <div class="hero-stage-track">
+            <div class="hero-stage-step">
+              <div class="hero-stage-node is-done"><i class="fa-light fa-check"></i></div>
+              <div class="hero-stage-label">LOI</div>
+            </div>
+            <div class="hero-stage-line is-done"></div>
+            <div class="hero-stage-step">
+              <div class="hero-stage-node is-done"><i class="fa-light fa-check"></i></div>
+              <div class="hero-stage-label">Application</div>
+            </div>
+            <div class="hero-stage-line is-done"></div>
+            <div class="hero-stage-step">
+              <div class="hero-stage-node is-active"></div>
+              <div class="hero-stage-label">Follow Up</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-12 col-xl-4">
+            <div class="card summary-card h-100 mb-0">
+              <div class="card-body pt-3">
+                <h2 class="h5 mb-3">Request Details</h2>
+                <dl>
+                  <dt>Process</dt><dd>2027 Community Impact Grant</dd>
+                  <dt>Submitted</dt><dd>03/10/2027</dd>
+                  <dt>Requested</dt><dd>$18,500.00</dd>
+                  <dt>Decision</dt><dd>Approved, one time, 04/15/2027</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-xl-8">
+            <div class="card summary-card h-100 mb-0" id="AwardCard">
+              <div class="card-body pt-3">
+                <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap mb-3">
+                  <h2 class="h5 mb-0">Award Details</h2>
+                  <button type="button" class="btn btn-outline-secondary" id="AddInstallmentBtn" data-mdb-modal-init data-mdb-target="#AddInstallmentModal"><i class="fa-light fa-plus me-2"></i>Add Installment</button>
+                </div>
+                <dl class="proto-award-totals" id="AwardTotals"></dl>
+                <p class="small mb-3" id="Unscheduled"></p>
+                <div class="table-responsive">
+                  <table class="table align-middle mb-0">
+                    <caption class="visually-hidden">Installments</caption>
+                    <thead>
+                      <tr><th scope="col">Installment</th><th scope="col">Due</th><th scope="col" class="text-end">Amount</th><th scope="col" class="text-end">Paid</th><th scope="col">Form</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr>
+                    </thead>
+                    <tbody id="InstallmentRows"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ═══ PROTOTYPE CONTENT END ═══ -->
+      </div>
+    </div>
+  </div>
+</main>
+
+
+<!-- Add Installment: production modal markup. Step 1 sets the schedule, step 2 picks the installment form.
+     Instead of filling the form inside this modal (today's flow), Continue opens the new installment view. -->
+<div class="modal fade" id="AddInstallmentModal" tabindex="-1" aria-labelledby="AddInstallmentTitle" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header border-bottom py-2 px-3">
+        <h2 class="modal-title" id="AddInstallmentTitle">Add Installment</h2>
+        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="small mb-3" id="AddInstStep" tabindex="-1">Step 1 of 2: Schedule</p>
+        <div id="AddInstStep1">
+          <div class="mb-3">
+            <label class="form-label" for="InstFirstDue">First due date</label>
+            <input type="date" class="form-control" id="InstFirstDue" value="2027-11-01" />
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-6">
+              <label class="form-label" for="InstCount">Number of installments</label>
+              <input type="number" class="form-control" id="InstCount" min="1" max="12" value="1" />
+            </div>
+            <div class="col-6">
+              <label class="form-label" for="InstMonths">Months between</label>
+              <input type="number" class="form-control" id="InstMonths" min="1" max="24" value="6" />
+            </div>
+          </div>
+          <p class="small mb-1">Splits the unscheduled $9,250.00 evenly:</p>
+          <ul class="small mb-0" id="InstPreview" aria-live="polite"></ul>
+        </div>
+        <div id="AddInstStep2" hidden>
+          <fieldset>
+            <legend class="form-label">Installment form</legend>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="radio" name="InstForm" id="InstFormStandard" value="Standard Installment" checked />
+              <label class="form-check-label" for="InstFormStandard">Standard Installment</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="InstForm" id="InstFormFinal" value="Final Installment" />
+              <label class="form-check-label" for="InstFormFinal">Final Installment</label>
+            </div>
+          </fieldset>
+          <p class="small mt-3 mb-0">You'll fill out the form on its own page, with the request's contact, prior submissions and award details beside it.</p>
+        </div>
+        <div id="AddInstError" class="mt-3"></div>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-outline-secondary" id="AddInstBack">Cancel</button>
+        <button type="button" class="btn btn-primary" id="AddInstNext">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer-spacer d-none d-md-block" aria-hidden="true"></div>
+
+<footer class="fixed-bottom d-none d-md-block">
+  <div class="d-flex justify-content-between align-items-center px-3 py-2">
+    <span class="nav-link d-inline">Riverbend Community Fund</span>
+    <span class="nav-link d-inline">Foundant &copy; 2026</span>
+  </div>
+</footer>
+
+<!-- Production's shared toast. Show it with GLM.Toast.showToast('GlobalToast', header, body). -->
+<div id="GlobalToast" class="toast" role="alert" aria-live="polite" aria-atomic="true"
+     data-mdb-autohide="true" data-mdb-delay="3000" data-mdb-width="350px"
+     data-mdb-position="top-right" data-mdb-append-to-body="true">
+  <div class="toast-header">
+    <div id="ToastHeader" class="d-flex align-items-center fw-bold flex-grow-1"></div>
+    <button type="button" class="btn-close ms-2" data-mdb-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div id="ToastBody" class="toast-body"></div>
+</div>
+
+<!-- Production scripts from beta: jQuery, MDB, then GLM.Utility, GLM.Toast and GLM.SlidePanel. -->
+<script src="https://beta.grantinterface.com/Scripts/jquery-3.7.1.js"></script>
+<script src="https://beta.grantinterface.com/Scripts/Mdb/mdb.umd.min.js"></script>
+<script src="https://beta.grantinterface.com/Scripts/MVC/GLM.Utility.js"></script>
+<script src="https://beta.grantinterface.com/Scripts/MVC/GLM.Toast.js"></script>
+<script src="https://beta.grantinterface.com/Scripts/Modern/GLM.SlidePanel.js"></script>
+<script src="https://beta.grantinterface.com/Scripts/MVC/GLM.SideNavigation.js"></script>
+<script>
+  // Production's header offset (Foundant/Views/Shared/Mdb/_TopLayoutBase.cshtml)
+  (function () {
+    'use strict';
+    function adjustMainPadding() {
+      const header = document.getElementById('MainHeader');
+      const main = document.getElementById('MainContent');
+      if (header && main) {
+        if (main.classList.contains('page-container')) {
+          main.classList.remove('mt-4');
+          main.style.marginTop = (header.offsetHeight + 15) + 'px';
+        } else {
+          main.style.paddingTop = header.offsetHeight + 'px';
+        }
+      }
+    }
+    const header = document.getElementById('MainHeader');
+    if (header && 'ResizeObserver' in window) {
+      new ResizeObserver(adjustMainPadding).observe(header);
+    }
+    window.addEventListener('load', adjustMainPadding);
+    window.addEventListener('resize', adjustMainPadding);
+    adjustMainPadding();
+  })();
+</script>
+<script>
+  // As the shipped containers do: move the record header on small screens, and fade the side panel's scroll edges.
+  GLM.SideNavigation.initContainerLayout('.panel-header-wrapper', '.panel-header-desktop');
+  GLM.SideNavigation.initSidePanelFades();
+</script>
+<!-- PROTOTYPE-ONLY SCRIPT: interactions for this prototype. -->
+<script>
+  /* Prototype state lives in the URL so the round trip to the installment view keeps it:
+     sched = new installments' due dates, amt = amount each, tpl = installment form, saved = saved installment numbers. */
+  (function () {
+    'use strict';
+    var FILL_PAGE = 'form-sidebar-sections.html';
+    var params = new URLSearchParams(location.search);
+    var test = params.get('test') === '1';
+    var state = {
+      sched: (params.get('sched') || '').split(',').filter(Boolean),
+      amt: Number(params.get('amt') || 0),
+      tpl: params.get('tpl') || '',
+      saved: (params.get('saved') || '').split(',').filter(Boolean).map(Number)
+    };
+    var AWARD = 18500, FIRST = { due: '2027-05-01', amount: 9250, paid: 9250 };
+
+    function money(n) { return '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+    function mdy(iso) { var p = String(iso).split('-'); return p.length === 3 ? p[1] + '/' + p[2] + '/' + p[0] : ''; }
+    function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+    function addMonths(iso, m) { var d = new Date(iso + 'T00:00:00'); d.setMonth(d.getMonth() + m); return d.toISOString().slice(0, 10); }
+    function q(o) { var u = new URLSearchParams(); Object.keys(o).forEach(function (k) { if (o[k] !== '' && o[k] != null) u.set(k, o[k]); }); if (test) u.set('test', '1'); return u.toString(); }
+    function stateQuery(extra) {
+      var o = { sched: state.sched.join(','), amt: state.amt || '', tpl: state.tpl, saved: state.saved.join(',') };
+      Object.keys(extra || {}).forEach(function (k) { o[k] = extra[k]; });
+      return q(o);
+    }
+    function fillUrl(n) {
+      var i = n - 2;
+      return FILL_PAGE + '?' + stateQuery({ form: 'installment', from: 'summary', n: n, of: 1 + state.sched.length, due: state.sched[i], test: test ? '1' : '' });
+    }
+
+    function render() {
+      var total = FIRST.amount + state.amt * state.sched.length;
+      var dl = [['Installment Total', money(total)], ['Canceled Total', money(0)], ['Amount Paid', money(FIRST.paid)], ['Balance', money(total - FIRST.paid)], ['Number of Installments', String(1 + state.sched.length)]];
+      document.getElementById('AwardTotals').innerHTML = dl.map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>'; }).join('');
+      var unscheduled = AWARD - total;
+      document.getElementById('Unscheduled').textContent = unscheduled > 0 ? money(unscheduled) + ' of the ' + money(AWARD) + ' award is not scheduled yet.' : 'The full ' + money(AWARD) + ' award is scheduled.';
+      document.getElementById('AddInstallmentBtn').disabled = unscheduled <= 0;
+      var rows = '<tr><td>Installment 1</td><td>' + mdy(FIRST.due) + '</td><td class="text-end">' + money(FIRST.amount) + '</td><td class="text-end">' + money(FIRST.paid) + '</td><td>Saved</td><td></td></tr>';
+      state.sched.forEach(function (due, i) {
+        var n = i + 2, saved = state.saved.indexOf(n) > -1;
+        rows += '<tr><td>Installment ' + n + '</td><td>' + mdy(due) + '</td><td class="text-end">' + money(state.amt) + '</td><td class="text-end">' + money(0) + '</td>' +
+          '<td>' + (saved ? 'Saved' : 'Not started') + '<span class="d-block small">' + esc(state.tpl) + '</span></td>' +
+          '<td class="text-end"><a class="btn btn-sm btn-outline-secondary" href="' + fillUrl(n) + '">' + (saved ? 'View form' : 'Fill out form') + '<span class="visually-hidden"> for installment ' + n + '</span></a></td></tr>';
+      });
+      document.getElementById('InstallmentRows').innerHTML = rows;
+    }
+
+    /* ---------- Add Installment modal ---------- */
+    var step = 1;
+    var modalEl = document.getElementById('AddInstallmentModal');
+    function plan() {
+      var first = document.getElementById('InstFirstDue').value;
+      var count = parseInt(document.getElementById('InstCount').value, 10);
+      var months = parseInt(document.getElementById('InstMonths').value, 10);
+      var unscheduled = AWARD - FIRST.amount - state.amt * state.sched.length;
+      var errs = [];
+      if (!first) errs.push('Enter the first due date.');
+      if (!(count >= 1 && count <= 12)) errs.push('Number of installments must be between 1 and 12.');
+      if (count > 1 && !(months >= 1 && months <= 24)) errs.push('Months between must be between 1 and 24.');
+      var dues = []; if (!errs.length) for (var i = 0; i < count; i++) dues.push(addMonths(first, i * (months || 0)));
+      return { errs: errs, dues: dues, amt: count ? Math.round(unscheduled / count * 100) / 100 : 0 };
+    }
+    function preview() {
+      var p = plan(), start = 2 + state.sched.length;
+      document.getElementById('InstPreview').innerHTML = p.errs.length ? '' : p.dues.map(function (d, i) { return '<li>Installment ' + (start + i) + ', due ' + mdy(d) + ', ' + money(p.amt) + '</li>'; }).join('');
+      document.getElementById('InstMonths').disabled = parseInt(document.getElementById('InstCount').value, 10) === 1;
+    }
+    function setStep(s) {
+      step = s;
+      document.getElementById('AddInstStep1').hidden = s !== 1;
+      document.getElementById('AddInstStep2').hidden = s !== 2;
+      document.getElementById('AddInstStep').textContent = s === 1 ? 'Step 1 of 2: Schedule' : 'Step 2 of 2: Installment form';
+      document.getElementById('AddInstBack').textContent = s === 1 ? 'Cancel' : 'Back';
+      document.getElementById('AddInstNext').textContent = s === 1 ? 'Next' : 'Continue to form';
+      document.getElementById('AddInstError').innerHTML = '';
+      document.getElementById('AddInstStep').focus();
+    }
+    function closeModal() { if (window.mdb && mdb.Modal) mdb.Modal.getOrCreateInstance(modalEl).hide(); }
+    ['InstFirstDue', 'InstCount', 'InstMonths'].forEach(function (id) { document.getElementById(id).addEventListener('input', preview); });
+    modalEl.addEventListener('show.mdb.modal', function () { setStep(1); preview(); });
+    document.getElementById('AddInstBack').addEventListener('click', function () { if (step === 1) closeModal(); else setStep(1); });
+    document.getElementById('AddInstNext').addEventListener('click', function () {
+      if (step === 1) {
+        var p = plan();
+        if (p.errs.length) { document.getElementById('AddInstError').innerHTML = '<div class="alert alert-danger mb-0" role="alert">' + p.errs.join(' ') + '</div>'; return; }
+        return setStep(2);
+      }
+      var p2 = plan(), firstNew = 2 + state.sched.length;
+      state.sched = state.sched.concat(p2.dues); state.amt = p2.amt;
+      state.tpl = document.querySelector('input[name="InstForm"]:checked').value;
+      location.href = fillUrl(firstNew);
+    });
+
+    render();
+    preview();
+    var just = params.get('justsaved');
+    if (just && window.GLM && GLM.Toast) GLM.Toast.showToast('GlobalToast', 'Installment saved', 'Installment ' + just + ' was saved to this request.');
+  })();
+</script>
+</body>
+</html>
