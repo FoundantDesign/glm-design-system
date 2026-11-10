@@ -1730,6 +1730,7 @@ h1[tabindex="-1"]:focus, h2[tabindex="-1"]:focus { outline: none; }
 .proto-ap-page { max-width: 880px; margin: 0 auto; padding: 24px 20px 64px; }
 .proto-ap-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
 .proto-ap-head h1 { font-size: 1.5rem; margin: 0; }
+#backLink:not([hidden]) { display: inline-block; }
 .proto-ap-head p { margin: 4px 0 0; color: var(--colors-neutral-30); font-size: 0.9rem; }
 .proto-ap-save { font-size: 0.85rem; color: var(--colors-neutral-30); white-space: nowrap; }
 .proto-ap-section { margin-bottom: 20px; scroll-margin-top: 16px; }
@@ -1945,9 +1946,13 @@ body.is-resizing, body.is-resizing * { cursor: col-resize !important; user-selec
   <main class="proto-ap-main" aria-labelledby="h-app">
     <div class="proto-ap-page">
       <div class="proto-ap-head">
-        <div><a href="#" id="backLink" class="d-inline-block mb-2" hidden>Return to Request Summary</a><h1 id="h-app">2027 Community Impact Grant</h1><p id="h-sub">Application for Maple Street Arts Collective. Due Mar 15, 2027.</p></div>
+        <div><a href="#" id="backLink" class="mb-2" hidden>Return to Request Summary</a><h1 id="h-app">2027 Community Impact Grant</h1><p id="h-sub">Application for Maple Street Arts Collective. Due Mar 15, 2027.</p></div>
         <div class="d-flex align-items-center gap-3">
           <div class="proto-ap-save" id="saveStatus" role="status" aria-live="polite"></div>
+          <div class="btn-group" role="group" aria-label="Form view" id="viewToggle" hidden>
+            <input type="radio" class="btn-check" name="formView" id="viewWizard" value="wizard" autocomplete="off"><label class="btn btn-outline-secondary btn-sm" for="viewWizard">Step by step</label>
+            <input type="radio" class="btn-check" name="formView" id="viewFull" value="full" autocomplete="off"><label class="btn btn-outline-secondary btn-sm" for="viewFull">Full page</label>
+          </div>
           <div class="dropdown" id="actionsMenu" hidden>
             <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" id="actionsBtn" data-actions aria-haspopup="true" aria-expanded="false" aria-controls="actionsList">Actions</button>
             <ul class="dropdown-menu dropdown-menu-end" id="actionsList" aria-labelledby="actionsBtn"></ul>
@@ -2642,6 +2647,8 @@ var ftProto = (function () {
   function renderHeadActions() {
     var p = $('headPrimary'), menu = $('actionsMenu');
     var acts = M.actions || [];
+    $('viewToggle').hidden = !(MODE === 'loi' || MODE === 'applicant');
+    $('viewWizard').checked = layout === 'wizard'; $('viewFull').checked = layout === 'full';
     menu.hidden = !acts.length;
     $('actionsList').innerHTML = acts.map(function (a) {
       var dis = a.act === 'cancelinst' && payState.canceled;
@@ -2959,6 +2966,7 @@ var ftProto = (function () {
   render = function (focusId) { _render(focusId); if (io && layout === 'full') { io.disconnect(); [].slice.call(document.querySelectorAll('.proto-ap-section')).forEach(function (s) { io.observe(s); }); } };
 
   /* ---------- controls ---------- */
+  document.addEventListener('change', function (e) { if (e.target.name === 'formView' && e.target.checked) { setLayout(e.target.value); say(e.target.value === 'full' ? 'Showing every section on one page.' : 'Showing one section at a time.'); } });
   function setLayout(v) { layout = v; activeFull = st.current; render(); if (v === 'full') { var s = $('sec-' + st.current); if (s) s.scrollIntoView({ block: 'start' }); } }
   function setMarking(v) { marking = v; render(); }
   function setSponsor(v) { st.ans.q2 = v === 'yes' ? 'Yes' : 'No'; st.touched.q2 = true; render(); say(v === 'yes' ? 'Fiscal sponsor section added.' : 'Fiscal sponsor section removed.'); }
@@ -3038,7 +3046,6 @@ var ftProto = (function () {
     ftProto.addSection({ label: 'Evaluator view', id: 'sbs', options: [{ label: 'Side by side', value: 'sbs', active: true }, { label: 'Evaluation only', value: 'single', active: false }], onChange: function (v) { sbs = v === 'sbs'; applySbs(); if (MODE === 'evaluator') say(sbs ? 'Side by side view.' : 'Evaluation only view.'); } });
     ftProto.addSection({ label: 'Evaluation navigation', id: 'evalnav', options: [{ label: 'A: Scrolling groups', value: 'groups', active: true }, { label: 'B: Stepper in pane', value: 'stepper', active: false }], onChange: function (v) { evalNav = v; applySbs(); if (paneNav()) say(v === 'groups' ? 'Scrolling groups.' : 'Stepper in the evaluation pane.'); } });
     ftProto.addSection({ label: 'Sidebar order', id: 'sideorder', options: [{ label: 'Details first', value: 'details', active: true }, { label: 'Sections first', value: 'sections', active: false }], onChange: function (v) { $('railBody').classList.toggle('is-sections-first', v === 'sections'); say(v === 'sections' ? 'Form sections now sit above Prior submissions and Request.' : 'Prior submissions and Request now sit above the form sections.'); } });
-    ftProto.addSection({ label: 'Layout', id: 'layout', options: [{ label: 'Wizard', value: 'wizard', active: layout === 'wizard' }, { label: 'Full page', value: 'full', active: layout === 'full' }], onChange: setLayout });
     ftProto.addSection({ label: 'Reset', id: 'reset', options: [{ label: 'Reset to start', value: 'reset', active: true }], onChange: function () { reset(); say('Reset to the start.'); } });
     ftProto.init();
   }
