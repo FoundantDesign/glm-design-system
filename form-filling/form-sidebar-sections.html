@@ -1778,6 +1778,12 @@ h1[tabindex="-1"]:focus, h2[tabindex="-1"]:focus { outline: none; }
 .request-info-card a { color: var(--colors-state-layers-dark-link); text-decoration: none; }
 .request-info-card a:hover { text-decoration: underline; }
 .proto-ap-cardgap { height: 10px; }
+/* Sidebar order option: contact card, then the form's sections, then Prior submissions and Request.
+   #refList becomes display: contents so its children and #navList can be reordered in one column. */
+#railBody.is-sections-first { display: flex; flex-direction: column; }
+#railBody.is-sections-first > #refList { display: contents; }
+#railBody.is-sections-first > #navList { order: 1; border-bottom: 1px solid var(--colors-borders-divider); padding-bottom: 4px; }
+#railBody.is-sections-first > #refList > :not(#contactCard):not(h2) { order: 2; }
 /* Nov 4 round: sidebar holds only a contact card and a Financials & compliance button (slide-out). */
 .proto-ap-contact { margin: 4px 12px 8px; }
 .proto-ap-contact .card-body { padding: 12px; font-size: 0.875rem; line-height: 1.4; }
@@ -2987,6 +2993,7 @@ var ftProto = (function () {
     ], onChange: function (v) { applyMode(v); say(MODES[v].label + ' form.'); } });
     ftProto.addSection({ label: 'Evaluator view', id: 'sbs', options: [{ label: 'Side by side', value: 'sbs', active: true }, { label: 'Evaluation only', value: 'single', active: false }], onChange: function (v) { sbs = v === 'sbs'; applySbs(); if (MODE === 'evaluator') say(sbs ? 'Side by side view.' : 'Evaluation only view.'); } });
     ftProto.addSection({ label: 'Evaluation navigation', id: 'evalnav', options: [{ label: 'A: Scrolling groups', value: 'groups', active: true }, { label: 'B: Stepper in pane', value: 'stepper', active: false }], onChange: function (v) { evalNav = v; applySbs(); if (paneNav()) say(v === 'groups' ? 'Scrolling groups.' : 'Stepper in the evaluation pane.'); } });
+    ftProto.addSection({ label: 'Sidebar order', id: 'sideorder', options: [{ label: 'Details first', value: 'details', active: true }, { label: 'Sections first', value: 'sections', active: false }], onChange: function (v) { $('railBody').classList.toggle('is-sections-first', v === 'sections'); say(v === 'sections' ? 'Form sections now sit above Prior submissions and Request.' : 'Prior submissions and Request now sit above the form sections.'); } });
     ftProto.addSection({ label: 'Layout', id: 'layout', options: [{ label: 'Wizard', value: 'wizard', active: layout === 'wizard' }, { label: 'Full page', value: 'full', active: layout === 'full' }], onChange: setLayout });
     ftProto.addSection({ label: 'Reset', id: 'reset', options: [{ label: 'Reset to start', value: 'reset', active: true }], onChange: function () { reset(); say('Reset to the start.'); } });
     ftProto.init();
