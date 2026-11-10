@@ -203,7 +203,7 @@
                   <table class="table align-middle mb-0">
                     <caption class="visually-hidden">Installments</caption>
                     <thead>
-                      <tr><th scope="col">Installment</th><th scope="col">Due</th><th scope="col" class="text-end">Amount</th><th scope="col" class="text-end">Paid</th><th scope="col">Form</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr>
+                      <tr><th scope="col">Installment</th><th scope="col">Form</th><th scope="col">Due</th><th scope="col" class="text-end">Amount</th><th scope="col" class="text-end">Paid</th><th scope="col">Status</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr>
                     </thead>
                     <tbody id="InstallmentRows"></tbody>
                   </table>
@@ -219,54 +219,32 @@
 </main>
 
 
-<!-- Add Installment: production modal markup. Step 1 sets the schedule, step 2 picks the installment form.
-     Instead of filling the form inside this modal (today's flow), Continue opens the new installment view. -->
+<!-- Add Installment: matches production's "Add One Time / Installment Information" modal. One row per
+     installment form configured on the approval. Instead of filling the forms in this modal, Add Installments
+     opens the new installment view. -->
 <div class="modal fade" id="AddInstallmentModal" tabindex="-1" aria-labelledby="AddInstallmentTitle" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header border-bottom py-2 px-3">
-        <h2 class="modal-title" id="AddInstallmentTitle">Add Installment</h2>
+        <h2 class="modal-title" id="AddInstallmentTitle">Add One Time / Installment Information</h2>
         <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p class="small mb-3" id="AddInstStep" tabindex="-1">Step 1 of 2: Schedule</p>
-        <div id="AddInstStep1">
-          <div class="mb-3">
-            <label class="form-label" for="InstFirstDue">First due date</label>
-            <input type="date" class="form-control" id="InstFirstDue" value="2027-11-01" />
-          </div>
-          <div class="row g-3 mb-3">
-            <div class="col-6">
-              <label class="form-label" for="InstCount">Number of installments</label>
-              <input type="number" class="form-control" id="InstCount" min="1" max="12" value="1" />
-            </div>
-            <div class="col-6">
-              <label class="form-label" for="InstMonths">Months between</label>
-              <input type="number" class="form-control" id="InstMonths" min="1" max="24" value="6" />
-            </div>
-          </div>
-          <p class="small mb-1">Splits the unscheduled $9,250.00 evenly:</p>
-          <ul class="small mb-0" id="InstPreview" aria-live="polite"></ul>
-        </div>
-        <div id="AddInstStep2" hidden>
-          <fieldset>
-            <legend class="form-label">Installment form</legend>
-            <div class="form-check mb-2">
-              <input class="form-check-input" type="radio" name="InstForm" id="InstFormStandard" value="Standard Installment" checked />
-              <label class="form-check-label" for="InstFormStandard">Standard Installment</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="InstForm" id="InstFormFinal" value="Final Installment" />
-              <label class="form-check-label" for="InstFormFinal">Final Installment</label>
-            </div>
-          </fieldset>
-          <p class="small mt-3 mb-0">You'll fill out the form on its own page, with the request's contact, prior submissions and award details beside it.</p>
+        <div class="alert alert-info" role="note"><strong>"One Time"</strong> awards are those with a <strong>single Installment</strong>.</div>
+        <div class="table-responsive">
+          <table class="table align-middle mb-0">
+            <caption class="visually-hidden">Installment forms on this approval</caption>
+            <thead>
+              <tr><th scope="col">Installment Form</th><th scope="col"># Added</th><th scope="col">Initial Due Date</th><th scope="col"># to Add</th><th scope="col">Months Between</th></tr>
+            </thead>
+            <tbody id="AddInstRows"></tbody>
+          </table>
         </div>
         <div id="AddInstError" class="mt-3"></div>
       </div>
       <div class="modal-footer justify-content-between">
-        <button type="button" class="btn btn-outline-secondary" id="AddInstBack">Cancel</button>
-        <button type="button" class="btn btn-primary" id="AddInstNext">Next</button>
+        <button type="button" class="btn btn-outline-secondary" data-mdb-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="AddInstSubmit">Add Installments</button>
       </div>
     </div>
   </div>
@@ -331,103 +309,80 @@
 </script>
 <!-- PROTOTYPE-ONLY SCRIPT: interactions for this prototype. -->
 <script>
-  /* Prototype state lives in the URL so the round trip to the installment view keeps it:
-     sched = new installments' due dates, amt = amount each, tpl = installment form, saved = saved installment numbers. */
+  /* Prototype state lives in the URL so the round trip to the installment view keeps it.
+     inst = the installments added in this session, each "form~due~amount~saved", numbered from 2. */
   (function () {
     'use strict';
     var FILL_PAGE = 'form-sidebar-sections.html';
+    var FORMS = ['Standard Installment Form', 'Matching Installment Form', 'Conditional Installment Form', 'Rescinded Grant - Returned Grant Funds Installment Form'];
     var params = new URLSearchParams(location.search);
     var test = params.get('test') === '1';
-    var state = {
-      sched: (params.get('sched') || '').split(',').filter(Boolean),
-      amt: Number(params.get('amt') || 0),
-      tpl: params.get('tpl') || '',
-      saved: (params.get('saved') || '').split(',').filter(Boolean).map(Number)
-    };
-    var AWARD = 18500, FIRST = { due: '2027-05-01', amount: 9250, paid: 9250 };
+    var AWARD = 18500, FIRST = { form: FORMS[0], due: '2027-05-01', amt: 9250, paid: 9250 };
+    var inst = (params.get('inst') || '').split(',').filter(Boolean).map(function (s) { var p = s.split('~'); return { form: p[0], due: p[1], amt: Number(p[2] || 0), saved: p[3] === '1' }; });
 
     function money(n) { return '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
     function mdy(iso) { var p = String(iso).split('-'); return p.length === 3 ? p[1] + '/' + p[2] + '/' + p[0] : ''; }
     function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
     function addMonths(iso, m) { var d = new Date(iso + 'T00:00:00'); d.setMonth(d.getMonth() + m); return d.toISOString().slice(0, 10); }
-    function q(o) { var u = new URLSearchParams(); Object.keys(o).forEach(function (k) { if (o[k] !== '' && o[k] != null) u.set(k, o[k]); }); if (test) u.set('test', '1'); return u.toString(); }
-    function stateQuery(extra) {
-      var o = { sched: state.sched.join(','), amt: state.amt || '', tpl: state.tpl, saved: state.saved.join(',') };
-      Object.keys(extra || {}).forEach(function (k) { o[k] = extra[k]; });
-      return q(o);
-    }
-    function fillUrl(n) {
-      var i = n - 2;
-      return FILL_PAGE + '?' + stateQuery({ form: 'installment', from: 'summary', n: n, of: 1 + state.sched.length, due: state.sched[i], test: test ? '1' : '' });
+    function enc(list) { return list.map(function (i) { return [i.form, i.due, i.amt || '', i.saved ? 1 : 0].join('~'); }).join(','); }
+    function fillUrl(n, list) {
+      var u = new URLSearchParams(); u.set('form', 'installment'); u.set('from', 'summary'); u.set('inst', enc(list || inst)); u.set('n', n);
+      if (test) u.set('test', '1');
+      return FILL_PAGE + '?' + u.toString();
     }
 
     function render() {
-      var total = FIRST.amount + state.amt * state.sched.length;
-      var dl = [['Installment Total', money(total)], ['Canceled Total', money(0)], ['Amount Paid', money(FIRST.paid)], ['Balance', money(total - FIRST.paid)], ['Number of Installments', String(1 + state.sched.length)]];
+      var scheduled = FIRST.amt + inst.reduce(function (a, i) { return a + (i.amt || 0); }, 0);
+      var dl = [['Installment Total', money(scheduled)], ['Canceled Total', money(0)], ['Amount Paid', money(FIRST.paid)], ['Balance', money(scheduled - FIRST.paid)], ['Number of Installments', String(1 + inst.length)]];
       document.getElementById('AwardTotals').innerHTML = dl.map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>'; }).join('');
-      var unscheduled = AWARD - total;
-      document.getElementById('Unscheduled').textContent = unscheduled > 0 ? money(unscheduled) + ' of the ' + money(AWARD) + ' award is not scheduled yet.' : 'The full ' + money(AWARD) + ' award is scheduled.';
-      document.getElementById('AddInstallmentBtn').disabled = unscheduled <= 0;
-      var rows = '<tr><td>Installment 1</td><td>' + mdy(FIRST.due) + '</td><td class="text-end">' + money(FIRST.amount) + '</td><td class="text-end">' + money(FIRST.paid) + '</td><td>Saved</td><td></td></tr>';
-      state.sched.forEach(function (due, i) {
-        var n = i + 2, saved = state.saved.indexOf(n) > -1;
-        rows += '<tr><td>Installment ' + n + '</td><td>' + mdy(due) + '</td><td class="text-end">' + money(state.amt) + '</td><td class="text-end">' + money(0) + '</td>' +
-          '<td>' + (saved ? 'Saved' : 'Not started') + '<span class="d-block small">' + esc(state.tpl) + '</span></td>' +
-          '<td class="text-end"><a class="btn btn-sm btn-outline-secondary" href="' + fillUrl(n) + '">' + (saved ? 'View form' : 'Fill out form') + '<span class="visually-hidden"> for installment ' + n + '</span></a></td></tr>';
+      var left = AWARD - scheduled;
+      document.getElementById('Unscheduled').textContent = left > 0 ? money(left) + ' of the ' + money(AWARD) + ' award is not scheduled yet.' : 'The full ' + money(AWARD) + ' award is scheduled.';
+      var rows = '<tr><td>Installment 1</td><td>' + esc(FIRST.form) + '</td><td>' + mdy(FIRST.due) + '</td><td class="text-end">' + money(FIRST.amt) + '</td><td class="text-end">' + money(FIRST.paid) + '</td><td>Paid</td><td></td></tr>';
+      inst.forEach(function (i, k) {
+        var n = k + 2;
+        rows += '<tr><td>Installment ' + n + '</td><td>' + esc(i.form) + '</td><td>' + mdy(i.due) + '</td><td class="text-end">' + (i.amt ? money(i.amt) : 'Not set') + '</td><td class="text-end">' + money(0) + '</td>' +
+          '<td>' + (i.saved ? 'Saved' : 'Not started') + '</td>' +
+          '<td class="text-end"><a class="btn btn-sm btn-outline-secondary" href="' + fillUrl(n) + '">' + (i.saved ? 'View form' : 'Fill out form') + '<span class="visually-hidden"> for installment ' + n + '</span></a></td></tr>';
       });
       document.getElementById('InstallmentRows').innerHTML = rows;
     }
 
     /* ---------- Add Installment modal ---------- */
-    var step = 1;
     var modalEl = document.getElementById('AddInstallmentModal');
-    function plan() {
-      var first = document.getElementById('InstFirstDue').value;
-      var count = parseInt(document.getElementById('InstCount').value, 10);
-      var months = parseInt(document.getElementById('InstMonths').value, 10);
-      var unscheduled = AWARD - FIRST.amount - state.amt * state.sched.length;
-      var errs = [];
-      if (!first) errs.push('Enter the first due date.');
-      if (!(count >= 1 && count <= 12)) errs.push('Number of installments must be between 1 and 12.');
-      if (count > 1 && !(months >= 1 && months <= 24)) errs.push('Months between must be between 1 and 24.');
-      var dues = []; if (!errs.length) for (var i = 0; i < count; i++) dues.push(addMonths(first, i * (months || 0)));
-      return { errs: errs, dues: dues, amt: count ? Math.round(unscheduled / count * 100) / 100 : 0 };
-    }
-    function preview() {
-      var p = plan(), start = 2 + state.sched.length;
-      document.getElementById('InstPreview').innerHTML = p.errs.length ? '' : p.dues.map(function (d, i) { return '<li>Installment ' + (start + i) + ', due ' + mdy(d) + ', ' + money(p.amt) + '</li>'; }).join('');
-      document.getElementById('InstMonths').disabled = parseInt(document.getElementById('InstCount').value, 10) === 1;
-    }
-    function setStep(s) {
-      step = s;
-      document.getElementById('AddInstStep1').hidden = s !== 1;
-      document.getElementById('AddInstStep2').hidden = s !== 2;
-      document.getElementById('AddInstStep').textContent = s === 1 ? 'Step 1 of 2: Schedule' : 'Step 2 of 2: Installment form';
-      document.getElementById('AddInstBack').textContent = s === 1 ? 'Cancel' : 'Back';
-      document.getElementById('AddInstNext').textContent = s === 1 ? 'Next' : 'Continue to form';
+    function addedCount(form) { return (form === FIRST.form ? 1 : 0) + inst.filter(function (i) { return i.form === form; }).length; }
+    function renderModal() {
+      document.getElementById('AddInstRows').innerHTML = FORMS.map(function (f, k) {
+        var id = 'af' + k;
+        return '<tr><th scope="row" class="fw-normal" id="' + id + '-name">' + esc(f) + '</th><td>' + addedCount(f) + '</td>' +
+          '<td><label class="visually-hidden" for="' + id + '-due">Initial due date, ' + esc(f) + '</label><input type="date" class="form-control" id="' + id + '-due"></td>' +
+          '<td><label class="visually-hidden" for="' + id + '-n"># to add, ' + esc(f) + '</label><input type="number" class="form-control" id="' + id + '-n" min="0" max="12"></td>' +
+          '<td><label class="visually-hidden" for="' + id + '-m">Months between, ' + esc(f) + '</label><input type="number" class="form-control" id="' + id + '-m" min="1" max="24"></td></tr>';
+      }).join('');
       document.getElementById('AddInstError').innerHTML = '';
-      document.getElementById('AddInstStep').focus();
     }
     function closeModal() { if (window.mdb && mdb.Modal) mdb.Modal.getOrCreateInstance(modalEl).hide(); }
-    ['InstFirstDue', 'InstCount', 'InstMonths'].forEach(function (id) { document.getElementById(id).addEventListener('input', preview); });
-    modalEl.addEventListener('show.mdb.modal', function () { setStep(1); preview(); });
-    document.getElementById('AddInstBack').addEventListener('click', function () { if (step === 1) closeModal(); else setStep(1); });
-    document.getElementById('AddInstNext').addEventListener('click', function () {
-      if (step === 1) {
-        var p = plan();
-        if (p.errs.length) { document.getElementById('AddInstError').innerHTML = '<div class="alert alert-danger mb-0" role="alert">' + p.errs.join(' ') + '</div>'; return; }
-        return setStep(2);
-      }
-      var p2 = plan(), firstNew = 2 + state.sched.length;
-      state.sched = state.sched.concat(p2.dues); state.amt = p2.amt;
-      state.tpl = document.querySelector('input[name="InstForm"]:checked').value;
+    modalEl.addEventListener('show.mdb.modal', renderModal);
+    document.getElementById('AddInstSubmit').addEventListener('click', function () {
+      var errs = [], added = [];
+      FORMS.forEach(function (f, k) {
+        var due = document.getElementById('af' + k + '-due').value, n = parseInt(document.getElementById('af' + k + '-n').value || '0', 10), m = parseInt(document.getElementById('af' + k + '-m').value || '0', 10);
+        if (!n && !due) return;
+        if (!(n >= 1 && n <= 12)) errs.push(f + ': enter how many to add (1 to 12).');
+        else if (!due) errs.push(f + ': enter the initial due date.');
+        else if (n > 1 && !(m >= 1 && m <= 24)) errs.push(f + ': enter months between (1 to 24).');
+        else for (var i = 0; i < n; i++) added.push({ form: f, due: addMonths(due, i * (m || 0)), amt: 0, saved: false });
+      });
+      if (!errs.length && !added.length) errs.push('Enter an initial due date and # to add for at least one installment form.');
+      if (errs.length) { document.getElementById('AddInstError').innerHTML = '<div class="alert alert-danger mb-0" role="alert">' + errs.map(esc).join('<br>') + '</div>'; return; }
+      added.sort(function (a, b) { return a.due < b.due ? -1 : a.due > b.due ? 1 : 0; });
+      var firstNew = 2 + inst.length;
+      inst = inst.concat(added);
       location.href = fillUrl(firstNew);
     });
 
     render();
-    preview();
     var just = params.get('justsaved');
-    if (just && window.GLM && GLM.Toast) GLM.Toast.showToast('GlobalToast', 'Installment saved', 'Installment ' + just + ' was saved to this request.');
+    if (just && window.GLM && GLM.Toast) GLM.Toast.showToast('GlobalToast', 'Installments saved', just + ' saved to this request.');
   })();
 </script>
 </body>

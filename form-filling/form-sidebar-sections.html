@@ -2214,7 +2214,7 @@ var ftProto = (function () {
   DENIAL_SECTIONS = flatten(DENIAL_SECTIONS, 'n', 'Denial');
   var INST_SECTIONS = [
     { id: 'i1', name: 'Installment', rows: [[q('i1a', 'Installment due date', 'date', { required: true }), q('i1b', 'Installment amount', 'currency', { required: true, max: '9250', hint: 'Balance remaining: $9,250.00' })]] },
-    { id: 'i2', name: 'Payment', rows: [[q('i2a', 'Payment method', 'choice', { required: true, options: ['ACH', 'Check'] })], [q('i2b', 'Payment backup', 'upload')], [q('i2c', 'Payment note', 'longtext')]] }
+    { id: 'i2', name: 'Notes', rows: [[q('i2c', 'Installment notes', 'longtext')]] }
   ];
   INST_SECTIONS = flatten(INST_SECTIONS, 'i', 'Installment');
   var FOLLOWUP_SECTIONS = [
@@ -2315,7 +2315,9 @@ var ftProto = (function () {
 
   /* ---------- nav (A1, A2, A10): status icons, no numbers, live counts ---------- */
   function renderNav() {
-    $('navList').hidden = !!paneNav() || !!M.flat;
+    var instNav = FROM_SUMMARY && MODE === 'installment';
+    $('navList').hidden = !instNav && (!!paneNav() || !!M.flat);
+    if (instNav) { $('navList').innerHTML = instNavHtml(); renderRef(); return; }
     $('navList').innerHTML = groupToggle('data-secgroup', M.label, secOpen, 'navList') + (!secOpen ? '' : visibleSections().map(function (s) {
       var state = sectionState(s), fs = visibleFields(s), req = fs.filter(function (f) { return f.required; }).length, active = layout === 'wizard' ? st.current === s.id : activeFull === s.id;
       var meta = s.review ? M.reviewMeta : plural(fs.length, 'question') + ', ' + req + ' required';
@@ -2534,6 +2536,7 @@ var ftProto = (function () {
       if (decState.emailed) out += '<div class="alert alert-info" role="status">' + D.letter + ' sent to ' + esc(CUR.email) + ' on ' + decState.emailed + '.</div>';
       return out;
     }
+    if (FROM_SUMMARY && MODE === 'installment') return FROM_SUMMARY.msg ? '<div class="alert alert-success" role="status">' + esc(FROM_SUMMARY.msg) + '</div>' : '';
     if (MODE !== 'followup') return '';
     if (payState.canceled) return '<div class="alert alert-warning" role="status">Installment 2 of 2 was canceled. $9,250.00 was removed from the award balance.</div>';
     if (payState.lastPay) return '<div class="alert alert-success" role="status">Payment of ' + payState.lastPay.amount + ' recorded for ' + payState.lastPay.date + '.</div>';
@@ -2590,10 +2593,18 @@ var ftProto = (function () {
     if (act === 'decsave') {
       clearTimeout(saveTimer); st.saving = false; st.savedAt = time(); renderSave(); say(cap(M.noun) + ' saved.');
       if (FROM_SUMMARY && MODE === 'installment') {
-        var ret = new URLSearchParams(FROM_SUMMARY.keep), sv = FROM_SUMMARY.saved.slice();
-        if (sv.indexOf(String(FROM_SUMMARY.n)) < 0) sv.push(String(FROM_SUMMARY.n));
-        ret.set('saved', sv.join(',')); ret.set('justsaved', String(FROM_SUMMARY.n));
-        location.href = 'request-summary-installments.html?' + ret.toString();
+        var F = FROM_SUMMARY, it = F.list[F.n - 2];
+        it.saved = true; it.ans = JSON.parse(JSON.stringify(st.ans)); it.due = st.ans.i1a || it.due; it.amt = instAmt(st.ans.i1b) || it.amt;
+        if (F.savedNow.indexOf(F.n) < 0) F.savedNow.push(F.n);
+        var nextIdx = -1; for (var k = 0; k < F.list.length; k++) { var kk = (F.n - 2 + 1 + k) % F.list.length; if (!F.list[kk].saved) { nextIdx = kk; break; } }
+        if (nextIdx > -1) {
+          var savedN = F.n; F.msg = 'Installment ' + savedN + ' saved. Now on installment ' + (nextIdx + 2) + '.';
+          loadInst(nextIdx + 2, true); $('h-app').setAttribute('tabindex', '-1'); $('h-app').focus(); say(F.msg);
+        } else {
+          var ns = F.savedNow.slice().sort(function (x, y) { return x - y; });
+          var label = ns.length === 1 ? 'Installment ' + ns[0] : 'Installments ' + ns.slice(0, -1).join(', ') + ' and ' + ns[ns.length - 1];
+          location.href = summaryUrl({ justsaved: label });
+        }
       }
       return;
     }
@@ -2638,6 +2649,7 @@ var ftProto = (function () {
     }).join('');
     if (!M.primary) { p.hidden = true; return; }
     p.hidden = false; p.textContent = M.primary.label; p.dataset.hact = M.primary.act;
+    if (FROM_SUMMARY && MODE === 'installment') { var others = FROM_SUMMARY.list.filter(function (i, k) { return !i.saved && k !== FROM_SUMMARY.n - 2; }).length; p.textContent = others ? 'Save and next installment' : 'Save installment'; }
     p.disabled = M.primary.act === 'pay' && (payState.canceled || payState.paid >= 18500);
     if (M.decision && decState.done) { p.disabled = true; p.textContent = M.decision.doneLabel; }
   }
@@ -2874,6 +2886,7 @@ var ftProto = (function () {
     if ((t = e.target.closest('[data-step]'))) { var ss = visibleSections(), si = ss.findIndex(function (x) { return x.id === st.current; }), tgt = ss[si + (t.dataset.step === 'next' ? 1 : -1)]; if (tgt) go(tgt.id); return; }
     if ((t = e.target.closest('[data-mact]'))) { MODAL_ACTS[t.dataset.mact](); return; }
     if ((t = e.target.closest('[data-hact]'))) { e.preventDefault(); if (t.classList.contains('disabled') || t.disabled) return; toggleActions(false); headAction(t.dataset.hact, t); return; }
+    if ((t = e.target.closest('[data-inst]'))) { e.preventDefault(); var ni = Number(t.dataset.inst); if (ni !== FROM_SUMMARY.n) { loadInst(ni); $('h-app').setAttribute('tabindex', '-1'); $('h-app').focus(); say('Installment ' + ni + '.'); } return; }
     if ((t = e.target.closest('[data-secgroup]'))) { secOpen = !secOpen; renderNav(); var sg = document.querySelector('[data-secgroup]'); if (sg) sg.focus(); say(secOpen ? 'Sections expanded.' : 'Sections collapsed.'); return; }
     if ((t = e.target.closest('[data-reqgroup]'))) { reqOpen = !reqOpen; renderRef(); var rg = document.querySelector('[data-reqgroup]'); if (rg) rg.focus(); say(reqOpen ? 'Request expanded.' : 'Request collapsed.'); return; }
     if ((t = e.target.closest('[data-priorgroup]'))) { priorOpen = !priorOpen; renderRef(); var pg = document.querySelector('[data-priorgroup]'); if (pg) pg.focus(); say(priorOpen ? 'Prior submissions expanded.' : 'Prior submissions collapsed.'); return; }
@@ -2967,20 +2980,49 @@ var ftProto = (function () {
   }
   var startMode = MODES[params.get('form')] ? params.get('form') : 'applicant';
   applyMode(startMode);
-  /* Arrived from Request Summary > Add Installment: the modal set the schedule and form, this view fills it out. */
+  /* Arrived from Request Summary > Add Installments. inst = every installment added there ("form~due~amount~saved"),
+     numbered from 2 since installment 1 is already paid. The sidebar lists them so staff can move between them. */
   var FROM_SUMMARY = null;
-  if (startMode === 'installment' && params.get('from') === 'summary') {
-    FROM_SUMMARY = { n: Number(params.get('n') || 2), of: Number(params.get('of') || 2), saved: (params.get('saved') || '').split(',').filter(Boolean) };
-    var keep = new URLSearchParams(); ['sched', 'amt', 'tpl', 'test'].forEach(function (k) { if (params.get(k)) keep.set(k, params.get(k)); });
-    FROM_SUMMARY.keep = keep;
-    var back = new URLSearchParams(keep); if (FROM_SUMMARY.saved.length) back.set('saved', FROM_SUMMARY.saved.join(','));
-    $('backLink').href = 'request-summary-installments.html?' + back.toString(); $('backLink').hidden = false;
-    M.title = 'Installment ' + FROM_SUMMARY.n + ' of ' + FROM_SUMMARY.of + ': ' + CUR.project;
-    M.sub = (params.get('tpl') || 'Standard Installment') + '. ' + CUR.org + '. 2027 Community Impact Grant.';
+  var FIRST_INST = { form: 'Standard Installment Form', due: '2027-05-01' };
+  function instAmt(v) { var n = Number(String(v || '').replace(/[$,\s]/g, '')); return isNaN(n) ? 0 : n; }
+  function instEnc() { return FROM_SUMMARY.list.map(function (i) { return [i.form, i.due, i.amt || '', i.saved ? 1 : 0].join('~'); }).join(','); }
+  function summaryUrl(extra) {
+    var u = new URLSearchParams(); u.set('inst', instEnc()); if (FROM_SUMMARY.test) u.set('test', '1');
+    Object.keys(extra || {}).forEach(function (k) { u.set(k, extra[k]); });
+    return 'request-summary-installments.html?' + u.toString();
+  }
+  function loadInst(n, keepMsg) {
+    var F = FROM_SUMMARY, cur = F.list[F.n - 2];
+    if (cur && F.loaded) cur.ans = JSON.parse(JSON.stringify(st.ans));
+    F.n = n; F.loaded = true; if (!keepMsg) F.msg = '';
+    var it = F.list[n - 2];
+    M.title = 'Installment ' + n + ' of ' + (1 + F.list.length) + ': ' + CUR.project;
+    M.sub = it.form + '. ' + CUR.org + '. 2027 Community Impact Grant.';
     $('h-app').textContent = M.title; $('h-sub').textContent = M.sub; document.title = M.title + ' | Forms prototype';
-    if (params.get('due')) st.ans.i1a = params.get('due');
-    if (params.get('amt')) st.ans.i1b = Number(params.get('amt')).toLocaleString('en-US', { minimumFractionDigits: 2 });
-    render();
+    var other = F.list.reduce(function (a, x, k) { return k === n - 2 ? a : a + (x.ans && x.ans.i1b ? instAmt(x.ans.i1b) : (x.amt || 0)); }, 0);
+    var rem = Math.max(18500 - 9250 - other, 0), amtQ = SECTIONS[0].rows[0][1];
+    amtQ.max = String(rem); amtQ.hint = 'Balance remaining: $' + rem.toLocaleString('en-US', { minimumFractionDigits: 2 });
+    st = fresh(); activeFull = SECTIONS[0].id;
+    st.ans = it.ans ? JSON.parse(JSON.stringify(it.ans)) : { i1a: it.due, i1b: it.amt ? it.amt.toLocaleString('en-US', { minimumFractionDigits: 2 }) : '' };
+    if (it.saved) st.savedAt = 'earlier';
+    $('backLink').href = summaryUrl(); $('backLink').hidden = false;
+    var u = new URLSearchParams(location.search); u.set('inst', instEnc()); u.set('n', n); history.replaceState(null, '', '?' + u.toString());
+    render(); window.scrollTo(0, 0);
+  }
+  function instNavHtml() {
+    var F = FROM_SUMMARY;
+    var items = '<div class="list-group-item proto-ap-navitem"><span class="flex-grow-1"><span>Installment 1</span><span class="proto-ap-navmeta">' + esc(FIRST_INST.form.replace(' Installment Form', '')) + '. Paid.</span></span><span class="visually-hidden">, done</span><span class="proto-nav-status">' + statusDot('complete') + '</span></div>' +
+      F.list.map(function (it, k) {
+        var n = k + 2, active = n === F.n, state = it.saved ? 'complete' : (active && Object.keys(st.ans).some(function (x) { return st.ans[x]; }) ? 'progress' : 'todo');
+        return '<a href="#" class="list-group-item list-group-item-action proto-ap-navitem' + (active ? ' active' : '') + '" data-inst="' + n + '"' + (active ? ' aria-current="page"' : '') + '>' +
+          '<span class="flex-grow-1"><span>Installment ' + n + '</span><span class="proto-ap-navmeta">' + esc(it.form.replace(' Installment Form', '')) + '. Due ' + isoToMdy(it.due) + '.</span></span>' +
+          '<span class="visually-hidden">, ' + STATUS[state][1] + '</span><span class="proto-nav-status">' + statusDot(state) + '</span></a>';
+      }).join('');
+    return groupToggle('data-secgroup', 'Installments', secOpen, 'navList') + (secOpen ? items : '');
+  }
+  if (startMode === 'installment' && params.get('from') === 'summary') {
+    FROM_SUMMARY = { list: (params.get('inst') || '').split(',').filter(Boolean).map(function (s) { var p = s.split('~'); return { form: p[0], due: p[1], amt: Number(p[2] || 0), saved: p[3] === '1', ans: null }; }), n: 0, test: params.get('test') === '1', savedNow: [] };
+    if (FROM_SUMMARY.list.length) loadInst(Math.min(Math.max(Number(params.get('n') || 2), 2), FROM_SUMMARY.list.length + 1)); else FROM_SUMMARY = null;
   }
   if (CONFIG.controls && params.get('test') !== '1' && window.ftProto) {
     ftProto.config.title = 'Forms prototype';
