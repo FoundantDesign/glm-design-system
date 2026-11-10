@@ -2316,13 +2316,13 @@ var ftProto = (function () {
   /* ---------- nav (A1, A2, A10): status icons, no numbers, live counts ---------- */
   function renderNav() {
     $('navList').hidden = !!paneNav() || !!M.flat;
-    $('navList').innerHTML = '<div class="nav-group-header">' + M.label + '</div>' + visibleSections().map(function (s) {
+    $('navList').innerHTML = groupToggle('data-secgroup', M.label, secOpen, 'navList') + (!secOpen ? '' : visibleSections().map(function (s) {
       var state = sectionState(s), fs = visibleFields(s), req = fs.filter(function (f) { return f.required; }).length, active = layout === 'wizard' ? st.current === s.id : activeFull === s.id;
       var meta = s.review ? M.reviewMeta : plural(fs.length, 'question') + ', ' + req + ' required';
       return '<a href="#sec-' + s.id + '" class="list-group-item list-group-item-action proto-ap-navitem' + (active ? ' active' : '') + '" data-go="' + s.id + '"' + (active ? ' aria-current="step"' : '') + '>' +
         '<span class="flex-grow-1"><span' + (s.name || s.review ? '' : ' class="fst-italic"') + '>' + esc(sectionLabel(s)) + '</span><span class="proto-ap-navmeta">' + meta + '</span></span>' +
         '<span class="visually-hidden">, ' + STATUS[state][1] + '</span><span class="proto-nav-status">' + statusDot(state) + '</span></a>';
-    }).join('');
+    }).join(''));
     renderRef();
   }
 
@@ -2359,7 +2359,7 @@ var ftProto = (function () {
      Applicant forms: contact card only. Staff forms: collapsible Contact and Prior submissions, then rows
      that open read-only slide-outs (organization overview, key interactions, documents, financials and
      compliance, and award details on Approval and Follow-up). Evaluation adds a Shared evaluations link. */
-  var priorOpen = true, payState = { paid: 9250, canceled: false, lastPay: null }, decState = { done: null, emailed: null };
+  var priorOpen = true, secOpen = true, reqOpen = true, payState = { paid: 9250, canceled: false, lastPay: null }, decState = { done: null, emailed: null };
   var CUR = { project: 'Riverside Murals for Youth', org: 'Maple Street Arts Collective', person: 'Dana Whitfield', email: 'dana@maplestreetarts.org', phone: '555-214-0193', ein: '84-2917365', orgPhone: '555-214-0100' };
   var NEXT_EVALS_ALL = [
     { project: 'Eastside Food Pantry Expansion', org: 'Eastside Neighbors Alliance', person: 'Marcus Bell', email: 'marcus@eastsideneighbors.org', phone: '555-301-4477', ein: '81-4410298', orgPhone: '555-301-4400' },
@@ -2400,12 +2400,12 @@ var ftProto = (function () {
       html += groupToggle('data-priorgroup', 'Prior submissions', priorOpen, 'priorList') +
         '<div class="list-group list-group-flush" id="priorList"' + (priorOpen ? '' : ' hidden') + '>' +
         (M.prior || []).map(function (k) { return panelRow('prior-' + k, 'file-lines', PRIOR[k].label, 'Submitted ' + PRIOR[k].date); }).join('') + '</div>' +
-        '<div class="nav-group-header">Request</div><div class="list-group list-group-flush">' +
+        groupToggle('data-reqgroup', 'Request', reqOpen, 'reqList') + '<div class="list-group list-group-flush" id="reqList">' + (!reqOpen ? '' : '' +
         panelRow('org', 'building', 'Organization overview') +
         panelRow('interactions', 'comment', 'Key interactions') +
         panelRow('docs', 'paperclip', 'Documents', null, 0) +
         panelRow('fin', 'circle-check', 'Financials &amp; compliance') +
-        (M.award ? panelRow('award', 'dollar-sign', 'Award details') : '') + '</div>' +
+        (M.award ? panelRow('award', 'dollar-sign', 'Award details') : '')) + '</div>' +
         (M.shared ? '<p class="proto-ap-sharedlink"><a href="#" data-noop>Shared evaluations (2) <i class="fa-light fa-arrow-up-right-from-square" aria-hidden="true"></i><span class="visually-hidden"> (opens shared evaluations)</span></a></p>' : '');
     }
     $('refList').innerHTML = html;
@@ -2874,6 +2874,8 @@ var ftProto = (function () {
     if ((t = e.target.closest('[data-step]'))) { var ss = visibleSections(), si = ss.findIndex(function (x) { return x.id === st.current; }), tgt = ss[si + (t.dataset.step === 'next' ? 1 : -1)]; if (tgt) go(tgt.id); return; }
     if ((t = e.target.closest('[data-mact]'))) { MODAL_ACTS[t.dataset.mact](); return; }
     if ((t = e.target.closest('[data-hact]'))) { e.preventDefault(); if (t.classList.contains('disabled') || t.disabled) return; toggleActions(false); headAction(t.dataset.hact, t); return; }
+    if ((t = e.target.closest('[data-secgroup]'))) { secOpen = !secOpen; renderNav(); var sg = document.querySelector('[data-secgroup]'); if (sg) sg.focus(); say(secOpen ? 'Sections expanded.' : 'Sections collapsed.'); return; }
+    if ((t = e.target.closest('[data-reqgroup]'))) { reqOpen = !reqOpen; renderRef(); var rg = document.querySelector('[data-reqgroup]'); if (rg) rg.focus(); say(reqOpen ? 'Request expanded.' : 'Request collapsed.'); return; }
     if ((t = e.target.closest('[data-priorgroup]'))) { priorOpen = !priorOpen; renderRef(); var pg = document.querySelector('[data-priorgroup]'); if (pg) pg.focus(); say(priorOpen ? 'Prior submissions expanded.' : 'Prior submissions collapsed.'); return; }
     if ((t = e.target.closest('[data-actions]'))) { toggleActions(!$('actionsList').classList.contains('show')); if ($('actionsList').classList.contains('show')) { var fi = $('actionsList').querySelector('.dropdown-item'); if (fi) fi.focus(); } return; }
     if (!e.target.closest('#actionsMenu')) toggleActions(false);
