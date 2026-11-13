@@ -113,7 +113,7 @@
   <div class="gl">Actions</div>
   <a href="#buttons">Buttons</a><a href="#dropdowns">Dropdowns</a>
   <div class="gl">Content</div>
-  <a href="#cards">Cards</a><a href="#badges">Badges &amp; Chips</a><a href="#alerts">Alerts</a><a href="#tables">Tables</a><a href="#list-groups">List Groups</a><a href="#accordions">Accordions</a><a href="#timeline">Timeline</a>
+  <a href="#cards">Cards</a><a href="#badges">Badges &amp; Chips</a><a href="#alerts">Alerts</a><a href="#tables">Tables</a><a href="#list-groups">List Groups</a><a href="#collapsible-panel">Collapsible Panel</a><a href="#accordions">Accordions</a><a href="#timeline">Timeline</a>
   <div class="gl">Forms</div>
   <a href="#inputs">Text Inputs</a><a href="#selects">Select</a><a href="#checkradio">Check, Radio, Switch</a><a href="#datepicker">Datepicker</a><a href="#autocomplete">Autocomplete</a><a href="#stepper">Stepper</a><a href="#validation">Validation</a><a href="#input-groups">Input Groups</a>
   <div class="gl">Feedback</div>
@@ -1296,6 +1296,149 @@ header, footer {
 
 </section>
 
+<!-- ═══ COLLAPSIBLE PANEL ═══ -->
+<section class="sec" id="collapsible-panel">
+  <h2>Collapsible Panel <span class="status-tag status-overridden">SHIPPED</span></h2>
+  <p class="ref-strip"><span class="ref-label">Rule:</span>Not in DESIGN-SYSTEM.md yet. Built by <a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/TagHelpers/CollapsiblePanelTagHelper.cs" target="_blank" rel="noopener">CollapsiblePanelTagHelper.cs</a></p>
+  <p class="sd">A card whose body opens and closes from its header, for groups of content a person can set aside.</p>
+
+  <table class="usage">
+    <tr><th>What</th><td>A <code>.card.collapsible-panel</code> with a <code>neutral-70</code> header. The header is one button: a leading <code>chevron-right</code> that turns to point down when open, the title, and an optional count. Header actions sit at the end, and an optional <code>.card-footer</code> closes the body.</td></tr>
+    <tr><th>Where</th><td>The <code>&lt;collapsible-panel&gt;</code> TagHelper in GLM.Web, with <code>&lt;panel-actions&gt;</code> and <code>&lt;panel-footer&gt;</code> children. Used on Email Send, Email Templates, Payment Tracking and Budget. Its styles are emitted by the TagHelper itself, not from a production stylesheet.</td></tr>
+    <tr><th>When</th><td>Groups on a page that a person works with one at a time or can set aside: templates grouped by status, attachments, search criteria. Open the group the person came for and close supporting ones, as Email Templates does with Available open and System and Archived closed. For secondary detail inside a record, use an accordion.</td></tr>
+    <tr><th>Why</th><td>The count stays visible when the panel is closed, so collapsed content can still be found. The leading chevron reads as a disclosure control before the title does.</td></tr>
+    <tr><th>How</th><td>Use the TagHelper rather than writing the markup by hand. Set <code>expanded</code> for the default state and <code>count</code> when the body is a list. Add <code>count-label</code> (for example <code>"attachments"</code>) when the count changes on the page, so the change is announced.</td></tr>
+  </table>
+
+  <!-- The same style block CollapsiblePanelTagHelper.cs emits once per page.
+       It isn't in a production stylesheet, so beta can't serve it. Replace this
+       with nothing once production moves it into a CSS file. -->
+  <style>
+    .collapsible-panel-header {
+      background-color: var(--colors-neutral-70);
+      color: var(--colors-brand-primary-dark-blue);
+      border-radius: var(--mdb-card-inner-border-radius) var(--mdb-card-inner-border-radius) 0 0;
+    }
+    .collapsible-panel-header:has(.collapsible-panel-trigger[aria-expanded="false"]) {
+      border-radius: var(--mdb-card-inner-border-radius);
+    }
+    .collapsible-panel-trigger {
+      cursor: pointer;
+      color: inherit;
+    }
+    .collapsible-panel-chevron { transition: transform 0.2s ease; }
+    .collapsible-panel-trigger[aria-expanded="true"] .collapsible-panel-chevron { transform: rotate(90deg); }
+    @media (prefers-reduced-motion: reduce) {
+      .collapsible-panel-chevron { transition: none; }
+    }
+    .collapsible-panel-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 1.75rem;
+      padding: 0.15rem 0.55rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--colors-neutral-100);
+      background-color: var(--colors-neutral-20);
+      border-radius: 999px;
+    }
+    .collapsible-panel-body {
+      border: 1px solid var(--colors-neutral-70);
+      border-top: 0;
+      border-radius: 0 0 var(--mdb-card-inner-border-radius) var(--mdb-card-inner-border-radius);
+    }
+  </style>
+
+  <h3>Default rendering</h3>
+  <p class="sd" style="border:none;margin:0 0 8px">Click a header to open or close it. This page doesn't load MDB's JS bundle, so a small script toggles the same classes and attributes MDB's collapse does.</p>
+  <div class="cr" style="display:block;max-width:640px">
+    <div class="card mb-3 collapsible-panel" id="demo-criteria">
+      <div class="card-header collapsible-panel-header d-flex align-items-center justify-content-between w-100 border-0">
+        <button type="button" class="collapsible-panel-trigger d-flex align-items-center gap-2 flex-grow-1 border-0 bg-transparent p-0 text-start" data-mdb-collapse-init data-mdb-target="#demo-criteria-body" aria-controls="demo-criteria-body" aria-expanded="true">
+          <i class="fa-light fa-chevron-right fa-fw collapsible-panel-chevron" aria-hidden="true"></i>
+          <div class="h5 mb-0">Search Criteria</div>
+          <span class="collapsible-panel-count-group d-none"><span id="demo-criteria-count" class="collapsible-panel-count"></span></span>
+        </button>
+      </div>
+      <div id="demo-criteria-body" class="collapsible-panel-body collapse show">
+        <div class="card-body">
+          <label class="form-label" for="demo-criteria-process">Process</label>
+          <select class="form-select" id="demo-criteria-process"><option>Spring Grants 2026</option><option>Capacity Building 2026</option></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-3 collapsible-panel" id="demo-available">
+      <div class="card-header collapsible-panel-header d-flex align-items-center justify-content-between w-100 border-0">
+        <button type="button" class="collapsible-panel-trigger d-flex align-items-center gap-2 flex-grow-1 border-0 bg-transparent p-0 text-start" data-mdb-collapse-init data-mdb-target="#demo-available-body" aria-controls="demo-available-body" aria-expanded="true">
+          <i class="fa-light fa-chevron-right fa-fw collapsible-panel-chevron" aria-hidden="true"></i>
+          <div class="h5 mb-0">Available</div>
+          <span class="collapsible-panel-count-group"><span id="demo-available-count" class="collapsible-panel-count">3</span></span>
+        </button>
+      </div>
+      <div id="demo-available-body" class="collapsible-panel-body collapse show">
+        <div class="table-responsive">
+          <table class="table table-sm table-hover mb-0">
+            <thead><tr><th scope="col">Template</th><th scope="col">Last Updated</th></tr></thead>
+            <tbody>
+              <tr><td>Award Notification</td><td>10/02/2026</td></tr>
+              <tr><td>Decline Notification</td><td>09/18/2026</td></tr>
+              <tr><td>Follow Up Reminder</td><td>08/27/2026</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-3 collapsible-panel" id="demo-archived">
+      <div class="card-header collapsible-panel-header d-flex align-items-center justify-content-between w-100 border-0">
+        <button type="button" class="collapsible-panel-trigger d-flex align-items-center gap-2 flex-grow-1 border-0 bg-transparent p-0 text-start" data-mdb-collapse-init data-mdb-target="#demo-archived-body" aria-controls="demo-archived-body" aria-expanded="false">
+          <i class="fa-light fa-chevron-right fa-fw collapsible-panel-chevron" aria-hidden="true"></i>
+          <div class="h5 mb-0">Archived</div>
+          <span class="collapsible-panel-count-group"><span id="demo-archived-count" class="collapsible-panel-count">12</span></span>
+        </button>
+      </div>
+      <div id="demo-archived-body" class="collapsible-panel-body collapse">
+        <div class="card-body">Twelve archived templates.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Markup</h3>
+  <div class="code-block">@* In a view: the TagHelper writes the markup and its styles *@
+&lt;collapsible-panel title="Available" id="available-templates" expanded="true" count="@Model.AvailableEmailTemplates.Count"&gt;
+  ...body...
+&lt;/collapsible-panel&gt;
+
+&lt;collapsible-panel title="Attachments" id="attachments-panel" expanded="false" count="@selectedCount" count-label="attachments"&gt;
+  ...body...
+  &lt;panel-footer&gt;...&lt;/panel-footer&gt;
+&lt;/collapsible-panel&gt;</div>
+
+  <div class="code-block">&lt;!-- What the TagHelper renders --&gt;
+&lt;div class="card mb-3 collapsible-panel" id="available-templates"&gt;
+  &lt;div class="card-header collapsible-panel-header d-flex align-items-center justify-content-between w-100 border-0"&gt;
+    &lt;button type="button" class="collapsible-panel-trigger d-flex align-items-center gap-2 flex-grow-1 border-0 bg-transparent p-0 text-start"
+            data-mdb-collapse-init data-mdb-target="#available-templates-body"
+            aria-controls="available-templates-body" aria-expanded="true"&gt;
+      &lt;i class="fa-light fa-chevron-right fa-fw collapsible-panel-chevron" aria-hidden="true"&gt;&lt;/i&gt;
+      &lt;div class="h5 mb-0"&gt;Available&lt;/div&gt;
+      &lt;span class="collapsible-panel-count-group"&gt;
+        &lt;span id="available-templates-count" class="collapsible-panel-count"&gt;3&lt;/span&gt;
+      &lt;/span&gt;
+    &lt;/button&gt;
+    &lt;!-- &lt;panel-actions&gt; content: &lt;div class="collapsible-panel-actions d-flex align-items-center gap-2 me-3"&gt; --&gt;
+  &lt;/div&gt;
+  &lt;div id="available-templates-body" class="collapsible-panel-body collapse show"&gt;
+    ...body...
+    &lt;!-- &lt;panel-footer&gt; content: &lt;div class="card-footer"&gt; --&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</div>
+
+</section>
+
 <!-- ═══ ACCORDIONS ═══ -->
 <section class="sec" id="accordions">
   <h2>Accordions <span class="status-tag status-proposal">PROPOSED</span> <span class="ticket-links"><a href="https://foundanttech.atlassian.net/browse/UX-147" target="_blank" rel="noopener">UX-147</a></span></h2>
@@ -1305,24 +1448,24 @@ header, footer {
   <table class="usage">
     <tr><th>What</th><td>MDB <code>.accordion</code> wrapping <code>.accordion-item</code>, each with an <code>.accordion-button</code> header (carrying <code>.collapsed</code> when shut) and an <code>.accordion-collapse.collapse</code> body. Driven by <code>data-mdb-collapse-init</code> and <code>data-mdb-target</code>.</td></tr>
     <tr><th>Where</th><td>Stock MDB. The chevron color is baked into an SVG data URI, so it can't be remapped.</td></tr>
-    <tr><th>When</th><td>Secondary detail on a record that most users skip: attachments, history, prior cycles. Not for primary content, since collapsed content is unsearchable by browser find and easy to miss.</td></tr>
-    <tr><th>Why</th><td>Collapsed content is easy to miss, so it suits secondary detail only. When to use a collapsible card instead is open (UX-147).</td></tr>
+    <tr><th>When</th><td>Secondary detail on a record that most users skip: attachments, history, prior cycles. Not for primary content, since collapsed content is unsearchable by browser find and easy to miss. For a group with its own count, actions or footer, use the <a href="#collapsible-panel">collapsible panel</a>.</td></tr>
+    <tr><th>Why</th><td>Collapsed content is easy to miss, so it suits secondary detail only.</td></tr>
     <tr><th>How</th><td>Variants are <code>.accordion-flush</code> and <code>.accordion-borderless</code>. The default 8px radius matches <code>--radius-md</code>.</td></tr>
   </table>
 
   <h3>Default rendering</h3>
-  <p class="sd" style="border:none;margin:0 0 8px">Rendered statically (one item open, one shut) since this reference page does not load MDB's JS bundle. The classes are the real ones MDB toggles at runtime.</p>
+  <p class="sd" style="border:none;margin:0 0 8px">Click a header to open or close it. This page doesn't load MDB's JS bundle, so a small script toggles the same classes MDB does. The open state shows the navy proposal below; production renders it in MDB blue.</p>
   <div class="cr" style="display:block">
     <div class="accordion" style="max-width:520px">
       <div class="accordion-item">
-        <h3 class="accordion-header"><button class="accordion-button" type="button">Award history</button></h3>
-        <div class="accordion-collapse collapse show">
+        <h3 class="accordion-header"><button class="accordion-button" type="button" aria-expanded="true" aria-controls="demo-acc-1">Award history</button></h3>
+        <div class="accordion-collapse collapse show" id="demo-acc-1">
           <div class="accordion-body">Three prior awards totaling $185,000 between 2021 and 2024.</div>
         </div>
       </div>
       <div class="accordion-item">
-        <h3 class="accordion-header"><button class="accordion-button collapsed" type="button">Attachments</button></h3>
-        <div class="accordion-collapse collapse">
+        <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" aria-expanded="false" aria-controls="demo-acc-2">Attachments</button></h3>
+        <div class="accordion-collapse collapse" id="demo-acc-2">
           <div class="accordion-body">Budget worksheet, board roster, IRS determination letter.</div>
         </div>
       </div>
@@ -1340,6 +1483,14 @@ header, footer {
   --mdb-accordion-btn-icon-width: 1.25rem;
   --mdb-accordion-active-color: #3b71ca;              
   --mdb-accordion-btn-active-icon: url("data:image/svg+xml,... stroke='%233b71ca' ...");
+}</div>
+
+  <h3>Navy open state <span class="status-tag status-proposal">PROPOSED</span> <span class="ticket-links"><a href="https://foundanttech.atlassian.net/browse/UX-147" target="_blank" rel="noopener">UX-147</a></span></h3>
+  <p class="sd" style="border:none;margin:0 0 8px">Keeps the header navy and the chevron the same gray in both states. The open chevron reuses MDB's closed-state icon, which the open state already rotates, so no new color goes into a data URI.</p>
+  <div class="code-block">/* glm-prototype-foundation.css, P6 (PROPOSED, UX-147) */
+.accordion {
+  --mdb-accordion-active-color: var(--colors-brand-primary-dark-blue);
+  --mdb-accordion-btn-active-icon: var(--mdb-accordion-btn-icon);
 }</div>
 
 </section>
@@ -2471,6 +2622,22 @@ GLM.Toast.showErrorToast('GlobalToast', header, body)</div>
     for (var j = 0; j < tocLinks.length; j++) {
       tocLinks[j].classList.toggle('on', tocLinks[j].getAttribute('href') === '#' + current);
     }
+  });
+
+  /* Collapse demos: toggle the classes and attributes MDB's collapse sets,
+     since this page doesn't load MDB's JS bundle. */
+  document.querySelectorAll('.collapsible-panel-trigger, #accordions .accordion-button').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var id = btn.getAttribute('aria-controls');
+      var body = document.getElementById(id);
+      if (!body) {
+        return;
+      }
+      var open = btn.getAttribute('aria-expanded') !== 'true';
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.classList.toggle('collapsed', !open);
+      body.classList.toggle('show', open);
+    });
   });
 
   /* ── Modal demo: real .modal/.modal-backdrop classes, toggled by hand
