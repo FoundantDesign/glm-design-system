@@ -1789,7 +1789,6 @@ h1[tabindex="-1"]:focus, h2[tabindex="-1"]:focus { outline: none; }
 .proto-sbs.is-on.is-swapped .proto-sbs-app { order: 1; }
 .proto-sbs-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; min-height: 36px; }
 .proto-sbs-app { position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow-y: auto; padding-top: 16px; }
-.proto-sbs-app .accordion-body { padding: 12px 16px; }
 #actionsMenu { position: relative; }
 #actionsList.show { display: block; position: absolute; right: 0; left: auto; top: calc(100% + 4px); min-width: 220px; z-index: 20; }
 /* Collapsible sidebar: collapses left to a narrow rail holding only the expand button. */
@@ -1797,23 +1796,6 @@ h1[tabindex="-1"]:focus, h2[tabindex="-1"]:focus { outline: none; }
 .panel-layout.is-railed .side-panel { width: 56px; min-width: 56px; max-width: 56px; flex: 0 0 56px; overflow: hidden; }
 .panel-layout.is-railed .proto-rail-bar { justify-content: center; padding: 8px 0 0; }
 .panel-layout.is-railed #railBody { display: none; }
-/* Both panes' collapsibles: white when open or closed, via MDB's own accordion vars. */
-.proto-sbs-app .accordion, .proto-eval-acc { --mdb-accordion-bg: var(--colors-neutral-100); --mdb-accordion-btn-bg: var(--colors-neutral-100); --mdb-accordion-active-bg: var(--colors-neutral-100); --mdb-accordion-active-color: var(--colors-brand-primary-dark-blue); --mdb-accordion-btn-color: var(--colors-brand-primary-dark-blue); }
-/* Chevron: MDB's open-state icon is a blue SVG, so the open state reuses the closed icon (MDB rotates it). */
-.proto-sbs-app .accordion-button::after, .proto-eval-acc .accordion-button::after { background-image: none; -webkit-mask: var(--mdb-accordion-btn-icon) center / contain no-repeat; mask: var(--mdb-accordion-btn-icon) center / contain no-repeat; background-color: var(--colors-brand-primary-dark-blue); }
-.proto-sbs-app .accordion-button:not(.collapsed)::after, .proto-eval-acc .accordion-button:not(.collapsed)::after { background-image: none; }
-/* Same header height in both panes: the evaluation header holds a status dot and a meta line, so the Application header matches its height. */
-.proto-sbs-app .accordion-button, .proto-eval-acc .accordion-button { min-height: 72px; }
-/* Header content starts on the same line as the expanded body's content. */
-.proto-eval-acc .accordion-button .proto-nav-status { margin-left: 0; padding-left: 0; }
-/* Evaluation headers: chevron first, status circle at the right end. */
-.proto-eval-acc .accordion-button::after { order: -1; margin-left: 0; margin-right: 4px; }
-.proto-eval-acc .accordion-button .proto-nav-status { order: 3; }
-/* Leading chevron: points right when closed, down when open. */
-.proto-eval-acc .accordion-button.collapsed::after { transform: rotate(-90deg); }
-.proto-eval-acc .accordion-button:not(.collapsed)::after { transform: none; }
-.proto-sbs-app .accordion-button { padding-left: 16px; }
-.proto-sbs-app .accordion-collapse, .proto-sbs-app .accordion-body, .proto-eval-acc .accordion-collapse, .proto-eval-acc .accordion-body { background-color: var(--colors-neutral-100); }
 /* Evaluator in-pane navigation (Nov 4): A = scrolling collapsible groups, B = stepper in the pane.
    Both live inside "Your evaluation", so they travel with the form when the panes swap. */
 .proto-eval-progress { font-size: 0.875rem; line-height: 20px; color: var(--colors-neutral-30); margin: 0 0 8px; }
@@ -1829,8 +1811,48 @@ h1[tabindex="-1"]:focus, h2[tabindex="-1"]:focus { outline: none; }
 .proto-sbs-resizer:hover::before, .proto-sbs-resizer.is-dragging::before, .proto-sbs-resizer:focus-visible::before { border-left-color: var(--colors-brand-primary-dark-blue); }
 .proto-sbs-resizer:focus-visible { outline: solid 2px var(--colors-brand-primary-dark-blue); outline-offset: 2px; }
 body.is-resizing, body.is-resizing * { cursor: col-resize !important; user-select: none !important; }
+/* Collapsible panel: the style block CollapsiblePanelTagHelper.cs (GLM.Web) emits once per page,
+   copied from the kitchen sink's Collapsible Panel section. Both panes' groups use it. */
+.collapsible-panel-header {
+  background-color: var(--colors-neutral-70);
+  color: var(--colors-brand-primary-dark-blue);
+  border-radius: var(--mdb-card-inner-border-radius) var(--mdb-card-inner-border-radius) 0 0;
+}
+.collapsible-panel-header:has(.collapsible-panel-trigger[aria-expanded="false"]) {
+  border-radius: var(--mdb-card-inner-border-radius);
+}
+.collapsible-panel-trigger {
+  cursor: pointer;
+  color: inherit;
+}
+.collapsible-panel-chevron { transition: transform 0.2s ease; }
+.collapsible-panel-trigger[aria-expanded="true"] .collapsible-panel-chevron { transform: rotate(90deg); }
+@media (prefers-reduced-motion: reduce) {
+  .collapsible-panel-chevron { transition: none; }
+}
+.collapsible-panel-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.75rem;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--colors-neutral-100);
+  background-color: var(--colors-neutral-20);
+  border-radius: 999px;
+}
+.collapsible-panel-body {
+  border: 1px solid var(--colors-neutral-70);
+  border-top: 0;
+  border-radius: 0 0 var(--mdb-card-inner-border-radius) var(--mdb-card-inner-border-radius);
+}
+/* Prototype layout only: the evaluation header carries a progress line, so both panes' headers share a
+   minimum height and their panels stay level side by side. */
+.proto-sbs-app .collapsible-panel-header, .proto-eval-acc .collapsible-panel-header { min-height: 72px; }
+.proto-eval-acc .collapsible-panel-trigger .proto-nav-status { margin-left: 0; padding-left: 0; }
 .proto-eval-acc { margin-bottom: 16px; }
-.proto-eval-acc .accordion-button { gap: 8px; }
 .proto-eval-acc .proto-ap-section { box-shadow: none; border: 0; margin: 0; background: transparent; }
 .proto-eval-acc .proto-ap-section > .card-body { padding: 0; }
 .proto-eval-acc .proto-ap-section .card-title, .proto-eval-acc .proto-ap-actions { display: none; }
@@ -1945,7 +1967,7 @@ body.is-resizing, body.is-resizing * { cursor: col-resize !important; user-selec
         <div class="proto-sbs-swap" id="sbsSwap" hidden><button type="button" class="icon-btn" data-swap aria-pressed="false" aria-label="Swap sides" title="Swap sides"><i class="fa-light fa-arrow-right-arrow-left" aria-hidden="true"></i></button><div class="proto-sbs-resizer" id="sbsResizer" role="separator" tabindex="0" aria-orientation="vertical" aria-label="Resize panes. Use left and right arrow keys." aria-valuemin="25" aria-valuemax="75" aria-valuenow="50" title="Drag to resize"></div></div>
         <section class="proto-sbs-app" id="paneApp" aria-labelledby="h-paneapp" hidden>
           <div class="proto-sbs-head"><h2 class="h5 mb-0" id="h-paneapp">Application</h2></div>
-          <div class="accordion" id="appRead"></div>
+          <div id="appRead"></div>
         </section>
       </div>
     </div>
@@ -2370,8 +2392,8 @@ var ftProto = (function () {
       var body = fieldsOf(s).filter(function (f) { return !f.show || APP_ANS[f.show.q] === f.show.a; }).map(function (f) {
         return '<div class="proto-sbs-ans"><p class="form-label mb-1">' + esc(f.label) + '</p>' + ansHtml(f) + '</div>';
       }).join('');
-      return '<div class="accordion-item"><h3 class="accordion-header" id="ah-' + s.id + '"><button type="button" class="accordion-button' + (open ? '' : ' collapsed') + '" data-acc="' + s.id + '" aria-expanded="' + open + '" aria-controls="ab-' + s.id + '">' + esc(s.name || 'Question group') + '</button></h3>' +
-        '<div class="accordion-collapse collapse' + (open ? ' show' : '') + '" id="ab-' + s.id + '" role="region" aria-labelledby="ah-' + s.id + '"><div class="accordion-body">' + body + '</div></div></div>';
+      return '<div class="card mb-3 collapsible-panel" id="ap-' + s.id + '"><div class="card-header collapsible-panel-header d-flex align-items-center justify-content-between w-100 border-0"><button type="button" class="collapsible-panel-trigger d-flex align-items-center gap-2 flex-grow-1 border-0 bg-transparent p-0 text-start" data-acc="' + s.id + '" aria-controls="ab-' + s.id + '" aria-expanded="' + open + '"><i class="fa-light fa-chevron-right fa-fw collapsible-panel-chevron" aria-hidden="true"></i><div class="h5 mb-0">' + esc(s.name || 'Question group') + '</div></button></div>' +
+        '<div id="ab-' + s.id + '" class="collapsible-panel-body collapse' + (open ? ' show' : '') + '"><div class="card-body">' + body + '</div></div></div>';
     }).join('');
   }
   /* Actions menu (top right): packets live here instead of in each pane header. */
@@ -2438,11 +2460,11 @@ var ftProto = (function () {
       '</div></nav>';
   }
   function groupsHtml(secs) {
-    return '<div class="accordion proto-eval-acc">' + secs.filter(function (x) { return !x.review; }).map(function (x) {
+    return '<div class="proto-eval-acc">' + secs.filter(function (x) { return !x.review; }).map(function (x) {
       var open = evalAcc[x.id] !== false, stt = sectionState(x);
-      return '<div class="accordion-item"><h2 class="accordion-header" id="eh-' + x.id + '"><button type="button" class="accordion-button' + (open ? '' : ' collapsed') + '" data-eacc="' + x.id + '" aria-expanded="' + open + '" aria-controls="eb-' + x.id + '">' +
-        '<span class="proto-nav-status">' + statusDot(stt) + '</span><span class="flex-grow-1"><span class="d-block">' + esc(sectionLabel(x)) + '</span><span class="proto-ap-navmeta">' + groupMeta(x) + '</span></span><span class="visually-hidden">, ' + STATUS[stt][1] + '</span></button></h2>' +
-        '<div class="accordion-collapse collapse' + (open ? ' show' : '') + '" id="eb-' + x.id + '" role="region" aria-labelledby="eh-' + x.id + '"><div class="accordion-body">' + sectionHtml(x) + '</div></div></div>';
+      return '<div class="card mb-3 collapsible-panel" id="ep-' + x.id + '"><div class="card-header collapsible-panel-header d-flex align-items-center justify-content-between w-100 border-0"><button type="button" class="collapsible-panel-trigger d-flex align-items-center gap-2 flex-grow-1 border-0 bg-transparent p-0 text-start" data-eacc="' + x.id + '" aria-controls="eb-' + x.id + '" aria-expanded="' + open + '"><i class="fa-light fa-chevron-right fa-fw collapsible-panel-chevron" aria-hidden="true"></i>' +
+        '<div class="flex-grow-1"><div class="h5 mb-0">' + esc(sectionLabel(x)) + '</div><span class="proto-ap-navmeta">' + groupMeta(x) + '</span></div><span class="proto-nav-status">' + statusDot(stt) + '</span><span class="visually-hidden">, ' + STATUS[stt][1] + '</span></button></div>' +
+        '<div id="eb-' + x.id + '" class="collapsible-panel-body collapse' + (open ? ' show' : '') + '"><div class="card-body">' + sectionHtml(x) + '</div></div></div>';
     }).join('') + '</div>' + (M.noReview ? '' : reviewHtml());
   }
   document.addEventListener('change', function (e) { if (e.target.id === 'stepJump') go(e.target.value); });
