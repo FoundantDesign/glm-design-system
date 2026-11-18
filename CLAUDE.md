@@ -25,6 +25,33 @@ It is not the design system's rulebook. That is `GLM.Web/DESIGN-SYSTEM.md` in th
 4. Buttons are pill-shaped. Icons are Font Awesome Pro, `fa-light` by default, `fa-regular` for filled-state controls. Icon-only buttons are `.btn.btn-icon` with an `aria-label`.
 5. Primary is `--colors-brand-primary-dark-blue`, dark navy, not blue.
 
+## Design process
+
+This is design's current process, open to feedback from the rest of the team (UX-179).
+
+1. Design proposes in this lab: a PROPOSED kitchen sink section or prototype, with its UX ticket and a draft PR.
+2. The team discusses it async in Teams or live in the weekly design sync.
+3. The team decides.
+4. Engineering owns DESIGN-SYSTEM.md. When they are available, they open a PR in Foundant/glm to update it and the shipped code. Design does not edit DESIGN-SYSTEM.md.
+5. Design closes its own tickets and PRs, and removes the shipped proposal from `glm-prototype-foundation.css` (Rule 2).
+6. The kitchen sink loads CSS from beta, so it shows the shipped change as soon as beta updates. No lab deploy is needed for that.
+
+## Pattern governance
+
+This is design's current process, open to feedback from the rest of the team (UX-179). Apply it before proposing a new pattern, class or token.
+
+### Default: use what exists
+Most UI needs are solved with existing MDB5 components or existing design system patterns. A need only becomes a pattern candidate when nothing existing fits.
+
+### What counts as a use case
+A pattern requires at least two use cases. A use case is a distinct workflow or a distinct user role. Repeated use of the same UI within one workflow counts as one use case: inventing patterns in isolation hides whether the need is truly reusable.
+
+### One-off solutions
+When a need has one use case, it is solved as a one-off: a new combination of MDB5 components, or an established plugin already in production (for example AG Grid for data tables). One-offs introduce no new tokens and no new design system classes.
+
+### Candidates
+One-offs are logged in the Candidate swim lane on the UX board. When a second workflow or role surfaces the same need, the candidate moves to a pattern proposal in the lab. (Lane format open for team feedback.)
+
 ## Kitchen sink sections
 
 Each section shows, in order: a heading with one status, a link to its DESIGN-SYSTEM.md rule, a one-line description, the What / Where / When / Why / How usage table, the live demo, and copy-paste markup. Nothing else. No history, correction notes or evidence trails on the page; those belong in the PR and in Jira.
