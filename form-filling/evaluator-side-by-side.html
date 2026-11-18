@@ -1855,6 +1855,8 @@ body.is-resizing, body.is-resizing * { cursor: col-resize !important; user-selec
    minimum height and their panels stay level side by side. */
 .proto-sbs-app .collapsible-panel-header, .proto-eval-acc .collapsible-panel-header { min-height: 72px; }
 .proto-eval-acc .collapsible-panel-trigger .proto-nav-status { margin-left: 0; padding-left: 0; }
+/* Prototype only, not production: the chevron is sized to the 1.25rem panel title so it reads as the control. */
+.proto-sbs-app .collapsible-panel-chevron, .proto-eval-acc .collapsible-panel-chevron { font-size: 1.25rem; }
 .proto-eval-acc { margin-bottom: 16px; }
 .proto-eval-acc .proto-ap-section { box-shadow: none; border: 0; margin: 0; background: transparent; }
 .proto-eval-acc .proto-ap-section > .card-body { padding: 0; }
@@ -1863,9 +1865,10 @@ body.is-resizing, body.is-resizing * { cursor: col-resize !important; user-selec
 .proto-eval-stepper .card-body { display: flex; align-items: center; gap: 8px; padding: 8px 12px; }
 .proto-eval-stepper .proto-ap-navmeta { display: block; text-align: center; margin-top: 2px; }
 .proto-sbs.is-on .proto-sbs-form { padding-top: 16px; }
-/* Side by side: each pane sits on a white container, as collapsible panels do in production
-   (Email Templates, Budget). On the neutral-80 page their neutral-70 headers were 1.06:1. */
-.proto-sbs.is-on .proto-sbs-form, .proto-sbs.is-on .proto-sbs-app { background-color: var(--colors-neutral-100); border-radius: var(--radius-md); padding: 16px; }
+/* Side by side: both panes, the swap button and the resizer share one white container, as collapsible
+   panels sit on white in production (Email Templates, Budget). On the neutral-80 page their neutral-70
+   headers were 1.06:1. No top padding: each pane keeps its own 16px, which the divider offsets below assume. */
+.proto-sbs.is-on { background-color: var(--colors-neutral-100); border-radius: var(--radius-md); padding: 0 16px 16px; }
 /* Divider starts level with the first collapsible: pane padding 16 + head 36 + head gap
    (option A: 6 + progress 20 + 8 = 34; otherwise 12). */
 .proto-sbs.is-on .proto-sbs-swap { padding-top: 64px; }
@@ -1874,7 +1877,8 @@ body.is-resizing, body.is-resizing * { cursor: col-resize !important; user-selec
 #finPanel a:not(.btn):hover { text-decoration: underline; }
 .proto-sbs-ans { margin-bottom: 16px; }
 .proto-sbs-ans:last-child { margin-bottom: 0; }
-.proto-sbs-ans .form-label { font-weight: 700; }
+/* Application question labels match the evaluation side's choice-question legends (0.9rem, regular). */
+.proto-sbs-ans .form-label { font-size: 0.9rem; }
 .proto-sbs-ans p { margin: 0; white-space: pre-line; }
 .proto-sbs-ans .table { font-size: 0.875rem; }
 @media (max-width: 1099.98px) {
@@ -2413,7 +2417,7 @@ var ftProto = (function () {
   (function () {
     var rz = $('sbsResizer'), dragging = false;
     rz.addEventListener('pointerdown', function (e) { dragging = true; rz.setPointerCapture(e.pointerId); rz.classList.add('is-dragging'); document.body.classList.add('is-resizing'); e.preventDefault(); });
-    rz.addEventListener('pointermove', function (e) { if (!dragging) return; var b = $('sbsWrap').getBoundingClientRect(); setRatio((e.clientX - b.left) / b.width); });
+    rz.addEventListener('pointermove', function (e) { if (!dragging) return; var w = $('sbsWrap'), b = w.getBoundingClientRect(), cs = getComputedStyle(w), pl = parseFloat(cs.paddingLeft), pr = parseFloat(cs.paddingRight); var fixed = 36 + 2 * parseFloat(cs.columnGap); setRatio((e.clientX - b.left - pl - fixed / 2) / (b.width - pl - pr - fixed)); });
     function end(e) { if (!dragging) return; dragging = false; rz.classList.remove('is-dragging'); document.body.classList.remove('is-resizing'); say('Left pane ' + Math.round(sbsRatio * 100) + ' percent.'); }
     rz.addEventListener('pointerup', end); rz.addEventListener('pointercancel', end);
     rz.addEventListener('dblclick', function () { setRatio(0.5); say('Panes reset to equal width.'); });
