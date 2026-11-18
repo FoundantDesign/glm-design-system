@@ -1861,6 +1861,9 @@ body.is-resizing, body.is-resizing * { cursor: col-resize !important; user-selec
 .proto-eval-stepper .card-body { display: flex; align-items: center; gap: 8px; padding: 8px 12px; }
 .proto-eval-stepper .proto-ap-navmeta { display: block; text-align: center; margin-top: 2px; }
 .proto-sbs.is-on .proto-sbs-form { padding-top: 16px; }
+/* Side by side: each pane sits on a white container, as collapsible panels do in production
+   (Email Templates, Budget). On the neutral-80 page their neutral-70 headers were 1.06:1. */
+.proto-sbs.is-on .proto-sbs-form, .proto-sbs.is-on .proto-sbs-app { background-color: var(--colors-neutral-100); border-radius: var(--radius-md); padding: 16px; }
 /* Divider starts level with the first collapsible: pane padding 16 + head 36 + head gap
    (option A: 6 + progress 20 + 8 = 34; otherwise 12). */
 .proto-sbs.is-on .proto-sbs-swap { padding-top: 64px; }
