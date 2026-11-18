@@ -8,7 +8,7 @@ UX-
 
 ## Status impact
 
-<!-- For each kitchen sink section touched: before and after status (SHIPPED / PROPOSAL / PRODUCTION GAP) and whether its reference strip was updated. -->
+<!-- For each kitchen sink section touched: before and after status (SHIPPED / PROPOSED) and whether its reference strip was updated. -->
 
 ## Evidence
 

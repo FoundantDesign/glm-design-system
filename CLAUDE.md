@@ -13,9 +13,10 @@ It is not the design system's rulebook. That is `GLM.Web/DESIGN-SYSTEM.md` in th
 - `index.html`: the kitchen sink. Loads production CSS live from beta (`https://beta.grantinterface.com`) in production's load order, then the proposals file, then the page furniture. Static files on beta need no login.
 - `glm-prototype-foundation.css`: proposals only. Everything here is something production does not ship yet. Every block is tagged `PROPOSED` with its ticket so the GLM.Web drift report (`.claude/skills/design-system/drift.py`) files it correctly. Never copy production CSS into it.
 - `kitchen-sink.css`: page furniture for `index.html` (usage tables, code blocks, status tags, reference strips). Not GLM components.
+- `README.md`: a short summary of the repo for GitHub visitors. This file is the full guide.
 - `GLM-design-contract.md`: retired. A pointer to DESIGN-SYSTEM.md; the full text is in git history.
 - `products/<product>/`: what the `glm-prototyping` skill builds from. `manifest.json` lists the product's live CSS, scripts and icons on its non-production environment, where its rules live, and its shells; `shells/*.html` are starting pages with the product's real header, layout and footer. When production's layout changes, update the shells and bump `shellVersion`. `products/README.md` explains adding a product line.
-- Prototype folders (`form-building/`, `form-filling/`, `request-summary/`, `key-interactions/`, `applicant-assistant/`, `application-analysis/`) and the `glm-homepage*` files: self-contained prototypes and user-test findings. Each inlines its own CSS, so changing the files above does not change them.
+- Prototype folders (`form-building/`, `form-filling/`, `request-summary/`, `key-interactions/`, `applicant-assistant/`, `application-analysis/`), the `glm-homepage*` files and `key-interactions-timeline-v4.html`: self-contained prototypes and user-test findings. Each inlines its own CSS, so changing the files above does not change them.
 
 ## Rules
 
@@ -41,17 +42,9 @@ Keep the usage tables current: they describe what production does today, in plai
 
 ## Open decisions: stop and ask
 
-Do not resolve these. If work touches one, describe the options in the PR and stop. The current list is the Open decisions table in DESIGN-SYSTEM.md; as of 6 Nov 2026:
+Do not resolve these. If work touches one, describe the options in the PR and stop.
 
-- UX-129 AG Grid theme, pending vendor accessibility conformance
-- UX-130 success, warning and info color ramps
-- UX-131 domain status to badge mapping
-- UX-132 hex vs rgb in token definitions
-- UX-133 disabled button color per variant
-- UX-146 slide-out vs modal
-- UX-147 accordion vs collapsible card
-- YOGI-8094 validation message placement
-- UX-149 and UX-151 switch "on" color, which blocks the UX-116 proposal
+The list of open decisions is the Open decisions table in `GLM.Web/DESIGN-SYSTEM.md`. Read it there each time; this file keeps no copy, because a copy goes stale. If the table and a ticket's Jira status disagree, the table wins, and say so in the PR. If you can't read GLM.Web, ask which decisions are open rather than guessing.
 
 If finishing a ticket needs a design choice that is not recorded in DESIGN-SYSTEM.md or on the ticket, it is a decision. Stop and ask.
 
@@ -61,6 +54,7 @@ If finishing a ticket needs a design choice that is not recorded in DESIGN-SYSTE
 - Branch per ticket when there is one: `UX-123/short-slug` (a YOGI key works too), with commit messages starting with the key. Kitchen sink and proposal changes always have a ticket.
 - A prototype doesn't need a ticket. Without one, use `proto/<short-slug>` and start commit messages with `PROTO:`. Create a UX ticket for a prototype only when the person asks for one.
 - Add `[skip ci]` to every commit except the last one intended for deploy. Netlify production deploys cost credits; aim for one per session.
+- Cloud Claude Code sessions are assigned a `claude/...` branch by the harness. Use it when it's the only branch the session may push to, keep one ticket or prototype per branch, and still start commit messages with the key or `PROTO:`.
 - Open PRs as drafts and fill in `.github/pull_request_template.md`.
 
 ## Jira
