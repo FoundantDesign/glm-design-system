@@ -962,8 +962,9 @@ var ftProto = (function () {
         '<div class="list-group-item ft-label mt-1"><i class="fa-light fa-phone me-3 h6 mb-0"></i><span>555-214-0193</span></div>' +
       '</div></div></div>' +
       /* A grouped section (kitchen sink Sidenav, Grouped sections) holding production's sidenav item (_RequestSidePanel.cshtml,
-         ComplianceMenuItem). A button, not a link, since here it opens the slide-out. */
-      (!staff ? '' : '<div class="list-group list-group-flush mt-1"><div class="nav-group-header">Quick View</div><button type="button" class="list-group-item list-group-item-action ripple" data-fin aria-haspopup="dialog" aria-controls="finPanel"><i class="fa-light fa-circle-check me-2 me-md-3" aria-hidden="true"></i>Financials &amp; Compliance</button></div>');
+         ComplianceMenuItem). A button, not a link, since here it opens the slide-out. Prototype only, not in production:
+         no leading icon, and a trailing chevron-right for the slide-out. */
+      (!staff ? '' : '<div class="list-group list-group-flush mt-1"><div class="nav-group-header">Quick View</div><button type="button" class="list-group-item list-group-item-action ripple" data-fin aria-haspopup="dialog" aria-controls="finPanel">Financials &amp; Compliance<i class="fa-light fa-chevron-right ms-auto" aria-hidden="true"></i></button></div>');
   }
 
   /* Financials & compliance: production's fields and order. Production's green border on passed checks
