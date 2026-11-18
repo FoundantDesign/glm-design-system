@@ -175,3 +175,17 @@
   color: var(--colors-neutral-30);
   margin-bottom: 6px;
 }
+
+
+/* ---------------------------------------------------------------------------
+   P6. ACCORDION OPEN STATE  (PROPOSED, UX-147)
+   Stock MDB turns an open accordion header and its chevron MDB blue
+   (#3b71ca) while a closed one stays navy text with a gray chevron. This keeps
+   the header navy in both states. The chevron's color lives in an SVG data
+   URI that can't be remapped (UX-137), so the open state reuses MDB's own
+   closed-state icon, which it already rotates. No new color literal.
+   --------------------------------------------------------------------------- */
+.accordion {
+  --mdb-accordion-active-color: var(--colors-brand-primary-dark-blue);
+  --mdb-accordion-btn-active-icon: var(--mdb-accordion-btn-icon);
+}
