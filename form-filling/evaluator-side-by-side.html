@@ -521,9 +521,6 @@ body.is-resizing, body.is-resizing * { cursor: col-resize !important; user-selec
 .proto-ap-stage .proto-ap-kv { margin-bottom: 4px; }
 .proto-ap-kv .proto-ap-filemeta { display: block; font-size: 0.75rem; color: var(--colors-neutral-30); margin-top: 2px; }
 /* Details header doubles as the collapse toggle for the whole group. */
-.side-panel .proto-ap-grouptoggle { display: flex; align-items: center; justify-content: space-between; width: 100%; background: none; border: 0; text-align: left; cursor: pointer; }
-.side-panel .proto-ap-grouptoggle:hover { color: var(--colors-brand-primary-dark-blue); }
-.side-panel .proto-ap-grouptoggle:focus-visible { outline: solid 2px var(--colors-brand-primary-dark-blue); outline-offset: -2px; }
 
 </style>
 </head>
@@ -928,7 +925,7 @@ var ftProto = (function () {
   /* ---------- sidebar reference sections: contact, request, award (installment only), documents ----------
      Mirrors today's admin tabs (Contact Info, Request, Award Details, Documents). Request info, award
      details and uploads read live from the form, so they change as the person works. */
-  var openRef = { contact: false, request: false, award: false, docs: false }, detailsOpen = true;
+  var openRef = { contact: false, request: false, award: false, docs: false };
   function money(v) { var n = Number(String(v || '').replace(/[$,\s]/g, '')); return v && !isNaN(n) ? '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''; }
   function kv(label, value, empty) { return '<div class="proto-ap-kv"><span class="ft-label d-block">' + label + '</span>' + (value ? '<span>' + value + '</span>' : '<span class="proto-ap-empty">' + (empty || 'Not answered yet') + '</span>') + '</div>'; }
   function refBlock(id, icon, label, count, body, unit) {
@@ -956,14 +953,11 @@ var ftProto = (function () {
   var sbs = true, swapped = false, accOpen = {}, finReturn = null;
   function renderRef() {
     var staff = MODE !== 'applicant';
-    /* Applicant: plain header, card always open, no Financials & compliance. Staff forms: collapsible card plus the slide-out button. */
-    var open = staff ? detailsOpen : true;
-    $('refList').innerHTML = (staff
-        ? '<button type="button" class="nav-group-header proto-ap-grouptoggle" data-refgroup aria-expanded="' + detailsOpen + '" aria-controls="contactCard"><span>Contact</span><i class="fa-light fa-chevron-' + (detailsOpen ? 'up' : 'down') + '" aria-hidden="true"></i></button>'
-        : '<div class="nav-group-header">Contact</div>') +
-/* The record nav rail's contact card: production's Request/Views/Shared/_RequestSidePanel.cshtml (kitchen
+    /* Every form type: the contact card, always shown. Staff forms add the Financials & compliance slide-out button. */
+    $('refList').innerHTML =
+      /* The record nav rail's contact card: production's Request/Views/Shared/_RequestSidePanel.cshtml (kitchen
          sink, Sidenav). Staff get the name as a link to the applicant record and the email as a Compose Email link. */
-      '<div id="contactCard" class="my-3 mx-2 request-info-card-wrapper"' + (open ? '' : ' hidden') + '><div class="card request-info-card" style="background-color: var(--colors-neutral-70)"><div class="my-3 mx-3">' +
+      '<div class="my-3 mx-2 request-info-card-wrapper"><div class="card request-info-card" style="background-color: var(--colors-neutral-70)"><div class="my-3 mx-3">' +
         '<div class="list-group-item ft-label d-flex align-items-center"><i class="fa-light fa-circle-user me-3 h6 mb-0"></i>' + (staff ? '<a href="#" data-noop>Dana Whitfield</a>' : '<span>Dana Whitfield</span>') + '</div>' +
         '<div class="list-group-item ft-label mt-1"><i class="fa-light fa-envelope me-3 h6 mb-0"></i>' + (staff ? '<a href="#" data-noop title="Compose Email">dana@maplestreetarts.org</a>' : '<span>dana@maplestreetarts.org</span>') + '</div>' +
         '<div class="list-group-item ft-label mt-1"><i class="fa-light fa-phone me-3 h6 mb-0"></i><span>555-214-0193</span></div>' +
@@ -1260,7 +1254,6 @@ var ftProto = (function () {
     if ((t = e.target.closest('[data-finclose]'))) { closeFin(); return; }
     if ((t = e.target.closest('[data-swap]'))) { swapped = !swapped; applySbs(); say(swapped ? 'Application on the left.' : 'Your evaluation on the left.'); return; }
     if ((t = e.target.closest('[data-acc]'))) { var aid = t.dataset.acc; accOpen[aid] = accOpen[aid] === false; renderAppRead(); var ab = document.querySelector('[data-acc="' + aid + '"]'); if (ab) ab.focus(); return; }
-    if ((t = e.target.closest('[data-refgroup]'))) { detailsOpen = !detailsOpen; renderRef(); var g = document.querySelector('[data-refgroup]'); if (g) g.focus(); say(detailsOpen ? 'Contact expanded.' : 'Contact collapsed.'); return; }
     if ((t = e.target.closest('[data-ref]'))) { var rid = t.dataset.ref; openRef[rid] = !openRef[rid]; renderRef(); var nb = document.querySelector('[data-ref="' + rid + '"]'); if (nb) nb.focus(); return; }
     if ((t = e.target.closest('[data-noop]'))) { e.preventDefault(); say('Not part of this prototype.'); return; }
     if ((t = e.target.closest('[data-go]'))) { e.preventDefault(); return go(t.dataset.go); }
