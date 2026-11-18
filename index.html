@@ -345,13 +345,13 @@
 <section class="sec" id="icons">
   <h2>Icons <span class="status-tag status-overridden">SHIPPED</span> <span class="ticket-links">Defect: <a href="https://foundanttech.atlassian.net/browse/UX-160" target="_blank" rel="noopener">UX-160</a></span></h2>
   <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#icons" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Icons</a></p>
-  <p class="sd">Font Awesome Pro 7, self-hosted as a curated subset. <code>fa-light</code> by default, <code>fa-regular</code> for filled-state controls.</p>
+  <p class="sd">Font Awesome Pro 7, self-hosted as a curated subset. <code>fa-light</code> by default, with a short list of exceptions below.</p>
 
   <table class="usage">
     <tr><th>What</th><td>Font Awesome Pro icons, converted to inline SVG at runtime.</td></tr>
     <tr><th>Where</th><td><code>&lt;i class="fa-light fa-…"&gt;</code> in markup. In GLM.Web views, the <code>Icons.Classic.*</code> helpers.</td></tr>
-    <tr><th>When</th><td>Light everywhere. Regular for filled-state controls such as toggles and the kebab menu. Duotone only as an accent on summary pages.</td></tr>
-    <tr><th>Why</th><td>One weight keeps icons consistent. The production kit is a subset, so an icon missing from it renders a placeholder circle.</td></tr>
+    <tr><th>When</th><td>Light everywhere, except the uses listed under Weight exceptions: Regular for filled-state controls, Solid for status icons and drag handles, Duotone as a summary page accent.</td></tr>
+    <tr><th>Why</th><td>One default weight keeps icons consistent, and each exception exists because the lighter weight doesn't do the job there. The production kit is a subset that carries some icons in only one weight, so an icon missing from it renders a placeholder circle.</td></tr>
     <tr><th>How</th><td>Size with <code>fa-lg</code> or <code>fa-xl</code>, space with Bootstrap utilities such as <code>me-2</code>. Every icon-only button needs an <code>aria-label</code>.</td></tr>
   </table>
 
@@ -363,6 +363,28 @@
 
 @* In GLM.Web views, take the class from the helper *@
 &lt;i class="@Icons.Classic.Light.ArrowUpRightFromSquare"&gt;&lt;/i&gt;</div>
+
+  <h3 style="margin-top:24px">Weight exceptions</h3>
+  <table class="usage">
+    <tr><th>Regular</th><td>Filled-state controls such as toggles and the kebab menu (<code>fa-ellipsis-vertical</code>).</td></tr>
+    <tr><th>Solid</th><td>Status icons in alerts and toasts, in the semantic color: <code>fa-circle-check</code>, <code>fa-circle-info</code>, <code>fa-triangle-exclamation</code>, <code>fa-circle-exclamation</code>. Drag handles: <code>fa-grip-dots-vertical</code>, which the kit carries in Solid only. How the rest of drag and drop works is still open (UX-121).</td></tr>
+    <tr><th>Duotone</th><td>An accent on summary pages only: Foundation Summary, Organization compliance cards and Applicant Dashboard request cards.</td></tr>
+  </table>
+  <div class="cr" style="font-size:20px;gap:16px;align-items:center">
+    <i class="fa-regular fa-ellipsis-vertical" title="Regular: kebab menu" style="color:var(--colors-brand-primary-dark-blue)"></i>
+    <i class="fa-solid fa-circle-check" title="Solid: success" style="color:var(--colors-semantic-success-0)"></i>
+    <i class="fa-solid fa-circle-info" title="Solid: info" style="color:var(--colors-semantic-info-0)"></i>
+    <i class="fa-solid fa-triangle-exclamation" title="Solid: warning" style="color:var(--colors-semantic-warning-0)"></i>
+    <i class="fa-solid fa-circle-exclamation" title="Solid: danger" style="color:var(--colors-semantic-danger-0)"></i>
+    <i class="fa-solid fa-grip-dots-vertical" title="Solid: drag handle" style="color:var(--colors-neutral-30)"></i>
+  </div>
+  <div class="code-block">&lt;i class="fa-regular fa-ellipsis-vertical"&gt;&lt;/i&gt;
+&lt;i class="fa-solid fa-circle-info"&gt;&lt;/i&gt;
+&lt;i class="fa-solid fa-grip-dots-vertical" aria-hidden="true"&gt;&lt;/i&gt;
+
+@* In GLM.Web views *@
+&lt;i class="@Icons.Classic.Solid.CircleInfo"&gt;&lt;/i&gt;
+&lt;i class="@Icons.Classic.Solid.GripDotsVertical" aria-hidden="true"&gt;&lt;/i&gt;</div>
 
   <h3 style="margin-top:24px">Icon reference chart</h3>
 
