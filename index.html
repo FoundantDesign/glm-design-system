@@ -366,7 +366,7 @@
 
   <h3 style="margin-top:24px">Weight exceptions</h3>
   <table class="usage">
-    <tr><th>Regular</th><td>Filled-state controls such as toggles and the kebab menu (<code>fa-ellipsis-vertical</code>).</td></tr>
+    <tr><th>Regular</th><td>Filled-state controls such as the kebab menu (<code>fa-ellipsis-vertical</code>).</td></tr>
     <tr><th>Solid</th><td>Status icons in alerts and toasts, in the semantic color: <code>fa-circle-check</code>, <code>fa-circle-info</code>, <code>fa-triangle-exclamation</code>, <code>fa-circle-exclamation</code>. Drag handles: <code>fa-grip-dots-vertical</code>, which the kit carries in Solid only. How the rest of drag and drop works is still open (UX-121).</td></tr>
     <tr><th>Duotone</th><td>An accent on summary pages only: Foundation Summary, Organization compliance cards and Applicant Dashboard request cards.</td></tr>
   </table>
@@ -439,7 +439,6 @@
     <div class="col-6 col-sm-4 col-lg-3" style="margin-bottom:14px"><div style="display:flex;align-items:flex-start;gap:10px"><i class="fa-light fa-file-pdf" style="font-size:20px;width:24px;text-align:center;flex:0 0 24px;color:var(--colors-brand-primary-dark-blue);margin-top:2px" aria-hidden="true"></i><div style="min-width:0"><code style="font-size:11px;word-break:break-word">fa-file-pdf</code><div style="font-size:12px;line-height:16px;color:var(--colors-neutral-20)">PDF download, paired with view</div></div></div></div>
     <div class="col-6 col-sm-4 col-lg-3" style="margin-bottom:14px"><div style="display:flex;align-items:flex-start;gap:10px"><i class="fa-light fa-check" style="font-size:20px;width:24px;text-align:center;flex:0 0 24px;color:var(--colors-brand-primary-dark-blue);margin-top:2px" aria-hidden="true"></i><div style="min-width:0"><code style="font-size:11px;word-break:break-word">fa-check</code><div style="font-size:12px;line-height:16px;color:var(--colors-neutral-20)">Completed stage in hero tracker</div></div></div></div>
     <div class="col-6 col-sm-4 col-lg-3" style="margin-bottom:14px"><div style="display:flex;align-items:flex-start;gap:10px"><i class="fa-regular fa-ellipsis-vertical" style="font-size:20px;width:24px;text-align:center;flex:0 0 24px;color:var(--colors-brand-primary-dark-blue);margin-top:2px" aria-hidden="true"></i><div style="min-width:0"><code style="font-size:11px;word-break:break-word">fa-ellipsis-vertical</code><div style="font-size:12px;line-height:16px;color:var(--colors-neutral-20)">Kebab menu trigger <em style="font-size:11px;color:var(--colors-neutral-30)">regular weight</em></div></div></div></div>
-    <div class="col-6 col-sm-4 col-lg-3" style="margin-bottom:14px"><div style="display:flex;align-items:flex-start;gap:10px"><i class="fa-regular fa-toggle-large-on" style="font-size:20px;width:24px;text-align:center;flex:0 0 24px;color:var(--colors-brand-primary-dark-blue);margin-top:2px" aria-hidden="true"></i><div style="min-width:0"><code style="font-size:11px;word-break:break-word">fa-toggle-large-on</code><div style="font-size:12px;line-height:16px;color:var(--colors-neutral-20)">Interactive toggle control, see Toggle switch <em style="font-size:11px;color:var(--colors-neutral-30)">regular weight</em></div></div></div></div>
     <div class="col-6 col-sm-4 col-lg-3" style="margin-bottom:14px"><div style="display:flex;align-items:flex-start;gap:10px"><i class="fa-light fa-spinner" style="font-size:20px;width:24px;text-align:center;flex:0 0 24px;color:var(--colors-brand-primary-dark-blue);margin-top:2px" aria-hidden="true"></i><div style="min-width:0"><code style="font-size:11px;word-break:break-word">fa-spinner</code><div style="font-size:12px;line-height:16px;color:var(--colors-neutral-20)">Present in production, purpose not established <em style="font-size:11px;color:var(--colors-neutral-30)">needs confirming</em></div></div></div></div>
   </div>
   <h4 style="font-size:14px;margin:18px 0 8px;color:var(--colors-brand-primary-dark-blue)">Validation and semantic color</h4>
@@ -1683,7 +1682,7 @@ header, footer {
 
 <!-- ═══ CHECK/RADIO/SWITCH ═══ -->
 <section class="sec" id="checkradio">
-  <h2>Checkbox, Radio &amp; Switch <span class="status-tag status-proposal">PROPOSED</span> <span class="ticket-links"><a href="https://foundanttech.atlassian.net/browse/UX-116" target="_blank" rel="noopener">UX-116</a> <a href="https://foundanttech.atlassian.net/browse/UX-149" target="_blank" rel="noopener">UX-149</a> <a href="https://foundanttech.atlassian.net/browse/UX-151" target="_blank" rel="noopener">UX-151</a></span></h2>
+  <h2>Checkbox, Radio &amp; Switch <span class="status-tag status-proposal">PROPOSED</span> <span class="ticket-links"><a href="https://foundanttech.atlassian.net/browse/UX-116" target="_blank" rel="noopener">UX-116</a></span></h2>
   <p class="ref-strip"><span class="ref-label">Rule:</span><a href="https://github.com/Foundant/glm/blob/trunk/GLM.Web/DESIGN-SYSTEM.md#forms" target="_blank" rel="noopener">DESIGN-SYSTEM.md &rsaquo; Forms</a></p>
   <p class="sd">Selection controls: checkbox, radio and switch.</p>
 
@@ -1739,39 +1738,17 @@ header, footer {
   background-color: var(--colors-brand-primary-dark-blue);
 }</div>
 
-  <h3 style="margin-top:24px">Toggle switch <span class="status-tag status-proposal">PROPOSED</span> <span class="ticket-links"><a href="https://foundanttech.atlassian.net/browse/UX-116" target="_blank" rel="noopener">UX-116</a> <a href="https://foundanttech.atlassian.net/browse/UX-149" target="_blank" rel="noopener">UX-149</a> <a href="https://foundanttech.atlassian.net/browse/UX-151" target="_blank" rel="noopener">UX-151</a></span></h3>
-  <p class="sd" style="border:none;margin:6px 0 12px">Standardizing the toggle switch system-wide (UX-116). The target is a filled pill with the knob contained inside it: neutral track when off, <code>--colors-semantic-success-0</code> when on, white knob in both states.</p>
+  <h3 style="margin-top:24px">Toggle switch <span class="status-tag status-proposal">PROPOSED</span> <span class="ticket-links"><a href="https://foundanttech.atlassian.net/browse/UX-116" target="_blank" rel="noopener">UX-116</a></span></h3>
+  <p class="sd" style="border:none;margin:6px 0 12px">The one toggle for every on/off setting in GLM and SLM, approved to ship (UX-116). A filled pill with the knob contained inside it: neutral track when off, <code>--colors-semantic-success-0</code> when on, white knob in both states. It replaces the Font Awesome glyph toggles (<code>.toggle-btn</code>, <code>.toggle-on</code> / <code>.toggle-off</code>), which should not be used for new work.</p>
 
   <table class="usage">
     <tr><th>What</th><td><code>.form-check.form-switch</code> with a <code>.form-check-input</code> of <code>type="checkbox"</code>. The input is the track; MDB draws the knob as an <code>:after</code> pseudo-element on it.</td></tr>
     <tr><th>Where</th><td>Stock MDB Material ships a 32x14px rail with a 20x20px knob overhanging it by 3px top and bottom. The target contains the knob inside the track, so this override makes the track a 30x20px pill with a 16px knob inset 2px, so it sits inside. Height is capped at 20px to match the radio, which MDB sets to 1.25rem square, so the two are the same height in a column.</td></tr>
-    <tr><th>When</th><td>Immediate binary state changes that take effect on toggle, with no separate save. For anything requiring confirmation or submission, use a checkbox inside a form instead, because a switch implies the change already happened.</td></tr>
+    <tr><th>When</th><td>Any binary on/off setting: a field saved with its form, a setting that takes effect immediately (such as Process or Universe availability), or opting into a previewed feature. Immediate settings post on <code>change</code>; the markup is the same either way.</td></tr>
     <tr><th>Why</th><td>Stock MDB gives no filled track in either state, so the only signal is a small knob changing color. A filled track makes state readable at a glance and at distance.</td></tr>
     <tr><th>How</th><td>Every switch needs a real <code>&lt;label for&gt;</code>. The label carries the accessible name; the control has no text of its own. Do not use the label to describe the action ("Turn on notifications"), only the thing being toggled ("Notifications"), since the same label has to make sense in both states.</td></tr>
   </table>
 
-<h3 style="margin-top:24px">Feature toggle, a separate pattern</h3>
-
-<p class="sd" style="border:none;margin:6px 0 12px">Opts a person into a previewed feature. An icon button, not a form switch: it posts immediately.</p>
-  <div class="cr" style="align-items:center;gap:16px">
-    <div class="d-flex align-items-center text-muted">New Admin Dashboard
-      <button type="button" title="Turn Off" aria-label="Turn Off" class="btn btn-icon toggle-btn ms-2 me-1 toggle-on"><i class="fa-regular fa-toggle-large-on" aria-hidden="true"></i></button>
-    </div>
-    <div class="d-flex align-items-center text-muted">New Admin Dashboard
-      <button type="button" title="Turn On" aria-label="Turn On" class="btn btn-icon toggle-btn ms-2 me-1 toggle-off"><i class="fa-regular fa-toggle-large-off" aria-hidden="true"></i></button>
-    </div>
-  </div>
-  <div class="code-block">&lt;!-- GLM.Web/Views/Shared/Components/PreviewToggle/Default.cshtml --&gt;
-&lt;form method="post" action="/Tools/Preview/Toggle" class="d-inline"&gt;
-  @Html.AntiForgeryToken()
-  &lt;div class="d-flex align-items-center text-muted"&gt;
-    New Admin Dashboard
-    &lt;button type="submit" title="Turn Off" aria-label="Turn Off"
-            class="btn btn-icon toggle-btn ms-2 me-1 toggle-on"&gt;
-      &lt;i class="fa-regular fa-toggle-large-on" aria-hidden="true"&gt;&lt;/i&gt;
-    &lt;/button&gt;
-  &lt;/div&gt;
-&lt;/form&gt;</div>
 
 </section>
 

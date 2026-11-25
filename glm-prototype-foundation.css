@@ -58,9 +58,8 @@
    a filled 30x20 pill with a contained 16px white knob, matching the radio's
    20px height.
 
-   Track color is not settled. The success token used here fails WCAG 1.4.11
-   at about 1.73:1 (UX-149), and whether "on" should use a semantic success
-   color at all is open (UX-151). Decide those before this ships.
+   Approved to ship as the single toggle for GLM and SLM, replacing the Font
+   Awesome glyph toggles. The success token is the accepted on-state color.
 
    MDB restates the knob's width and height at four specificity levels (rest,
    checked, focus, checked plus focus), so every one is restated here. The

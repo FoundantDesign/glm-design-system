@@ -51,7 +51,6 @@ Do not resolve these. If work touches one, describe the options in the PR and st
 - UX-146 slide-out vs modal
 - UX-147 accordion vs collapsible card
 - YOGI-8094 validation message placement
-- UX-149 and UX-151 switch "on" color, which blocks the UX-116 proposal
 
 If finishing a ticket needs a design choice that is not recorded in DESIGN-SYSTEM.md or on the ticket, it is a decision. Stop and ask.
 
